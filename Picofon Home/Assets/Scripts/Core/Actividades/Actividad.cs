@@ -1,18 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Actividad : MonoBehaviour
+public abstract class Actividad
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public string Titulo { get; protected set; }
+    public abstract void Ejecutar();
 }

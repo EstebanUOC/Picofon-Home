@@ -1,18 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActividadFactory : MonoBehaviour
+public class ActividadFactory
 {
-    // Start is called before the first frame update
-    void Start()
+    public Actividad CrearActividad(string tipo)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        switch (tipo)
+        {
+            case "comparar":
+                return new ActividadCompararSilaba();
+            case "crear":
+                return new ActividadCrearPalabra();
+            default:
+                throw new ArgumentException("Tipo de actividad no válida");
+        }
     }
 }

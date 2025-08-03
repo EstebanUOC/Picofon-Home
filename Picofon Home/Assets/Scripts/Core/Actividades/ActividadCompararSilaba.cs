@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActividadCompararSilaba : MonoBehaviour
+public class ActividadCompararSilaba : Actividad
 {
-    // Start is called before the first frame update
-    void Start()
+    public ActividadCompararSilaba()
     {
-        
+        Titulo = "¿Empiezan con la misma sílaba?";
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Ejecutar()
     {
-        
+        // Lógica de comparación de sílabas
     }
 }

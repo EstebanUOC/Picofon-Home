@@ -2,17 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GeneradorDeActividadesPersonalizadas : MonoBehaviour
+public class GeneradorDeActividadesPersonalizadas
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private ActividadFactory factory = new ActividadFactory();
 
-    // Update is called once per frame
-    void Update()
+    public List<Actividad> GenerarParaUsuario(Usuario usuario)
     {
-        
+        var lista = new List<Actividad>();
+
+        foreach (var tipo in usuario.ActividadesPreferidas)
+        {
+            lista.Add(factory.CrearActividad(tipo));
+        }
+
+        return lista;
     }
 }

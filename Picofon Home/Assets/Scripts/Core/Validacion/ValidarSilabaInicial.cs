@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ValidarSilabaInicial : MonoBehaviour
+public class ValidarSilabaInicial : IEstrategiaValidacion
 {
-    // Start is called before the first frame update
-    void Start()
+    public bool Validar(string entradaUsuario, string[] datos)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        return datos[0].StartsWith(entradaUsuario);
     }
 }

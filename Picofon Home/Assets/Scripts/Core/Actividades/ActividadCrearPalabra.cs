@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActividadCrearPalabra : MonoBehaviour
+public class ActividadCrearPalabra : Actividad
 {
-    // Start is called before the first frame update
-    void Start()
+    public ActividadCrearPalabra()
     {
-        
+        Titulo = "Crea una palabra con esta sílaba";
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Ejecutar()
     {
-        
+        // Lógica de creación de palabras
     }
 }

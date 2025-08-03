@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GestorDeProgreso : MonoBehaviour
+public class GestorDeProgreso : IObservadorActividad
 {
-    // Start is called before the first frame update
-    void Start()
+    private IRepositorioUsuario repositorio;
+
+    public GestorDeProgreso(IRepositorioUsuario repo)
     {
-        
+        repositorio = repo;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnActividadCompletada(Actividad actividad, Usuario usuario)
     {
-        
+        repositorio.GuardarProgreso(usuario, actividad);
+        ActualizarEstadisticas();
+    }
+
+    public void ActualizarEstadisticas()
+    {
+        // Implementa lógica de estadísticas
     }
 }
+

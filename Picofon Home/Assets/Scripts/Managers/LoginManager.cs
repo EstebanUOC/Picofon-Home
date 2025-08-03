@@ -14,7 +14,15 @@ public class LoginManager : MonoBehaviour
 
     private void Start()
     {
-        botonLogin.onClick.AddListener(ValidarLogin);
+        IRepositorioUsuario repositorio = new RepositorioPostgres();
+        GestorDeUsuarios.GetInstancia(repositorio);
+
+        var gestorProgreso = new GestorDeProgreso(repositorio);
+        // Aquí puedes registrar el gestor como observador
+
+
+
+    botonLogin.onClick.AddListener(ValidarLogin);
         textoCarga.SetActive(false); // Asegúrate de que esté oculto al inicio
     }
 
