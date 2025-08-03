@@ -3,7 +3,27 @@
   "WorkspaceRootPath": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|c:\\users\\kevin\\desktop\\picofonhome\\picofon-home\\picofon home\\assets\\scripts\\mundomanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|c:\\users\\kevin\\desktop\\picofonhome\\picofon-home\\picofon home\\assets\\scripts\\generadordeactividadespersonalizadas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\generadordeactividadespersonalizadas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|c:\\users\\kevin\\desktop\\picofonhome\\picofon-home\\picofon home\\assets\\scripts\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\assets\\scripts\\iobservadoractividad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\iobservadoractividad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\assets\\scripts\\iestrategiavalidacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\iestrategiavalidacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\assets\\scripts\\abstractactividad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\abstractactividad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\assets\\scripts\\mundomanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\mundomanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -27,6 +47,68 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "GeneradorDeActividadesPersonalizadas.cs",
+              "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\GeneradorDeActividadesPersonalizadas.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\GeneradorDeActividadesPersonalizadas.cs",
+              "ToolTip": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\GeneradorDeActividadesPersonalizadas.cs",
+              "RelativeToolTip": "Assets\\Scripts\\GeneradorDeActividadesPersonalizadas.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-01T13:50:40.037Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Usuario.cs",
+              "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Usuario.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Usuario.cs",
+              "ToolTip": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Usuario.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Usuario.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-01T13:49:48.945Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IObservadorActividad.cs",
+              "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\IObservadorActividad.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\IObservadorActividad.cs",
+              "ToolTip": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\IObservadorActividad.cs",
+              "RelativeToolTip": "Assets\\Scripts\\IObservadorActividad.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-01T13:48:26.238Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "IEstrategiaValidacion.cs",
+              "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\IEstrategiaValidacion.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\IEstrategiaValidacion.cs",
+              "ToolTip": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\IEstrategiaValidacion.cs",
+              "RelativeToolTip": "Assets\\Scripts\\IEstrategiaValidacion.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-01T13:47:08.936Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AbstractActividad.cs",
+              "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\AbstractActividad.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\AbstractActividad.cs",
+              "ToolTip": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\AbstractActividad.cs",
+              "RelativeToolTip": "Assets\\Scripts\\AbstractActividad.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-01T13:39:04.568Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "MundoManager.cs",
               "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\MundoManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\MundoManager.cs",
@@ -34,12 +116,11 @@
               "RelativeToolTip": "Assets\\Scripts\\MundoManager.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-30T00:07:46.089Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-30T00:07:46.089Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 6,
               "Title": "MenuManager.cs",
               "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\MenuManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\MenuManager.cs",
@@ -51,7 +132,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "LoginManager.cs",
               "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\LoginManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\LoginManager.cs",
