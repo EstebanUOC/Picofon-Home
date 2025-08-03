@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|c:\\users\\kevin\\desktop\\picofonhome\\picofon-home\\picofon home\\assets\\scripts\\generadordeactividadespersonalizadas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\generadordeactividadespersonalizadas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\assets\\scripts\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|c:\\users\\kevin\\desktop\\picofonhome\\picofon-home\\picofon home\\assets\\scripts\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|c:\\users\\kevin\\desktop\\picofonhome\\picofon-home\\picofon home\\assets\\scripts\\generadordeactividadespersonalizadas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\generadordeactividadespersonalizadas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\assets\\scripts\\iobservadoractividad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -42,11 +42,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "GeneradorDeActividadesPersonalizadas.cs",
               "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\GeneradorDeActividadesPersonalizadas.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\GeneradorDeActividadesPersonalizadas.cs",
@@ -59,7 +59,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Usuario.cs",
               "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\PicofonHome\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Usuario.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Usuario.cs",
