@@ -6,7 +6,7 @@ using System;
 
 public class RepositorioPostgres : IRepositorioUsuario
 {
-    private string conexion = "Host=localhost;Port=5432;Username=tu_usuario;Password=tu_contraseña;Database=nombre_bd";
+    private string conexion = "Host=54.75.243.210;Port=3306;Username=root;Password=1234Picofon*;Database=PICOFON_TEST";
 
     public Usuario ObtenerUsuarioPorNombre(string nombre)
     {
