@@ -10,7 +10,7 @@ public class ActividadFactory
         switch (tipo)
         {
             case "comparar":
-                return new ActividadCompararSilaba();
+                return new ActividadCompararSilaba("Test", "ma");
             case "crear":
                 return new ActividadCrearPalabra();
             default:
