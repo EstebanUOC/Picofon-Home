@@ -50,7 +50,8 @@ namespace UI
             }
 
             // Genera un balón en el escenario
-            Instantiate(prefabBalon, spawnBalon.position, Quaternion.identity);
+            Instantiate(prefabBalon, new Vector3(spawnBalon.position.x, spawnBalon.position.y, 0), Quaternion.identity);
+
         }
 
         private void SeleccionarCanasta(string palabraSeleccionada)
