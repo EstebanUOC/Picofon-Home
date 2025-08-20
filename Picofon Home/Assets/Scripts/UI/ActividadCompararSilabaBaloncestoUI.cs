@@ -8,18 +8,6 @@ namespace UI
 {
     public class ActividadCompararSilabaUI : MonoBehaviour
     {
-
-        private void Start()
-        {
-            string silaba = "ma"; // aquí puedes pedirla del GeneradorDePalabras
-            List<string> opciones = new List<string>()
-    {
-        "mano", "mapa", "casa", "perro"
-    };
-
-            MostrarOpciones(silaba, opciones);
-        }
-
         public static ActividadCompararSilabaUI Instance;
 
         [SerializeField] private TextMeshProUGUI textoSilaba;
@@ -28,41 +16,59 @@ namespace UI
         [SerializeField] private Transform spawnBalon;
 
         private ActividadCompararSilaba actividadActual;
+        private GameObject balonActual; // referencia al balón en juego
 
         private void Awake()
         {
             Instance = this;
         }
 
-        private GameObject balonActual;
+        private void Start()
+        {
+            string silaba = "ma"; // aquí puedes pedirla del GeneradorDePalabras
+            List<string> opciones = new List<string>()
+            {
+                "mano", "mapa", "casa", "perro"
+            };
+
+            MostrarOpciones(silaba, opciones);
+        }
 
         public void MostrarOpciones(string silaba, List<string> opciones)
         {
             textoSilaba.text = silaba;
             actividadActual = new ActividadCompararSilaba("Baloncesto - Comparar Sílabas", silaba);
 
-            for (int i = 0; i < botonesCanastas.Count; i++)
+            int total = Mathf.Min(botonesCanastas.Count, opciones.Count);
+
+            for (int i = 0; i < total; i++)
             {
                 botonesCanastas[i].GetComponentInChildren<TextMeshProUGUI>().text = opciones[i];
                 string palabra = opciones[i];
+                Transform canasta = botonesCanastas[i].transform;
+
                 botonesCanastas[i].onClick.RemoveAllListeners();
-                botonesCanastas[i].onClick.AddListener(() => SeleccionarCanasta(palabra));
+                botonesCanastas[i].onClick.AddListener(() => SeleccionarCanasta(palabra, canasta));
             }
 
-            // Genera un balón en el escenario
-            Instantiate(prefabBalon, new Vector3(spawnBalon.position.x, spawnBalon.position.y, 0), Quaternion.identity);
 
+            // Genera un balón y lo guardamos en balonActual
+            balonActual = Instantiate(prefabBalon, spawnBalon.position, Quaternion.identity);
         }
 
-        private void SeleccionarCanasta(string palabraSeleccionada)
+        private void SeleccionarCanasta(string palabraSeleccionada, Transform canastaTransform)
         {
+            if (balonActual != null)
+            {
+                // Lanza el balón hacia la canasta seleccionada
+                balonActual.GetComponent<Balon>().LanzarHacia(canastaTransform.position);
+            }
+
             bool resultado = actividadActual.ValidarRespuesta(palabraSeleccionada);
             if (resultado)
                 PantallaResultado.Instance.MostrarMensaje(" ¡Correcto!");
             else
                 PantallaResultado.Instance.MostrarMensaje(" Intenta otra vez");
         }
-
     }
-
 }
