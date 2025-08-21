@@ -5,7 +5,7 @@ public class Balon : MonoBehaviour
 {
     private Vector3 destino;
     private bool enMovimiento = false;
-    private float velocidad = 8f;
+    private float velocidad = 64f;
 
     // Llamado desde la UI cuando se selecciona una canasta
     public void LanzarHacia(Vector3 posicionCanasta)

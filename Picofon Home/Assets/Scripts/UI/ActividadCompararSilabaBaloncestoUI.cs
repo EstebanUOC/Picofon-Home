@@ -14,7 +14,9 @@ namespace UI
         [SerializeField] private List<Button> botonesCanastas;
         [SerializeField] private GameObject prefabBalon;
         [SerializeField] private Transform spawnBalon;
+        [SerializeField] private int rondasTotales = 3; // cuántas veces quieres jugar
 
+        private int rondasRestantes;
         private ActividadCompararSilaba actividadActual;
         private GameObject balonActual; // referencia al balón en juego
 
@@ -25,6 +27,7 @@ namespace UI
 
         private void Start()
         {
+            rondasRestantes = rondasTotales;
             string silaba = "ma"; // aquí puedes pedirla del GeneradorDePalabras
             List<string> opciones = new List<string>()
             {
@@ -56,19 +59,44 @@ namespace UI
             balonActual = Instantiate(prefabBalon, spawnBalon.position, Quaternion.identity);
         }
 
+        private void NuevaRonda()
+        {
+            string silaba = "pa";
+            List<string> opciones = new List<string>() { "pato", "pala", "gato", "sol" };
+
+            MostrarOpciones(silaba, opciones);
+        }
+
+
         private void SeleccionarCanasta(string palabraSeleccionada, Transform canastaTransform)
         {
+            // Mueve el balón hacia la canasta
             if (balonActual != null)
             {
-                // Lanza el balón hacia la canasta seleccionada
                 balonActual.GetComponent<Balon>().LanzarHacia(canastaTransform.position);
             }
 
             bool resultado = actividadActual.ValidarRespuesta(palabraSeleccionada);
+
             if (resultado)
                 PantallaResultado.Instance.MostrarMensaje(" ¡Correcto!");
             else
                 PantallaResultado.Instance.MostrarMensaje(" Intenta otra vez");
+
+            // Reducir rondas
+            rondasRestantes--;
+
+            if (rondasRestantes > 0)
+            {
+                //  iniciar nueva ronda después de 1 segundo
+                Invoke(nameof(NuevaRonda), 1f);
+            }
+            else
+            {
+                //  fin del juego
+                PantallaResultado.Instance.MostrarMensaje("¡Juego terminado!");
+            }
         }
+
     }
 }
