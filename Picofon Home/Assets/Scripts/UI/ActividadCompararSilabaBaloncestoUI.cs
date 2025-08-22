@@ -19,6 +19,8 @@ namespace UI
         private int rondasRestantes;
         private ActividadCompararSilaba actividadActual;
         private GameObject balonActual; // referencia al balón en juego
+        private bool balonEnVuelo = false;
+
 
         private void Awake()
         {
@@ -56,7 +58,9 @@ namespace UI
 
 
             // Genera un balón y lo guardamos en balonActual
+            balonEnVuelo = false;
             balonActual = Instantiate(prefabBalon, spawnBalon.position, Quaternion.identity);
+
         }
 
         private void NuevaRonda()
@@ -70,10 +74,12 @@ namespace UI
 
         private void SeleccionarCanasta(string palabraSeleccionada, Transform canastaTransform)
         {
-            // Mueve el balón hacia la canasta
+            if (balonEnVuelo) return; //  ignorar clics si ya hay un balón en vuelo
+
             if (balonActual != null)
             {
                 balonActual.GetComponent<Balon>().LanzarHacia(canastaTransform.position);
+                balonEnVuelo = true; //  marcar que ya está volando
             }
 
             bool resultado = actividadActual.ValidarRespuesta(palabraSeleccionada);
@@ -83,20 +89,18 @@ namespace UI
             else
                 PantallaResultado.Instance.MostrarMensaje(" Intenta otra vez");
 
-            // Reducir rondas
             rondasRestantes--;
 
             if (rondasRestantes > 0)
             {
-                //  iniciar nueva ronda después de 1 segundo
-                Invoke(nameof(NuevaRonda), 1f);
+                Invoke(nameof(NuevaRonda), 1.2f); // espera a que el balón llegue antes de nueva ronda
             }
             else
             {
-                //  fin del juego
                 PantallaResultado.Instance.MostrarMensaje("¡Juego terminado!");
             }
         }
+
 
     }
 }
