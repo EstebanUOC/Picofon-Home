@@ -5,21 +5,17 @@ using TMPro;
 
 public class Globo : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI textoSilaba;
+    [SerializeField] private TextMeshPro textoSilaba;
     private bool esDiferente;
 
     private void Awake()
     {
-        // Si no se asignó desde el Inspector, lo busca automáticamente en los hijos
         if (textoSilaba == null)
         {
-            textoSilaba = GetComponentInChildren<TextMeshProUGUI>();
+            textoSilaba = GetComponentInChildren<TextMeshPro>();
         }
     }
 
-    /// <summary>
-    /// Configura el globo con la sílaba y si es el diferente
-    /// </summary>
     public void Configurar(string silaba, bool diferente)
     {
         if (textoSilaba != null)
@@ -28,7 +24,7 @@ public class Globo : MonoBehaviour
         }
         else
         {
-            Debug.LogError(" No se encontró un TextMeshProUGUI en el prefab del globo");
+            Debug.LogError("No se encontró un TextMeshPro en el prefab del globo");
         }
 
         esDiferente = diferente;
@@ -36,14 +32,12 @@ public class Globo : MonoBehaviour
 
     private void OnMouseDown()
     {
-        // Notifica al minijuego si era el globo correcto o no
         MinijuegoGlobos controlador = FindObjectOfType<MinijuegoGlobos>();
         if (controlador != null)
         {
             controlador.ReventarGlobo(esDiferente);
         }
 
-        // Destruye el globo al hacer clic
         Destroy(gameObject);
     }
 }
