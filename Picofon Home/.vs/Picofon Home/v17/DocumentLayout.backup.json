@@ -3,11 +3,19 @@
   "WorkspaceRootPath": "C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|c:\\users\\kevin\\desktop\\picofongit\\picofon-home\\picofon home\\assets\\prefabs\\globo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\prefabs\\globo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\assets\\scripts\\ui\\minijuegoglobos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\ui\\minijuegoglobos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\assets\\scripts\\ui\\actividadcompararsilababaloncestoui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\ui\\actividadcompararsilababaloncestoui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|c:\\users\\kevin\\desktop\\picofongit\\picofon-home\\picofon home\\assets\\prefabs\\balon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\assets\\prefabs\\balon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\prefabs\\balon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -51,6 +59,31 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "MinijuegoGlobos.cs",
+              "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\MinijuegoGlobos.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\MinijuegoGlobos.cs",
+              "ToolTip": "C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\MinijuegoGlobos.cs",
+              "RelativeToolTip": "Assets\\Scripts\\UI\\MinijuegoGlobos.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABsAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-28T07:59:10.171Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Globo.cs",
+              "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\Assets\\Prefabs\\Globo.cs",
+              "RelativeDocumentMoniker": "Assets\\Prefabs\\Globo.cs",
+              "ToolTip": "C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\Assets\\Prefabs\\Globo.cs",
+              "RelativeToolTip": "Assets\\Prefabs\\Globo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-28T07:53:15.683Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "Balon.cs",
               "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\Assets\\Prefabs\\Balon.cs",
               "RelativeDocumentMoniker": "Assets\\Prefabs\\Balon.cs",
@@ -58,12 +91,11 @@
               "RelativeToolTip": "Assets\\Prefabs\\Balon.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-20T16:33:24.259Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-20T16:33:24.259Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "ActividadCompararSilabaBaloncestoUI.cs",
               "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\ActividadCompararSilabaBaloncestoUI.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\ActividadCompararSilabaBaloncestoUI.cs",
@@ -71,12 +103,11 @@
               "RelativeToolTip": "Assets\\Scripts\\UI\\ActividadCompararSilabaBaloncestoUI.cs",
               "ViewState": "AgIAAEQAAAAAAAAAAAAIwFEAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-20T16:25:35.485Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-20T16:25:35.485Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "ActividadCompararSilabaUI.cs",
               "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\ActividadCompararSilabaUI.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\ActividadCompararSilabaUI.cs",
@@ -88,7 +119,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "ActividadFactory.cs",
               "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Actividades\\ActividadFactory.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Actividades\\ActividadFactory.cs",
@@ -100,7 +131,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "PantallaResultado.cs",
               "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\PantallaResultado.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\PantallaResultado.cs",
@@ -112,7 +143,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "GeneradorDePalabras.cs",
               "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Palabras\\GeneradorDePalabras.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Palabras\\GeneradorDePalabras.cs",
@@ -124,7 +155,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "ValidarSilabaInicial.cs",
               "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Validacion\\ValidarSilabaInicial.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Validacion\\ValidarSilabaInicial.cs",
@@ -136,7 +167,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "ActividadCompararSilabaUI1.cs",
               "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\ActividadCompararSilabaUI1.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\ActividadCompararSilabaUI1.cs",
@@ -147,7 +178,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "ActividadCompararSilaba.cs",
               "DocumentMoniker": "C:\\Users\\Kevin\\Desktop\\picofongit\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Actividades\\ActividadCompararSilaba.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Actividades\\ActividadCompararSilaba.cs",
