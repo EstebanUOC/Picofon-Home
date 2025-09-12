@@ -44,7 +44,7 @@ sysinfo.txt
 
 # Git LFS tracked files (optional; also run `git lfs track`)
 *.psd
-*.png
+
 *.fbx
 *.mp4
 *.wav
