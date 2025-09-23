@@ -1,0 +1,87 @@
+using System.Collections;
+using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using System.Collections.Generic;
+
+public class ActividadCompararSilabaUI : ActividadUI
+{
+    public TextMeshProUGUI palabra1Text;
+    public TextMeshProUGUI palabra2Text;
+    public Button botonSi;
+    public Button botonNo;
+
+    private WordSegment palabra1;
+    private WordSegment palabra2;
+    private bool respuestaCorrecta;
+
+    private List<WordSegment> palabrasDisponibles = new List<WordSegment>();
+
+    void Awake()
+    {
+        botonSi.onClick.AddListener(() => ValidarRespuesta(true));
+        botonNo.onClick.AddListener(() => ValidarRespuesta(false));
+    }
+
+    public override void IniciarActividad()
+    {
+        base.IniciarActividad();
+
+        // Solo inicializa si la lista está vacía
+        if (palabrasDisponibles == null || palabrasDisponibles.Count == 0)
+        {
+            palabrasDisponibles = new List<WordSegment>()
+        {
+            new WordSegment { id = 1, syllabified_word = "ma#ma" },
+            new WordSegment { id = 2, syllabified_word = "ma#pa" },
+            new WordSegment { id = 3, syllabified_word = "to#ma" },
+            new WordSegment { id = 4, syllabified_word = "pa#pa" }
+        };
+        }
+
+        GenerarNuevaRonda();
+    }
+
+
+
+
+    void GenerarNuevaRonda()
+    {
+        Debug.Log("Total palabras disponibles: " + palabrasDisponibles.Count);
+
+        if (palabrasDisponibles.Count < 2)
+        {
+            Debug.LogError("No hay suficientes palabras para generar una ronda.");
+            return;
+        }
+
+        int index1 = Random.Range(0, palabrasDisponibles.Count);
+        int index2;
+
+        do
+        {
+            index2 = Random.Range(0, palabrasDisponibles.Count);
+        } while (index2 == index1 && palabrasDisponibles.Count > 1);
+
+        palabra1 = palabrasDisponibles[index1];
+        palabra2 = palabrasDisponibles[index2];
+
+        palabra1Text.text = palabra1.GetPalabra();
+        palabra2Text.text = palabra2.GetPalabra();
+
+        respuestaCorrecta = palabra1.GetPrimeraSilaba() == palabra2.GetPrimeraSilaba();
+    }
+
+
+
+    public override void ValidarRespuesta(bool respuestaUsuario)
+    {
+        FinalizarActividad(respuestaUsuario == respuestaCorrecta);
+        GenerarNuevaRonda(); // Avanza a la siguiente
+    }
+
+    void Start()
+    {
+        IniciarActividad();
+    }
+}
