@@ -1,0 +1,7 @@
+{
+  "main_word": "ca#sa",
+  "wrong_option1": "ca#ma",
+  "wrong_option2": "ca#rro",
+  "wrong_option3": "mu#ro",
+  "correct_option": "mu#ro"
+}
