@@ -1,39 +1,51 @@
-using System.Collections;
-using System.Collections.Generic;
-using Firebase.Extensions;
-using Google;
+﻿using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
 using TMPro;
-using Firebase.Auth;
 using UnityEngine.UI;
-using UnityEngine.Networking;
+using Firebase.Auth;
+using Firebase.Extensions;
+using Firebase.Firestore;
+using Google;
 
 public class LoginWithGoogle : MonoBehaviour
 {
+    [Header("Firebase")]
     public string GoogleAPI = "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
-    private GoogleSignInConfiguration configuration;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+    private FirebaseFirestore firestore;
 
-    Firebase.Auth.FirebaseAuth auth;
-    Firebase.Auth.FirebaseUser user;
+    [Header("Panels")]
+    public GameObject LoginPanel;
+    public GameObject ChildDataPanel;
 
-    public TextMeshProUGUI Username, UserEmail;
+    [Header("Buttons")]
+    public Button SignInButton;   // ✅ assign in Inspector
+    public Button ContinueButton;
 
-    public Image UserProfilePic;
-    private string imageUrl;
+    [Header("User Info UI")]
+    public TextMeshProUGUI UsernameText;
+    public TextMeshProUGUI ThanksMessage;
+
+    [Header("Child Data UI")]
+    public TMP_InputField ChildNameField;
+    public TMP_Dropdown AgeDropdown;
+    public Toggle TDAH_Toggle;
+    public Toggle Down_Toggle;
+    public Toggle TEL_Toggle;
+    public Toggle TEA_Toggle;
+    public Toggle Other_Toggle;
+    public TMP_InputField OtherTextField;
+
     private bool isGoogleSignInInitialized = false;
+
     private void Start()
     {
+        Debug.Log("Msg::::: Start()");
         InitFirebase();
-    }
 
-    void InitFirebase()
-    {
-        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-    }
-
-    public void Login()
-    {
+        // ✅ Initialize Google Sign-In once
         if (!isGoogleSignInInitialized)
         {
             GoogleSignIn.Configuration = new GoogleSignInConfiguration
@@ -42,86 +54,144 @@ public class LoginWithGoogle : MonoBehaviour
                 WebClientId = GoogleAPI,
                 RequestEmail = true
             };
-
             isGoogleSignInInitialized = true;
+            Debug.Log("Msg::::: Google SignIn configuration initialized in Start()");
         }
-        GoogleSignIn.Configuration = new GoogleSignInConfiguration
+
+        // ✅ Wire buttons safely
+        if (SignInButton != null)
         {
-            RequestIdToken = true,
-            WebClientId = GoogleAPI
-        };
-        GoogleSignIn.Configuration.RequestEmail = true;
+            SignInButton.onClick.RemoveAllListeners();
+            SignInButton.onClick.AddListener(Login);
+            Debug.Log("Msg::::: SignIn button wired programmatically in Start()");
+        }
+
+        if (ContinueButton != null)
+        {
+            ContinueButton.onClick.RemoveAllListeners();
+            ContinueButton.onClick.AddListener(OnContinue);
+        }
+
+        // Default UI state (safe even if already set in Inspector)
+        LoginPanel.SetActive(true);
+        ChildDataPanel.SetActive(false);
+    }
+
+    void InitFirebase()
+    {
+        Debug.Log("Msg::::: InitFirebase()");
+        auth = FirebaseAuth.DefaultInstance;
+        firestore = FirebaseFirestore.DefaultInstance;
+    }
+
+    public void Login()
+    {
+        Debug.Log($">>>> SignIn Button Pressed at: {System.DateTime.Now:HH:mm:ss.fff}");
+        Debug.Log("Msg:::::Login() called – SignIn button pressed");
 
         Task<GoogleSignInUser> signIn = GoogleSignIn.DefaultInstance.SignIn();
-
         TaskCompletionSource<FirebaseUser> signInCompleted = new TaskCompletionSource<FirebaseUser>();
+
         signIn.ContinueWith(task =>
         {
+            Debug.Log("Msg:::::GoogleSignIn task finished. Status: " + task.Status);
+
             if (task.IsCanceled)
             {
+                Debug.LogWarning("Msg:::::Google Sign-In canceled");
                 signInCompleted.SetCanceled();
-                Debug.Log("Cancelled");
             }
             else if (task.IsFaulted)
             {
+                Debug.LogError("Msg:::::Google Sign-In error: " + task.Exception);
                 signInCompleted.SetException(task.Exception);
-
-                Debug.Log("Faulted " + task.Exception);
             }
             else
             {
-                Credential credential = Firebase.Auth.GoogleAuthProvider.GetCredential(((Task<GoogleSignInUser>)task).Result.IdToken, null);
-                auth.SignInWithCredentialAsync(credential).ContinueWith(authTask =>
+                Debug.Log("Msg:::::Google Sign-In success. Getting Firebase credential...");
+
+                Credential credential = GoogleAuthProvider.GetCredential(task.Result.IdToken, null);
+
+                auth.SignInWithCredentialAsync(credential).ContinueWithOnMainThread(authTask =>
                 {
+                    Debug.Log("Msg:::::Firebase SignIn task finished. Status: " + authTask.Status);
+
                     if (authTask.IsCanceled)
                     {
+                        Debug.LogWarning("Msg:::::Firebase Auth canceled");
                         signInCompleted.SetCanceled();
                     }
                     else if (authTask.IsFaulted)
                     {
+                        Debug.LogError("Msg:::::Firebase Auth error: " + authTask.Exception);
                         signInCompleted.SetException(authTask.Exception);
-                        Debug.Log("Faulted In Auth " + task.Exception);
                     }
                     else
                     {
-                        signInCompleted.SetResult(((Task<FirebaseUser>)authTask).Result);
-                        Debug.Log("Success");
-                        user = auth.CurrentUser;
-                        Username.text = user.DisplayName;
-                        UserEmail.text = user.Email;
+                        Debug.Log("Msg:::::Firebase Auth success. Logged in as: " + authTask.Result.DisplayName);
+                        signInCompleted.SetResult(authTask.Result);
 
-                        StartCoroutine(LoadImage(CheckImageUrl(user.PhotoUrl.ToString())));
+                        OnLoginSuccess(auth.CurrentUser);
                     }
                 });
             }
         });
     }
-    private string CheckImageUrl(string url)
+
+    private void OnLoginSuccess(FirebaseUser loggedUser)
     {
-        if (!string.IsNullOrEmpty(url))
-        {
-            return url;
-        }
-        return imageUrl;
+        Debug.Log("Msg::::: OnLoginSuccess()");
+        user = loggedUser;
+
+        UsernameText.text = user.DisplayName;
+        ThanksMessage.text = $"{user.DisplayName}, gràcies per registrar-te";
+
+        LoginPanel.SetActive(false);
+        ChildDataPanel.SetActive(true);
     }
 
-    IEnumerator LoadImage(string imageUri)
+    private void OnContinue()
     {
-        UnityWebRequest www = UnityWebRequestTexture.GetTexture(imageUri);
-        yield return www.SendWebRequest();
-
-        if (www.result == UnityWebRequest.Result.Success)
+        if (user == null)
         {
-            Texture2D texture = DownloadHandlerTexture.GetContent(www);
-            // Use the loaded texture here
-            Debug.Log("Image loaded successfully");
-            UserProfilePic.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0));
-        }
-        else
-        {
-            Debug.Log("Error loading image: " + www.error);
+            Debug.LogError("Msg:::::No user logged in.");
+            return;
         }
 
+        string childName = ChildNameField.text;
+        string age = AgeDropdown.options[AgeDropdown.value].text;
+        bool hasTDAH = TDAH_Toggle.isOn;
+        bool hasDown = Down_Toggle.isOn;
+        bool hasTEL = TEL_Toggle.isOn;
+        bool hasTEA = TEA_Toggle.isOn;
+        bool hasOther = Other_Toggle.isOn;
+        string otherDetails = OtherTextField.text;
 
+        DocumentReference docRef = firestore.Collection("users").Document(user.UserId);
+        var childData = new
+        {
+            parentName = user.DisplayName,
+            parentEmail = user.Email,
+            childName = childName,
+            age = age,
+            TDAH = hasTDAH,
+            Down = hasDown,
+            TEL = hasTEL,
+            TEA = hasTEA,
+            Other = hasOther,
+            OtherDetails = otherDetails
+        };
+
+        docRef.SetAsync(childData).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("Msg:::::Child data saved successfully!");
+            }
+            else
+            {
+                Debug.LogError("Msg::::: Error saving child data: " + task.Exception);
+            }
+        });
     }
 }
