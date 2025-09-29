@@ -24,6 +24,9 @@ public class LoginWithGoogle : MonoBehaviour
     public Button SignInButton;   // ✅ assign in Inspector
     public Button ContinueButton;
 
+    [Header("Debug / Testing Only")]
+    public Button DebugLoginButton;
+
     [Header("User Info UI")]   
     public TextMeshProUGUI WelcomeMessage;
     public TextMeshProUGUI EmailText;
@@ -43,6 +46,15 @@ public class LoginWithGoogle : MonoBehaviour
     private void Start()
     {
         Debug.Log("Msg::::: Start()");
+
+        // ✅ Debug button (simulates login without Firebase/Google)
+        if (DebugLoginButton != null)
+        {
+            Debug.Log("Msg::::: DebugLoginButton start");
+            DebugLoginButton.onClick.RemoveAllListeners();
+            DebugLoginButton.onClick.AddListener(SimulateLogin);
+        }
+
         InitFirebase();
 
         // ✅ Initialize Google Sign-In once
@@ -143,11 +155,25 @@ public class LoginWithGoogle : MonoBehaviour
     /// </summary>
     private void OnLoginSuccess(FirebaseUser loggedUser)
     {
-        Debug.Log("Msg::::: OnLoginSuccess()");
+       if (loggedUser == null) return;
+
+        Debug.Log("Msg::::: OnLoginSuccess() [FirebaseUser]");
         user = loggedUser;
 
-        WelcomeMessage.text = $"{user.DisplayName}, gràcies per registrar-te";        
-        EmailText.text = user.Email; 
+        WelcomeMessage.text = $"{user.DisplayName}, gràcies per registrar-te";
+        EmailText.text = user.Email;
+
+        LoginPanel.SetActive(false);
+        ChildDataPanel.SetActive(true);
+    }
+
+    // Overload for fake user (only used in debug mode)
+    private void OnLoginSuccess(FakeFirebaseUser fakeUser)
+    {
+        Debug.Log("Msg::::: OnLoginSuccess() [FakeFirebaseUser]");
+
+        WelcomeMessage.text = $"{fakeUser.DisplayName}, gràcies per registrar-te";
+        EmailText.text = fakeUser.Email;
 
         LoginPanel.SetActive(false);
         ChildDataPanel.SetActive(true);
@@ -196,5 +222,37 @@ public class LoginWithGoogle : MonoBehaviour
                 Debug.LogError("Msg::::: Error saving child data: " + task.Exception);
             }
         });
+    }
+
+
+    /// <summary>
+    /// Fake login for testing UI flow without Firebase
+    /// </summary>
+    private void SimulateLogin()
+    {
+        Debug.Log("Msg::::: SimulateLogin() called – skipping Google/Firebase login");
+
+        FakeFirebaseUser fakeUser = new FakeFirebaseUser(
+            "testUser123",
+            "Test User",
+            "testuser@example.com"
+        );
+
+        OnLoginSuccess(fakeUser);
+    }
+}
+
+
+public class FakeFirebaseUser
+{
+    public string UserId { get; }
+    public string DisplayName { get; }
+    public string Email { get; }
+
+    public FakeFirebaseUser(string id, string name, string mail)
+    {
+        UserId = id;
+        DisplayName = name;
+        Email = mail;
     }
 }
