@@ -24,9 +24,9 @@ public class LoginWithGoogle : MonoBehaviour
     public Button SignInButton;   // ✅ assign in Inspector
     public Button ContinueButton;
 
-    [Header("User Info UI")]
-    public TextMeshProUGUI UsernameText;
-    public TextMeshProUGUI ThanksMessage;
+    [Header("User Info UI")]   
+    public TextMeshProUGUI WelcomeMessage;
+    public TextMeshProUGUI EmailText;
 
     [Header("Child Data UI")]
     public TMP_InputField ChildNameField;
@@ -138,13 +138,16 @@ public class LoginWithGoogle : MonoBehaviour
         });
     }
 
+    /// <summary>
+    /// Called when login is successful
+    /// </summary>
     private void OnLoginSuccess(FirebaseUser loggedUser)
     {
         Debug.Log("Msg::::: OnLoginSuccess()");
         user = loggedUser;
 
-        UsernameText.text = user.DisplayName;
-        ThanksMessage.text = $"{user.DisplayName}, gràcies per registrar-te";
+        WelcomeMessage.text = $"{user.DisplayName}, gràcies per registrar-te";        
+        EmailText.text = user.Email; 
 
         LoginPanel.SetActive(false);
         ChildDataPanel.SetActive(true);
