@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PortraitLevelMapGenerator : MonoBehaviour
 {
@@ -21,7 +22,16 @@ public class PortraitLevelMapGenerator : MonoBehaviour
     public float backgroundHeight = 1536f;   
 
     [Header("Scroll")]
-    public ScrollRect scrollRect; 
+    public ScrollRect scrollRect;
+
+    // 🎯 Add your scene cycle here
+    private string[] scenes = new string[]
+    {
+        "PopSeaScene",
+        "PopPartyScene",
+        "BasketScene",
+        "CrossTheRiverScene"
+    };
 
     void Start()
     {
@@ -45,24 +55,35 @@ public class PortraitLevelMapGenerator : MonoBehaviour
 
             // Alternate X positions
             float x = (i % 2 == 0) ? leftX : rightX;
-
-            // Y decreases each step
             float y = startY - (i * stepY);
-
             rt.anchoredPosition = new Vector2(x, y);
 
-            // Label
-            //var text = btn.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            //if (text != null) text.text = "Set " + (i + 1);
+            // Pick scene from cycle
+            string sceneName = scenes[i % scenes.Length];
+
+            // Add label (optional)
+            var text = btn.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            if (text != null) text.text = "Level " + (i + 1) + "\n" + sceneName;
+
+            // Add click listener
+            Button buttonComp = btn.GetComponent<Button>();
+            if (buttonComp != null)
+            {
+                int levelIndex = i; // capture loop var
+                buttonComp.onClick.AddListener(() =>
+                {
+                    Debug.Log("Loading: " + sceneName + " (Level " + (levelIndex + 1) + ")");
+                    SceneManager.LoadScene(sceneName);
+                });
+            }
         }
 
-        // 2) Resize Content (make sure scroll area fits)
+        // 2) Resize Content
         float totalHeight = startY + (numberOfLevels * stepY);
         contentParent.sizeDelta = new Vector2(contentParent.sizeDelta.x, totalHeight + 500f);
 
         // 3) Background Tiles
         int numberOfTiles = Mathf.CeilToInt(contentParent.sizeDelta.y / backgroundHeight);
-
         for (int i = 0; i < numberOfTiles; i++)
         {
             GameObject bg = Instantiate(backgroundPrefab, backgroundsParent);
