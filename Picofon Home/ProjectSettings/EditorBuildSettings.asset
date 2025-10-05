@@ -8,6 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+<<<<<<< HEAD
   - enabled: 0
     path: Assets/Scenes/OLD/EscenaLogin.unity
     guid: 3fc8acdd13e6c734bafef6554d6fdbcd
@@ -20,6 +21,17 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LoginScene.unity
     guid: 367e71f78665cb5418ff7bde19659bea
+=======
+  - enabled: 1
+    path: Assets/Scenes/EscenaLogin.unity
+    guid: 3fc8acdd13e6c734bafef6554d6fdbcd
+  - enabled: 1
+    path: Assets/Scenes/EscenaPrincipal.unity
+    guid: 026b42c7fef2c32449f3f8acdf72f3c0
+  - enabled: 1
+    path: Assets/Scenes/EscenaJuego.unity
+    guid: 0899e708c04f0da4db5f4e9cf308d5ad
+>>>>>>> feature/gmSea
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 1272ab4523c20ef47a3e38d43e7b6047, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 63a0181731c918a4aafc3a05e0a8f22b, type: 2}
