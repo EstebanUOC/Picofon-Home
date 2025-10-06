@@ -534,7 +534,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1671370759
 RectTransform:
   m_ObjectHideFlags: 0
@@ -551,7 +551,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 8.5, y: -855}
+  m_AnchoredPosition: {x: 8.5, y: -824}
   m_SizeDelta: {x: 300, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1671370760
@@ -780,15 +780,20 @@ MonoBehaviour:
   buttonParent: {fileID: 1944916955}
   buttonPrefab: {fileID: 3037750171041973716, guid: b859ea019f2127446b763d8b2a1749bc, type: 3}
   numberOfLevels: 12
-  startY: 1800
-  stepY: 100
-  leftX: -70
+  startY: 1600
+  stepY: 80
+  leftX: -50
   rightX: 80
   contentParent: {fileID: 963802370}
   backgroundsParent: {fileID: 1713383379}
   backgroundPrefab: {fileID: 9201206760764586939, guid: c5b2d5179b9e0a04cad06e79d8cf7dff, type: 3}
   backgroundHeight: 1536
   scrollRect: {fileID: 0}
+  seaSprite: {fileID: 21300000, guid: 9cae276aeae900a4e914c0eaa04e8696, type: 3}
+  partySprite: {fileID: 21300000, guid: de774c951988d00459777a0742d7f32f, type: 3}
+  basketSprite: {fileID: 21300000, guid: 98f41744ba6c4a342a8e56a73425557d, type: 3}
+  riverSprite: {fileID: 21300000, guid: a46653cf21cb8bd42a6c07227713b313, type: 3}
+  padlockSprite: {fileID: 21300000, guid: 8428b967083d32c47b1271cdc989b9ae, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
