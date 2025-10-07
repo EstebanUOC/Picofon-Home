@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 33657264}
   - component: {fileID: 33657263}
   m_Layer: 5
-  m_Name: Canastas
+  m_Name: Baskets
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -453,7 +453,7 @@ GameObject:
   - component: {fileID: 460971909}
   - component: {fileID: 460971908}
   m_Layer: 5
-  m_Name: Canasta1
+  m_Name: Ball1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -676,7 +676,7 @@ GameObject:
   - component: {fileID: 882653462}
   - component: {fileID: 882653461}
   m_Layer: 5
-  m_Name: Canasta2
+  m_Name: Ball2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -881,7 +881,7 @@ GameObject:
   - component: {fileID: 975986030}
   - component: {fileID: 975986029}
   m_Layer: 5
-  m_Name: Canasta3
+  m_Name: Ball3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1425,7 +1425,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 418}
+  m_AnchoredPosition: {x: 755, y: -411}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1459647585
@@ -1819,7 +1819,7 @@ GameObject:
   - component: {fileID: 1714139617}
   - component: {fileID: 1714139616}
   m_Layer: 5
-  m_Name: Canasta4
+  m_Name: Ball4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
