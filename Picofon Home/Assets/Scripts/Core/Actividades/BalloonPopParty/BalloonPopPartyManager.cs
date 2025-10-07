@@ -16,6 +16,12 @@ public class BalloonPopPartyManager : MonoBehaviour
     [SerializeField] private List<Image> feedbackWordImages; // Asigna 4 imágenes desde el inspector
     [SerializeField] private List<TMP_Text> feedbackWordLabels; // Asigna 4 textos desde el inspector
 
+    [Header("Extra Feedback Image")]
+    [SerializeField] private Image extraImage;
+    [SerializeField] private Sprite correctAnswerSprite;   // Corect_Answer
+    [SerializeField] private Sprite incorrectAnswerSprite; // Incorrect_Answer
+
+
     private WordData wordData;
     private string correctAnswer;
     private List<string> currentOrder = new List<string>(); // guarda el orden real de palabras en esta ronda
@@ -81,10 +87,19 @@ public class BalloonPopPartyManager : MonoBehaviour
         feedbackText.text = isCorrect ? "¡Correcto!" : "Incorrecto";
         feedbackText.color = isCorrect ? Color.green : Color.red;
 
+        // 🔹 Mostrar imagen adicional
+        if (extraImage != null)
+        {
+            extraImage.enabled = true;
+            extraImage.sprite = isCorrect ? correctAnswerSprite : incorrectAnswerSprite;
+        }
+
         if (isCorrect)
         {
-            // Mostrar las 4 palabras con su orden
-            for (int i = 0; i < currentOrder.Count && i < feedbackWordLabels.Count; i++)
+            // ✅ Mostrar solo 2 imágenes/textos aunque haya 4 opciones
+            int visibleCount = Mathf.Min(2, currentOrder.Count);
+
+            for (int i = 0; i < visibleCount; i++)
             {
                 string word = currentOrder[i].Replace("#", "");
                 feedbackWordLabels[i].text = word;
@@ -95,24 +110,51 @@ public class BalloonPopPartyManager : MonoBehaviour
                     feedbackWordImages[i].enabled = true;
                 }
             }
+
+            // Ocultar los demás slots
+            for (int j = visibleCount; j < feedbackWordLabels.Count; j++)
+            {
+                feedbackWordLabels[j].text = "";
+                if (j < feedbackWordImages.Count)
+                {
+                    feedbackWordImages[j].sprite = null;
+                    feedbackWordImages[j].enabled = false;
+                }
+            }
         }
         else
         {
-            // Si es incorrecto, ocultar los labels y sprites
-            for (int i = 2; i < feedbackWordLabels.Count; i++)
+            // ❌ Si es incorrecto, mostrar solo 2 imágenes/textos
+            int visibleCount = Mathf.Min(2, currentOrder.Count);
+
+            for (int i = 0; i < visibleCount; i++)
             {
-                feedbackWordLabels[i].text = "";
+                string word = currentOrder[i].Replace("#", "");
+                feedbackWordLabels[i].text = word;
+
                 if (i < feedbackWordImages.Count)
                 {
-                    feedbackWordImages[i].sprite = null;
-                    feedbackWordImages[i].enabled = false;
+                    feedbackWordImages[i].sprite = balloonButtons[i].GetComponent<Image>().sprite;
+                    feedbackWordImages[i].enabled = true;
+                }
+            }
+
+            // Ocultar los demás
+            for (int j = visibleCount; j < feedbackWordLabels.Count; j++)
+            {
+                feedbackWordLabels[j].text = "";
+                if (j < feedbackWordImages.Count)
+                {
+                    feedbackWordImages[j].sprite = null;
+                    feedbackWordImages[j].enabled = false;
                 }
             }
         }
 
-        // Esperar 5 segundos y reiniciar
+        // ⏳ Esperar 5 segundos y reiniciar
         StartCoroutine(HideFeedbackAndNext());
     }
+
 
     private IEnumerator HideFeedbackAndNext()
     {
