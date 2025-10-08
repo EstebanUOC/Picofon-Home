@@ -19,8 +19,8 @@ public class BasketGameManager : MonoBehaviour
     {
         ClearBalls();
 
-        float startX = -300f;
-        float spacing = 200f;
+        float startX = -400f;
+        float spacing = 250;
         float yPos = 300f;
 
         for (int i = 0; i < ballCount; i++)
