@@ -1,29 +1,41 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class BallController : MonoBehaviour, IPointerClickHandler
 {
+    [Header("References")]
+    public Image innerImage; // Image shown on top of the ball
     private Transform hoopTarget;
     private bool isMoving = false;
     private float timeElapsed = 0f;
-    private float travelTime = 1.0f; // Duration of the throw
-    private Vector3 startPos;
-    private Vector3 targetPos;
-    private float arcHeight = 200f; // Adjust for how high the ball should travel
+    private float travelTime = 1.0f;
+    private float arcHeight = 200f;
+    private bool isClickable = true;
 
-    public void Initialize(Transform target)
+    public void Initialize(Transform target, Sprite contentSprite, bool clickable)
     {
         hoopTarget = target;
+        isClickable = clickable;
+
+        if (innerImage != null && contentSprite != null)
+            innerImage.sprite = contentSprite;
     }
+
+    public void StartMoveTo(Transform target)
+    {
+        hoopTarget = target;
+        isMoving = true;
+        timeElapsed = 0f;
+    }
+
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (isMoving || hoopTarget == null)
+        if (!isClickable || isMoving || hoopTarget == null)
             return;
 
         isMoving = true;
-        startPos = transform.position;
-        targetPos = hoopTarget.position;
         timeElapsed = 0f;
     }
 
@@ -34,16 +46,17 @@ public class BallController : MonoBehaviour, IPointerClickHandler
         timeElapsed += Time.deltaTime;
         float t = timeElapsed / travelTime;
 
-        // Parabolic interpolation
+        Vector3 startPos = transform.position;
+        Vector3 targetPos = hoopTarget.position;
+
         Vector3 currentPos = Vector3.Lerp(startPos, targetPos, t);
         currentPos.y += arcHeight * Mathf.Sin(Mathf.PI * t);
-
         transform.position = currentPos;
 
         if (t >= 1f)
         {
             isMoving = false;
-            Destroy(gameObject, 0.2f); // Optional delay before disappearing
+            Destroy(gameObject, 0.2f);
         }
     }
 }
