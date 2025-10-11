@@ -45,17 +45,18 @@ public class BasketGameManager : MonoBehaviour
         // Adjust elements based on typeTask
         switch (typeTask)
         {
+            //Judge
             case 0:
                 SpawnBalls(2);               
                 if (judgeController != null)
                     judgeController.ActivateTypeJudge();               
                 break;
-
+            //Select
             case 1:
                 SpawnBalls(4);
                 if (hoopCenter != null) hoopCenter.gameObject.SetActive(true);
                 break;
-
+            //Relate
             case 2:
                 SpawnBalls(4);
                 if (hoopCenter != null) hoopCenter.gameObject.SetActive(true);
