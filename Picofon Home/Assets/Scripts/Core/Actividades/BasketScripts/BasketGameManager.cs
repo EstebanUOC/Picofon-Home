@@ -6,7 +6,7 @@ public class BasketGameManager : MonoBehaviour
     [Header("🌐 API Connection")]
     public BasketAPI api;
     public string childId = "1805359203"; // can be set dynamically from MapScene
-    public int therapyTemplateId = 10;    // example from your JSON
+    public int therapyTemplateId = 1;    // example from your JSON
 
     [Header("⚙️ Task Settings (for testing)")]
     [Range(0, 2)]
@@ -79,15 +79,15 @@ public class BasketGameManager : MonoBehaviour
         if (typeTask == 0)
         {
             // Custom layout for 2 balls
-            startX = -170f;
-            spacing = 310f; // between -170 and 140 → difference = 310
-            yPos = 300f; // same height as before, you can tweak
+            startX = -150f;
+            spacing = 330f; // between -170 and 140 → difference = 310
+            yPos = 380f; // same height as before, you can tweak
         }
         else
         {
             // Default layout
-            startX = -450f;
-            spacing = 280f;
+            startX = -700f;
+            spacing = 450f;
             yPos = 300f;
         }
 
