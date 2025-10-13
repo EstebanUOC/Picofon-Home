@@ -1,127 +1,258 @@
-//using System.Collections;
-//using System.Collections.Generic;
-//using Firebase.Extensions;
-//using Google;
-//using System.Threading.Tasks;
-//using UnityEngine;
-//using TMPro;
-//using Firebase.Auth;
-//using UnityEngine.UI;
-//using UnityEngine.Networking;
+﻿using System.Collections;
+using System.Threading.Tasks;
+using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using Firebase.Auth;
+using Firebase.Extensions;
+using Firebase.Firestore;
+using Google;
 
-//public class LoginWithGoogle : MonoBehaviour
-//{
-//    public string GoogleAPI = "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
-//    private GoogleSignInConfiguration configuration;
+public class LoginWithGoogle : MonoBehaviour
+{
+    [Header("Firebase")]
+    public string GoogleAPI = "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+    private FirebaseFirestore firestore;
 
-//    Firebase.Auth.FirebaseAuth auth;
-//    Firebase.Auth.FirebaseUser user;
+    [Header("Panels")]
+    public GameObject LoginPanel;
+    public GameObject ChildDataPanel;
 
-//    public TextMeshProUGUI Username, UserEmail;
+    [Header("Buttons")]
+    public Button SignInButton;   // ✅ assign in Inspector
+    public Button ContinueButton;
 
-//    public Image UserProfilePic;
-//    private string imageUrl;
-//    private bool isGoogleSignInInitialized = false;
-//    private void Start()
-//    {
-//        InitFirebase();
-//    }
+    [Header("Debug / Testing Only")]
+    public Button DebugLoginButton;
 
-//    void InitFirebase()
-//    {
-//        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-//    }
+    [Header("User Info UI")]   
+    public TextMeshProUGUI WelcomeMessage;
+    public TextMeshProUGUI EmailText;
 
-//    public void Login()
-//    {
-//        if (!isGoogleSignInInitialized)
-//        {
-//            GoogleSignIn.Configuration = new GoogleSignInConfiguration
-//            {
-//                RequestIdToken = true,
-//                WebClientId = GoogleAPI,
-//                RequestEmail = true
-//            };
+    [Header("Child Data UI")]
+    public TMP_InputField ChildNameField;
+    public TMP_Dropdown AgeDropdown;
+    public Toggle TDAH_Toggle;
+    public Toggle Down_Toggle;
+    public Toggle TEL_Toggle;
+    public Toggle TEA_Toggle;
+    public Toggle Other_Toggle;
+    public TMP_InputField OtherTextField;
 
-//            isGoogleSignInInitialized = true;
-//        }
-//        GoogleSignIn.Configuration = new GoogleSignInConfiguration
-//        {
-//            RequestIdToken = true,
-//            WebClientId = GoogleAPI
-//        };
-//        GoogleSignIn.Configuration.RequestEmail = true;
+    private bool isGoogleSignInInitialized = false;
 
-//        Task<GoogleSignInUser> signIn = GoogleSignIn.DefaultInstance.SignIn();
+    private void Start()
+    {
+        Debug.Log("Msg::::: Start()");
 
-//        TaskCompletionSource<FirebaseUser> signInCompleted = new TaskCompletionSource<FirebaseUser>();
-//        signIn.ContinueWith(task =>
-//        {
-//            if (task.IsCanceled)
-//            {
-//                signInCompleted.SetCanceled();
-//                Debug.Log("Cancelled");
-//            }
-//            else if (task.IsFaulted)
-//            {
-//                signInCompleted.SetException(task.Exception);
+        // ✅ Debug button (simulates login without Firebase/Google)
+        if (DebugLoginButton != null)
+        {
+            Debug.Log("Msg::::: DebugLoginButton start");
+            DebugLoginButton.onClick.RemoveAllListeners();
+            DebugLoginButton.onClick.AddListener(SimulateLogin);
+        }
 
-//                Debug.Log("Faulted " + task.Exception);
-//            }
-//            else
-//            {
-//                Credential credential = Firebase.Auth.GoogleAuthProvider.GetCredential(((Task<GoogleSignInUser>)task).Result.IdToken, null);
-//                auth.SignInWithCredentialAsync(credential).ContinueWith(authTask =>
-//                {
-//                    if (authTask.IsCanceled)
-//                    {
-//                        signInCompleted.SetCanceled();
-//                    }
-//                    else if (authTask.IsFaulted)
-//                    {
-//                        signInCompleted.SetException(authTask.Exception);
-//                        Debug.Log("Faulted In Auth " + task.Exception);
-//                    }
-//                    else
-//                    {
-//                        signInCompleted.SetResult(((Task<FirebaseUser>)authTask).Result);
-//                        Debug.Log("Success");
-//                        user = auth.CurrentUser;
-//                        Username.text = user.DisplayName;
-//                        UserEmail.text = user.Email;
+        InitFirebase();
 
-//                        StartCoroutine(LoadImage(CheckImageUrl(user.PhotoUrl.ToString())));
-//                    }
-//                });
-//            }
-//        });
-//    }
-//    private string CheckImageUrl(string url)
-//    {
-//        if (!string.IsNullOrEmpty(url))
-//        {
-//            return url;
-//        }
-//        return imageUrl;
-//    }
+        // ✅ Initialize Google Sign-In once
+        if (!isGoogleSignInInitialized)
+        {
+            GoogleSignIn.Configuration = new GoogleSignInConfiguration
+            {
+                RequestIdToken = true,
+                WebClientId = GoogleAPI,
+                RequestEmail = true
+            };
+            isGoogleSignInInitialized = true;
+            Debug.Log("Msg::::: Google SignIn configuration initialized in Start()");
+        }
 
-//    IEnumerator LoadImage(string imageUri)
-//    {
-//        UnityWebRequest www = UnityWebRequestTexture.GetTexture(imageUri);
-//        yield return www.SendWebRequest();
+        // ✅ Wire buttons safely
+        if (SignInButton != null)
+        {
+            SignInButton.onClick.RemoveAllListeners();
+            SignInButton.onClick.AddListener(Login);
+            Debug.Log("Msg::::: SignIn button wired programmatically in Start()");
+        }
 
-//        if (www.result == UnityWebRequest.Result.Success)
-//        {
-//            Texture2D texture = DownloadHandlerTexture.GetContent(www);
-//            // Use the loaded texture here
-//            Debug.Log("Image loaded successfully");
-//            UserProfilePic.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0));
-//        }
-//        else
-//        {
-//            Debug.Log("Error loading image: " + www.error);
-//        }
+        if (ContinueButton != null)
+        {
+            ContinueButton.onClick.RemoveAllListeners();
+            ContinueButton.onClick.AddListener(OnContinue);
+        }
+
+        // Default UI state (safe even if already set in Inspector)
+        LoginPanel.SetActive(true);
+        ChildDataPanel.SetActive(false);
+    }
+
+    void InitFirebase()
+    {
+        Debug.Log("Msg::::: InitFirebase()");
+        auth = FirebaseAuth.DefaultInstance;
+        firestore = FirebaseFirestore.DefaultInstance;
+    }
+
+    public void Login()
+    {
+        Debug.Log($">>>> SignIn Button Pressed at: {System.DateTime.Now:HH:mm:ss.fff}");
+        Debug.Log("Msg:::::Login() called – SignIn button pressed");
+
+        Task<GoogleSignInUser> signIn = GoogleSignIn.DefaultInstance.SignIn();
+        TaskCompletionSource<FirebaseUser> signInCompleted = new TaskCompletionSource<FirebaseUser>();
+
+        signIn.ContinueWith(task =>
+        {
+            Debug.Log("Msg:::::GoogleSignIn task finished. Status: " + task.Status);
+
+            if (task.IsCanceled)
+            {
+                Debug.LogWarning("Msg:::::Google Sign-In canceled");
+                signInCompleted.SetCanceled();
+            }
+            else if (task.IsFaulted)
+            {
+                Debug.LogError("Msg:::::Google Sign-In error: " + task.Exception);
+                signInCompleted.SetException(task.Exception);
+            }
+            else
+            {
+                Debug.Log("Msg:::::Google Sign-In success. Getting Firebase credential...");
+
+                Credential credential = GoogleAuthProvider.GetCredential(task.Result.IdToken, null);
+
+                auth.SignInWithCredentialAsync(credential).ContinueWithOnMainThread(authTask =>
+                {
+                    Debug.Log("Msg:::::Firebase SignIn task finished. Status: " + authTask.Status);
+
+                    if (authTask.IsCanceled)
+                    {
+                        Debug.LogWarning("Msg:::::Firebase Auth canceled");
+                        signInCompleted.SetCanceled();
+                    }
+                    else if (authTask.IsFaulted)
+                    {
+                        Debug.LogError("Msg:::::Firebase Auth error: " + authTask.Exception);
+                        signInCompleted.SetException(authTask.Exception);
+                    }
+                    else
+                    {
+                        Debug.Log("Msg:::::Firebase Auth success. Logged in as: " + authTask.Result.DisplayName);
+                        signInCompleted.SetResult(authTask.Result);
+
+                        OnLoginSuccess(auth.CurrentUser);
+                    }
+                });
+            }
+        });
+    }
+
+    /// <summary>
+    /// Called when login is successful
+    /// </summary>
+    private void OnLoginSuccess(FirebaseUser loggedUser)
+    {
+       if (loggedUser == null) return;
+
+        Debug.Log("Msg::::: OnLoginSuccess() [FirebaseUser]");
+        user = loggedUser;
+
+        WelcomeMessage.text = $"{user.DisplayName}, gràcies per registrar-te";
+        EmailText.text = user.Email;
+
+        LoginPanel.SetActive(false);
+        ChildDataPanel.SetActive(true);
+    }
+
+    // Overload for fake user (only used in debug mode)
+    private void OnLoginSuccess(FakeFirebaseUser fakeUser)
+    {
+        Debug.Log("Msg::::: OnLoginSuccess() [FakeFirebaseUser]");
+
+        WelcomeMessage.text = $"{fakeUser.DisplayName}, gràcies per registrar-te";
+        EmailText.text = fakeUser.Email;
+
+        LoginPanel.SetActive(false);
+        ChildDataPanel.SetActive(true);
+    }
+
+    private void OnContinue()
+    {
+        if (user == null)
+        {
+            Debug.LogError("Msg:::::No user logged in.");
+            return;
+        }
+
+        string childName = ChildNameField.text;
+        string age = AgeDropdown.options[AgeDropdown.value].text;
+        bool hasTDAH = TDAH_Toggle.isOn;
+        bool hasDown = Down_Toggle.isOn;
+        bool hasTEL = TEL_Toggle.isOn;
+        bool hasTEA = TEA_Toggle.isOn;
+        bool hasOther = Other_Toggle.isOn;
+        string otherDetails = OtherTextField.text;
+
+        DocumentReference docRef = firestore.Collection("users").Document(user.UserId);
+        var childData = new
+        {
+            parentName = user.DisplayName,
+            parentEmail = user.Email,
+            childName = childName,
+            age = age,
+            TDAH = hasTDAH,
+            Down = hasDown,
+            TEL = hasTEL,
+            TEA = hasTEA,
+            Other = hasOther,
+            OtherDetails = otherDetails
+        };
+
+        docRef.SetAsync(childData).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("Msg:::::Child data saved successfully!");
+            }
+            else
+            {
+                Debug.LogError("Msg::::: Error saving child data: " + task.Exception);
+            }
+        });
+    }
 
 
-//    }
-//}
+    /// <summary>
+    /// Fake login for testing UI flow without Firebase
+    /// </summary>
+    private void SimulateLogin()
+    {
+        Debug.Log("Msg::::: SimulateLogin() called – skipping Google/Firebase login");
+
+        FakeFirebaseUser fakeUser = new FakeFirebaseUser(
+            "testUser123",
+            "Test User",
+            "testuser@example.com"
+        );
+
+        OnLoginSuccess(fakeUser);
+    }
+}
+
+
+public class FakeFirebaseUser
+{
+    public string UserId { get; }
+    public string DisplayName { get; }
+    public string Email { get; }
+
+    public FakeFirebaseUser(string id, string name, string mail)
+    {
+        UserId = id;
+        DisplayName = name;
+        Email = mail;
+    }
+}
