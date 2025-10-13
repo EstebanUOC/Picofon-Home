@@ -1,9 +1,14 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class PortraitLevelMapGenerator : MonoBehaviour
 {
+    [Header("API var")]
+    public string childId = "1805359203"; // temporary until login connects    
+
     [Header("Buttons")]
     public RectTransform buttonParent;
     public GameObject buttonPrefab;
@@ -47,11 +52,43 @@ public class PortraitLevelMapGenerator : MonoBehaviour
 
     void Start()
     {
-        GenerateMap();
-        UpdateLevelLocks();
-
-       
+        StartCoroutine(LoadMapData());    
+        //GenerateMap();
+        //UpdateLevelLocks();       
     }
+
+    IEnumerator LoadMapData()
+    {
+        TherapyAPI api = gameObject.AddComponent<TherapyAPI>();
+
+        yield return StartCoroutine(api.LoadTherapyPlans(childId, (plans) =>
+        {
+            if (plans != null && plans.Count > 0)
+            {
+                // Count how many therapy_template_id entries exist
+                numberOfLevels = plans.Count;
+                Debug.Log($"✅ Child {childId} has {numberOfLevels} therapy plans.");
+
+                // (Optional) You could also store each plan's template ID if needed later
+                // foreach (var plan in plans) Debug.Log($"Template ID: {plan.therapy_template_id}");
+            }
+            else
+            {
+                Debug.LogWarning("⚠️ No plans found — using default 12 levels.");
+                numberOfLevels = 12;
+            }
+
+            GenerateMap();
+            UpdateLevelLocks();
+
+            if (scrollRect != null)
+            {
+                Canvas.ForceUpdateCanvases();
+                scrollRect.verticalNormalizedPosition = 1f;
+            }
+        }));
+    }
+
 
     void GenerateMap()
     {

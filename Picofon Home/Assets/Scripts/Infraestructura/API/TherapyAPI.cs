@@ -1,18 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Networking;
+using System.Collections.Generic;
 
 public class TherapyAPI : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private const string BASE_URL = "http://108.130.147.206/api/v1/unity-proxy/therapy/child";
 
-    // Update is called once per frame
-    void Update()
+    public IEnumerator LoadTherapyPlans(
+        string childId,
+        System.Action<List<TherapyPlan>> onSuccess)
     {
-        
+        string url = $"{BASE_URL}/{childId}";
+        Debug.Log($"🌐 Requesting therapy data → {url}");
+
+        using (UnityWebRequest req = UnityWebRequest.Get(url))
+        {
+            yield return req.SendWebRequest();
+
+            if (req.result == UnityWebRequest.Result.Success)
+            {
+                string json = req.downloadHandler.text;
+                Debug.Log($"📥 Therapy JSON: {json.Substring(0, Mathf.Min(300, json.Length))}");
+
+                TherapyResponse response = JsonUtility.FromJson<TherapyResponse>(json);
+                onSuccess?.Invoke(response.data);
+            }
+            else
+            {
+                Debug.LogError($"❌ TherapyAPI error: {req.error}");
+                onSuccess?.Invoke(null);
+            }
+        }
     }
 }

@@ -777,9 +777,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3869c05e3fe98ba4c9ca3f7a56b47be3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  childId: 1805359203
   buttonParent: {fileID: 1944916955}
   buttonPrefab: {fileID: 3037750171041973716, guid: b859ea019f2127446b763d8b2a1749bc, type: 3}
-  numberOfLevels: 12
+  numberOfLevels: 10
   startY: 2000
   stepY: 100
   leftX: -100
