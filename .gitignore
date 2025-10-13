@@ -58,4 +58,12 @@ sysinfo.txt
 *.exe
 *.app
 *.unitypackage
-Picofon Home/Assets/Resources/Images/ImgButtons/.tmp.driveupload/11518
+
+# Ignore Google Drive temporary upload folders
+*.tmp.driveupload/
+.tmp.driveupload/
+*/.tmp.driveupload/
+
+
+/Picofon Home/Assets/Resources/Images/
+/Picofon Home/Assets/Images/
