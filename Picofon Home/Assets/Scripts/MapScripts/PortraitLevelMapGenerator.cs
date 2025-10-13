@@ -10,10 +10,13 @@ public class PortraitLevelMapGenerator : MonoBehaviour
     public int numberOfLevels = 12;
 
     [Header("Button Placement")]
-    public float startY = 1600f;
-    public float stepY = 80f;
-    public float leftX = -50f;
-    public float rightX = 50f;
+    public float startY = 2100f;
+    public float stepY = 100f;
+    public float leftX = -100f;
+    public float rightX = 100f;
+
+    [Header("Button Size")]
+    public Vector2 buttonSize = new Vector2(150f, 150f);
 
     [Header("Background (Tiled)")]
     public RectTransform contentParent;
@@ -47,11 +50,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
         GenerateMap();
         UpdateLevelLocks();
 
-        if (scrollRect != null)
-        {
-            Canvas.ForceUpdateCanvases();
-            scrollRect.verticalNormalizedPosition = 0f;
-        }
+       
     }
 
     void GenerateMap()
@@ -63,7 +62,9 @@ public class PortraitLevelMapGenerator : MonoBehaviour
         {
             GameObject btn = Instantiate(buttonPrefab, buttonParent);
             RectTransform rt = btn.GetComponent<RectTransform>();
-            rt.sizeDelta = new Vector2(70f, 70f);
+            //rt.sizeDelta = new Vector2(70f, 70f);
+            rt.sizeDelta = buttonSize;
+
 
             float x = (i % 2 == 0) ? leftX : rightX;
             float y = startY - (i * stepY);
@@ -82,7 +83,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
                 sceneRT.anchorMin = new Vector2(0.5f, 0.5f);
                 sceneRT.anchorMax = new Vector2(0.5f, 0.5f);
                 sceneRT.pivot = new Vector2(0.5f, 0.5f);
-                sceneRT.sizeDelta = new Vector2(40f, 40f);
+                sceneRT.sizeDelta = new Vector2(80f, 80f);
                 sceneRT.anchoredPosition = Vector2.zero;
 
                 Image sceneImage = sceneOverlay.GetComponent<Image>();
@@ -146,6 +147,14 @@ public class PortraitLevelMapGenerator : MonoBehaviour
             bgRt.anchoredPosition = new Vector2(0, y);
             bgRt.sizeDelta = new Vector2(contentParent.rect.width, backgroundHeight);
             bg.name = "BackgroundTile_" + (i + 1);
+        }
+
+        // ✅ Reset scroll position AFTER generation
+        if (scrollRect != null)
+        {
+            Canvas.ForceUpdateCanvases();          
+            // Then reset scroll to top if you want to start at the beginning:
+            scrollRect.verticalNormalizedPosition = 1f; // 1 = top, 0 = bottom
         }
     }
 
