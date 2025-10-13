@@ -64,6 +64,6 @@ sysinfo.txt
 .tmp.driveupload/
 */.tmp.driveupload/
 
-
-/Picofon Home/Assets/Resources/Images/
-/Picofon Home/Assets/Images/
+# Ignore local image folders (synced with Google Drive)
+Picofon Home/Assets/Resources/Images/
+Picofon Home/Assets/Images/
