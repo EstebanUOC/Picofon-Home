@@ -41,9 +41,9 @@ public class PortraitLevelMapGenerator : MonoBehaviour
 
     private string[] scenes = new string[]
     {
+        "BasketScene",    
         "BalloonPopSeaScene",
-        "BalloonPopParty",
-        "BasketScene",
+        "BalloonPopParty",        
         "CrossTheRiverScene"
     };
 
@@ -79,13 +79,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
             }
 
             GenerateMap();
-            UpdateLevelLocks();
-
-            if (scrollRect != null)
-            {
-                Canvas.ForceUpdateCanvases();
-                scrollRect.verticalNormalizedPosition = 1f;
-            }
+            UpdateLevelLocks();            
         }));
     }
 
@@ -191,6 +185,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
         {
             Canvas.ForceUpdateCanvases();          
             // Then reset scroll to top if you want to start at the beginning:
+            // Important put 1 to appears the scroll rect at the top.
             scrollRect.verticalNormalizedPosition = 1f; // 1 = top, 0 = bottom
         }
     }
