@@ -22,7 +22,7 @@ public class BalloonPopPartyManager : MonoBehaviour
     [SerializeField] private Sprite incorrectAnswerSprite; // Incorrect_Answer
 
 
-    private WordData wordData;
+    //private WordData wordData;
     private string correctAnswer;
     private List<string> currentOrder = new List<string>(); // guarda el orden real de palabras en esta ronda
 
@@ -37,21 +37,21 @@ public class BalloonPopPartyManager : MonoBehaviour
 
     void LoadWords()
     {
-        wordData = WordLoader.LoadFromTextAsset("WordsExampleJson");
-        if (wordData == null) return;
-        correctAnswer = wordData.correct_option;
+        //wordData = WordLoader.LoadFromTextAsset("WordsExampleJson");
+        //if (wordData == null) return;
+        //correctAnswer = wordData.correct_option;
     }
 
     void SetupBalloons()
     {
-        if (wordData == null) return;
+        //if (wordData == null) return;
 
         // Lista de opciones
         List<string> options = new List<string> {
-            wordData.main_word,
-            wordData.wrong_option1,
-            wordData.wrong_option2,
-            wordData.wrong_option3
+            //wordData.main_word,
+            //wordData.wrong_option1,
+            //wordData.wrong_option2,
+            //wordData.wrong_option3
         };
 
         // Mezclar aleatoriamente
