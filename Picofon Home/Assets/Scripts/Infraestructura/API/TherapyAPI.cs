@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class TherapyAPI : MonoBehaviour
 {
-    private const string BASE_URL = "http://108.130.147.206/api/v1/unity-proxy/therapy/child";
+    private const string BASE_URL = "https://108.130.147.206/api/v1/unity-proxy/therapy/child";
 
     public IEnumerator LoadTherapyPlans(
         string childId,
