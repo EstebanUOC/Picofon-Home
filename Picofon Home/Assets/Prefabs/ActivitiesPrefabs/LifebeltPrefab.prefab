@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3139905607432282396}
   - component: {fileID: 5086856240590952150}
   m_Layer: 5
-  m_Name: lifebelt
+  m_Name: BackgroundLifebelt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4711e26fb8906c345bb3ccb3fd4cde8f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 56451d43c3cf0814a8862f8169170e3e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

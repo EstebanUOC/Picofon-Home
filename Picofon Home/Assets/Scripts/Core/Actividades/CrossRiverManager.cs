@@ -3,433 +3,560 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Linq;
-
-// ✅ Namespaces por minijuego (reutilizando modelos existentes)
 using Picofon.Games.Judge;
-using Picofon.Games.Relate;
-using Picofon.Games.Select;
-using Picofon.Games.Create;
+using UnityEngine.SceneManagement;
 
-// ✅ Alias global de WordData
-using WordData = Picofon.Games.Judge.WordData;
 
-/// <summary>
-/// Controlador principal del minijuego CrossRiver.
-/// Usa los mismos modelos que BalloonPopSea pero reemplaza el prefab por LifebeltPrefab.
-/// Modo 0 → Judge (Sí/No)
-/// Modo 1 → Relate (Selecciona el diferente)
-/// Modo 2 → Create (Con pista)
-/// Modo 3 → Select (Elige el correcto)
-/// </summary>
-public class CrossRiverManager : ActivityBaseManager
+public class CrossRiverManager : MonoBehaviour
 {
-    private int currentMode = 0;
-    private bool correctAnswered = false;
+    [Header("🧩 Controlador de Feedback")]
+    [SerializeField] private FeedbackPanelController feedbackController;
 
-    private readonly Dictionary<Button, Sprite> buttonToSprite = new();
-    private readonly Dictionary<Sprite, string> spriteToWord = new();
+    [SerializeField] private Image imageMain;
 
-    [Header("Prefabs y contenedores")]
-    [SerializeField] private GameObject lifebeltPrefab; // 🛟 reemplaza bubblePrefab
-    [SerializeField] private Transform containerRow1;
-    [SerializeField] private Transform containerRow2;
 
-    private HorizontalLayoutGroup layoutRow1;
-    private HorizontalLayoutGroup layoutRow2;
+    [Header("🎯 Prefabs y objetos principales")]
+    [SerializeField] private GameObject buttonPrefab;
+    [SerializeField] private RectTransform buttonContainer;
 
-    [Header("Feedback visual")]
+    [Header("🖼️ Imágenes (modo Judge)")]
+    [SerializeField] private Image firstImage;
+    [SerializeField] private Image secondImage;
+
+    [Header("🧠 Panel de feedback y pregunta")]
     [SerializeField] private GameObject panelFeedback;
     [SerializeField] private TMP_Text feedbackText;
-    [SerializeField] private Image feedbackImage1;
-    [SerializeField] private Image feedbackImage2;
-    [SerializeField] private TMP_Text feedbackName1;
-    [SerializeField] private TMP_Text feedbackName2;
+    [SerializeField] private TMP_Text questionText;
 
-    [Header("Imágenes auxiliares")]
-    [SerializeField] private Image extraImage;
-    [SerializeField] private Sprite extraCorrectSprite;
-    [SerializeField] private Sprite extraIncorrectSprite;
-    [SerializeField] private Image cloudImage;
+    [Header("📦 Botones de cambio de modo (TopButtons)")]
+    [SerializeField] private Transform topButtonsContainer;
 
-    [Header("Botones modo Judge (Sí/No)")]
-    [SerializeField] private Button buttonYes;
-    [SerializeField] private Button buttonNo;
+    [Header("🧭 Botones de cambio de escena")]
+    [SerializeField] private Button buttonMapScene;
+    [SerializeField] private Button buttonNextScene;
 
-    [Header("Sprites locales")]
-    [SerializeField] private string resourcesFolder = "CrossRiver";
-    [SerializeField] private List<Sprite> gameImages = new();
+    private readonly string mapSceneName = "MapPath";
+    private readonly string nextSceneName = "BalloonPopSeaScene";
 
-    public bool IsBusyShowingFeedback { get; private set; }
 
-    // ==============================================================
-    protected override void Awake()
+
+    // 🧍‍♂️ Personaje
+    private RectTransform imageCharacter;
+    private readonly float moveDuration = 1.2f;
+    private readonly float arcHeight = 150f;
+    private readonly AnimationCurve moveCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+
+    private Vector2 startCharacterPos = new(250, 200);
+    private Vector2 finalCharacterPos = new(1700, 800);
+    private bool isAnimating = false;
+
+    private List<GameObject> spawnedButtons = new();
+    private int currentMode = 0;
+    private GameAPIService apiService;
+
+    // ============================================================
+    // 🔹 Coordenadas configurables SOLO desde código
+    // ============================================================
+    private Vector2 yesButtonPosition = new(750, 300);
+    private Vector2 noButtonPosition = new(1200, 200);
+
+    private Vector2[] mode1Positions =
     {
-        base.Awake();
-        EnsureSpritesLoaded();
+        new Vector2(750, 700),
+        new Vector2(1200, 600),
+        new Vector2(750, 300),
+        new Vector2(1200, 200)
+    };
 
+    private Vector2[] mode2Positions =
+    {
+        new Vector2(750, 700),
+        new Vector2(1200, 600),
+        new Vector2(750, 300),
+        new Vector2(1200, 200)
+    };
+
+    private void Awake()
+    {
+        apiService = FindObjectOfType<GameAPIService>();
         if (panelFeedback) panelFeedback.SetActive(false);
-        if (cloudImage) cloudImage.enabled = false;
 
-        layoutRow1 = containerRow1?.GetComponent<HorizontalLayoutGroup>();
-        layoutRow2 = containerRow2?.GetComponent<HorizontalLayoutGroup>();
+        imageCharacter = GameObject.Find("ImageCharacter")?.GetComponent<RectTransform>();
+        if (imageCharacter != null)
+            imageCharacter.anchoredPosition = startCharacterPos;
     }
 
     private void Start()
     {
-        if (api != null)
+        AssignModeButtons();
+        if (buttonMapScene != null)
         {
-            Debug.Log($"🌊 Cargando modo inicial {currentMode} desde API...");
-            StartCoroutine(api.LoadActivity(currentMode, OnJsonLoaded, OnError));
+            buttonMapScene.onClick.RemoveAllListeners();
+            buttonMapScene.onClick.AddListener(() => ChangeScene(mapSceneName));
         }
-        else
+
+        if (buttonNextScene != null)
         {
-            Debug.LogWarning("⚠️ No hay API asignada, modo local sin carga remota.");
+            buttonNextScene.onClick.RemoveAllListeners();
+            buttonNextScene.onClick.AddListener(() => ChangeScene(nextSceneName));
         }
+
+
+        StartCoroutine(LoadModeFromAPI(0));
     }
 
-    // ==============================================================
-    // 🔹 Carga desde botón / API / JSON directo
-    // ==============================================================
-    #region Carga directa
-    public new void LoadMode(int mode)
+    // ============================================================
+    // 🔹 Carga dinámica de modos
+    // ============================================================
+    private IEnumerator LoadModeFromAPI(int mode)
     {
         currentMode = mode;
-        Debug.Log($"🎮 Botón → modo {mode}");
-        if (api != null)
-            StartCoroutine(api.LoadActivity(mode, OnJsonLoaded, OnError));
-        else
-            Debug.LogWarning("⚠️ No hay API asignada.");
+        if (apiService == null)
+        {
+            Debug.LogError("❌ No se encontró GameAPIService en la escena.");
+            yield break;
+        }
+
+        yield return apiService.LoadActivity(mode,
+            json => LoadMode(mode, json),
+            err => Debug.LogError(err));
     }
 
     public void LoadMode(int mode, string json)
     {
+        ClearButtons();
         currentMode = mode;
-        if (string.IsNullOrEmpty(json))
+
+        switch (mode)
         {
-            Debug.LogError("❌ JSON vacío en LoadMode(mode, json).");
-            return;
-        }
-        Debug.Log($"🧩 Cargando modo {mode} con JSON directo...");
-        OnJsonLoaded(json);
-    }
-    #endregion
 
-    // ==============================================================
-    // 🔹 Procesamiento del JSON recibido
-    // ==============================================================
-    protected override void OnJsonLoaded(string json)
-    {
-        ClearContainers();
-        correctAnswered = false;
+            case 0:
+                if (imageMain != null)
+                    imageMain.gameObject.SetActive(false);
 
-        if (string.IsNullOrEmpty(json))
-        {
-            Debug.LogError("❌ JSON vacío recibido en OnJsonLoaded.");
-            return;
-        }
+                var judgeData = JsonUtility.FromJson<ApiResponseJudge>(json);
+                if (judgeData?.data?.activity1 != null)
+                    LoadJudgeMode(judgeData.data.activity1);
+                else
+                    Debug.LogError("❌ JSON no contiene activity1 válido.");
+                break;
 
-        try
-        {
-            switch (currentMode)
-            {
-                case 0:
-                    var judgeData = JsonUtility.FromJson<ApiResponseJudge>(json);
-                    if (judgeData?.data?.activity1 != null)
-                        LoadJudgeMode(judgeData.data.activity1);
-                    break;
 
-                case 1:
-                    var relateData = JsonUtility.FromJson<ApiResponseRelate>(json);
-                    if (relateData?.data?.activity1 != null)
-                        LoadRelateMode(relateData.data.activity1);
-                    break;
+            case 1:
+                HideWordImages();
+                CreateModeButtons(mode1Positions);
+                if (imageMain != null)
+                    imageMain.gameObject.SetActive(true);
+                break;
 
-                case 2:
-                    var createData = JsonUtility.FromJson<ApiResponseCreate>(json);
-                    if (createData?.data?.activity1 != null)
-                        LoadCreateMode(createData.data.activity1);
-                    break;
+            case 2:
+                HideWordImages();
+                CreateModeButtons(mode2Positions);
+                if (imageMain != null)
+                    imageMain.gameObject.SetActive(true);
+                break;
 
-                case 3:
-                    var selectData = JsonUtility.FromJson<ApiResponseSelect>(json);
-                    if (selectData?.data?.activity1 != null)
-                        LoadSelectMode(selectData.data.activity1);
-                    break;
-
-                default:
-                    Debug.LogWarning($"⚠️ Modo {currentMode} no implementado.");
-                    break;
-            }
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"❌ Error al procesar JSON del modo {currentMode}: {ex.Message}");
+            default:
+                HideWordImages();
+                Debug.LogWarning($"⚠️ Modo {mode} no implementado.");
+                break;
         }
     }
 
-    // ==============================================================
-    // 🟢 MODO 0 – Judge
-    // ==============================================================
+    // ============================================================
+    // 🟣 Modo Judge (Sí / No)
+    // ============================================================
     private void LoadJudgeMode(ActivityJudge activity)
     {
-        currentMode = 0;
-        Debug.Log($"🟢 Judge → {activity.word1.word} vs {activity.word2.word}");
+        if (questionText != null)
+            questionText.text = activity.question;
 
-        ClearContainers();
-
-        buttonYes?.gameObject.SetActive(true);
-        buttonNo?.gameObject.SetActive(true);
-
-        Sprite s1 = LoadSprite(activity.word1.PATH);
-        Sprite s2 = LoadSprite(activity.word2.PATH);
-
-        CreateLifebelt(containerRow1, s1);
-        CreateLifebelt(containerRow1, s2);
-
-        spriteToWord.Clear();
-        if (s1) spriteToWord[s1] = activity.word1.word;
-        if (s2) spriteToWord[s2] = activity.word2.word;
-
-        bool correctIsYes = activity.answer;
-        bool correctIsNo = !activity.answer;
-
-        buttonYes.onClick.RemoveAllListeners();
-        buttonNo.onClick.RemoveAllListeners();
-
-        buttonYes.onClick.AddListener(() => EvaluateJudge(activity, true, correctIsYes, s1, s2));
-        buttonNo.onClick.AddListener(() => EvaluateJudge(activity, false, correctIsNo, s1, s2));
-    }
-
-    // ==============================================================
-    // 🟣 MODO 1 – Relate
-    // ==============================================================
-    private void LoadRelateMode(ActivityRelate activity)
-    {
-        currentMode = 1;
-        Debug.Log($"🟣 Relate cargado → principal: {activity.main_word.word}");
-
-        ClearContainers();
-        buttonYes?.gameObject.SetActive(false);
-        buttonNo?.gameObject.SetActive(false);
-
-        spriteToWord.Clear();
-        buttonToSprite.Clear();
-
-        if (layoutRow2 != null)
+        if (firstImage && secondImage)
         {
-            layoutRow2.spacing = 150f;
-            layoutRow2.childAlignment = TextAnchor.MiddleCenter;
+            firstImage.gameObject.SetActive(true);
+            secondImage.gameObject.SetActive(true);
+            firstImage.sprite = LoadLocalSprite(activity.word1.PATH);
+            secondImage.sprite = LoadLocalSprite(activity.word2.PATH);
         }
 
-        Sprite main = LoadSprite(activity.main_word.PATH);
-        Sprite correct = LoadSprite(activity.correct_option.PATH);
-        Sprite wrong1 = LoadSprite(activity.wrong_option1.PATH);
-        Sprite wrong2 = LoadSprite(activity.wrong_option2.PATH);
-        Sprite wrong3 = LoadSprite(activity.wrong_option3.PATH);
+        CreateJudgeButtons(activity);
+    }
 
-        CreateLifebelt(containerRow1, main);
+    private void CreateJudgeButtons(ActivityJudge activity)
+    {
+        ClearButtons();
 
-        List<(Sprite sprite, bool isCorrect)> options = new()
+        string[] labels = { "Sí", "No" };
+        bool[] answers = { true, false };
+        Vector2[] positions = { yesButtonPosition, noButtonPosition };
+
+        for (int i = 0; i < 2; i++)
         {
-            (correct, false),
-            (wrong1, false),
-            (wrong2, false),
-            (wrong3, true)
-        };
+            GameObject btnObj = Instantiate(buttonPrefab, buttonContainer);
+            btnObj.name = $"Button_{labels[i]}";
 
-        foreach (var opt in options.Where(o => o.sprite != null))
-        {
-            GameObject lifebelt = CreateLifebelt(containerRow2, opt.sprite);
-            Button btn = lifebelt.transform.Find("ButtonOp")?.GetComponent<Button>();
-            if (btn)
+            RectTransform rect = btnObj.GetComponent<RectTransform>();
+            rect.anchorMin = rect.anchorMax = new Vector2(0f, 0f);
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = positions[i];
+
+            TMP_Text text = btnObj.GetComponentInChildren<TMP_Text>();
+            if (text != null) text.text = labels[i];
+
+            Transform opTf = btnObj.transform.Find("ButtonOp");
+            Button button = opTf ? opTf.GetComponent<Button>() : null;
+
+            if (button != null)
             {
-                btn.onClick.RemoveAllListeners();
-                btn.onClick.AddListener(() => EvaluateRelate(activity, opt.isCorrect, opt.sprite));
+                bool isYes = answers[i];
+
+                button.onClick.AddListener(() =>
+                {
+                    if (!isAnimating)
+                    {
+                        // ✅ Si la respuesta correcta es "true"
+                        // el botón "Sí" es correcto, el "No" es incorrecto.
+                        // Si la respuesta correcta es "false", se invierte.
+                        bool isCorrect;
+
+                        if (activity.answer) // answer = true
+                            isCorrect = isYes; // "Sí" correcto
+                        else // answer = false
+                            isCorrect = !isYes; // "No" correcto
+
+                        string msg = isCorrect ? activity.feedback_positive : activity.feedback_neutral;
+
+                        if (isCorrect)
+                            StartCoroutine(HandleCorrectFeedback(activity, msg));
+                        else
+                            StartCoroutine(HandleSpecialIncorrectFeedback(activity, msg));
+                    }
+                });
             }
-        }
-    }
 
-    // ==============================================================
-    // 🟧 MODO 2 – Create
-    // ==============================================================
-    private void LoadCreateMode(ActivityCreate activity)
-    {
-        currentMode = 2;
-        Debug.Log($"🟧 Create cargado → palabra: {activity.main_word.word}");
-
-        ClearContainers();
-        buttonYes?.gameObject.SetActive(false);
-        buttonNo?.gameObject.SetActive(false);
-
-        layoutRow1.spacing = 0;
-        layoutRow2.spacing = 0;
-
-        Sprite main = LoadSprite(activity.main_word.PATH);
-        Sprite hint = LoadSprite(activity.hint_word.PATH);
-
-        CreateLifebelt(containerRow1, main);
-        CreateLifebelt(containerRow2, hint);
-
-        ShowFeedback(true, main, hint, $"Pista: {activity.hint}", activity.main_word.word, activity.hint_word.word);
-    }
-
-    // ==============================================================
-    // 🔵 MODO 3 – Select
-    // ==============================================================
-    private void LoadSelectMode(ActivitySelect activity)
-    {
-        currentMode = 3;
-        Debug.Log($"🔵 Select cargado → {activity.main_word.word}");
-
-        ClearContainers();
-        buttonYes?.gameObject.SetActive(false);
-        buttonNo?.gameObject.SetActive(false);
-
-        Sprite main = LoadSprite(activity.main_word.PATH);
-        Sprite correct = LoadSprite(activity.correct_option.PATH);
-        Sprite wrong1 = LoadSprite(activity.wrong_option1.PATH);
-        Sprite wrong2 = LoadSprite(activity.wrong_option2.PATH);
-
-        List<(Sprite sprite, bool isCorrect)> options = new()
-        {
-            (correct, true),
-            (wrong1, false),
-            (wrong2, false)
-        };
-
-        options = options.Where(o => o.sprite != null).OrderBy(x => Random.value).ToList();
-
-        foreach (var opt in options)
-        {
-            GameObject lifebelt = CreateLifebelt(containerRow1, opt.sprite);
-            Button btn = lifebelt.transform.Find("ButtonOp")?.GetComponent<Button>();
-            if (btn)
-            {
-                btn.onClick.RemoveAllListeners();
-                btn.onClick.AddListener(() => EvaluateSelect(activity, opt.isCorrect, opt.sprite));
-            }
-        }
-    }
-
-    // ==============================================================
-    // 🎯 Evaluaciones (idénticas a BalloonPopSea)
-    // ==============================================================
-    private void EvaluateJudge(ActivityJudge act, bool pressedYes, bool isCorrect, Sprite s1, Sprite s2)
-    {
-        correctAnswered = isCorrect;
-        string msg = isCorrect ? act.feedback_positive : act.feedback_neutral;
-        ShowFeedback(isCorrect, s1, s2, msg, act.word1.word, act.word2.word);
-    }
-
-    private void EvaluateRelate(ActivityRelate act, bool isCorrect, Sprite chosen)
-    {
-        correctAnswered = isCorrect;
-        string msg = isCorrect ? act.feedback_positive : act.feedback_neutral;
-        ShowFeedback(isCorrect, chosen, LoadSprite(act.main_word.PATH), msg, act.main_word.word, spriteToWord.ContainsKey(chosen) ? spriteToWord[chosen] : "?");
-    }
-
-    private void EvaluateSelect(ActivitySelect act, bool isCorrect, Sprite chosen)
-    {
-        correctAnswered = isCorrect;
-        string msg = isCorrect ? act.feedback_positive : act.feedback_neutral;
-        ShowFeedback(isCorrect, chosen, LoadSprite(act.main_word.PATH), msg, act.main_word.word, spriteToWord.ContainsKey(chosen) ? spriteToWord[chosen] : "?");
-    }
-
-    // ==============================================================
-    // 🎨 Feedback visual
-    // ==============================================================
-    private void ShowFeedback(bool correct, Sprite img1, Sprite img2, string msg, string w1, string w2)
-    {
-        if (!panelFeedback || !feedbackText) return;
-        panelFeedback.SetActive(true);
-        feedbackText.text = msg;
-        feedbackText.color = correct ? Color.green : new Color(1f, 0.5f, 0f);
-        feedbackImage1.sprite = img1;
-        feedbackImage2.sprite = img2;
-        feedbackName1.text = w1;
-        feedbackName2.text = w2;
-
-        if (extraImage)
-        {
-            extraImage.enabled = true;
-            extraImage.sprite = correct ? extraCorrectSprite : extraIncorrectSprite;
+            spawnedButtons.Add(btnObj);
         }
 
-        if (cloudImage) cloudImage.enabled = !correct;
-        StartCoroutine(FeedbackThenNext());
+        Debug.Log($"✅ Botones Judge configurados según answer={activity.answer}");
     }
 
-    private IEnumerator FeedbackThenNext()
+
+    // ============================================================
+    // 🔹 Crear botones genéricos (modo 1 y 2)
+    // ============================================================
+    private void CreateModeButtons(Vector2[] positions)
     {
-        yield return new WaitForSeconds(2.5f);
-        panelFeedback.SetActive(false);
-        if (cloudImage) cloudImage.enabled = false;
-        IsBusyShowingFeedback = false;
-        if (correctAnswered) StartCoroutine(api.LoadActivity(currentMode, OnJsonLoaded, OnError));
+        if (buttonPrefab == null || buttonContainer == null)
+        {
+            Debug.LogError("❌ Falta prefab o contenedor.");
+            return;
+        }
+
+        ClearButtons();
+
+        for (int i = 0; i < positions.Length; i++)
+        {
+            GameObject btnObj = Instantiate(buttonPrefab, buttonContainer);
+            btnObj.name = $"Button_{i + 1}";
+
+            RectTransform rect = btnObj.GetComponent<RectTransform>();
+            rect.anchorMin = rect.anchorMax = new Vector2(0f, 0f);
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = positions[i];
+
+            // ❌ sin texto ni label
+            TMP_Text text = btnObj.GetComponentInChildren<TMP_Text>();
+            if (text != null) text.text = "";
+
+            spawnedButtons.Add(btnObj);
+        }
+
+        Debug.Log($"✅ Generados {positions.Length} botones en modo {currentMode}");
     }
 
-    // ==============================================================
+    // ============================================================
+    // 🎯 Evaluar respuesta modo Judge
+    // ============================================================
+    // ============================================================
+    // 🎯 Evaluar respuesta modo Judge (con animaciones diferenciadas)
+    // ============================================================
+    private void EvaluateJudge(ActivityJudge activity, bool playerAnswer)
+    {
+        bool correct = (activity.answer == playerAnswer);
+        string msg = correct ? activity.feedback_positive : activity.feedback_neutral;
+
+        // Si es el modo 0 y la respuesta es incorrecta → comportamiento especial
+        if (currentMode == 0 && !correct)
+        {
+            StartCoroutine(HandleSpecialIncorrectFeedback(activity, msg));
+            return;
+        }
+
+        if (correct)
+        {
+            // ✅ Caso correcto normal
+            StartCoroutine(HandleCorrectFeedback(activity, msg));
+        }
+        else
+        {
+            // ❌ Caso incorrecto normal (otros modos)
+            StartCoroutine(HandleIncorrectFeedback(activity, msg));
+        }
+    }
+    // ============================================================
+    // ⚠️ Caso especial modo 0: sin animación hacia el botón
+    // ============================================================
+    // ============================================================
+    // ⚠️ Caso especial modo 0: animación al prefab → feedback → regreso
+    // ============================================================
+    private IEnumerator HandleSpecialIncorrectFeedback(ActivityJudge activity, string message)
+    {
+        isAnimating = true;
+
+        // Buscar el botón presionado (opuesto al correcto)
+        RectTransform target = FindClosestButton(!activity.answer);
+        if (target == null)
+        {
+            Debug.LogWarning("⚠️ No se encontró el botón presionado.");
+            yield break;
+        }
+
+        // 🔹 1. Movimiento inicial: del personaje al botón clicado
+        yield return MoveToCurve(imageCharacter, target.anchoredPosition);
+
+        // 🔹 2. Mostrar feedback neutral
+        ShowFeedback(message, false);
+
+        // Esperar a que el panel se muestre completamente (3 segundos)
+        yield return new WaitForSeconds(3f);
+
+        // 🔹 3. Regresar al punto inicial con animación parabólica
+        yield return MoveToCurve(imageCharacter, startCharacterPos);
+
+        isAnimating = false;
+    }
+
+
+
+    // ============================================================
+    // ✅ Secuencia completa de respuesta correcta
+    // ============================================================
+    private IEnumerator HandleCorrectFeedback(ActivityJudge activity, string message)
+    {
+        isAnimating = true;
+
+        // Mueve al botón correcto
+        RectTransform target = FindClosestButton(activity.answer);
+        if (target == null) yield break;
+
+        // 🔹 1. Movimiento al botón correcto
+        yield return MoveToCurve(imageCharacter, target.anchoredPosition);
+        yield return new WaitForSeconds(0.2f);
+
+        // 🔹 2. Movimiento al punto final
+        yield return MoveToCurve(imageCharacter, finalCharacterPos);
+        yield return new WaitForSeconds(0.3f);
+
+        // 🔹 3. Mostrar feedback positivo
+        ShowFeedback(message, true);
+
+        // Esperar a que el feedback se muestre completamente
+        yield return new WaitForSeconds(3f);
+
+        // 🔹 4. Regresar al punto inicial
+        yield return MoveToCurve(imageCharacter, startCharacterPos);
+
+        // 🔹 5. Nueva petición para recargar imágenes del modo actual
+        StartCoroutine(LoadModeFromAPI(currentMode));
+
+        isAnimating = false;
+    }
+
+
+    // ============================================================
+    // ❌ Secuencia de respuesta incorrecta
+    // ============================================================
+    private IEnumerator HandleIncorrectFeedback(ActivityJudge activity, string message)
+    {
+        RectTransform target = FindClosestButton(activity.answer);
+        if (target == null) yield break;
+
+        // Movimiento hacia el botón incorrecto
+        yield return MoveToCurve(imageCharacter, target.anchoredPosition);
+        yield return new WaitForSeconds(0.3f);
+
+        // Mostrar feedback neutral
+        ShowFeedback(message, false);
+
+        // Esperar hasta que el feedback desaparezca
+        yield return new WaitForSeconds(3f);
+
+        // Volver al punto inicial
+        imageCharacter.anchoredPosition = startCharacterPos;
+    }
+
+    // ============================================================
+    // 🔹 Buscar el botón "Sí" o "No"
+    // ============================================================
+    private RectTransform FindClosestButton(bool isYes)
+    {
+        foreach (var btn in spawnedButtons)
+        {
+            if (btn.name.Contains(isYes ? "Sí" : "No"))
+                return btn.GetComponent<RectTransform>();
+        }
+        return null;
+    }
+
+
+    private void ShowFeedback(string message, bool correct)
+    {
+        if (feedbackController == null) return;
+
+        feedbackController.ShowFeedback(
+            firstImage.sprite,
+            secondImage.sprite,
+            message,
+            correct ? "¡Correcto!" : "Intenta de nuevo",
+            correct
+        );
+    }
+
+    // ============================================================
     // 🧩 Utilidades
-    // ==============================================================
-    private void ClearContainers()
+    // ============================================================
+    private void ClearButtons()
     {
-        foreach (Transform c in containerRow1) Destroy(c.gameObject);
-        foreach (Transform c in containerRow2) Destroy(c.gameObject);
+        foreach (var btn in spawnedButtons)
+            if (btn != null) Destroy(btn.gameObject);
+        spawnedButtons.Clear();
     }
 
-    private Sprite LoadSprite(string path)
+    private void HideWordImages()
     {
-        if (string.IsNullOrEmpty(path)) return null;
-        string fileName = System.IO.Path.GetFileNameWithoutExtension(path);
-        string fullPath = $"Images/ImgButtons/{fileName}";
-        Sprite s = Resources.Load<Sprite>(fullPath);
-        if (!s) Debug.LogWarning($"⚠️ Sprite no encontrado: {fullPath}");
-        return s;
+        if (firstImage) firstImage.gameObject.SetActive(false);
+        if (secondImage) secondImage.gameObject.SetActive(false);
     }
 
-    private void EnsureSpritesLoaded()
+    private Sprite LoadLocalSprite(string imageName)
     {
-        if (gameImages == null) gameImages = new List<Sprite>();
-        if (gameImages.Count == 0 && !string.IsNullOrEmpty(resourcesFolder))
+        if (string.IsNullOrEmpty(imageName)) return null;
+        string path = $"Images/ImgButtons/{System.IO.Path.GetFileNameWithoutExtension(imageName)}";
+        return Resources.Load<Sprite>(path);
+    }
+
+    private void AssignModeButtons()
+    {
+        if (topButtonsContainer == null)
+            topButtonsContainer = GameObject.Find("TopButtons")?.transform;
+
+        if (topButtonsContainer == null)
         {
-            var loaded = Resources.LoadAll<Sprite>(resourcesFolder);
-            if (loaded.Length > 0) gameImages.AddRange(loaded);
+            Debug.LogWarning("⚠️ No se encontró TopButtons.");
+            return;
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            int mode = i;
+            Transform button = topButtonsContainer.Find($"Button{i}");
+            if (button != null && button.TryGetComponent(out Button btn))
+            {
+                btn.onClick.RemoveAllListeners();
+                btn.onClick.AddListener(() => StartCoroutine(LoadModeFromAPI(mode)));
+                Debug.Log($"🎮 Asignado Button{i} → modo {mode}");
+            }
         }
     }
 
-    private GameObject CreateLifebelt(Transform parent, Sprite sprite)
+    // ============================================================
+    // 🌀 Movimiento del personaje
+    // ============================================================
+    // ============================================================
+    // 🌀 Movimiento del personaje con dos fases (curva al botón + curva al final)
+    // ============================================================
+    // ============================================================
+    // 🌀 Movimiento del personaje (parabólico correcto en Overlay)
+    // ============================================================
+    private IEnumerator MoveCharacterToTarget(RectTransform target)
     {
-        if (lifebeltPrefab == null)
-        {
-            Debug.LogError("❌ No se asignó el prefab de salvavidas (lifebeltPrefab) en el inspector.");
-            return null;
-        }
+        if (isAnimating || imageCharacter == null || target == null) yield break;
+        isAnimating = true;
 
-        GameObject lifebelt = Instantiate(lifebeltPrefab, parent);
-        Image img = lifebelt.transform.Find("Image")?.GetComponent<Image>();
-        if (img != null)
-        {
-            img.sprite = sprite;
-            img.preserveAspect = true;
-            Debug.Log($"🛟 Lifebelt creado con sprite: {sprite?.name ?? "NULL"}");
-        }
+        // ✅ Ambos están bajo el mismo Canvas Overlay, por lo que usamos posiciones locales directamente
+        Vector2 localTarget = target.anchoredPosition;
 
-        Button btn = lifebelt.transform.Find("ButtonOp")?.GetComponent<Button>();
-        if (btn != null)
-        {
-            btn.onClick.RemoveAllListeners();
-            btn.interactable = true;
-            btn.gameObject.SetActive(true);
-            if (sprite != null && !buttonToSprite.ContainsKey(btn))
-                buttonToSprite[btn] = sprite;
-        }
+        Debug.Log($"🎯 Movimiento: {imageCharacter.anchoredPosition} → {localTarget} → {finalCharacterPos}");
 
-        return lifebelt;
+        // 🔹 Movimiento parabólico hasta el botón
+        yield return MoveToCurve(imageCharacter, localTarget);
+
+        // 🔹 Espera breve
+        yield return new WaitForSeconds(0.3f);
+
+        // 🔹 Movimiento parabólico hacia la posición final
+        yield return MoveToCurve(imageCharacter, finalCharacterPos);
+
+        // (Opcional) volver al inicio
+        yield return new WaitForSeconds(0.3f);
+        imageCharacter.anchoredPosition = startCharacterPos;
+
+        isAnimating = false;
     }
 
-    protected override void OnError(string err)
+
+
+    private IEnumerator MoveTo(RectTransform element, Vector2 targetPos)
     {
-        Debug.LogError($"⚠️ Error modo {currentMode}: {err}");
+        Vector2 start = element.anchoredPosition;
+        float time = 0f;
+        while (time < moveDuration)
+        {
+            float t = moveCurve.Evaluate(time / moveDuration);
+            Vector2 newPos = Vector2.Lerp(start, targetPos, t);
+            newPos.y += Mathf.Sin(t * Mathf.PI) * arcHeight;
+            element.anchoredPosition = newPos;
+            time += Time.deltaTime;
+            yield return null;
+        }
+        element.anchoredPosition = targetPos;
     }
+    // ============================================================
+    // 🌀 Movimiento parabólico (trayectoria curva)
+    // ============================================================
+    private IEnumerator MoveToCurve(RectTransform element, Vector2 targetPos)
+    {
+        Vector2 start = element.anchoredPosition;
+        float time = 0f;
+
+        while (time < moveDuration)
+        {
+            float t = moveCurve.Evaluate(time / moveDuration);
+
+            // Trayectoria curva (parábola)
+            Vector2 newPos = Vector2.Lerp(start, targetPos, t);
+            newPos.y += Mathf.Sin(t * Mathf.PI) * arcHeight;
+
+            element.anchoredPosition = newPos;
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        element.anchoredPosition = targetPos;
+    }
+    // ============================================================
+    // 🚀 Cambiar de escena de forma genérica
+    // ============================================================
+    private void ChangeScene(string sceneName)
+    {
+        if (string.IsNullOrEmpty(sceneName))
+        {
+            Debug.LogWarning("⚠️ No se ha asignado el nombre de la escena destino.");
+            return;
+        }
+
+        Debug.Log($"🌍 Cambiando a la escena: {sceneName}");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+    }
+
 }

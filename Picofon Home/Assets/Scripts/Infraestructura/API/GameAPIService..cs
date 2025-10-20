@@ -4,38 +4,41 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 /// <summary>
-/// Servicio centralizado para cargar actividades desde la API.
+/// 🌐 Servicio centralizado para cargar actividades desde la API.
 /// Compatible con todos los modos (Judge, Relate, Create, Select).
 /// </summary>
 public class GameAPIService : MonoBehaviour
 {
-    // URL base del servidor
-    private const string BASE_URL = "http://108.130.147.206/api/v1/unity-proxy/questions/";
+    // ============================================================
+    // 🔗 URL base del servidor (HTTPS)
+    // ============================================================
+    private const string BASE_URL = "https://108.130.147.206/api/v1/unity-proxy/questions/";
 
-    // Endpoints por modo (orden: 0=Judge, 1=Relate, 2=Create, 3=Select)
+    // Endpoints por modo (orden: 1=Judge, 2=Select, 3=Relate, 4=Create)
     private readonly string[] MODE_ENDPOINTS = {
-        "1/1805359203",  // Judge
-        "8/1805359203",  // Relate
-        "9/1805359203",  // Create
-        "10/1805359203"  // Select
+        "1/1805359203",   // 🧠 JUDGE
+        "8/1805359203",   // 🔗 RELATE
+        "9/1805359203",   // ✍️ CREATE
+        "10/1805359203"   // 🎯 SELECT
     };
 
-    /// <summary>
-    /// Llama a la API y devuelve el JSON completo del modo solicitado.
-    /// </summary>
-    /// <param name="mode">Modo de juego (0–3)</param>
-    /// <param name="onSuccess">Callback al recibir datos correctamente</param>
-    /// <param name="onError">Callback si ocurre un error HTTP o de red</param>
+    // ============================================================
+    // 🟢 Cargar actividad según el modo de juego
+    // ============================================================
     public IEnumerator LoadActivity(int mode, Action<string> onSuccess, Action<string> onError = null)
     {
-        // Evita valores fuera de rango
         mode = Mathf.Clamp(mode, 0, MODE_ENDPOINTS.Length - 1);
         string url = BASE_URL + MODE_ENDPOINTS[mode];
 
         Debug.Log($"🌐 Solicitando datos del modo {mode} → {url}");
 
+        // ⚠️ Configurar petición HTTPS
         using (UnityWebRequest req = UnityWebRequest.Get(url))
         {
+            // Desactiva verificación SSL si el servidor usa IP sin certificado válido
+            req.certificateHandler = new BypassCertificate();
+            req.timeout = 15; // segundos
+
             yield return req.SendWebRequest();
 
             if (req.result == UnityWebRequest.Result.Success && req.responseCode == 200)
@@ -50,6 +53,18 @@ public class GameAPIService : MonoBehaviour
                 Debug.LogError(errorMsg);
                 onError?.Invoke(errorMsg);
             }
+        }
+    }
+
+    // ============================================================
+    // 🧩 Clase auxiliar — Desactiva verificación SSL para pruebas locales
+    // ============================================================
+    private class BypassCertificate : CertificateHandler
+    {
+        protected override bool ValidateCertificate(byte[] certificateData)
+        {
+            // ⚠️ SOLO usar para desarrollo (IP sin SSL válido)
+            return true;
         }
     }
 }
