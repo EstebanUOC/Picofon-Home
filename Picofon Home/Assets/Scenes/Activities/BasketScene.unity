@@ -404,7 +404,7 @@ MonoBehaviour:
   api: {fileID: 1322575447}
   childId: 1805359203
   therapyTemplateId: 1
-  typeTask: 1
+  typeTask: 0
   judgeController: {fileID: 1920226094}
   ballPrefab: {fileID: 2701318299716833605, guid: 2bc8af7d22949124b9c2e68bdda7d845, type: 3}
   ballContainer: {fileID: 1764654042}
