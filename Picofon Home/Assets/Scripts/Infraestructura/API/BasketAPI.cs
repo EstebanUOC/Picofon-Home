@@ -6,9 +6,9 @@ using UnityEngine.Networking;
 public class BasketAPI : MonoBehaviour
 {
     // Example endpoint:
-    // http://108.130.147.206/api/v1/unity-proxy/questions/{therapyID}/{childID}
+    // http://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/questions/{therapyID}/{childID}
 
-    private const string BASE_URL = "http://108.130.147.206/api/v1/unity-proxy/questions";
+    private const string BASE_URL = "http://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/questions";
 
     // Request activity for given therapy + child
     public IEnumerator LoadBasketActivity(
