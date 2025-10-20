@@ -781,7 +781,7 @@ GameObject:
   - component: {fileID: 249498434}
   - component: {fileID: 249498432}
   m_Layer: 5
-  m_Name: TMP_Dropdown
+  m_Name: TMP_Dropdown_Age
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -837,6 +837,8 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
+    - m_Text: 
+      m_Image: {fileID: 0}
     - m_Text: 3
       m_Image: {fileID: 0}
     - m_Text: 4
@@ -1723,7 +1725,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &610160313
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2797,7 +2799,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fad7f7d6d79f9044cbcb02ec6216082d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useFakeLogin: 1
+  useFakeLogin: 0
   GoogleAPI: 1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com
   LoginPanel: {fileID: 1039029301}
   ChildDataPanel: {fileID: 610160312}
@@ -3309,7 +3311,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1039029302
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5830,7 +5832,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 3
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
