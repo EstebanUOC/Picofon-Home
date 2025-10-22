@@ -28,6 +28,11 @@ UserSettings/
 *.userprefs
 *.pidb
 *.booproj
+*.pdb
+*.mdb
+*.opendb
+*.DS_Store
+Thumbs.db
 
 # Unity cache
 *.bak
@@ -67,3 +72,6 @@ sysinfo.txt
 # Ignore local image folders (synced with Google Drive)
 Picofon Home/Assets/Resources/Images/
 Picofon Home/Assets/Images/
+
+# Ignore all Unity meta files
+*.meta
