@@ -37,6 +37,8 @@ public class CrossRiverManager : MonoBehaviour
 
     private readonly string mapSceneName = "MapPath";
     private readonly string nextSceneName = "BalloonPopSeaScene";
+    private ActivityJudge lastActivityShown;
+
 
 
 
@@ -168,6 +170,7 @@ public class CrossRiverManager : MonoBehaviour
     // ============================================================
     private void LoadJudgeMode(ActivityJudge activity)
     {
+        lastActivityShown = activity;
         if (questionText != null)
             questionText.text = activity.question;
 
@@ -195,6 +198,48 @@ public class CrossRiverManager : MonoBehaviour
             GameObject btnObj = Instantiate(buttonPrefab, buttonContainer);
             btnObj.name = $"Button_{labels[i]}";
 
+            // ================================
+            // 🎮 CONFIGURACIÓN DE IMÁGENES SEGÚN MODO Y PREFAB
+            // ================================
+            Transform bgLifebelt = btnObj.transform.Find("BackgroundLifebelt");
+            if (bgLifebelt != null)
+            {
+                Image bgImage = bgLifebelt.GetComponent<Image>();
+                if (bgImage != null)
+                {
+                    string spritePath;
+
+                    // 🔹 Solo en modo 0 y en el primer prefab → usar el rosa
+                    if (currentMode == 0 && i == 0)
+                        spritePath = "Images/Images/CrossRiver/lifebelt_pink_Lluni";
+                    else
+                        spritePath = "Images/Images/CrossRiver/lifebelt_violet_Lluni";
+
+                    Sprite lifebeltSprite = Resources.Load<Sprite>(spritePath);
+                    if (lifebeltSprite != null)
+                    {
+                        bgImage.sprite = lifebeltSprite;
+                        bgImage.color = Color.white;
+                        bgImage.preserveAspect = true;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"⚠️ No se encontró el sprite en {spritePath}");
+                    }
+                }
+            }
+
+            // 🔹 Ocultar la imagen "Image" solo en modo 0
+            if (currentMode == 0)
+            {
+                Transform imageChild = btnObj.transform.Find("Image");
+                if (imageChild != null)
+                    imageChild.gameObject.SetActive(false);
+            }
+
+            // ================================
+            // 📍 POSICIÓN Y TEXTO
+            // ================================
             RectTransform rect = btnObj.GetComponent<RectTransform>();
             rect.anchorMin = rect.anchorMax = new Vector2(0f, 0f);
             rect.pivot = new Vector2(0.5f, 0.5f);
@@ -203,27 +248,20 @@ public class CrossRiverManager : MonoBehaviour
             TMP_Text text = btnObj.GetComponentInChildren<TMP_Text>();
             if (text != null) text.text = labels[i];
 
+            // ================================
+            // 🧠 ASIGNAR LÓGICA DEL BOTÓN
+            // ================================
             Transform opTf = btnObj.transform.Find("ButtonOp");
             Button button = opTf ? opTf.GetComponent<Button>() : null;
 
             if (button != null)
             {
                 bool isYes = answers[i];
-
                 button.onClick.AddListener(() =>
                 {
                     if (!isAnimating)
                     {
-                        // ✅ Si la respuesta correcta es "true"
-                        // el botón "Sí" es correcto, el "No" es incorrecto.
-                        // Si la respuesta correcta es "false", se invierte.
-                        bool isCorrect;
-
-                        if (activity.answer) // answer = true
-                            isCorrect = isYes; // "Sí" correcto
-                        else // answer = false
-                            isCorrect = !isYes; // "No" correcto
-
+                        bool isCorrect = activity.answer ? isYes : !isYes;
                         string msg = isCorrect ? activity.feedback_positive : activity.feedback_neutral;
 
                         if (isCorrect)
@@ -239,6 +277,7 @@ public class CrossRiverManager : MonoBehaviour
 
         Debug.Log($"✅ Botones Judge configurados según answer={activity.answer}");
     }
+
 
 
     // ============================================================
@@ -413,14 +452,22 @@ public class CrossRiverManager : MonoBehaviour
     {
         if (feedbackController == null) return;
 
+        var currentActivity = lastActivityShown; // referencia que guardaremos al mostrar el modo actual
+        if (currentActivity == null)
+        {
+            Debug.LogWarning("⚠️ No hay actividad cargada para mostrar feedback.");
+            return;
+        }
+
         feedbackController.ShowFeedback(
             firstImage.sprite,
             secondImage.sprite,
-            message,
-            correct ? "¡Correcto!" : "Intenta de nuevo",
-            correct
+            correct,
+            currentActivity.word1.syllabified_word,
+            currentActivity.word2.syllabified_word
         );
     }
+
 
     // ============================================================
     // 🧩 Utilidades
