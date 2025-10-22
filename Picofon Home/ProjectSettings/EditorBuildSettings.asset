@@ -18,4 +18,5 @@ EditorBuildSettings:
     path: Assets/Scenes/Activities/BalloonPopSeaScene.unity
     guid: df55e9d45657c5148b5b52740c1dce1c
   m_configObjects:
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 1272ab4523c20ef47a3e38d43e7b6047, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 63a0181731c918a4aafc3a05e0a8f22b, type: 2}

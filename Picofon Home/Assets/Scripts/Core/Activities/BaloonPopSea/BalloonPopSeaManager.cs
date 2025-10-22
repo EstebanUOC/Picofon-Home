@@ -5,19 +5,31 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 
-public class BalloonPopSeaManager : MonoBehaviour
-{
-    private Dictionary<Button, Sprite> buttonToSprite = new(); // Mapea botón → sprite mostrado
-    private Dictionary<Sprite, string> spriteToWord = new();    // Mapea sprite → texto
+// ✅ Namespaces por minijuego (independientes)
+using Picofon.Games.Judge;
+using Picofon.Games.Relate;
+using Picofon.Games.Select;
+using Picofon.Games.Create;
 
-    private Activity currentActivity;
+// ✅ Alias global para WordData (usa el de Judge como referencia)
+using WordData = Picofon.Games.Judge.WordData;
+
+/// <summary>
+/// Controlador principal del minijuego BalloonPopSea.
+/// Modo 0 → Judge (Sí/No)
+/// Modo 1 → Relate (selecciona el diferente)
+/// Modo 2 → Create (con pista)
+/// Modo 3 → Select (elige el correcto)
+/// </summary>
+public class BalloonPopSeaManager : ActivityBaseManager
+{
+    private int currentMode = 0;
     private bool correctAnswered = false;
 
-    [Header("API Remota")]
-    [SerializeField] private BalloonPopSeaAPI api;
-    private Data apiData;
+    private readonly Dictionary<Button, Sprite> buttonToSprite = new();
+    private readonly Dictionary<Sprite, string> spriteToWord = new();
 
-    [Header("Prefab y Contenedores")]
+    [Header("Prefabs y contenedores")]
     [SerializeField] private GameObject bubblePrefab;
     [SerializeField] private Transform bubbleContainerHorizontal1;
     [SerializeField] private Transform bubbleContainerHorizontal2;
@@ -25,7 +37,7 @@ public class BalloonPopSeaManager : MonoBehaviour
     private HorizontalLayoutGroup layoutRow1;
     private HorizontalLayoutGroup layoutRow2;
 
-    [Header("Feedback")]
+    [Header("Feedback visual")]
     [SerializeField] private GameObject panelFeedback;
     [SerializeField] private TMP_Text feedbackText;
     [SerializeField] private Image feedbackImage1;
@@ -33,487 +45,408 @@ public class BalloonPopSeaManager : MonoBehaviour
     [SerializeField] private TMP_Text feedbackName1;
     [SerializeField] private TMP_Text feedbackName2;
 
-    [Header("Imagen adicional")]
+    [Header("Imágenes auxiliares")]
     [SerializeField] private Image extraImage;
     [SerializeField] private Sprite extraCorrectSprite;
     [SerializeField] private Sprite extraIncorrectSprite;
-
-    [Header("Imagen de nube (solo en incorrecto)")]
     [SerializeField] private Image cloudImage;
 
-    [Header("Botones principales (solo modo 0)")]
+    [Header("Botones modo Judge (Sí/No)")]
     [SerializeField] private Button buttonYes;
     [SerializeField] private Button buttonNo;
 
-    [Header("Sprites disponibles")]
-    [SerializeField] private List<Sprite> gameImages = new List<Sprite>();
+    [Header("Sprites locales")]
     [SerializeField] private string resourcesFolder = "BalloonPopSea";
+    [SerializeField] private List<Sprite> gameImages = new();
 
-    private int currentMode = 1; // por defecto modo 1
-    private Sprite current1, current2, oddOneOut;
-    public bool IsBusyShowingFeedback { get; private set; } = false;
+    public bool IsBusyShowingFeedback { get; private set; }
 
     // ==============================================================
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         EnsureSpritesLoaded();
 
         if (panelFeedback) panelFeedback.SetActive(false);
         if (cloudImage) cloudImage.enabled = false;
 
-        if (bubbleContainerHorizontal1 != null)
-            layoutRow1 = bubbleContainerHorizontal1.GetComponent<HorizontalLayoutGroup>();
-        if (bubbleContainerHorizontal2 != null)
-            layoutRow2 = bubbleContainerHorizontal2.GetComponent<HorizontalLayoutGroup>();
+        layoutRow1 = bubbleContainerHorizontal1?.GetComponent<HorizontalLayoutGroup>();
+        layoutRow2 = bubbleContainerHorizontal2?.GetComponent<HorizontalLayoutGroup>();
     }
 
     private void Start()
     {
-        // Solo ejecuta si quieres probar localmente sin API
-        //ShowNewPair();
+        if (api != null)
+        {
+            Debug.Log($"🌐 Solicitando modo {currentMode} desde Start()...");
+            StartCoroutine(api.LoadActivity(currentMode, OnJsonLoaded, OnError));
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ No hay API asignada, modo local sin carga remota.");
+        }
     }
 
-
-
     // ==============================================================
-    // 🔹 Solicitar actividad 1 al servidor
+    // 🔹 Carga desde botón / API / JSON directo
     // ==============================================================
-    public void LoadActivity1FromServer()
+    #region Carga directa
+    public new void LoadMode(int mode)  // desde botón
     {
-        if (api == null)
+        currentMode = mode;
+        Debug.Log($"🎮 Botón → modo {mode}");
+        if (api != null)
+            StartCoroutine(api.LoadActivity(mode, OnJsonLoaded, OnError));
+        else
+            Debug.LogWarning("⚠️ No hay API asignada.");
+    }
+
+    public void LoadMode(int mode, string json) // desde GameManager
+    {
+        currentMode = mode;
+        if (string.IsNullOrEmpty(json))
         {
-            Debug.LogError("⚠️ Falta referencia a BalloonPopSeaAPI.");
+            Debug.LogError("❌ JSON vacío en LoadMode(mode, json).");
+            return;
+        }
+        Debug.Log($"🧩 Cargando modo {mode} con JSON directo...");
+        OnJsonLoaded(json);
+    }
+    #endregion
+
+    // ==============================================================
+    // 🔹 Procesamiento del JSON recibido
+    // ==============================================================
+    protected override void OnJsonLoaded(string json)
+    {
+        ClearContainers();
+        correctAnswered = false;
+
+        if (string.IsNullOrEmpty(json))
+        {
+            Debug.LogError("❌ JSON vacío recibido en OnJsonLoaded.");
             return;
         }
 
-        if (buttonYes) buttonYes.gameObject.SetActive(false);
-        if (buttonNo) buttonNo.gameObject.SetActive(false);
+        Debug.Log($"🧩 Procesando JSON para modo {currentMode}...");
 
-        Debug.Log("🌐 Solicitando Activity1 al servidor...");
-        StartCoroutine(api.LoadActivities(OnActivity1Loaded));
+        try
+        {
+            switch (currentMode)
+            {
+                case 0:
+                    var judgeData = JsonUtility.FromJson<ApiResponseJudge>(json);
+                    if (judgeData?.data?.activity1 != null)
+                        LoadJudgeMode(judgeData.data.activity1);
+                    break;
+
+                case 1:
+                    var relateData = JsonUtility.FromJson<ApiResponseRelate>(json);
+                    if (relateData?.data?.activity1 != null)
+                        LoadRelateMode(relateData.data.activity1);
+                    break;
+
+                case 2:
+                    var createData = JsonUtility.FromJson<ApiResponseCreate>(json);
+                    if (createData?.data?.activity1 != null)
+                        LoadCreateMode(createData.data.activity1);
+                    break;
+
+                case 3:
+                    var selectData = JsonUtility.FromJson<ApiResponseSelect>(json);
+                    if (selectData?.data?.activity1 != null)
+                        LoadSelectMode(selectData.data.activity1);
+                    break;
+
+                default:
+                    Debug.LogWarning($"⚠️ Modo {currentMode} no implementado.");
+                    break;
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"❌ Error al procesar JSON del modo {currentMode}: {ex.Message}");
+        }
     }
+
     // ==============================================================
-    // 🔹 Solicitar actividad del modo 0 (Sí/No)
+    // 🟢 MODO 0 – Judge
     // ==============================================================
-    public void LoadActivity0FromServer()
+    private void LoadJudgeMode(ActivityJudge activity)
     {
         currentMode = 0;
-        if (api == null)
-        {
-            Debug.LogError("⚠️ Falta referencia a BalloonPopSeaAPI.");
-            return;
-        }
+        Debug.Log($"👁️ [Modo {currentMode}] Judge → {activity.word1.word} vs {activity.word2.word}");
 
-        // Mostrar los botones del modo 0
+        ClearContainers();
+
         if (buttonYes) buttonYes.gameObject.SetActive(true);
         if (buttonNo) buttonNo.gameObject.SetActive(true);
 
-        Debug.Log("🌐 Solicitando Activity0 al servidor...");
-        StartCoroutine(api.LoadSimpleActivities(OnActivity0Loaded));
-    }
-
-    private void OnActivity0Loaded(DataSimple data)
-    {
-        if (data == null || data.activity1 == null)
-        {
-            Debug.LogError("❌ No se recibió activity0 desde la API.");
-            return;
-        }
-
-        ActivitySimple activity = data.activity1;
-        correctAnswered = false;
-
-        Debug.Log($"✅ Activity0 recibida: {activity.palabra_principal} vs {activity.opcion1}");
-
-        LoadSimpleActivityToBubbles(activity);
-    }
-
-    private void LoadSimpleActivityToBubbles(ActivitySimple activity)
-    {
-        ClearContainers();
-
-        if (layoutRow1) layoutRow1.spacing = 250;
-
-        Sprite main = LoadSprite(activity.palabra_principal_PATH);
-        Sprite compare = LoadSprite(activity.opcion1_PATH);
-
-        if (main == null || compare == null)
-        {
-            Debug.LogError("❌ No se pudieron cargar las imágenes del modo 0.");
-            return;
-        }
-
-        spriteToWord.Clear();
-        spriteToWord[main] = activity.palabra_principal;
-        spriteToWord[compare] = activity.opcion1;
-
-        // Crear ambas burbujas
-        CreateBubble(bubbleContainerHorizontal1, main);
-        CreateBubble(bubbleContainerHorizontal1, compare);
-
-        // Configurar botones de respuesta
-        buttonYes.onClick.RemoveAllListeners();
-        buttonNo.onClick.RemoveAllListeners();
-
-        buttonYes.onClick.AddListener(() => EvaluateAnswer(activity, true));
-        buttonNo.onClick.AddListener(() => EvaluateAnswer(activity, false));
-    }
-
-    private void EvaluateAnswer(ActivitySimple activity, bool playerAnswer)
-    {
-        // El campo "respuesta" del JSON indica si el botón correcto es Sí (true) o No (false)
-        bool isCorrect = playerAnswer == activity.respuesta;
-        correctAnswered = isCorrect;
-
-        string feedback = isCorrect ? activity.feedback_positiu : activity.feedback_neutre;
-
-        Debug.Log(isCorrect
-            ? $"✅ Respuesta correcta → {(activity.respuesta ? "Sí" : "No")} era la opción correcta."
-            : $"❌ Respuesta incorrecta → {(activity.respuesta ? "Sí" : "No")} era la opción correcta.");
-
-        // Muestra feedback visual
-        ShowFeedback(
-            isCorrect,
-            LoadSprite(activity.palabra_principal_PATH),
-            LoadSprite(activity.opcion1_PATH),
-            feedback,
-            activity.palabra_principal,
-            activity.opcion1
-        );
-    }
-
-
-
-
-    private void OnActivity1Loaded(Data data)
-    {
-        if (data == null || data.activity1 == null)
-        {
-            Debug.LogError("❌ No se recibió activity1 desde la API.");
-            return;
-        }
-
-        currentActivity = data.activity1;
-        correctAnswered = false;
-
-        Debug.Log($"✅ Activity1 recibida: {currentActivity.main_word} | Correcta: {currentActivity.correct_option.text}");
-        LoadActivityToBubbles(currentActivity);
-    }
-
-    // ==============================================================
-    // 🔹 Mostrar las imágenes del JSON (modo 1)
-    // ==============================================================
-    private void LoadActivityToBubbles(Activity activity)
-    {
-        ClearContainers();
-
-        if (layoutRow1) layoutRow1.spacing = 250;
-        if (layoutRow2) layoutRow2.spacing = 250;
-
-        spriteToWord.Clear();
-        buttonToSprite.Clear();
-
-        Sprite main = LoadSprite(activity.main_word_PATH);
-        Sprite correct = LoadSprite(activity.correct_option.path);
-        Sprite wrong1 = LoadSprite(activity.wrong_option1.path);
-        Sprite wrong2 = LoadSprite(activity.wrong_option2.path);
-
-        List<Sprite> sprites = new() { main, correct, wrong1, wrong2 };
-        sprites = sprites.Where(s => s != null).OrderBy(x => Random.value).ToList();
-
-        if (sprites.Count < 4)
-        {
-            Debug.LogWarning("⚠️ No se encontraron las 4 imágenes requeridas.");
-            return;
-        }
-
-        spriteToWord[main] = activity.main_word;
-        spriteToWord[correct] = activity.correct_option.text;
-        spriteToWord[wrong1] = activity.wrong_option1.text;
-        spriteToWord[wrong2] = activity.wrong_option2.text;
-
-        CreateBubble(bubbleContainerHorizontal1, sprites[0]);
-        CreateBubble(bubbleContainerHorizontal1, sprites[1]);
-        CreateBubble(bubbleContainerHorizontal2, sprites[2]);
-        CreateBubble(bubbleContainerHorizontal2, sprites[3]);
-    }
-
-    // ==============================================================
-    // 🎲 Modo local (si no hay API)
-    // ==============================================================
-    // ==============================================================
-// 🎲 Generar burbujas según el modo
-// ==============================================================
-public void ShowNewPair()
-{
-    ClearContainers();
-
-    if (layoutRow1) layoutRow1.spacing = 250;
-    if (layoutRow2) layoutRow2.spacing = 250;
-
-    if (gameImages == null || gameImages.Count < 2)
-    {
-        Debug.LogWarning("⚠️ No hay suficientes imágenes locales cargadas.");
-        return;
-    }
-
-    if (currentMode == 0)
-    {
-        // 🎮 MODO 0 → dos imágenes y botones Sí / No
-        if (buttonYes) buttonYes.gameObject.SetActive(true);
-        if (buttonNo) buttonNo.gameObject.SetActive(true);
-
-        int i1 = Random.Range(0, gameImages.Count);
-        int i2;
-        do { i2 = Random.Range(0, gameImages.Count); } while (i2 == i1);
-
-        Sprite s1 = gameImages[i1];
-        Sprite s2 = gameImages[i2];
+        Sprite s1 = LoadSprite(activity.word1.PATH);
+        Sprite s2 = LoadSprite(activity.word2.PATH);
 
         CreateBubble(bubbleContainerHorizontal1, s1);
         CreateBubble(bubbleContainerHorizontal1, s2);
 
-        // Guarda las actuales (por si quieres comparar sílaba, etc.)
-        current1 = s1;
-        current2 = s2;
+        spriteToWord.Clear();
+        if (s1) spriteToWord[s1] = activity.word1.word;
+        if (s2) spriteToWord[s2] = activity.word2.word;
+
+        bool correctIsYes = activity.answer;
+        bool correctIsNo = !activity.answer;
+
+        buttonYes.onClick.RemoveAllListeners();
+        buttonNo.onClick.RemoveAllListeners();
+
+        buttonYes.onClick.AddListener(() => EvaluateJudge(activity, true, correctIsYes, s1, s2));
+        buttonNo.onClick.AddListener(() => EvaluateJudge(activity, false, correctIsNo, s1, s2));
     }
-    else if (currentMode == 2)
-    {
-        // 🎮 MODO 2 → 5 imágenes (1 arriba + 4 abajo)
-        if (layoutRow2) layoutRow2.spacing = 150;
-
-        HashSet<int> indices = new();
-        while (indices.Count < 5)
-            indices.Add(Random.Range(0, gameImages.Count));
-
-        var selected = indices.Select(i => gameImages[i]).ToList();
-
-        CreateBubble(bubbleContainerHorizontal1, selected[0]);
-        for (int i = 1; i < 5; i++)
-            CreateBubble(bubbleContainerHorizontal2, selected[i]);
-    }
-    else if (currentMode == 1)
-    {
-        // 🎮 MODO 1 → usa el servidor, no se genera localmente
-        Debug.Log("Modo 1 se maneja con LoadActivity1FromServer().");
-    }
-}
-
 
     // ==============================================================
-    // 🧩 Crear burbuja con botón interactivo
+    // 🟣 MODO 1 – Relate
     // ==============================================================
-    private GameObject CreateBubble(Transform parent, Sprite sprite)
+    private void LoadRelateMode(ActivityRelate activity)
     {
-        GameObject bubble = Instantiate(bubblePrefab, parent);
+        currentMode = 1;
+        Debug.Log($"🧩 [Modo {currentMode}] Relate cargado → principal: {activity.main_word.word}");
 
-        // Imagen principal de la burbuja
-        Image img = bubble.transform.Find("Image")?.GetComponent<Image>();
-        Button btn = bubble.transform.Find("ButtonOp")?.GetComponent<Button>();
+        ClearContainers();
+        if (buttonYes) buttonYes.gameObject.SetActive(false);
+        if (buttonNo) buttonNo.gameObject.SetActive(false);
 
-        if (img == null)
+        spriteToWord.Clear();
+        buttonToSprite.Clear();
+
+        // 🔹 Ajuste de spacing y alineación
+        if (layoutRow2 != null)
         {
-            Debug.LogError("❌ Prefab inválido: falta hijo 'Image'.");
-            return bubble;
+            layoutRow2.spacing = 150f;
+            layoutRow2.childAlignment = TextAnchor.MiddleCenter;
         }
 
-        img.sprite = sprite;
+        Sprite main = LoadSprite(activity.main_word.PATH);
+        Sprite correct = LoadSprite(activity.correct_option.PATH);
+        Sprite wrong1 = LoadSprite(activity.wrong_option1.PATH);
+        Sprite wrong2 = LoadSprite(activity.wrong_option2.PATH);
+        Sprite wrong3 = LoadSprite(activity.wrong_option3.PATH);
 
-        // 🧩 Si estamos en el modo 0 (Sí/No)
-        if (currentMode == 0)
+        CreateBubble(bubbleContainerHorizontal1, main);
+
+        List<(Sprite sprite, bool isCorrect)> options = new()
         {
-            // 🔹 Desactiva completamente los botones dentro de la burbuja
-            if (btn != null)
+            (correct, false),
+            (wrong1, false),
+            (wrong2, false),
+            (wrong3, true)
+        };
+
+        foreach (var opt in options.Where(o => o.sprite != null))
+        {
+            GameObject bubble = CreateBubble(bubbleContainerHorizontal2, opt.sprite);
+            Button btn = bubble.transform.Find("ButtonOp")?.GetComponent<Button>();
+            if (btn)
             {
                 btn.onClick.RemoveAllListeners();
-                btn.interactable = false;
-                btn.enabled = false;
-                btn.gameObject.SetActive(false);
+                btn.onClick.AddListener(() => EvaluateRelate(activity, opt.isCorrect, opt.sprite));
             }
-
-            // 🔹 Desactiva todos los botones hijos (por si el prefab tiene varios)
-            foreach (var b in bubble.GetComponentsInChildren<Button>(true))
-            {
-                b.onClick.RemoveAllListeners();
-                b.interactable = false;
-                b.enabled = false;
-                b.gameObject.SetActive(false);
-            }
-
-            // 🔹 Desactiva todos los event triggers
-            foreach (var trigger in bubble.GetComponentsInChildren<UnityEngine.EventSystems.EventTrigger>(true))
-                trigger.enabled = false;
-
-            // 🔹 Desactiva todos los raycastTargets de imágenes
-            foreach (var image in bubble.GetComponentsInChildren<Image>(true))
-                image.raycastTarget = false;
-
-            // 🔹 Desactiva colliders si los tuviera
-            foreach (var col in bubble.GetComponentsInChildren<Collider>(true))
-                col.enabled = false;
-            foreach (var col2d in bubble.GetComponentsInChildren<Collider2D>(true))
-                col2d.enabled = false;
-
-            // 🔹 Desactiva canvases interactivos
-            foreach (var canvas in bubble.GetComponentsInChildren<CanvasGroup>(true))
-            {
-                canvas.interactable = false;
-                canvas.blocksRaycasts = false;
-            }
-
-            // 🔹 Limpieza de referencias
-            buttonToSprite.Clear();
-
-            return bubble; // ✅ Solo visual, sin interacción posible
         }
 
-        // 🧩 En otros modos (1 o 2) → comportamiento normal
-        if (btn == null)
-        {
-            Debug.LogError("⚠️ Prefab sin botón 'ButtonOp'.");
-            return bubble;
-        }
-
-        btn.enabled = true;
-        btn.interactable = true;
-        btn.onClick.RemoveAllListeners();
-        btn.gameObject.SetActive(true);
-        buttonToSprite[btn] = sprite;
-        btn.onClick.AddListener(() => OnBubbleClicked(btn));
-
-        return bubble;
+        Debug.Log($"🟣 Generadas {options.Count(o => o.sprite != null)} opciones en modo Relate con spacing 150.");
     }
 
-
-
-
     // ==============================================================
-    // 🎯 Clic en burbuja
+    // 🟧 MODO 2 – Create
     // ==============================================================
-    private void OnBubbleClicked(Button btn)
+    private void LoadCreateMode(ActivityCreate activity)
     {
-        if (!buttonToSprite.ContainsKey(btn)) return;
-        Sprite chosen = buttonToSprite[btn];
+        currentMode = 2;
+        Debug.Log($"🟠 [Modo {currentMode}] Create cargado → palabra: {activity.main_word.word}");
 
-        if (currentMode == 1 && currentActivity != null)
+        ClearContainers();
+        if (buttonYes) buttonYes.gameObject.SetActive(false);
+        if (buttonNo) buttonNo.gameObject.SetActive(false);
+
+        // 🔹 Solo 2 imágenes centradas
+        if (layoutRow1 != null)
         {
-            Sprite correctSprite = LoadSprite(currentActivity.correct_option.path);
-            Sprite wrong1 = LoadSprite(currentActivity.wrong_option1.path);
-            Sprite wrong2 = LoadSprite(currentActivity.wrong_option2.path);
+            layoutRow1.spacing = 0f;
+            layoutRow1.childAlignment = TextAnchor.MiddleCenter;
+        }
+        if (layoutRow2 != null)
+        {
+            layoutRow2.spacing = 0f;
+            layoutRow2.childAlignment = TextAnchor.MiddleCenter;
+        }
 
-            bool isCorrect = chosen.name == correctSprite.name;
-            string chosenWord = spriteToWord.ContainsKey(chosen) ? spriteToWord[chosen] : "???";
+        Sprite main = LoadSprite(activity.main_word.PATH);
+        Sprite hint = LoadSprite(activity.hint_word.PATH);
 
-            if (isCorrect)
+        CreateBubble(bubbleContainerHorizontal1, main);
+        CreateBubble(bubbleContainerHorizontal2, hint);
+
+        Debug.Log($"🟧 Modo Create: generadas 2 imágenes (principal + pista)");
+
+        ShowFeedback(true, main, hint, $"Pista: {activity.hint}", activity.main_word.word, activity.hint_word.word);
+    }
+
+    // ==============================================================
+    // 🔵 MODO 3 – Select
+    // ==============================================================
+    private void LoadSelectMode(ActivitySelect activity)
+    {
+        currentMode = 3;
+        Debug.Log($"🔵 [Modo {currentMode}] Select cargado → {activity.main_word.word}");
+
+        ClearContainers();
+        if (buttonYes) buttonYes.gameObject.SetActive(false);
+        if (buttonNo) buttonNo.gameObject.SetActive(false);
+
+        Sprite main = LoadSprite(activity.main_word.PATH);
+        Sprite correct = LoadSprite(activity.correct_option.PATH);
+        Sprite wrong1 = LoadSprite(activity.wrong_option1.PATH);
+        Sprite wrong2 = LoadSprite(activity.wrong_option2.PATH);
+
+        List<(Sprite sprite, bool isCorrect)> options = new()
+        {
+            (correct, true),
+            (wrong1, false),
+            (wrong2, false)
+        };
+
+        options = options.Where(o => o.sprite != null).OrderBy(x => Random.value).ToList();
+
+        foreach (var opt in options)
+        {
+            GameObject bubble = CreateBubble(bubbleContainerHorizontal1, opt.sprite);
+            Button btn = bubble.transform.Find("ButtonOp")?.GetComponent<Button>();
+            if (btn)
             {
-                correctAnswered = true;
-                Sprite randomWrong = (Random.value > 0.5f) ? wrong1 : wrong2;
-                string randomWrongWord = spriteToWord.ContainsKey(randomWrong) ? spriteToWord[randomWrong] : "???";
-                ShowFeedback(true, chosen, randomWrong, currentActivity.feedback_positive, chosenWord, randomWrongWord);
-            }
-            else
-            {
-                Sprite otherWrong = (chosen.name == wrong1?.name) ? wrong2 : wrong1;
-                string otherWrongWord = spriteToWord.ContainsKey(otherWrong) ? spriteToWord[otherWrong] : "???";
-                ShowFeedback(false, chosen, otherWrong, currentActivity.feedback_neutral, chosenWord, otherWrongWord);
+                btn.onClick.RemoveAllListeners();
+                btn.onClick.AddListener(() => EvaluateSelect(activity, opt.isCorrect, opt.sprite));
             }
         }
     }
 
     // ==============================================================
-    // 📊 Feedback visual
+    // 🎯 Evaluaciones
     // ==============================================================
-    private void ShowFeedback(bool isCorrect, Sprite chosen, Sprite match, string message, string word1, string word2)
+    private void EvaluateJudge(ActivityJudge act, bool pressedYes, bool isCorrect, Sprite s1, Sprite s2)
+    {
+        correctAnswered = isCorrect;
+        string msg = isCorrect ? act.feedback_positive : act.feedback_neutral;
+        ShowFeedback(isCorrect, s1, s2, msg, act.word1.word, act.word2.word);
+    }
+
+    private void EvaluateRelate(ActivityRelate act, bool isCorrect, Sprite chosen)
+    {
+        correctAnswered = isCorrect;
+        string msg = isCorrect ? act.feedback_positive : act.feedback_neutral;
+        ShowFeedback(isCorrect, chosen, LoadSprite(act.main_word.PATH), msg, act.main_word.word, spriteToWord.ContainsKey(chosen) ? spriteToWord[chosen] : "?");
+    }
+
+    private void EvaluateSelect(ActivitySelect act, bool isCorrect, Sprite chosen)
+    {
+        correctAnswered = isCorrect;
+        string msg = isCorrect ? act.feedback_positive : act.feedback_neutral;
+        ShowFeedback(isCorrect, chosen, LoadSprite(act.main_word.PATH), msg, act.main_word.word, spriteToWord.ContainsKey(chosen) ? spriteToWord[chosen] : "?");
+    }
+
+    // ==============================================================
+    // 🎨 Feedback visual
+    // ==============================================================
+    private void ShowFeedback(bool correct, Sprite img1, Sprite img2, string msg, string w1, string w2)
     {
         if (!panelFeedback || !feedbackText) return;
-        IsBusyShowingFeedback = true;
-
         panelFeedback.SetActive(true);
-        feedbackText.text = message;
-        feedbackText.color = isCorrect ? Color.green : Color.red;
-
-        feedbackImage1.sprite = chosen;
-        feedbackImage2.sprite = match;
-        feedbackName1.text = word1;
-        feedbackName2.text = word2;
+        feedbackText.text = msg;
+        feedbackText.color = correct ? Color.green : new Color(1f, 0.5f, 0f);
+        feedbackImage1.sprite = img1;
+        feedbackImage2.sprite = img2;
+        feedbackName1.text = w1;
+        feedbackName2.text = w2;
+        feedbackName1.richText = true;
+        feedbackName2.richText = true;
 
         if (extraImage)
         {
             extraImage.enabled = true;
-            extraImage.sprite = isCorrect ? extraCorrectSprite : extraIncorrectSprite;
+            extraImage.sprite = correct ? extraCorrectSprite : extraIncorrectSprite;
         }
 
-        if (cloudImage)
-            cloudImage.enabled = !isCorrect;
-
+        if (cloudImage) cloudImage.enabled = !correct;
         StartCoroutine(FeedbackThenNext());
     }
 
     private IEnumerator FeedbackThenNext()
     {
-        yield return new WaitForSeconds(3f);
-
-        if (panelFeedback) panelFeedback.SetActive(false);
+        yield return new WaitForSeconds(2.5f);
+        panelFeedback.SetActive(false);
         if (cloudImage) cloudImage.enabled = false;
         IsBusyShowingFeedback = false;
-
-        // 🔹 Si el jugador respondió correctamente
-        if (correctAnswered)
-        {
-            if (currentMode == 0)
-            {
-                Debug.Log("🔁 Respuesta correcta → solicitando nueva actividad modo 0...");
-                LoadActivity0FromServer(); // ✅ sigue en modo 0
-            }
-            else if (currentMode == 1)
-            {
-                Debug.Log("🔁 Respuesta correcta → solicitando nueva actividad modo 1...");
-                LoadActivity1FromServer();
-            }
-            else if (currentMode == 2)
-            {
-                Debug.Log("🔁 Respuesta correcta → refrescando modo 2 local...");
-                ShowNewPair(); // opcional si el modo 2 es local
-            }
-        }
-        else
-        {
-            Debug.Log("⏸ Respuesta incorrecta → se mantienen las mismas imágenes (sin nueva petición).");
-            // No recarga, solo permite que el jugador intente nuevamente
-        }
+        if (correctAnswered) StartCoroutine(api.LoadActivity(currentMode, OnJsonLoaded, OnError));
     }
 
-
-
     // ==============================================================
-    // Utilidades
+    // 🧩 Utilidades
     // ==============================================================
     private void ClearContainers()
     {
-        foreach (Transform child in bubbleContainerHorizontal1) Destroy(child.gameObject);
-        foreach (Transform child in bubbleContainerHorizontal2) Destroy(child.gameObject);
+        foreach (Transform c in bubbleContainerHorizontal1) Destroy(c.gameObject);
+        foreach (Transform c in bubbleContainerHorizontal2) Destroy(c.gameObject);
     }
 
-    private Sprite LoadSprite(string imageFileName)
+    private Sprite LoadSprite(string path)
     {
-        if (string.IsNullOrEmpty(imageFileName)) return null;
-        string imageName = System.IO.Path.GetFileNameWithoutExtension(imageFileName);
-        return Resources.Load<Sprite>($"Images/ImgButtons/{imageName}");
+        if (string.IsNullOrEmpty(path)) return null;
+        string fileName = System.IO.Path.GetFileNameWithoutExtension(path);
+        string fullPath = $"Images/ImgButtons/{fileName}";
+        Sprite s = Resources.Load<Sprite>(fullPath);
+        if (!s) Debug.LogWarning($"⚠️ Sprite no encontrado: {fullPath}");
+        return s;
     }
 
     private void EnsureSpritesLoaded()
     {
         if (gameImages == null) gameImages = new List<Sprite>();
-        if (gameImages.Count < 2 && !string.IsNullOrEmpty(resourcesFolder))
+        if (gameImages.Count == 0 && !string.IsNullOrEmpty(resourcesFolder))
         {
             var loaded = Resources.LoadAll<Sprite>(resourcesFolder);
-            if (loaded != null && loaded.Length > 0)
-            {
-                gameImages.Clear();
-                gameImages.AddRange(loaded);
-            }
+            if (loaded.Length > 0) gameImages.AddRange(loaded);
         }
     }
 
+    private GameObject CreateBubble(Transform parent, Sprite sprite)
+    {
+        if (bubblePrefab == null)
+        {
+            Debug.LogError("❌ No se asignó el prefab de burbuja (bubblePrefab) en el inspector.");
+            return null;
+        }
 
+        GameObject bubble = Instantiate(bubblePrefab, parent);
+        Image img = bubble.transform.Find("Image")?.GetComponent<Image>();
+        if (img != null)
+        {
+            img.sprite = sprite;
+            img.preserveAspect = true;
+            Debug.Log($"🫧 Burbuja creada con sprite: {sprite?.name ?? "NULL"}");
+        }
+
+        Button btn = bubble.transform.Find("ButtonOp")?.GetComponent<Button>();
+        if (btn != null)
+        {
+            btn.onClick.RemoveAllListeners();
+            btn.interactable = true;
+            btn.gameObject.SetActive(true);
+            if (sprite != null && !buttonToSprite.ContainsKey(btn))
+                buttonToSprite[btn] = sprite;
+        }
+
+        return bubble;
+    }
+
+    protected override void OnError(string err)
+    {
+        Debug.LogError($"⚠️ Error modo {currentMode}: {err}");
+    }
 }
