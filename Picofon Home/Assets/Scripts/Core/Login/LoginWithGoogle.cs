@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
 using Firebase.Firestore;
@@ -16,23 +17,22 @@ public class LoginWithGoogle : MonoBehaviour
     private bool isFakeUser = false;
 
     [Header("Firebase")]
-    public string GoogleAPI = "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
+    public string GoogleAPI =  "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
     private FirebaseAuth auth;
     private FirebaseUser user;
     private FirebaseFirestore firestore;
+    private bool isFirebaseReady = false;
 
     [Header("Panels")]
     public GameObject LoginPanel;
     public GameObject ChildDataPanel;
 
     [Header("Buttons")]
-    public Button SignInButton;   // ✅ assign in Inspector
+    public Button SignInButton;
     public Button ContinueButton;
-
-    [Header("Debug / Testing Only")]
     public Button DebugLoginButton;
 
-    [Header("User Info UI")]   
+    [Header("User Info UI")]
     public TextMeshProUGUI WelcomeMessage;
     public TextMeshProUGUI EmailText;
 
@@ -42,29 +42,25 @@ public class LoginWithGoogle : MonoBehaviour
     public Toggle No_Toggle;
     public Toggle TEL_Toggle;
     public Toggle TEA_Toggle;
-    public Toggle TDAH_Toggle;  
+    public Toggle TDAH_Toggle;
     public Toggle Other_Toggle;
     public TMP_InputField OtherTextField;
 
-
-
+    private bool isSigningIn = false;
     private bool isGoogleSignInInitialized = false;
 
     private void Start()
     {
         Debug.Log("Msg::::: Start()");
 
-        // ✅ Debug button (simulates login without Firebase/Google)
         if (DebugLoginButton != null)
         {
-            Debug.Log("Msg::::: DebugLoginButton start");
             DebugLoginButton.onClick.RemoveAllListeners();
             DebugLoginButton.onClick.AddListener(SimulateLogin);
         }
 
         InitFirebase();
 
-        // ✅ Initialize Google Sign-In once
         if (!isGoogleSignInInitialized)
         {
             GoogleSignIn.Configuration = new GoogleSignInConfiguration
@@ -72,17 +68,16 @@ public class LoginWithGoogle : MonoBehaviour
                 RequestIdToken = true,
                 WebClientId = GoogleAPI,
                 RequestEmail = true
+                //ForceCodeForRefreshToken = true // ensure popup shows
             };
             isGoogleSignInInitialized = true;
             Debug.Log("Msg::::: Google SignIn configuration initialized in Start()");
         }
 
-        // ✅ Wire buttons safely
         if (SignInButton != null)
         {
             SignInButton.onClick.RemoveAllListeners();
             SignInButton.onClick.AddListener(Login);
-            Debug.Log("Msg::::: SignIn button wired programmatically in Start()");
         }
 
         if (ContinueButton != null)
@@ -91,100 +86,110 @@ public class LoginWithGoogle : MonoBehaviour
             ContinueButton.onClick.AddListener(OnContinue);
         }
 
-        // Default UI state (safe even if already set in Inspector)
         LoginPanel.SetActive(true);
         ChildDataPanel.SetActive(false);
 
-        // ✅ Skip Firebase login automatically when testing in the Unity Editor
-        #if UNITY_EDITOR
-        Debug.Log("Msg::::: UNITY_EDITOR detected — using fake login for testing");
+#if UNITY_EDITOR
+        Debug.Log("Msg::::: UNITY_EDITOR detected – using fake login");
         SimulateLogin();
-        #endif
+#endif
 
         ChildNameField.onValueChanged.AddListener(_ => UpdateContinueButtonState());
         AgeDropdown.onValueChanged.AddListener(_ => UpdateContinueButtonState());
-        TDAH_Toggle.onValueChanged.AddListener(_ => UpdateContinueButtonState());
         No_Toggle.onValueChanged.AddListener(_ => UpdateContinueButtonState());
         TEL_Toggle.onValueChanged.AddListener(_ => UpdateContinueButtonState());
         TEA_Toggle.onValueChanged.AddListener(_ => UpdateContinueButtonState());
+        TDAH_Toggle.onValueChanged.AddListener(_ => UpdateContinueButtonState());
         Other_Toggle.onValueChanged.AddListener(_ => UpdateContinueButtonState());
 
-        UpdateContinueButtonState(); // initialize state at startup
+        UpdateContinueButtonState();
     }
 
-    void InitFirebase()
+    private void InitFirebase()
     {
         Debug.Log("Msg::::: InitFirebase()");
-        auth = FirebaseAuth.DefaultInstance;
-        firestore = FirebaseFirestore.DefaultInstance;
-    }
-
-    public void Login()
-    {
-        Debug.Log($">>>> SignIn Button Pressed at: {System.DateTime.Now:HH:mm:ss.fff}");
-        Debug.Log("Msg:::::Login() called – SignIn button pressed");
-
-        Task<GoogleSignInUser> signIn = GoogleSignIn.DefaultInstance.SignIn();
-        TaskCompletionSource<FirebaseUser> signInCompleted = new TaskCompletionSource<FirebaseUser>();
-
-        signIn.ContinueWith(task =>
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
-            Debug.Log("Msg:::::GoogleSignIn task finished. Status: " + task.Status);
-
-            if (task.IsCanceled)
+            var status = task.Result;
+            if (status == DependencyStatus.Available)
             {
-                Debug.LogWarning("Msg:::::Google Sign-In canceled");
-                signInCompleted.SetCanceled();
-            }
-            else if (task.IsFaulted)
-            {
-                Debug.LogError("Msg:::::Google Sign-In error: " + task.Exception);
-                signInCompleted.SetException(task.Exception);
+                auth = FirebaseAuth.DefaultInstance;
+                firestore = FirebaseFirestore.DefaultInstance;
+                isFirebaseReady = true;
+                Debug.Log("Firebase ready and initialized successfully.");
             }
             else
             {
-                Debug.Log("Msg:::::Google Sign-In success. Getting Firebase credential...");
-
-                Credential credential = GoogleAuthProvider.GetCredential(task.Result.IdToken, null);
-
-                auth.SignInWithCredentialAsync(credential).ContinueWithOnMainThread(authTask =>
-                {
-                    Debug.Log("Msg:::::Firebase SignIn task finished. Status: " + authTask.Status);
-
-                    if (authTask.IsCanceled)
-                    {
-                        Debug.LogWarning("Msg:::::Firebase Auth canceled");
-                        signInCompleted.SetCanceled();
-                    }
-                    else if (authTask.IsFaulted)
-                    {
-                        Debug.LogError("Msg:::::Firebase Auth error: " + authTask.Exception);
-                        signInCompleted.SetException(authTask.Exception);
-                    }
-                    else
-                    {
-                        Debug.Log("Msg:::::Firebase Auth success. Logged in as: " + authTask.Result.DisplayName);
-                        signInCompleted.SetResult(authTask.Result);
-
-                        OnLoginSuccess(auth.CurrentUser);
-                    }
-                });
+                Debug.LogError("Firebase dependencies not available: " + status);
             }
         });
     }
 
-    /// <summary>
-    /// Called when login is successful
-    /// </summary>
+    public void Login()
+    {
+        if (!isFirebaseReady)
+        {
+            Debug.LogWarning("Firebase not ready yet. Please wait...");
+            return;
+        }
+
+        Debug.Log($">>>> SignIn Button Pressed at: {System.DateTime.Now:HH:mm:ss.fff}");
+        if (isSigningIn) return;
+        isSigningIn = true;
+
+        // Ensure popup chooser
+        GoogleSignIn.DefaultInstance.Disconnect();
+        GoogleSignIn.DefaultInstance.SignOut();
+
+        Debug.Log("Msg::::: Starting Google SignIn flow...");
+
+        GoogleSignIn.DefaultInstance.SignIn().ContinueWithOnMainThread(task =>
+        {
+            isSigningIn = false;
+            Debug.Log("Msg::::: GoogleSignIn task finished. Status: " + task.Status);
+
+            if (task.IsCanceled)
+            {
+                Debug.LogWarning("Msg::::: Google Sign-In canceled.");
+                return;
+            }
+            if (task.IsFaulted)
+            {
+                Debug.LogError("Msg::::: Google Sign-In error: " + task.Exception);
+                return;
+            }
+
+            Debug.Log("Msg::::: Google Sign-In success. Exchanging token with Firebase...");
+            Credential credential = GoogleAuthProvider.GetCredential(task.Result.IdToken, null);
+
+            auth.SignInWithCredentialAsync(credential).ContinueWithOnMainThread(authTask =>
+            {
+                isSigningIn = false;
+
+                if (authTask.IsCanceled)
+                {
+                    Debug.LogWarning("Msg::::: Firebase Auth canceled.");
+                    return;
+                }
+                if (authTask.IsFaulted)
+                {
+                    Debug.LogError("Msg::::: Firebase Auth error: " + authTask.Exception);
+                    return;
+                }
+
+                Debug.Log("Msg::::: Firebase Auth success. Logged in as: " + authTask.Result.DisplayName);
+                OnLoginSuccess(auth.CurrentUser);
+            });
+        });
+    }
+
     private void OnLoginSuccess(FirebaseUser loggedUser)
     {
-        isFakeUser = false;
-      
         if (loggedUser == null) return;
-
-        Debug.Log("Msg::::: OnLoginSuccess() [FirebaseUser]");
+        isFakeUser = false;
         user = loggedUser;
 
+        Debug.Log("Msg::::: OnLoginSuccess() [FirebaseUser]");
         WelcomeMessage.text = $"{user.DisplayName}, gràcies per registrar-te";
         EmailText.text = user.Email;
 
@@ -192,11 +197,20 @@ public class LoginWithGoogle : MonoBehaviour
         ChildDataPanel.SetActive(true);
     }
 
-    // Overload for fake user (only used in debug mode)
+    private void SimulateLogin()
+    {
+        Debug.Log("Msg::::: SimulateLogin() – skipping Google/Firebase login");
+        isFakeUser = true;
+
+        FakeFirebaseUser fakeUser = new FakeFirebaseUser(
+            "testUser123", "Test User", "testuser@example.com"
+        );
+        OnLoginSuccess(fakeUser);
+    }
+
     private void OnLoginSuccess(FakeFirebaseUser fakeUser)
     {
         Debug.Log("Msg::::: OnLoginSuccess() [FakeFirebaseUser]");
-
         WelcomeMessage.text = $"{fakeUser.DisplayName}, gràcies per registrar-te";
         EmailText.text = fakeUser.Email;
 
@@ -205,49 +219,28 @@ public class LoginWithGoogle : MonoBehaviour
         UpdateContinueButtonState();
     }
 
-
-
-    /// <summary>
-    /// Fake login for testing UI flow without Firebase
-    /// </summary>
-    private void SimulateLogin()
-    {
-        Debug.Log("Msg::::: SimulateLogin() called – skipping Google/Firebase login");
-
-        isFakeUser = true; // ✅ mark that this is a fake session
-
-        FakeFirebaseUser fakeUser = new FakeFirebaseUser(
-            "testUser123",
-            "Test User",
-            "testuser@example.com"
-        );
-
-        OnLoginSuccess(fakeUser);
-    }
-
     private void UpdateContinueButtonState()
     {
         bool hasName = !string.IsNullOrWhiteSpace(ChildNameField.text);
-        bool hasAge = AgeDropdown.value > 0; // assuming 0 is "Select age"
-        bool hasAnyCondition = TDAH_Toggle.isOn || No_Toggle.isOn ||
-                               TEL_Toggle.isOn || TEA_Toggle.isOn || Other_Toggle.isOn;
+        bool hasAge = AgeDropdown.value > 0;
+        bool hasAnyCondition =
+            TDAH_Toggle.isOn || No_Toggle.isOn || TEL_Toggle.isOn ||
+            TEA_Toggle.isOn || Other_Toggle.isOn;
 
         ContinueButton.interactable = hasName && hasAge && hasAnyCondition;
     }
 
     private void OnContinue()
     {
-        // ✅ If using real Firebase login
         if (!isFakeUser)
         {
             if (user == null)
             {
-                Debug.LogError("Msg:::::No user logged in.");
+                Debug.LogError("Msg::::: No user logged in.");
                 return;
             }
 
             DocumentReference docRef = firestore.Collection("users").Document(user.UserId);
-
             var childData = new
             {
                 parentName = user.DisplayName,
@@ -266,7 +259,7 @@ public class LoginWithGoogle : MonoBehaviour
             {
                 if (task.IsCompletedSuccessfully)
                 {
-                    Debug.Log("Msg:::::Child data saved successfully!");
+                    Debug.Log("Msg::::: Child data saved successfully!");
                     SceneManager.LoadScene("MapPath");
                 }
                 else
@@ -278,14 +271,11 @@ public class LoginWithGoogle : MonoBehaviour
         }
         else
         {
-            // ✅ Fake login flow (skip Firebase, just go to MapPath)
-            Debug.Log("Msg::::: Fake user detected — skipping Firestore save.");
+            Debug.Log("Msg::::: Fake user detected – skipping Firestore save");
             SceneManager.LoadScene("MapPath");
         }
     }
-
 }
-
 
 public class FakeFirebaseUser
 {
