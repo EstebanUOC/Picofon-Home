@@ -8,17 +8,14 @@ public class FeedbackPanelController : MonoBehaviour
     [Header("🧠 Elementos del Panel")]
     [SerializeField] private GameObject panelFeedback;
     [SerializeField] private Image background;
+    [SerializeField] private Image backgroundLumi;
     [SerializeField] private Image cloud;
     [SerializeField] private Image imageLeft;
     [SerializeField] private Image imageRight;
-    [SerializeField] private TMP_Text textMain;
-    [SerializeField] private TMP_Text textSub;
+    [SerializeField] private TMP_Text textMain;   // Primera palabra
+    [SerializeField] private TMP_Text textSub;    // Segunda palabra
 
     private Coroutine hideRoutine;
-
-    // 🖼️ Sprites de feedback (se cargan desde Resources)
-    private Sprite spriteCorrect;
-    private Sprite spriteNeutral;
     private Sprite spriteCloud;
 
     private void Awake()
@@ -26,42 +23,69 @@ public class FeedbackPanelController : MonoBehaviour
         if (panelFeedback != null)
             panelFeedback.SetActive(false);
 
-        // 🔹 Cargar las imágenes desde la carpeta Resources
-        spriteCorrect = Resources.Load<Sprite>("Images/Images/PanelFeedback/Correct_Answer");
-        spriteNeutral = Resources.Load<Sprite>("Images/Images/PanelFeedback/Neutral_Answer");
         spriteCloud = Resources.Load<Sprite>("Images/Images/PanelFeedback/Cloud");
     }
 
     // ============================================================
-    // ✅ Mostrar feedback con imágenes y textos dinámicos
+    // ✅ Mostrar feedback con dos palabras (una en cada texto)
     // ============================================================
-    public void ShowFeedback(Sprite left, Sprite right, string mainMsg, string subMsg, bool correct)
+    public void ShowFeedback(
+        Sprite left,
+        Sprite right,
+        bool correct,
+        string syllWord1,
+        string syllWord2
+    )
     {
         if (panelFeedback == null) return;
-
         panelFeedback.SetActive(true);
+        HidePrefabImageIfModeZero(); // 👈
 
-        // 🔹 Fondo principal
+
+        // ============================================================
+        // 🎨 Fondos según tipo de feedback
+        // ============================================================
+        string backPath = correct
+            ? "Images/Images/PanelFeedback/back_correct"
+            : "Images/Images/PanelFeedback/back_neutral";
+
+        string lumiPath = correct
+            ? "Images/Images/PanelFeedback/Correct_Answer"
+            : "Images/Images/PanelFeedback/Neutral_Answer";
+
+        Sprite backSprite = Resources.Load<Sprite>(backPath);
+        Sprite lumiSprite = Resources.Load<Sprite>(lumiPath);
+
         if (background != null)
         {
-            background.enabled = true;
-            background.sprite = correct ? spriteCorrect : spriteNeutral;
-            background.preserveAspect = true;
+            background.enabled = (backSprite != null);
+            if (backSprite != null) background.sprite = backSprite;
             background.color = Color.white;
         }
 
-        // 🔹 Nube solo si es incorrecto
+        if (backgroundLumi != null)
+        {
+            backgroundLumi.enabled = (lumiSprite != null);
+            if (lumiSprite != null) backgroundLumi.sprite = lumiSprite;
+            backgroundLumi.color = Color.white;
+        }
+
+        // ============================================================
+        // ☁️ Nube (solo si es incorrecto)
+        // ============================================================
         if (cloud != null)
         {
             cloud.enabled = !correct;
-            if (!correct)
+            if (!correct && spriteCloud != null)
             {
                 cloud.sprite = spriteCloud;
-                cloud.preserveAspect = true;
+                cloud.color = Color.white;
             }
         }
 
-        // 🔹 Imágenes izquierda/derecha (palabras del juego)
+        // ============================================================
+        // 🖼️ Imágenes
+        // ============================================================
         if (imageLeft != null)
         {
             imageLeft.enabled = (left != null);
@@ -76,22 +100,66 @@ public class FeedbackPanelController : MonoBehaviour
             imageRight.preserveAspect = true;
         }
 
-        // 🔹 Textos
+        // ============================================================
+        // 🟩 Primera palabra → textMain
+        // ============================================================
         if (textMain != null)
         {
-            textMain.text = mainMsg;
-            textMain.color = correct ? Color.green : new Color(1f, 0.4f, 0f);
+            textMain.text = ColorizeFirstSyllable(syllWord1, correct);
+            textMain.alignment = TextAlignmentOptions.Center;
         }
 
+        // ============================================================
+        // 🟧 Segunda palabra → textSub
+        // ============================================================
         if (textSub != null)
-            textSub.text = subMsg;
+        {
+            textSub.text = ColorizeFirstSyllable(syllWord2, correct);
+            textSub.alignment = TextAlignmentOptions.Center;
+        }
 
-        // 🔹 Cancelar corrutina previa
+        // ============================================================
+        // 🔹 Ocultar feedback después de un tiempo
+        // ============================================================
         if (hideRoutine != null)
             StopCoroutine(hideRoutine);
-
-        // 🔹 Ocultar panel después de 3 segundos
         hideRoutine = StartCoroutine(HideAfterDelay(3f));
+    }
+    // ============================================================
+    // 🔹 Ocultar el objeto "Image" dentro de los prefabs generados
+    // ============================================================
+    private void HidePrefabImageIfModeZero()
+    {
+        Transform imageObj = transform.Find("Image");
+        if (imageObj != null)
+        {
+            Image img = imageObj.GetComponent<Image>();
+            if (img != null)
+                img.gameObject.SetActive(false);
+        }
+    }
+
+
+    // ============================================================
+    // 🎨 Colorear la primera sílaba de una palabra
+    // ============================================================
+    private string ColorizeFirstSyllable(string syllWord, bool correct)
+    {
+        if (string.IsNullOrEmpty(syllWord))
+            return "";
+
+        string[] syllables = syllWord.Split('#');
+        if (syllables.Length == 0)
+            return syllWord;
+
+        string colorHex = correct ? "#00C853" : "#FF9100"; // verde o naranja
+
+        // Colorea solo la primera sílaba
+        string coloredWord = $"<color={colorHex}>{syllables[0]}</color>";
+        for (int i = 1; i < syllables.Length; i++)
+            coloredWord += syllables[i];
+
+        return $"<b>{coloredWord}</b>";
     }
 
     // ============================================================
@@ -102,5 +170,7 @@ public class FeedbackPanelController : MonoBehaviour
         yield return new WaitForSeconds(delay);
         if (panelFeedback != null)
             panelFeedback.SetActive(false);
+        if (backgroundLumi != null)
+            backgroundLumi.enabled = false;
     }
 }
