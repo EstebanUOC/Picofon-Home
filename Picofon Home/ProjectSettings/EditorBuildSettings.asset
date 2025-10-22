@@ -6,9 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/LoginScene.unity
+    guid: 367e71f78665cb5418ff7bde19659bea
+  - enabled: 1
     path: Assets/Scenes/MapPath.unity
     guid: 45197a4593b2e124eb664aaf7d42bf4f
   - enabled: 1
+    path: Assets/Scenes/Activities/BasketScene.unity
+    guid: 014117f89751d7a44a23819992ec3348
+  - enabled: 0
     path: Assets/Scenes/Activities/BalloonPopSeaScene.unity
     guid: df55e9d45657c5148b5b52740c1dce1c
   m_configObjects:
