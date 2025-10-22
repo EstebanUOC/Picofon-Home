@@ -1725,7 +1725,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &610160313
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2799,13 +2799,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fad7f7d6d79f9044cbcb02ec6216082d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useFakeLogin: 0
   GoogleAPI: 1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com
   LoginPanel: {fileID: 1039029301}
   ChildDataPanel: {fileID: 610160312}
   SignInButton: {fileID: 1031013743}
   ContinueButton: {fileID: 1785091892}
-  DebugLoginButton: {fileID: 95402053}
   WelcomeMessage: {fileID: 1305574975}
   EmailText: {fileID: 2096060790}
   ChildNameField: {fileID: 930904021}
@@ -2815,7 +2813,6 @@ MonoBehaviour:
   TEA_Toggle: {fileID: 1714903961}
   TDAH_Toggle: {fileID: 1105259391}
   Other_Toggle: {fileID: 24830657}
-  OtherTextField: {fileID: 1987182558}
 --- !u!4 &929300375
 Transform:
   m_ObjectHideFlags: 0
@@ -3311,7 +3308,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1039029302
 RectTransform:
   m_ObjectHideFlags: 0
