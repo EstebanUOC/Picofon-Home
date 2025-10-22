@@ -70,8 +70,8 @@ sysinfo.txt
 */.tmp.driveupload/
 
 # Ignore local image folders (synced with Google Drive)
-Picofon Home/Assets/Resources/Images/
-Picofon Home/Assets/Images/
+"Picofon Home/Assets/Resources/Images/"
+"Picofon Home/Assets/Images/"
 
 # Ignore all Unity meta files
 *.meta
