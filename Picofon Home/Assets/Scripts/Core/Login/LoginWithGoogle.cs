@@ -25,6 +25,7 @@ public class LoginWithGoogle : MonoBehaviour
     public Button ContinueButton;
 
     [Header("User Info UI")]
+    public TextMeshProUGUI TitleText;
     public TextMeshProUGUI WelcomeMessage;
     public TextMeshProUGUI EmailText;
 
@@ -138,6 +139,7 @@ public class LoginWithGoogle : MonoBehaviour
 
     private void OnLoginSuccess()
     {
+        TitleText.enabled = false;
         WelcomeMessage.text = $"{user.DisplayName}, gràcies per registrar-te";
         EmailText.text = user.Email;
 
