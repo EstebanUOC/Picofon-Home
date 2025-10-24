@@ -75,6 +75,7 @@ sysinfo.txt
 
 # Ignore local image folders (synced with Google Drive)
 "Picofon Home/Assets/Resources/Images/"
+"Picofon Home/Assets/Resources/Images/ImgButtons/"
 
 # Ignore all Unity meta files
 *.meta
