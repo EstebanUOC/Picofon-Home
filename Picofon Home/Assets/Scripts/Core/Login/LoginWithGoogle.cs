@@ -122,18 +122,30 @@ public class LoginWithGoogle : MonoBehaviour
             Debug.Log("Msg::::: Google Sign-In success. Exchanging token with Firebase...");
             Credential credential = GoogleAuthProvider.GetCredential(task.Result.IdToken, null);
 
-            auth.SignInWithCredentialAsync(credential).ContinueWithOnMainThread(authTask =>
+            auth.SignInWithCredentialAsync(credential).ContinueWithOnMainThread(async authTask =>
             {
                 if (authTask.IsCanceled || authTask.IsFaulted)
                 {
-                    Debug.LogError("Msg::::: Firebase Auth error: " + authTask.Exception);
+                    Debug.LogError("Firebase Auth error: " + authTask.Exception);
                     return;
                 }
 
                 user = auth.CurrentUser;
-                Debug.Log("Msg::::: Firebase Auth success. Logged in as: " + user.DisplayName);
+                Debug.Log("Firebase Auth success. Logged in as: " + user.DisplayName);
+
                 OnLoginSuccess();
+
+                // ✅ Because this lambda is marked "async", you can now use await
+                string idToken = await user.TokenAsync(true);
+
+                StartCoroutine(new LoginAPI().SendFirebaseToken(idToken, success => {
+                    if (success)
+                        Debug.Log("✅ Server login success");
+                    else
+                        Debug.LogError("❌ Server login failed");
+                }));
             });
+
         });
     }
 
