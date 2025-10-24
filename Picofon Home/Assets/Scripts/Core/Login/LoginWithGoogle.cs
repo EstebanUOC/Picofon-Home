@@ -7,6 +7,8 @@ using Firebase.Auth;
 using Firebase.Extensions;
 using Google;
 using UnityEngine.SceneManagement;
+using System;
+
 
 public class LoginWithGoogle : MonoBehaviour
 {
@@ -93,61 +95,77 @@ public class LoginWithGoogle : MonoBehaviour
     {
         if (!isFirebaseReady)
         {
-            Debug.LogWarning("Firebase not ready yet. Please wait...");
+            Debug.LogWarning("⚠️ Firebase not ready yet. Please wait...");
             return;
         }
 
-        if (isSigningIn) return;
-        isSigningIn = true;
+        if (isSigningIn) 
+        {
+            Debug.LogWarning("⚠️ Already signing in. Please wait.");
+            return;
+        }
 
+        isSigningIn = true;
+        Debug.Log("🚀 Starting Google Sign-In...");
+
+        // Make sure there’s no existing session
         GoogleSignIn.DefaultInstance.Disconnect();
         GoogleSignIn.DefaultInstance.SignOut();
 
-        Debug.Log("Msg::::: Starting Google SignIn flow...");
-
-        GoogleSignIn.DefaultInstance.SignIn().ContinueWithOnMainThread(task =>
+        GoogleSignIn.DefaultInstance.SignIn().ContinueWithOnMainThread(async googleTask =>
         {
             isSigningIn = false;
-            if (task.IsCanceled)
+
+            if (googleTask.IsCanceled)
             {
-                Debug.LogWarning("Msg::::: Google Sign-In canceled.");
-                return;
-            }
-            if (task.IsFaulted)
-            {
-                Debug.LogError("Msg::::: Google Sign-In error: " + task.Exception);
+                Debug.LogWarning("❌ Google Sign-In canceled by user.");
                 return;
             }
 
-            Debug.Log("Msg::::: Google Sign-In success. Exchanging token with Firebase...");
-            Credential credential = GoogleAuthProvider.GetCredential(task.Result.IdToken, null);
-
-            auth.SignInWithCredentialAsync(credential).ContinueWithOnMainThread(async authTask =>
+            if (googleTask.IsFaulted)
             {
-                if (authTask.IsCanceled || authTask.IsFaulted)
+                Debug.LogError($"❌ Google Sign-In failed: {googleTask.Exception?.Message}");
+                return;
+            }
+
+            Debug.Log("✅ Google Sign-In success. Exchanging with Firebase...");
+
+            // Get the Google Sign-In IdToken (OAuth token)
+            string googleIdToken = googleTask.Result.IdToken;
+
+            // Use that token to sign in with Firebase
+            Credential credential = GoogleAuthProvider.GetCredential(googleIdToken, null);
+
+            try
+            {
+                FirebaseUser newUser = await auth.SignInWithCredentialAsync(credential);
+                user = newUser;
+                Debug.Log($"✅ Firebase Auth success. Logged in as: {user.DisplayName}");
+
+                // ✅ Get Firebase's ID token (NOT the Google OAuth token)
+                string firebaseIdToken = await user.TokenAsync(true);
+
+                Debug.Log($"📤 Sending Firebase ID Token to backend for {user.Email}");
+
+                // Send the ID token to your backend
+                StartCoroutine(new LoginAPI().SendFirebaseToken(firebaseIdToken, success =>
                 {
-                    Debug.LogError("Firebase Auth error: " + authTask.Exception);
-                    return;
-                }
-
-                user = auth.CurrentUser;
-                Debug.Log("Firebase Auth success. Logged in as: " + user.DisplayName);
-
-                OnLoginSuccess();
-
-                // ✅ Because this lambda is marked "async", you can now use await
-                string idToken = await user.TokenAsync(true);
-
-                StartCoroutine(new LoginAPI().SendFirebaseToken(idToken, success => {
                     if (success)
-                        Debug.Log("✅ Server login success");
+                        Debug.Log("✅ Backend login success.");
                     else
-                        Debug.LogError("❌ Server login failed");
+                        Debug.LogError("❌ Backend login failed.");
                 }));
-            });
 
+                // Optional: trigger UI updates
+                OnLoginSuccess();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"🔥 Firebase Auth exception: {ex.Message}");
+            }
         });
     }
+
 
     private void OnLoginSuccess()
     {
