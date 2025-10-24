@@ -141,12 +141,15 @@ public class FeedbackPanelController : MonoBehaviour
 
 
     // ============================================================
-    // 🎨 Colorear la primera sílaba de una palabra
+    // 🎨 Colorear la primera sílaba de una palabra (en MAYÚSCULAS)
     // ============================================================
     private string ColorizeFirstSyllable(string syllWord, bool correct)
     {
         if (string.IsNullOrEmpty(syllWord))
             return "";
+
+        // Convertimos todo a MAYÚSCULAS antes de separar las sílabas
+        syllWord = syllWord.ToUpper();
 
         string[] syllables = syllWord.Split('#');
         if (syllables.Length == 0)
@@ -161,6 +164,7 @@ public class FeedbackPanelController : MonoBehaviour
 
         return $"<b>{coloredWord}</b>";
     }
+
 
     // ============================================================
     // 🔹 Ocultar feedback con retardo

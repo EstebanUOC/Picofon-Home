@@ -52,7 +52,7 @@ namespace Picofon.Games.Relate
     {
         public ActivityRelate activity1;
         public ActivityRelate activity2;
-        public ActivityRelate activity3;
+
         public AvailabilityInfo availability_info;
     }
 

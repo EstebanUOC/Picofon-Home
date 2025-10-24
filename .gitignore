@@ -49,7 +49,6 @@ sysinfo.txt
 
 # Git LFS tracked files (optional; also run `git lfs track`)
 *.psd
-*.png
 *.fbx
 *.mp4
 *.wav
@@ -70,9 +69,14 @@ sysinfo.txt
 .tmp.driveupload/
 */.tmp.driveupload/
 
+# Ignore PNGs globally except for this folder
+*.png
+!Picofon Home/Assets/Resources/Images/Images/**/*.png
+
+
 # Ignore local image folders (synced with Google Drive)
-"Picofon Home/Assets/Resources/Images/"
-"Picofon Home/Assets/Images/"
+"Picofon Home/Assets/Resources/Images/ImgButtons/"
+
 
 # Ignore all Unity meta files
 *.meta

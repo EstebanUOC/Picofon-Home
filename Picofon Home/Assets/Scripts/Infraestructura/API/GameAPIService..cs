@@ -10,16 +10,18 @@ using UnityEngine.Networking;
 public class GameAPIService : MonoBehaviour
 {
     // ============================================================
-    // 🔗 URL base del servidor (HTTPS)
+    // 🔗 URL base del nuevo servidor HTTPS
     // ============================================================
-    private const string BASE_URL = "https://108.130.147.206/api/v1/unity-proxy/questions/";
+    private const string BASE_URL = "https://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/questions/";
 
-    // Endpoints por modo (orden: 1=Judge, 2=Select, 3=Relate, 4=Create)
+    // ============================================================
+    // 📚 Endpoints por modo (orden: 0=Judge, 1=Select, 2=Relate, 3=Create)
+    // ============================================================
     private readonly string[] MODE_ENDPOINTS = {
         "1/1805359203",   // 🧠 JUDGE
+        "10/1805359203",  // 🎯 SELECT
         "8/1805359203",   // 🔗 RELATE
-        "9/1805359203",   // ✍️ CREATE
-        "10/1805359203"   // 🎯 SELECT
+        "9/1805359203"    // ✍️ CREATE
     };
 
     // ============================================================
@@ -27,15 +29,15 @@ public class GameAPIService : MonoBehaviour
     // ============================================================
     public IEnumerator LoadActivity(int mode, Action<string> onSuccess, Action<string> onError = null)
     {
+        // Ajusta el índice para evitar errores fuera de rango
         mode = Mathf.Clamp(mode, 0, MODE_ENDPOINTS.Length - 1);
         string url = BASE_URL + MODE_ENDPOINTS[mode];
 
         Debug.Log($"🌐 Solicitando datos del modo {mode} → {url}");
 
-        // ⚠️ Configurar petición HTTPS
         using (UnityWebRequest req = UnityWebRequest.Get(url))
         {
-            // Desactiva verificación SSL si el servidor usa IP sin certificado válido
+            // Desactiva validación SSL solo si el servidor tiene certificado autofirmado
             req.certificateHandler = new BypassCertificate();
             req.timeout = 15; // segundos
 
@@ -57,13 +59,13 @@ public class GameAPIService : MonoBehaviour
     }
 
     // ============================================================
-    // 🧩 Clase auxiliar — Desactiva verificación SSL para pruebas locales
+    // 🧩 Clase auxiliar — Desactiva verificación SSL para entornos de prueba
     // ============================================================
     private class BypassCertificate : CertificateHandler
     {
         protected override bool ValidateCertificate(byte[] certificateData)
         {
-            // ⚠️ SOLO usar para desarrollo (IP sin SSL válido)
+            // ⚠️ IMPORTANTE: usar solo para desarrollo (no en producción)
             return true;
         }
     }

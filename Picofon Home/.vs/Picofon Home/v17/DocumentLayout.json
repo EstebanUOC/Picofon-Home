@@ -3,52 +3,52 @@
   "WorkspaceRootPath": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Library\\PackageCache\\com.unity.2d.tilemap@1.0.0\\Editor\\GridPaintingState.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Library\\PackageCache\\com.unity.2d.tilemap@1.0.0\\Editor\\GridPaintingState.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\core\\activities\\crossrivermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\activities\\crossrivermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Library\\PackageCache\\com.unity.ide.visualstudio@2.0.22\\Editor\\VisualStudioEditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Library\\PackageCache\\com.unity.ide.visualstudio@2.0.22\\Editor\\VisualStudioEditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\packages\\microsoft.extensions.logging.abstractions.6.0.0\\analyzers\\dotnet\\roslyn4.0\\cs\\pl\\microsoft.extensions.logging.generators.resources.dll||{177559E0-D141-11D0-92DF-00A0C9138C45}",
-      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\packages\\microsoft.extensions.logging.abstractions.6.0.0\\analyzers\\dotnet\\roslyn4.0\\cs\\pl\\microsoft.extensions.logging.generators.resources.dll||{177559E0-D141-11D0-92DF-00A0C9138C45}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\ui\\feedbackpanelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|c:\\users\\user\\documents\\github\\picofon\\picofon-home\\picofon home\\assets\\scripts\\ui\\feedbackpanelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\ui\\feedbackpanelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\core\\activities\\models\\activityrelatemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\activities\\models\\activityrelatemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\infraestructura\\api\\gameapiservice..cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\infraestructura\\api\\gameapiservice..cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\core\\activities\\models\\activityjudgemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\activities\\models\\activityjudgemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\core\\activities\\models\\activityselectmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\activities\\models\\activityselectmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\managers\\gamemanagerglobal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\managers\\gamemanagerglobal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\core\\activities\\balloonpopparty\\balloonpopseaparty.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\activities\\balloonpopparty\\balloonpopseaparty.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\core\\activities\\baloonpopsea\\balloonpopseamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\activities\\baloonpopsea\\balloonpopseamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Actividades\\BaloonPopSea\\Models\\BalloonPopSeaModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Core\\Actividades\\BaloonPopSea\\Models\\BalloonPopSeaModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Actividades\\Models\\ActivitySelectModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Core\\Actividades\\Models\\ActivitySelectModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Actividades\\Models\\ActivityRelateModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Core\\Actividades\\Models\\ActivityRelateModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Actividades\\Models\\ActivityCreateModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Core\\Actividades\\Models\\ActivityCreateModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Actividades\\Models\\ActivityJudgeModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Core\\Actividades\\Models\\ActivityJudgeModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\MiniJSON.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\UI\\MiniJSON.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -58,120 +58,133 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "GridPaintingState.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Library\\PackageCache\\com.unity.2d.tilemap@1.0.0\\Editor\\GridPaintingState.cs",
-              "RelativeDocumentMoniker": "Library\\PackageCache\\com.unity.2d.tilemap@1.0.0\\Editor\\GridPaintingState.cs",
-              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Library\\PackageCache\\com.unity.2d.tilemap@1.0.0\\Editor\\GridPaintingState.cs",
-              "RelativeToolTip": "Library\\PackageCache\\com.unity.2d.tilemap@1.0.0\\Editor\\GridPaintingState.cs",
-              "ViewState": "AgIAAG8CAAAAAAAAAAAgwIUCAAAJAAAAAAAAAA==",
+              "DocumentIndex": 11,
+              "Title": "MiniJSON.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\MiniJSON.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\MiniJSON.cs",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\MiniJSON.cs",
+              "RelativeToolTip": "Assets\\Scripts\\UI\\MiniJSON.cs",
+              "ViewState": "AgIAAKkAAAAAAAAAAAAwwM0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-22T20:31:02.068Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-24T13:39:21.933Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
+              "Title": "ActivityRelateModel.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\Models\\ActivityRelateModel.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Activities\\Models\\ActivityRelateModel.cs",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\Models\\ActivityRelateModel.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Core\\Activities\\Models\\ActivityRelateModel.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAowEIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T12:52:57.677Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ActivityJudgeModel.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\Models\\ActivityJudgeModel.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Activities\\Models\\ActivityJudgeModel.cs",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\Models\\ActivityJudgeModel.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Core\\Activities\\Models\\ActivityJudgeModel.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAowEIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T19:38:52.062Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "BalloonPopSeaParty.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\BalloonPopParty\\BalloonPopSeaParty.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Activities\\BalloonPopParty\\BalloonPopSeaParty.cs",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\BalloonPopParty\\BalloonPopSeaParty.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Core\\Activities\\BalloonPopParty\\BalloonPopSeaParty.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwAoAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T19:38:01.678Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ActivitySelectModel.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\Models\\ActivitySelectModel.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Activities\\Models\\ActivitySelectModel.cs",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\Models\\ActivitySelectModel.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Core\\Activities\\Models\\ActivitySelectModel.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAowEEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T14:59:00.452Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "CrossRiverManager.cs",
               "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\CrossRiverManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Activities\\CrossRiverManager.cs",
               "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\CrossRiverManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\Core\\Activities\\CrossRiverManager.cs",
-              "ViewState": "AgIAACEBAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAGYAAAAAAAAAAAAAAHYAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-22T20:22:44.495Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Microsoft.Extensions.Logging.Generators.resources.dll",
-              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Packages\\Microsoft.Extensions.Logging.Abstractions.6.0.0\\analyzers\\dotnet\\roslyn4.0\\cs\\pl\\Microsoft.Extensions.Logging.Generators.resources.dll",
-              "RelativeDocumentMoniker": "Assets\\Packages\\Microsoft.Extensions.Logging.Abstractions.6.0.0\\analyzers\\dotnet\\roslyn4.0\\cs\\pl\\Microsoft.Extensions.Logging.Generators.resources.dll",
-              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Packages\\Microsoft.Extensions.Logging.Abstractions.6.0.0\\analyzers\\dotnet\\roslyn4.0\\cs\\pl\\Microsoft.Extensions.Logging.Generators.resources.dll",
-              "RelativeToolTip": "Assets\\Packages\\Microsoft.Extensions.Logging.Abstractions.6.0.0\\analyzers\\dotnet\\roslyn4.0\\cs\\pl\\Microsoft.Extensions.Logging.Generators.resources.dll",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001697|",
-              "WhenOpened": "2025-10-22T20:10:52.113Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "VisualStudioEditor.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Library\\PackageCache\\com.unity.ide.visualstudio@2.0.22\\Editor\\VisualStudioEditor.cs",
-              "RelativeDocumentMoniker": "Library\\PackageCache\\com.unity.ide.visualstudio@2.0.22\\Editor\\VisualStudioEditor.cs",
-              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Library\\PackageCache\\com.unity.ide.visualstudio@2.0.22\\Editor\\VisualStudioEditor.cs",
-              "RelativeToolTip": "Library\\PackageCache\\com.unity.ide.visualstudio@2.0.22\\Editor\\VisualStudioEditor.cs",
-              "ViewState": "AgIAALAAAAAAAAAAAAAewL4AAAB2AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-22T20:01:32.901Z",
+              "WhenOpened": "2025-10-22T20:22:44.495Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "ActivitySelectModel.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Actividades\\Models\\ActivitySelectModel.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Actividades\\Models\\ActivitySelectModel.cs",
-              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Actividades\\Models\\ActivitySelectModel.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Core\\Actividades\\Models\\ActivitySelectModel.cs",
-              "ViewState": "AgIAACcAAAAAAAAAAAAowEEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-22T20:01:31.644Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "ActivityRelateModel.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Actividades\\Models\\ActivityRelateModel.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Actividades\\Models\\ActivityRelateModel.cs",
-              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Actividades\\Models\\ActivityRelateModel.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Core\\Actividades\\Models\\ActivityRelateModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-22T20:01:31.761Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "FeedbackPanelController.cs",
               "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\FeedbackPanelController.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\FeedbackPanelController.cs",
               "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\FeedbackPanelController.cs",
               "RelativeToolTip": "Assets\\Scripts\\UI\\FeedbackPanelController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAJkAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAI4AAAAAAAAAAAAYwKYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-20T12:53:17.567Z"
+              "WhenOpened": "2025-10-20T12:53:17.567Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "GameAPIService..cs",
               "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Infraestructura\\API\\GameAPIService..cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Infraestructura\\API\\GameAPIService..cs",
               "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Infraestructura\\API\\GameAPIService..cs",
               "RelativeToolTip": "Assets\\Scripts\\Infraestructura\\API\\GameAPIService..cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAASAAAAAAAAAA==",
-              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALLSURBVDhP7ZNdSFNhGMf/73vO2ea209zmNPEiQzhbUlGwJKJ54\u002BiD8CLwKlIhIW/DSXkjOLoyiEUQRHdGJIFdaCYNvSjvHOeitmU5rSzMPHOrs7bUfbzndHVEA6\u002Biu35XDzz/58cD7/sA//lbOKNIKkl725U2t3BSEIWAIDrOOsRDFw\u002BJLZ0tpvmx\u002BU0AUFXVaT9vd64dWTOlo\u002Blif3\u002B/J\u002BPP7Ntq3cL61HoJAKghrBQrvaRCZE3Q5ApfkRmYTDkq8\u002BAjRoaBRUy6SWYcixQKhZqiVnyhQZNZhfUaGQIA8S/xwelP05ffKG8kM29Gs6cZNsEGpjOUWGmy\u002B3B3FwOL3I3dPTf7Zbbuc\u002B6zYubN8WP7jwWWvi9Zfmz\u002BSFFKH6WupW5SAIh9i534qH6UNF3DmYNnCkfrjt4\u002BXnc8LLmkcK21dtThcJQ1XUvUi/U5j80DQkiuiq\u002BK\u002B9y\u002BsmgSQUBWCcgHY0t0jHZMXHpySQ9Ph5V8Pv9QVVXXdnMH2Z/ZiVuvbulSRHqWLqTrs7ns156nPbo34h0yMhQAFrOLMHNmOKucMVEUu6qrq7/vFOm6TvP5fG3mV8ayUdoAAMv9ufu1SkHhiqwIHbq9\u002BXaza1vIUx485SFQYadnG\u002BMB7szdCYy9G0NZK58eeT0S7RzvrJFXZTCdXWUci8AQNogN2KxsIp6O/\u002BkCANhsthx03GiX2uOtB1rBES7R5G66PnBqIOd1e0FAJjWm3QMAHgCCB4N4u/4Wi9lFKfQ8NBRsDMJusSOzkYGSV1KU0scAprNqtiahJLwc5VLR7uhERs14pj5MiRzhXi70LcRgfJu55bnB6FL0cjKdlFxWF3xuH6yCFWWtjCIrTvYF\u002Btr/WHpPiFHMLMyEltXl0Pj7cazkV8BRDk3OJjTua5wZvjDctXtsb7YvxaJZHqAMPykTP3T4GWN\u002BohN/iStd2z3yn3/Nb0PjNWfDy7QfAAAAAElFTkSuQmCC",
-              "WhenOpened": "2025-10-20T12:02:28.045Z"
+              "ViewState": "AgIAACwAAAAAAAAAAAAwwEgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T13:44:24.131Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "GameManagerGlobal.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Managers\\GameManagerGlobal.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Managers\\GameManagerGlobal.cs",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Managers\\GameManagerGlobal.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Managers\\GameManagerGlobal.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-13T08:24:48.136Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "BalloonPopSeaManager.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\BaloonPopSea\\BalloonPopSeaManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Activities\\BaloonPopSea\\BalloonPopSeaManager.cs",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\BaloonPopSea\\BalloonPopSeaManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Core\\Activities\\BaloonPopSea\\BalloonPopSeaManager.cs",
+              "ViewState": "AgIAAKkBAAAAAAAAAAAswMEBAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T14:55:09.414Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 10,
-              "Title": "ActivityCreateModel.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Actividades\\Models\\ActivityCreateModel.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Actividades\\Models\\ActivityCreateModel.cs",
-              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Actividades\\Models\\ActivityCreateModel.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Core\\Actividades\\Models\\ActivityCreateModel.cs",
-              "ViewState": "AgIAACcAAAAAAAAAAAAIwEMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-22T20:01:32.005Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
               "Title": "ActivityJudgeModel.cs",
               "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Actividades\\Models\\ActivityJudgeModel.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Actividades\\Models\\ActivityJudgeModel.cs",
@@ -183,19 +196,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "GameManagerGlobal.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Managers\\GameManagerGlobal.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Managers\\GameManagerGlobal.cs",
-              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Managers\\GameManagerGlobal.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Managers\\GameManagerGlobal.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-13T08:24:48.136Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "BalloonPopSeaModel.cs",
               "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Actividades\\BaloonPopSea\\Models\\BalloonPopSeaModel.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Actividades\\BaloonPopSea\\Models\\BalloonPopSeaModel.cs",
