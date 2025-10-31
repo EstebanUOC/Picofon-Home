@@ -50,7 +50,7 @@ public class CrossRiverManager : MonoBehaviour
 
     // 🧍‍♂️ Personaje
     private RectTransform imageCharacter;
-    private readonly float moveDuration = 1.2f;
+    private readonly float moveDuration = 0.8f;
     private readonly float arcHeight = 150f;
     private readonly AnimationCurve moveCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
@@ -91,8 +91,16 @@ public class CrossRiverManager : MonoBehaviour
 
         imageCharacter = GameObject.Find("ImageCharacter")?.GetComponent<RectTransform>();
         if (imageCharacter != null)
+        {
             imageCharacter.anchoredPosition = startCharacterPos;
+
+            // No detener animación al inicio porque aún no ha empezado
+            if (imageCharacter.TryGetComponent(out CharacterAnimator anim))
+                anim.SetIdleFrame(); // Nueva función que pondremos
+
+        }
     }
+
 
     private void Start()
     {
@@ -1214,24 +1222,36 @@ public class CrossRiverManager : MonoBehaviour
     // ============================================================
     private IEnumerator MoveToCurve(RectTransform element, Vector2 targetPos)
     {
+        CharacterAnimator animController = null;
+        if (element != null && element.TryGetComponent(out animController))
+        {
+            // ⏯️ Reproducir animación una vez durante el salto
+            StartCoroutine(animController.PlayOnce());
+        }
+
         Vector2 start = element.anchoredPosition;
         float time = 0f;
 
         while (time < moveDuration)
         {
             float t = moveCurve.Evaluate(time / moveDuration);
-
-            // Trayectoria curva (parábola)
             Vector2 newPos = Vector2.Lerp(start, targetPos, t);
             newPos.y += Mathf.Sin(t * Mathf.PI) * arcHeight;
-
             element.anchoredPosition = newPos;
+
             time += Time.deltaTime;
             yield return null;
         }
 
         element.anchoredPosition = targetPos;
+
+        // ✅ asegurar idle al final
+        if (animController != null)
+            animController.SetIdleFrame();
     }
+
+
+
     // ============================================================
     // 🚀 Cambiar de escena de forma genérica
     // ============================================================

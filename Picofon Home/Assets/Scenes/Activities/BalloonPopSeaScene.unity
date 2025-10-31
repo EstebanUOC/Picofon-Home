@@ -838,24 +838,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f977054b23ec514c89090610f6d9db3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  api: {fileID: 1242380395}
-  bubblePrefab: {fileID: 7750018717267140773, guid: f7d84f8145c06aa49b2ff77d3605a8f5, type: 3}
-  bubbleContainerHorizontal1: {fileID: 2122582203}
-  bubbleContainerHorizontal2: {fileID: 1845014092}
-  panelFeedback: {fileID: 2058792785}
-  feedbackText: {fileID: 725406488}
-  feedbackImage1: {fileID: 1654815499}
-  feedbackImage2: {fileID: 605471392}
-  feedbackName1: {fileID: 930532458}
-  feedbackName2: {fileID: 1778083751}
-  extraImage: {fileID: 1240344335}
-  extraCorrectSprite: {fileID: 21300000, guid: 421125a76ac82174f997525377ff4e89, type: 3}
-  extraIncorrectSprite: {fileID: 21300000, guid: f45e2a6d05de3be4cbac893b60454c05, type: 3}
-  cloudImage: {fileID: 437742654}
-  buttonYes: {fileID: 457695533}
-  buttonNo: {fileID: 430822535}
-  resourcesFolder: BalloonPopSea
-  gameImages: []
 --- !u!1 &605471390
 GameObject:
   m_ObjectHideFlags: 0
@@ -2440,7 +2422,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4a168ba1befbe2b4881626f60a643e4f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 24ddffb8f3c5f3048b318fcec695bc3b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
