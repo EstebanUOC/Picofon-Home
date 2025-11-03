@@ -3,18 +3,18 @@ using UnityEngine.SceneManagement;
 
 public class SceneOrientationManager : MonoBehaviour
 {
-    void Start()
+    void Awake()
     {
         string sceneName = SceneManager.GetActiveScene().name;
 
-        if (sceneName == "LoginScene" || sceneName == "MapPath")
+        if (sceneName == "LoginScene")
         {
             // Enable autorotation
-            Screen.autorotateToLandscapeLeft = true;
-            Screen.autorotateToLandscapeRight = true;
+            Screen.autorotateToLandscapeLeft = false;
+            Screen.autorotateToLandscapeRight = false;
             Screen.autorotateToPortrait = true;
-            Screen.autorotateToPortraitUpsideDown = true;
-            Screen.orientation = ScreenOrientation.AutoRotation;
+            Screen.autorotateToPortraitUpsideDown = false;
+            Screen.orientation = ScreenOrientation.Portrait;
         }
         else
         {
