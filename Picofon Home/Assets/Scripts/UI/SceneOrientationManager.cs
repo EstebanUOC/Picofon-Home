@@ -7,7 +7,7 @@ public class SceneOrientationManager : MonoBehaviour
     {
         string sceneName = SceneManager.GetActiveScene().name;
 
-        if (sceneName == "LoginScene")
+        if (sceneName == "LoginScene" || sceneName == "MapScene")
         {
             // Enable autorotation
             Screen.autorotateToLandscapeLeft = false;
