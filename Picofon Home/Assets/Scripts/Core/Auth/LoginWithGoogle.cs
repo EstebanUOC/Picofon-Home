@@ -21,19 +21,13 @@ public class LoginWithGoogle : MonoBehaviour
     private bool isFirebaseReady = false;
 
     [Header("Panels")]
-    public GameObject LoginPanel;
-    public GameObject ChildDataPanel;
-    public GameObject Header;
+    public GameObject LoginPage;
+    public GameObject ChildDataPage;
 
     [Header("Buttons")]
-    public Button SignInButton;
+    public Button LoginButton;
     public Button ContinueButton;
     public Button DebugSignInButton;
-
-    [Header("User Info UI")]
-    public TextMeshProUGUI TitleText;
-    public TextMeshProUGUI WelcomeMessage;
-    public TextMeshProUGUI EmailText;
 
     [Header("Child Data UI")]
     public TMP_InputField ChildNameField;
@@ -78,10 +72,10 @@ public class LoginWithGoogle : MonoBehaviour
     private void InitComponents()
     {
         // Login components
-        if (SignInButton != null)
+        if (LoginButton != null)
         {
-            SignInButton.onClick.RemoveAllListeners();
-            SignInButton.onClick.AddListener(Login);
+            LoginButton.onClick.RemoveAllListeners();
+            LoginButton.onClick.AddListener(Login);
         }
 
         if (DebugSignInButton != null)
@@ -90,8 +84,7 @@ public class LoginWithGoogle : MonoBehaviour
             DebugSignInButton.onClick.AddListener(DebugLogin);
         }
 
-        Header.SetActive(false);
-        LoginPanel.SetActive(true);
+        LoginPage.SetActive(true);
 
         // Child data components
 
@@ -101,7 +94,7 @@ public class LoginWithGoogle : MonoBehaviour
             ContinueButton.onClick.AddListener(OnContinue);
         }
 
-        ChildDataPanel.SetActive(false);
+        ChildDataPage.SetActive(false);
 
         // Listeners for input fields to update button state
         UnityAction<string> textChange = OnInputChange;
@@ -261,12 +254,12 @@ public class LoginWithGoogle : MonoBehaviour
 
     private void OnLoginSuccess()
     {
-        TitleText.enabled = false;
-        WelcomeMessage.text = $"{user.DisplayName}, gràcies per registrar-te";
-        EmailText.text = user.Email;
+        // TitleText.enabled = false;
+        // WelcomeMessage.text = $"{user.DisplayName}, gràcies per registrar-te";
+        // EmailText.text = user.Email;
 
-        LoginPanel.SetActive(false);
-        ChildDataPanel.SetActive(true);
+        LoginPage.SetActive(false);
+        ChildDataPage.SetActive(true);
     }
 
     private void OnContinue()
@@ -364,8 +357,7 @@ public class LoginWithGoogle : MonoBehaviour
 
     private void DebugLogin()
     {
-        LoginPanel.SetActive(false);
-        ChildDataPanel.SetActive(true);
-        Header.SetActive(true);
+        LoginPage.SetActive(false);
+        ChildDataPage.SetActive(true);
     }
 }
