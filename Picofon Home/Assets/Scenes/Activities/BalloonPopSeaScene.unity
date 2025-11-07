@@ -321,7 +321,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 91.7295, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &198470518
 MonoBehaviour:
@@ -367,7 +367,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 528797713}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ActivityBaseManager, Assembly-CSharp
         m_MethodName: LoadMode
         m_Mode: 3
@@ -546,8 +546,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 257, y: -225}
-  m_SizeDelta: {x: 550, y: 450}
+  m_AnchoredPosition: {x: 289, y: -225}
+  m_SizeDelta: {x: 750, y: 650}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &430822535
 MonoBehaviour:
@@ -593,7 +593,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 528797713}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BalloonPopSeaManager, Assembly-CSharp
         m_MethodName: OnSecondButton
         m_Mode: 1
@@ -679,7 +679,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -275, y: -225}
-  m_SizeDelta: {x: 550, y: 450}
+  m_SizeDelta: {x: 750, y: 650}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &457695533
 MonoBehaviour:
@@ -725,7 +725,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 528797713}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BalloonPopSeaManager, Assembly-CSharp
         m_MethodName: OnFirstButton
         m_Mode: 1
@@ -784,7 +784,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 528797712}
-  - component: {fileID: 528797713}
   - component: {fileID: 528797714}
   m_Layer: 0
   m_Name: BaloonPopSeaManager
@@ -808,18 +807,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 366165462}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &528797713
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 528797711}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f977054b23ec514c89090610f6d9db3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &528797714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -890,7 +877,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 78.4547, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &782371062
 MonoBehaviour:
@@ -936,7 +923,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 528797713}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ActivityBaseManager, Assembly-CSharp
         m_MethodName: LoadMode
         m_Mode: 3
@@ -1268,8 +1255,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -847, y: 461}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -754.0764, y: 482.8087}
+  m_SizeDelta: {x: 285.8474, y: 56.3826}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1140672015
 MonoBehaviour:
@@ -1564,6 +1551,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: PanelFeedback
       objectReference: {fileID: 0}
+    - target: {fileID: 1351965189959182413, guid: c0e8f8f5cb1669e4898b6bbb0f1512d4, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 250
+      objectReference: {fileID: 0}
+    - target: {fileID: 1351965189959182413, guid: c0e8f8f5cb1669e4898b6bbb0f1512d4, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 215
+      objectReference: {fileID: 0}
+    - target: {fileID: 4284022700424703607, guid: c0e8f8f5cb1669e4898b6bbb0f1512d4, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4782534722519110247, guid: c0e8f8f5cb1669e4898b6bbb0f1512d4, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1644,6 +1643,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4882036266960729189, guid: c0e8f8f5cb1669e4898b6bbb0f1512d4, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8688009979648549379, guid: c0e8f8f5cb1669e4898b6bbb0f1512d4, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1654.1926
+      objectReference: {fileID: 0}
+    - target: {fileID: 8688009979648549379, guid: c0e8f8f5cb1669e4898b6bbb0f1512d4, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 493.0399
+      objectReference: {fileID: 0}
+    - target: {fileID: 8688009979648549379, guid: c0e8f8f5cb1669e4898b6bbb0f1512d4, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 33.09613
+      objectReference: {fileID: 0}
+    - target: {fileID: 8688009979648549379, guid: c0e8f8f5cb1669e4898b6bbb0f1512d4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 167.16
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1658,7 +1677,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1242380394}
-  - component: {fileID: 1242380393}
   - component: {fileID: 1242380395}
   m_Layer: 5
   m_Name: 'BalloonPopSeaAPI '
@@ -1667,18 +1685,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1242380393
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1242380392}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3f5913d51d5e11418af753b52c9c4fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1242380394
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2031,7 +2037,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 84.1439, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1812669796
 MonoBehaviour:
@@ -2077,7 +2083,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 528797713}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ActivityBaseManager, Assembly-CSharp
         m_MethodName: LoadMode
         m_Mode: 3

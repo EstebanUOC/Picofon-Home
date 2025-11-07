@@ -3,24 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|c:\\users\\user\\documents\\github\\picofon\\picofon-home\\picofon home\\assets\\scripts\\core\\activities\\baloonpopsea\\balloonpopseamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\activities\\baloonpopsea\\balloonpopseamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|c:\\users\\user\\documents\\github\\picofon\\picofon-home\\picofon home\\assets\\scripts\\core\\activities\\models\\activityrelatemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\activities\\models\\activityrelatemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|c:\\users\\user\\documents\\github\\picofon\\picofon-home\\picofon home\\assets\\scripts\\ui\\feedbackpanelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\ui\\feedbackpanelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\infraestructura\\api\\gameapiservice..cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\infraestructura\\api\\gameapiservice..cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|c:\\users\\user\\documents\\github\\picofon\\picofon-home\\picofon home\\assets\\scripts\\core\\activities\\crossriver\\crossrivermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\activities\\crossriver\\crossrivermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\core\\activities\\baloonpopsea\\balloonpopseamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\activities\\baloonpopsea\\balloonpopseamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|c:\\users\\user\\documents\\github\\picofon\\picofon-home\\picofon home\\assets\\scripts\\ui\\feedbackpanelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\ui\\feedbackpanelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\core\\activities\\models\\activityrelatemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\activities\\models\\activityrelatemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\core\\activities\\crossriver\\crossrivermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\activities\\crossriver\\crossrivermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\managers\\gamemanagerglobal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -38,11 +38,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "ActivityRelateModel.cs",
               "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\Models\\ActivityRelateModel.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Activities\\Models\\ActivityRelateModel.cs",
@@ -50,51 +50,48 @@
               "RelativeToolTip": "Assets\\Scripts\\Core\\Activities\\Models\\ActivityRelateModel.cs",
               "ViewState": "AgIAACQAAAAAAAAAAAAQwDkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-05T14:37:34.736Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-05T14:37:34.736Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "FeedbackPanelController.cs",
               "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\FeedbackPanelController.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\FeedbackPanelController.cs",
               "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\FeedbackPanelController.cs",
               "RelativeToolTip": "Assets\\Scripts\\UI\\FeedbackPanelController.cs",
-              "ViewState": "AgIAAKMAAAAAAAAAAAAYwLQAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAEwBMAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-05T13:55:15.049Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "BalloonPopSeaManager.cs",
               "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\BaloonPopSea\\BalloonPopSeaManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Activities\\BaloonPopSea\\BalloonPopSeaManager.cs",
               "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\BaloonPopSea\\BalloonPopSeaManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\Core\\Activities\\BaloonPopSea\\BalloonPopSeaManager.cs",
-              "ViewState": "AgIAACUBAAAAAAAAAAAAAMsAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAACIBAAAAAAAAAIBJwMsAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-05T13:42:37.547Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-05T13:42:37.547Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "GameAPIService..cs",
               "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Infraestructura\\API\\GameAPIService..cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Infraestructura\\API\\GameAPIService..cs",
               "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Infraestructura\\API\\GameAPIService..cs",
               "RelativeToolTip": "Assets\\Scripts\\Infraestructura\\API\\GameAPIService..cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAADwvxYAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAoAAAAAAAAAAADwvw4AAABmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-24T13:44:24.131Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-24T13:44:24.131Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "CrossRiverManager.cs",
               "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\CrossRiver\\CrossRiverManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Activities\\CrossRiver\\CrossRiverManager.cs",
@@ -102,8 +99,7 @@
               "RelativeToolTip": "Assets\\Scripts\\Core\\Activities\\CrossRiver\\CrossRiverManager.cs",
               "ViewState": "AgIAAAYFAAAAAAAAAAAcwCYFAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-29T13:31:55.657Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-29T13:31:55.657Z"
             },
             {
               "$type": "Document",
@@ -115,8 +111,7 @@
               "RelativeToolTip": "Assets\\Scripts\\Managers\\GameManagerGlobal.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-13T08:24:48.136Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-13T08:24:48.136Z"
             },
             {
               "$type": "Document",
