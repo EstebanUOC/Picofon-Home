@@ -1532,6 +1532,69 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 533162754}
   m_CullTransparentMesh: 1
+--- !u!1 &547734090
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 547734092}
+  - component: {fileID: 547734091}
+  m_Layer: 0
+  m_Name: Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &547734091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547734090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d25136541f1aeab293f49cfb1e00130, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  childId: 1805359203
+  buttonParent: {fileID: 0}
+  buttonPrefab: {fileID: 0}
+  numberOfLevels: 12
+  startY: 2100
+  stepY: 100
+  leftX: -100
+  rightX: 100
+  buttonSize: {x: 150, y: 150}
+  contentParent: {fileID: 0}
+  backgroundsParent: {fileID: 0}
+  backgroundPrefab: {fileID: 0}
+  backgroundHeight: 1536
+  scrollRect: {fileID: 0}
+  seaSprite: {fileID: 0}
+  partySprite: {fileID: 0}
+  basketSprite: {fileID: 0}
+  riverSprite: {fileID: 0}
+  padlockSprite: {fileID: 0}
+--- !u!4 &547734092
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547734090}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 338.73242, y: 159.77661, z: -0.8857938}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &660202110
 GameObject:
   m_ObjectHideFlags: 0
@@ -3497,5 +3560,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 138762998}
   - {fileID: 1527077206}
+  - {fileID: 547734092}
   - {fileID: 1419606582}
   - {fileID: 1805974928}
