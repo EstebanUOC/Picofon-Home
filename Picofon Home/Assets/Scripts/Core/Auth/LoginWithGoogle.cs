@@ -230,21 +230,23 @@ public class LoginWithGoogle : MonoBehaviour
         GoogleSignIn.DefaultInstance.Disconnect();
         GoogleSignIn.DefaultInstance.SignOut();
 
+        Debug.Log("Llego aqui");
+
         GoogleSignIn
             .DefaultInstance.SignIn()
             .ContinueWithOnMainThread(async googleTask =>
             {
                 isSigningIn = false;
 
-                if (googleTask.IsCanceled)
+                if (googleTask.IsFaulted)
                 {
-                    Debug.LogWarning("❌ Google Sign-In canceled by user.");
+                    Debug.LogError($"<DEBUG> Google Sign-In failed: {googleTask.Exception}");
                     return;
                 }
 
-                if (googleTask.IsFaulted)
+                if (googleTask.IsCanceled)
                 {
-                    Debug.LogError($"❌ Google Sign-In failed: {googleTask.Exception?.Message}");
+                    Debug.LogWarning("<DEBUG> Google Sign-In canceled by user.");
                     return;
                 }
 
