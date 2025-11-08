@@ -8,7 +8,7 @@ public class ChildModel
     public string BirthDate;
     public string Disorder;
     public string School;
-    public string Grade;
+    public int Grade;
     public int CenterId;
     public string OwnerId;
     public string Id;
@@ -24,7 +24,7 @@ public class ChildModel
             && !string.IsNullOrEmpty(child.BirthDate)
             && !string.IsNullOrEmpty(child.Disorder)
             && !string.IsNullOrEmpty(child.School)
-            && !string.IsNullOrEmpty(child.Grade)
+            && child.Grade > 0
             && child.CenterId > 0
             && !string.IsNullOrEmpty(child.OwnerId);
 

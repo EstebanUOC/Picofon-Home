@@ -7,6 +7,7 @@ public class ScreenResponsive : MonoBehaviour
 
     void Awake()
     {
+        Application.targetFrameRate = 60;
         panel = GetComponent<RectTransform>();
         ApplySafeArea();
     }

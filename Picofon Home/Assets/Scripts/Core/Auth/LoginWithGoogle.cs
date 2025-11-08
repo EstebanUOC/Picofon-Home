@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using Firebase;
 using Firebase.Auth;
@@ -6,7 +6,6 @@ using Firebase.Extensions;
 using Google;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -33,7 +32,15 @@ public class LoginWithGoogle : MonoBehaviour
     public TMP_InputField ChildNameField;
     public TMP_InputField ChildLastNameField;
     public TMP_InputField ChildIDField;
-    public TMP_Dropdown AgeField;
+    public TMP_InputField ChildSchoolField;
+    public TMP_Dropdown ChildGradeField;
+
+    // public TMP_Dropdown AgeField;
+
+    [Header("Child Birthdate")]
+    public TMP_InputField BirthDayField;
+    public TMP_InputField BirthMonthField;
+    public TMP_InputField BirthYearField;
 
     [Header("Disorder Toggles")]
     public ToggleGroup DisorderToggleGroup;
@@ -51,6 +58,8 @@ public class LoginWithGoogle : MonoBehaviour
 
     private bool inputGroupValid = false;
     private bool toogleGroupValid = false;
+    private bool birthdateGroupValid = false;
+    private bool schoolGroupValid = false;
 
     private void Start()
     {
@@ -95,59 +104,89 @@ public class LoginWithGoogle : MonoBehaviour
         }
 
         ChildDataPage.SetActive(false);
+        OtherInput.gameObject.SetActive(false);
 
         // Listeners for input fields to update button state
-        UnityAction<string> textChange = OnInputChange;
+        ChildNameField.onValueChanged.AddListener(OnInputChange);
+        ChildLastNameField.onValueChanged.AddListener(OnInputChange);
+        ChildIDField.onValueChanged.AddListener(OnInputChange);
+        ChildSchoolField.onValueChanged.AddListener(OnInputChange);
 
-        ChildNameField.onValueChanged.AddListener(textChange);
-        ChildLastNameField.onValueChanged.AddListener(textChange);
-        ChildIDField.onValueChanged.AddListener(textChange);
+        // Birthdate fields
+        BirthDayField.onValueChanged.AddListener(OnInputChange);
+        BirthMonthField.onValueChanged.AddListener(OnInputChange);
+        BirthYearField.onValueChanged.AddListener(OnInputChange);
 
-        UnityAction<bool> toggleChange = OnToogleChange;
+        // Grade dropdown
+        ChildGradeField.onValueChanged.AddListener(OnDropdownChange);
 
-        NoToggle.onValueChanged.AddListener(toggleChange);
-        TELToggle.onValueChanged.AddListener(toggleChange);
-        TEAToggle.onValueChanged.AddListener(toggleChange);
-        TDAHToggle.onValueChanged.AddListener(toggleChange);
-        OtherToggle.onValueChanged.AddListener(toggleChange);
+        NoToggle.onValueChanged.AddListener(OnToggleChange);
+        TELToggle.onValueChanged.AddListener(OnToggleChange);
+        TEAToggle.onValueChanged.AddListener(OnToggleChange);
+        TDAHToggle.onValueChanged.AddListener(OnToggleChange);
+        OtherToggle.onValueChanged.AddListener(OnToggleChange);
+        OtherToggle.onValueChanged.AddListener(OnToggleOtherChanged);
     }
 
     private void OnInputChange(string value)
     {
-        if (value == "")
-        {
-            inputGroupValid = false;
-            ContinueButton.interactable = false;
-            return;
-        }
+        ValidateAllFields();
+    }
 
+    private void OnDropdownChange(int value)
+    {
+        ValidateAllFields();
+    }
+
+    private void ValidateAllFields()
+    {
         bool nameValid = !string.IsNullOrWhiteSpace(ChildNameField.text);
         bool lastNameValid = !string.IsNullOrWhiteSpace(ChildLastNameField.text);
         bool idValid = !string.IsNullOrWhiteSpace(ChildIDField.text);
+        inputGroupValid = nameValid && lastNameValid && idValid;
 
-        bool valid = nameValid && lastNameValid && idValid;
+        schoolGroupValid = !string.IsNullOrWhiteSpace(ChildSchoolField.text);
 
-        inputGroupValid = valid;
+        bool dayValid = !string.IsNullOrWhiteSpace(BirthDayField.text);
+        bool monthValid = !string.IsNullOrWhiteSpace(BirthMonthField.text);
+        bool yearValid = !string.IsNullOrWhiteSpace(BirthYearField.text);
+        birthdateGroupValid = dayValid && monthValid && yearValid;
 
-        ContinueButton.interactable = toogleGroupValid && inputGroupValid;
+        UpdateContinueButton();
     }
 
-    private void OnToogleChange(bool value)
+    private void OnToggleChange(bool value)
     {
         bool valid = NoToggle.isOn || TELToggle.isOn || TEAToggle.isOn || TDAHToggle.isOn;
 
         toogleGroupValid = valid;
-        ContinueButton.interactable = toogleGroupValid && inputGroupValid;
 
-        if (valid)
-            return;
-
-        OtherInput.onValueChanged.AddListener(text =>
+        if (!valid && OtherToggle.isOn)
         {
-            bool otherValid = !string.IsNullOrWhiteSpace(OtherInput.text);
-            toogleGroupValid = otherValid;
-            ContinueButton.interactable = toogleGroupValid && inputGroupValid;
-        });
+            OtherInput.onValueChanged.RemoveAllListeners();
+            OtherInput.onValueChanged.AddListener(text =>
+            {
+                bool otherValid = !string.IsNullOrWhiteSpace(OtherInput.text);
+                toogleGroupValid = otherValid;
+                UpdateContinueButton();
+            });
+        }
+
+        UpdateContinueButton();
+    }
+
+    private void UpdateContinueButton()
+    {
+        bool allValid =
+            inputGroupValid && toogleGroupValid && birthdateGroupValid && schoolGroupValid;
+        ContinueButton.interactable = allValid;
+    }
+
+    private void OnToggleOtherChanged(bool isOn)
+    {
+        OtherInput.gameObject.SetActive(isOn);
+        if (!isOn)
+            OtherInput.text = string.Empty;
     }
 
     private void InitFirebase()
@@ -269,6 +308,10 @@ public class LoginWithGoogle : MonoBehaviour
         // 1. Parse names from ChildNameField
         string firstName = ChildNameField.text.Trim();
         string lastName = ChildLastNameField.text.Trim();
+        string birthDate =
+            $"{BirthYearField.text}-{BirthMonthField.text.PadLeft(2, '0')}-{BirthDayField.text.PadLeft(2, '0')}";
+        string school = ChildSchoolField.text.Trim();
+        int grade = ChildGradeField.value + 1;
 
         IEnumerable toggles = DisorderToggleGroup.ActiveToggles();
 
@@ -278,7 +321,7 @@ public class LoginWithGoogle : MonoBehaviour
         {
             if (toggle.name == "Other")
             {
-                disorder = OtherInput != null ? OtherInput.text : "";
+                disorder = OtherInput != null ? OtherInput.text : string.Empty;
             }
             disorder = toggle.name;
         }
@@ -288,10 +331,10 @@ public class LoginWithGoogle : MonoBehaviour
         {
             FirstName = firstName,
             LastName = lastName,
-            BirthDate = "2020-05-01", // Set this from date input if you have one
+            BirthDate = birthDate,
             Disorder = disorder,
-            School = "Escuela",
-            Grade = "5",
+            School = school,
+            Grade = grade,
             CenterId = 1,
             OwnerId = "AwgdI1xsu5RoU6zgLvTfAZeklbn2", // Change if needed
             Id = "62448460X", // Change if dynamic
@@ -305,13 +348,13 @@ public class LoginWithGoogle : MonoBehaviour
             return;
         }
 
+        Debug.Log("ChildModel JSON: " + child.ToJson());
         StartCoroutine(SendChildData(child));
     }
 
     IEnumerator SendChildData(ChildModel data)
     {
         string json = data.ToJson();
-        Debug.Log("ChildModel JSON: " + json);
 
         UnityWebRequest request = new ChildService().SendChildData(json);
 
