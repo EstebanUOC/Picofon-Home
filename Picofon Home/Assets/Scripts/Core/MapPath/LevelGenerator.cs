@@ -1,13 +1,12 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PortraitLevelMapGenerator : MonoBehaviour
 {
     [Header("API var")]
-    public string childId = "1805359203"; // temporary until login connects    
+    public string childId = "1805359203";
 
     [Header("Buttons")]
     public RectTransform buttonParent;
@@ -21,13 +20,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
     public float rightX = 100f;
 
     [Header("Button Size")]
-    public Vector2 buttonSize = new Vector2(150f, 150f);
-
-    [Header("Background (Tiled)")]
-    public RectTransform contentParent;
-    public RectTransform backgroundsParent;
-    public GameObject backgroundPrefab;
-    public float backgroundHeight = 1536f;
+    public Vector2 buttonSize = new(150f, 150f);
 
     [Header("Scroll")]
     public ScrollRect scrollRect;
@@ -37,14 +30,14 @@ public class PortraitLevelMapGenerator : MonoBehaviour
     public Sprite partySprite;
     public Sprite basketSprite;
     public Sprite riverSprite;
-    public Sprite padlockSprite;  // 🆕 assign your padlock icon in Inspector
+    public Sprite padlockSprite; // 🆕 assign your padlock icon in Inspector
 
-    private string[] scenes = new string[]
+    private readonly string[] scenes = new string[]
     {
-        "BasketScene",    
+        "BasketScene",
         "BalloonPopSeaScene",
-        "BalloonPopParty",        
-        "CrossTheRiverScene"
+        "BalloonPopParty",
+        "CrossTheRiverScene",
     };
 
     private Button[] levelButtons;
@@ -52,39 +45,40 @@ public class PortraitLevelMapGenerator : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(LoadMapData());    
-        //GenerateMap();
-        //UpdateLevelLocks();       
+        StartCoroutine(LoadMapData());
     }
 
     IEnumerator LoadMapData()
     {
         TherapyAPI api = gameObject.AddComponent<TherapyAPI>();
 
-        yield return StartCoroutine(api.LoadTherapyPlans(childId, (plans) =>
-        {
-            if (plans != null && plans.Count > 0)
-            {
-                // Count how many therapy_template_id entries exist
-                numberOfLevels = plans.Count;
-                Debug.Log($"✅ Child {childId} has {numberOfLevels} therapy plans.");
+        yield return StartCoroutine(
+            api.LoadTherapyPlans(
+                childId,
+                (plans) =>
+                {
+                    if (plans != null && plans.Count > 0)
+                    {
+                        numberOfLevels = plans.Count;
+                        Debug.Log($"✅ Child {childId} has {numberOfLevels} therapy plans.");
 
-                // (Optional) You could also store each plan's template ID if needed later
-                // foreach (var plan in plans) Debug.Log($"Template ID: {plan.therapy_template_id}");
-            }
-            else
-            {
-                Debug.LogWarning("⚠️ No plans found — using default 12 levels.");
-                numberOfLevels = 12;
-            }
+                        // foreach (var plan in plans)
+                        //     Debug.Log($"Template ID: {plan.Name}");
+                    }
+                    else
+                    {
+                        Debug.LogWarning("⚠️ No plans found — using default 12 levels.");
+                        numberOfLevels = 12;
+                    }
 
-            GenerateMap();
-            UpdateLevelLocks();            
-        }));
+                    // GenerateMap();
+                    // UpdateLevelLocks();
+                }
+            )
+        );
     }
 
-
-    void GenerateMap()
+    private void GenerateMap()
     {
         levelButtons = new Button[numberOfLevels];
         padlockIcons = new GameObject[numberOfLevels];
@@ -96,7 +90,6 @@ public class PortraitLevelMapGenerator : MonoBehaviour
             //rt.sizeDelta = new Vector2(70f, 70f);
             rt.sizeDelta = buttonSize;
 
-
             float x = (i % 2 == 0) ? leftX : rightX;
             float y = startY - (i * stepY);
             rt.anchoredPosition = new Vector2(x, y);
@@ -107,7 +100,11 @@ public class PortraitLevelMapGenerator : MonoBehaviour
             Image moonImage = btn.GetComponent<Image>();
             if (moonImage != null)
             {
-                GameObject sceneOverlay = new GameObject("SceneOverlay", typeof(RectTransform), typeof(Image));
+                GameObject sceneOverlay = new GameObject(
+                    "SceneOverlay",
+                    typeof(RectTransform),
+                    typeof(Image)
+                );
                 sceneOverlay.transform.SetParent(moonImage.transform, false);
 
                 RectTransform sceneRT = sceneOverlay.GetComponent<RectTransform>();
@@ -120,16 +117,28 @@ public class PortraitLevelMapGenerator : MonoBehaviour
                 Image sceneImage = sceneOverlay.GetComponent<Image>();
                 switch (sceneName)
                 {
-                    case "BalloonPopSeaScene": sceneImage.sprite = seaSprite; break;
-                    case "BalloonPopParty": sceneImage.sprite = partySprite; break;
-                    case "BasketScene": sceneImage.sprite = basketSprite; break;
-                    case "CrossTheRiverScene": sceneImage.sprite = riverSprite; break;
+                    case "BalloonPopSeaScene":
+                        sceneImage.sprite = seaSprite;
+                        break;
+                    case "BalloonPopParty":
+                        sceneImage.sprite = partySprite;
+                        break;
+                    case "BasketScene":
+                        sceneImage.sprite = basketSprite;
+                        break;
+                    case "CrossTheRiverScene":
+                        sceneImage.sprite = riverSprite;
+                        break;
                 }
                 sceneImage.preserveAspect = true;
             }
 
             // --- Create padlock overlay ---
-            GameObject padlock = new GameObject("PadlockIcon", typeof(RectTransform), typeof(Image));
+            GameObject padlock = new GameObject(
+                "PadlockIcon",
+                typeof(RectTransform),
+                typeof(Image)
+            );
             padlock.transform.SetParent(btn.transform, false);
             RectTransform lockRT = padlock.GetComponent<RectTransform>();
             lockRT.anchorMin = new Vector2(0.5f, 0.5f);
@@ -165,29 +174,29 @@ public class PortraitLevelMapGenerator : MonoBehaviour
         }
 
         // --- Resize Content + Backgrounds ---
-        float totalHeight = startY + (numberOfLevels * stepY);
-        contentParent.sizeDelta = new Vector2(contentParent.sizeDelta.x, totalHeight + 500f);
-
-        int numberOfTiles = Mathf.CeilToInt(contentParent.sizeDelta.y / backgroundHeight);
-        for (int i = 0; i < numberOfTiles; i++)
-        {
-            GameObject bg = Instantiate(backgroundPrefab, backgroundsParent);
-            RectTransform bgRt = bg.GetComponent<RectTransform>();
-
-            float y = -i * backgroundHeight;
-            bgRt.anchoredPosition = new Vector2(0, y);
-            bgRt.sizeDelta = new Vector2(contentParent.rect.width, backgroundHeight);
-            bg.name = "BackgroundTile_" + (i + 1);
-        }
-
-        // ✅ Reset scroll position AFTER generation
-        if (scrollRect != null)
-        {
-            Canvas.ForceUpdateCanvases();          
-            // Then reset scroll to top if you want to start at the beginning:
-            // Important put 1 to appears the scroll rect at the top.
-            scrollRect.verticalNormalizedPosition = 1f; // 1 = top, 0 = bottom
-        }
+        // float totalHeight = startY + (numberOfLevels * stepY);
+        // contentParent.sizeDelta = new Vector2(contentParent.sizeDelta.x, totalHeight + 500f);
+        //
+        // int numberOfTiles = Mathf.CeilToInt(contentParent.sizeDelta.y / backgroundHeight);
+        // for (int i = 0; i < numberOfTiles; i++)
+        // {
+        //     GameObject bg = Instantiate(backgroundPrefab, backgroundsParent);
+        //     RectTransform bgRt = bg.GetComponent<RectTransform>();
+        //
+        //     float y = -i * backgroundHeight;
+        //     bgRt.anchoredPosition = new Vector2(0, y);
+        //     bgRt.sizeDelta = new Vector2(contentParent.rect.width, backgroundHeight);
+        //     bg.name = "BackgroundTile_" + (i + 1);
+        // }
+        //
+        // // ✅ Reset scroll position AFTER generation
+        // if (scrollRect != null)
+        // {
+        //     Canvas.ForceUpdateCanvases();
+        //     // Then reset scroll to top if you want to start at the beginning:
+        //     // Important put 1 to appears the scroll rect at the top.
+        //     scrollRect.verticalNormalizedPosition = 1f; // 1 = top, 0 = bottom
+        // }
     }
 
     void UpdateLevelLocks()
@@ -196,15 +205,14 @@ public class PortraitLevelMapGenerator : MonoBehaviour
 
         for (int i = 0; i < levelButtons.Length; i++)
         {
-            bool unlocked = (i <= lastCompleted + 1);
+            bool unlocked = i <= lastCompleted + 1;
             levelButtons[i].interactable = unlocked;
 
             Image img = levelButtons[i].GetComponent<Image>();
             if (img != null)
                 img.color = unlocked ? Color.white : new Color(0.6f, 0.6f, 0.6f, 1f);
 
-            if (padlockIcons[i] != null)
-                padlockIcons[i].SetActive(!unlocked); // hide if unlocked
+            padlockIcons[i]?.SetActive(!unlocked);
         }
     }
 }

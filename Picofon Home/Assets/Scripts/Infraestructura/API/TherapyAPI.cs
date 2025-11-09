@@ -1,36 +1,34 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Collections.Generic;
 
 public class TherapyAPI : MonoBehaviour
 {
-    private const string BASE_URL = "https://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/therapy/child";
+    private const string BaseURL =
+        "https://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/therapy/child";
 
-    public IEnumerator LoadTherapyPlans(
-        string childId,
-        System.Action<List<TherapyPlan>> onSuccess)
+    public IEnumerator LoadTherapyPlans(string childId, Action<List<TherapyPlan>> onSuccess)
     {
-        string url = $"{BASE_URL}/{childId}";
-        Debug.Log($"🌐 Requesting therapy data → {url}");
+        string url = $"{BaseURL}/{childId}";
+        Debug.Log($"Requesting therapy data → {url}");
 
-        using (UnityWebRequest req = UnityWebRequest.Get(url))
+        using UnityWebRequest req = UnityWebRequest.Get(url);
+
+        yield return req.SendWebRequest();
+
+        if (req.result == UnityWebRequest.Result.Success)
         {
-            yield return req.SendWebRequest();
+            string json = req.downloadHandler.text;
 
-            if (req.result == UnityWebRequest.Result.Success)
-            {
-                string json = req.downloadHandler.text;
-                Debug.Log($"📥 Therapy JSON: {json.Substring(0, Mathf.Min(300, json.Length))}");
-
-                TherapyResponse response = JsonUtility.FromJson<TherapyResponse>(json);
-                onSuccess?.Invoke(response.data);
-            }
-            else
-            {
-                Debug.LogError($"❌ TherapyAPI error: {req.error}");
-                onSuccess?.Invoke(null);
-            }
+            TherapyResponse response = TherapyResponse.FromJson(json);
+            onSuccess?.Invoke(response.Data);
+        }
+        else
+        {
+            Debug.LogError($"<DEBUG:ERROR> TherapyAPI error: {req.error}");
+            onSuccess?.Invoke(null);
         }
     }
 }

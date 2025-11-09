@@ -1,12 +1,10 @@
 using System;
 using System.Collections;
-using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
 using Google;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,9 +13,6 @@ public class LoginWithGoogle : MonoBehaviour
     [Header("Firebase")]
     public string GoogleAPI =
         "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
-    private FirebaseAuth auth;
-    private FirebaseUser user;
-    private bool isFirebaseReady = false;
 
     [Header("Panels")]
     public GameObject LoginPage;
@@ -54,6 +49,9 @@ public class LoginWithGoogle : MonoBehaviour
     [Header("Modal")]
     public Modal modal;
 
+    private FirebaseService firebaseService;
+    private FirebaseUser user;
+
     private bool isSigningIn = false;
 
     private bool inputGroupValid = false;
@@ -65,7 +63,8 @@ public class LoginWithGoogle : MonoBehaviour
     {
         Debug.Log("Msg::::: Start()");
 
-        InitFirebase();
+        firebaseService = new FirebaseService();
+        firebaseService.InitFirebase();
 
         // Configure Google Sign-In
         GoogleSignIn.Configuration = new GoogleSignInConfiguration
@@ -175,13 +174,6 @@ public class LoginWithGoogle : MonoBehaviour
         UpdateContinueButton();
     }
 
-    private void UpdateContinueButton()
-    {
-        bool allValid =
-            inputGroupValid && toogleGroupValid && birthdateGroupValid && schoolGroupValid;
-        ContinueButton.interactable = allValid;
-    }
-
     private void OnToggleOtherChanged(bool isOn)
     {
         OtherInput.gameObject.SetActive(isOn);
@@ -189,29 +181,16 @@ public class LoginWithGoogle : MonoBehaviour
             OtherInput.text = string.Empty;
     }
 
-    private void InitFirebase()
+    private void UpdateContinueButton()
     {
-        FirebaseApp
-            .CheckAndFixDependenciesAsync()
-            .ContinueWithOnMainThread(task =>
-            {
-                var status = task.Result;
-                if (status == DependencyStatus.Available)
-                {
-                    auth = FirebaseAuth.DefaultInstance;
-                    isFirebaseReady = true;
-                    Debug.Log("Firebase ready for authentication.");
-                }
-                else
-                {
-                    Debug.LogError("Firebase dependencies not available: " + status);
-                }
-            });
+        bool allValid =
+            inputGroupValid && toogleGroupValid && birthdateGroupValid && schoolGroupValid;
+        ContinueButton.interactable = allValid;
     }
 
     public void Login()
     {
-        if (!isFirebaseReady)
+        if (!firebaseService.IsFirebaseReady)
         {
             Debug.LogWarning("⚠️ Firebase not ready yet. Please wait...");
             return;
@@ -229,8 +208,6 @@ public class LoginWithGoogle : MonoBehaviour
         // Make sure there’s no existing session
         GoogleSignIn.DefaultInstance.Disconnect();
         GoogleSignIn.DefaultInstance.SignOut();
-
-        Debug.Log("Llego aqui");
 
         GoogleSignIn
             .DefaultInstance.SignIn()
@@ -260,8 +237,7 @@ public class LoginWithGoogle : MonoBehaviour
 
                 try
                 {
-                    FirebaseUser newUser = await auth.SignInWithCredentialAsync(credential);
-                    user = newUser;
+                    user = await firebaseService.SignIn(credential);
                     Debug.Log($"✅ Firebase Auth success. Logged in as: {user.DisplayName}");
 
                     // ✅ Get Firebase's ID token (NOT the Google OAuth token)
@@ -295,10 +271,6 @@ public class LoginWithGoogle : MonoBehaviour
 
     private void OnLoginSuccess()
     {
-        // TitleText.enabled = false;
-        // WelcomeMessage.text = $"{user.DisplayName}, gràcies per registrar-te";
-        // EmailText.text = user.Email;
-
         LoginPage.SetActive(false);
         ChildDataPage.SetActive(true);
     }
@@ -307,17 +279,20 @@ public class LoginWithGoogle : MonoBehaviour
     {
         Debug.Log("Msg::::: Continue button clicked.");
 
-        // 1. Parse names from ChildNameField
         string firstName = ChildNameField.text.Trim();
         string lastName = ChildLastNameField.text.Trim();
-        string birthDate =
-            $"{BirthYearField.text}-{BirthMonthField.text.PadLeft(2, '0')}-{BirthDayField.text.PadLeft(2, '0')}";
+
+        string year = BirthYearField.text.Trim();
+        string month = BirthMonthField.text.Trim().PadLeft(2, '0');
+        string day = BirthDayField.text.Trim().PadLeft(2, '0');
+        string birthDate = $"{year}-{month}-{day}";
+
         string school = ChildSchoolField.text.Trim();
+
         int grade = ChildGradeField.value + 1;
 
         IEnumerable toggles = DisorderToggleGroup.ActiveToggles();
 
-        // 2. Determine selected disorder
         string disorder = "No";
         foreach (Toggle toggle in toggles)
         {
@@ -328,7 +303,6 @@ public class LoginWithGoogle : MonoBehaviour
             disorder = toggle.name;
         }
 
-        // 3. Fill out the model (replace hardcoded values as needed with dynamic ones)
         ChildModel child = new()
         {
             FirstName = firstName,
@@ -356,53 +330,26 @@ public class LoginWithGoogle : MonoBehaviour
 
     IEnumerator SendChildData(ChildModel data)
     {
-        string json = data.ToJson();
-
-        UnityWebRequest request = new ChildService().SendChildData(json);
-
-        yield return request.SendWebRequest();
-
-        if (request.result == UnityWebRequest.Result.Success)
+        void onComplete(bool success)
         {
+            string message = success
+                ? "Les dades del nen s'han enviat correctament."
+                : "Hi ha hagut un error en enviar les dades del nen. Si us plau, torna-ho a intentar més tard.";
+
             modal.Show(
-                "Èxit",
-                "Les dades del nen s'han enviat correctament.",
-                () =>
-                {
-                    SceneManager.LoadScene("MapPath");
-                }
+                success ? "Èxit" : "Error",
+                message,
+                success ? () => SceneManager.LoadScene("MapPathScene") : () => { }
             );
         }
-        else
-        {
-            Debug.LogError("Error sending child data: " + request.error);
-            modal.Show(
-                "Error",
-                "Hi ha hagut un error en enviar les dades del nen. Si us plau, torna-ho a intentar més tard.",
-                () => { }
-            );
-        }
-    }
 
-    private void LogChildModel(string context, ChildModel data)
-    {
-        Debug.Log(
-            $"{context}: "
-                + $"first_name={data.FirstName}, "
-                + $"last_name={data.LastName}, "
-                + $"birth_date={data.BirthDate}, "
-                + $"disorder={data.Disorder}, "
-                + $"school={data.School}, "
-                + $"grade={data.Grade}, "
-                + $"center_id={data.CenterId}, "
-                + $"owner_id={data.OwnerId}, "
-                + $"id={data.Id}"
-        );
+        yield return new ChildService().SendChildData(data, onComplete);
     }
 
     private void DebugLogin()
     {
         LoginPage.SetActive(false);
         ChildDataPage.SetActive(true);
+        // SceneManager.LoadScene("MapPathScene");
     }
 }

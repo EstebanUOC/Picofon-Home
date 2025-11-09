@@ -5,11 +5,11 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/LoginScene.unity
     guid: 8b7dff497d25c86dabf38dd082b4f5ef
   - enabled: 1
-    path: Assets/Scenes/MapScene.unity
+    path: Assets/Scenes/MapPathScene.unity
     guid: c4107749ff3e9d021bd203ce41d3238e
   - enabled: 0
     path: Assets/Scenes/Activities/BasketScene.unity

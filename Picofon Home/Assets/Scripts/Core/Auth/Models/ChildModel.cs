@@ -1,16 +1,34 @@
 using System;
+using System.Text.Json.Serialization;
 
 [Serializable]
 public class ChildModel
 {
+    [JsonInclude]
     public string FirstName;
+
+    [JsonInclude]
     public string LastName;
+
+    [JsonInclude]
     public string BirthDate;
+
+    [JsonInclude]
     public string Disorder;
+
+    [JsonInclude]
     public string School;
+
+    [JsonInclude]
     public int Grade;
+
+    [JsonInclude]
     public int CenterId;
+
+    [JsonInclude]
     public string OwnerId;
+
+    [JsonInclude]
     public string Id;
 
     public static bool Validate(ChildModel child)
@@ -36,18 +54,6 @@ public class ChildModel
 
     public string ToJson()
     {
-        string jsonString =
-            $@"{{
-                    ""first_name"": ""{FirstName}"",
-                    ""last_name"": ""{LastName}"",
-                    ""birth_date"": ""{BirthDate}"",
-                    ""disorder"": ""{Disorder}"",
-                    ""school"": ""{School}"",
-                    ""grade"": ""{Grade}"",
-                    ""center_id"": {CenterId},
-                    ""owner_id"": ""{OwnerId}"",
-                    ""id"": ""{Id}""
-                }}";
-        return jsonString;
+        return JsonHelper.ToJson(this);
     }
 }
