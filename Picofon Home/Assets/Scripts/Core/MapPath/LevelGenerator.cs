@@ -73,7 +73,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
 
         for (int i = 0; i < levelCount; i++)
         {
-            float x = (i % 2 == 0) ? LeftX : RightX;
+            float x = (i % 2 == 0) ? RightX : LeftX;
             float y = StartY + (i * StepY);
             Vector2 position = new(x, y);
 
