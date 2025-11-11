@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +11,9 @@ public class Level : MonoBehaviour
 
     [SerializeField]
     private TMP_Text LabelText;
+
+    [SerializeField]
+    private Image BackgroundImage;
 
     [Header("States Overlays")]
     [SerializeField]
@@ -43,15 +47,37 @@ public class Level : MonoBehaviour
         LabelText.text = levelNumber.ToString();
     }
 
+    private void SetBackgroundColor(int levelType)
+    {
+        BackgroundImage.color = levelType switch
+        {
+            0 => new Color32(70, 153, 178, 255),
+            1 => new Color32(206, 129, 225, 255),
+            _ => new Color32(255, 255, 255, 255),
+        };
+    }
+
+    public enum LevelType
+    {
+        Syllable = 0,
+        Phoneme = 1,
+    }
+
     public void Awake()
     {
         button = GetComponent<Button>();
     }
 
-    public void Init(LevelData levelData, int number, bool locked)
+    public void Init(
+        LevelData levelData,
+        int number,
+        bool locked,
+        LevelType levelType = LevelType.Syllable
+    )
     {
         SetData(levelData);
         SetLevelNumber(number);
         SetIsLocked(locked);
+        SetBackgroundColor((int)levelType);
     }
 }

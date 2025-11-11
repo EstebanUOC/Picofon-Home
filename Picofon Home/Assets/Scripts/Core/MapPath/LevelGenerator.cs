@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using static Level;
 
 public class PortraitLevelMapGenerator : MonoBehaviour
 {
@@ -93,7 +94,14 @@ public class PortraitLevelMapGenerator : MonoBehaviour
                 _ => BasketData,
             };
 
-            levelComponent.Init(levelData: levelData, number: i + 1, locked: isLocked);
+            LevelType levelType = i % 2 == 0 ? LevelType.Syllable : LevelType.Phoneme;
+
+            levelComponent.Init(
+                levelData: levelData,
+                number: i + 1,
+                locked: isLocked,
+                levelType: levelType
+            );
         }
     }
 }

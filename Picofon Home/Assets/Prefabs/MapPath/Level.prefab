@@ -528,7 +528,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3137255, g: 0.67058825, b: 0.7764706, a: 1}
+  m_Color: {r: 0.2733179, g: 0.60091424, b: 0.6981132, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -792,9 +792,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc501f848fb6b3a3faf400a38d76992a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: fae657f77d1e37042a5270d30f612e8d, type: 2}
   IconImage: {fileID: 5495187143461384949}
   LabelText: {fileID: 2721551648968274249}
+  BackgroundImage: {fileID: 6291120961215241013}
   LockedOverlay: {fileID: 546145624417487878}
 --- !u!1 &5853070138623205457
 GameObject:
