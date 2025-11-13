@@ -276,6 +276,9 @@ public class LoginWithGoogle : MonoBehaviour
     {
         LoginPage.SetActive(false);
         ChildDataPage.SetActive(true);
+
+        ChildRegister childRegister = ChildDataPage.GetComponent<ChildRegister>();
+        childRegister.SetParentInfo(user.Email, user.DisplayName);
     }
 
     private void OnContinue()
@@ -353,6 +356,8 @@ public class LoginWithGoogle : MonoBehaviour
     {
         LoginPage.SetActive(false);
         ChildDataPage.SetActive(true);
-        // SceneManager.LoadScene("MapPathScene");
+
+        ChildRegister childRegister = ChildDataPage.GetComponent<ChildRegister>();
+        childRegister.SetParentInfo("test@gmail.com", "Test User");
     }
 }
