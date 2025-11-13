@@ -351,10 +351,12 @@ public class LoginWithGoogle : MonoBehaviour
 
     private void DebugLogin()
     {
-        LoginPage.SetActive(false);
-        ChildDataPage.SetActive(true);
+        // LoginPage.SetActive(false);
+        // ChildDataPage.SetActive(true);
 
-        ChildRegister childRegister = ChildDataPage.GetComponent<ChildRegister>();
-        childRegister.SetParentInfo("test@gmail.com", "Test User");
+        // ChildRegister childRegister = ChildDataPage.GetComponent<ChildRegister>();
+        // childRegister.SetParentInfo("test@gmail.com", "Test User");
+
+        SceneManager.LoadScene("BasketScene");
     }
 }
