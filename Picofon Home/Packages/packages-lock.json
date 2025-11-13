@@ -97,7 +97,11 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.adaptiveperformance": {
+<<<<<<< HEAD
       "version": "5.0.0",
+=======
+      "version": "5.1.0",
+>>>>>>> origin/FuturePopParty
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -106,11 +110,32 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.adaptiveperformance.google.android": {
+<<<<<<< HEAD
       "version": "1.1.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.adaptiveperformance": "5.0.0"
+=======
+      "version": "5.1.6",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.androidjni": "1.0.0",
+        "com.unity.modules.subsystems": "1.0.0",
+        "com.unity.adaptiveperformance": "5.1.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.adaptiveperformance.samsung.android": {
+      "version": "5.1.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.androidjni": "1.0.0",
+        "com.unity.modules.subsystems": "1.0.0",
+        "com.unity.adaptiveperformance": "5.1.0"
+>>>>>>> origin/FuturePopParty
       },
       "url": "https://packages.unity.com"
     },

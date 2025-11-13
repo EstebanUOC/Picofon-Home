@@ -1,6 +1,11 @@
 {
   "dependencies": {
+<<<<<<< HEAD
     "com.unity.adaptiveperformance.google.android": "1.1.2",
+=======
+    "com.unity.adaptiveperformance.google.android": "5.1.6",
+    "com.unity.adaptiveperformance.samsung.android": "5.1.0",
+>>>>>>> origin/FuturePopParty
     "com.unity.collab-proxy": "2.8.2",
     "com.unity.feature.2d": "2.0.1",
     "com.unity.feature.mobile": "1.0.0",

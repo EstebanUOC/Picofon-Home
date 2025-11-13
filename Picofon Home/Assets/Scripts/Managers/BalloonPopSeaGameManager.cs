@@ -13,7 +13,7 @@ public class BalloonPopSeaGameManager : MonoBehaviour
 
     [Header("Modo de juego")]
     [SerializeField, Range(0, 3)]
-    private int currentMode = 1; // 0=Judge, 1=Relate, 2=Create, 3=Select
+    private int currentMode = 0; // 0=Judge, 1=Select,3=Relate
 
     private void Start()
     {
