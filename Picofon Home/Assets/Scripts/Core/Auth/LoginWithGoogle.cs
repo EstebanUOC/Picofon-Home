@@ -231,9 +231,11 @@ public class LoginWithGoogle : MonoBehaviour
 
                 // Get the Google Sign-In IdToken (OAuth token)
                 string googleIdToken = googleTask.Result.IdToken;
+                Debug.Log($"googleIdToken (OAuth token) : {googleIdToken}");
 
                 // Use that token to sign in with Firebase
                 Credential credential = GoogleAuthProvider.GetCredential(googleIdToken, null);
+                Debug.Log($"token: {credential}");
 
                 try
                 {
@@ -242,6 +244,7 @@ public class LoginWithGoogle : MonoBehaviour
 
                     // ✅ Get Firebase's ID token (NOT the Google OAuth token)
                     string firebaseIdToken = await user.TokenAsync(true);
+                    Debug.Log($"Important firebaseIdToken {firebaseIdToken}");
 
                     Debug.Log($"📤 Sending Firebase ID Token to backend for {user.Email}");
 

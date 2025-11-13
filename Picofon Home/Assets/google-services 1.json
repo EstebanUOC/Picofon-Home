@@ -52,11 +52,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "1068789468608-1eu8f2719jg8ujq2vac1au2hsvlpl102.apps.googleusercontent.com",
+          "client_id": "1068789468608-m2n9s2k8htlqmoqa3ket72hattcc8je4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.Language4Kids.Picofon",
-            "certificate_hash": "696fab8383d3db9b8aa2720ae7e6459dbf8b7086"
+            "certificate_hash": "f736335561454c334c44be65e74c9fe99c4186f6"
           }
         },
         {
