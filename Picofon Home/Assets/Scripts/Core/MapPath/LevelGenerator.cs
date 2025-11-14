@@ -25,7 +25,6 @@ public class PortraitLevelMapGenerator : MonoBehaviour
 
     private readonly string[] scenes = new string[]
     {
-        "BasketScene",
         "BalloonPopSeaScene",
         "BalloonPopParty",
         "CrossTheRiverScene",

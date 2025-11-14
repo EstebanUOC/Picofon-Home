@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1068789468608:android:0131f4bf21364341280c25",
         "android_client_info": {
-          "package_name": "com.DefaultCompany.com.unity.template.mobile2D"
+          "package_name": "com.Language4Kids.Picofon"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "1068789468608-dufun6ghlj9h2tdjvu3s6360u63fso7u.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "package_name": "com.Language4Kids.Picofon",
             "certificate_hash": "696fab8383d3db9b8aa2720ae7e6459dbf8b7086"
           }
         },
@@ -51,14 +51,6 @@
         }
       },
       "oauth_client": [
-        {
-          "client_id": "1068789468608-1eu8f2719jg8ujq2vac1au2hsvlpl102.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.Language4Kids.Picofon",
-            "certificate_hash": "696fab8383d3db9b8aa2720ae7e6459dbf8b7086"
-          }
-        },
         {
           "client_id": "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com",
           "client_type": 3
