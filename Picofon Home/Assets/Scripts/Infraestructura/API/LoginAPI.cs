@@ -4,45 +4,39 @@ using UnityEngine.Networking;
 
 public class LoginAPI
 {
-    private const string LOGIN_URL = "https://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/auth/login";
+    private const string LOGIN_URL =
+        "https://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/auth/login";
 
-    [System.Serializable]
-    public class FirebaseLoginPayload
+    public IEnumerator SendFirebaseToken(string idToken, System.Action<bool, UserModel> onComplete)
     {
-        public string firebase_id_token;
-    }
+        LoginRequest payload = new() { FirebaseIdToken = idToken };
+        string jsonData = payload.ToJson();
 
+        using UnityWebRequest req = new(LOGIN_URL, "POST");
 
-    public IEnumerator SendFirebaseToken(string idToken, System.Action<bool> onComplete)
-    {
-        FirebaseLoginPayload payload = new FirebaseLoginPayload { firebase_id_token = idToken };
-        string json = JsonUtility.ToJson(payload); // ✅ will correctly serialize now
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
 
-        using (UnityWebRequest req = new UnityWebRequest(LOGIN_URL, "POST"))
+        req.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        req.downloadHandler = new DownloadHandlerBuffer();
+        req.SetRequestHeader("Content-Type", "application/json");
+
+        yield return req.SendWebRequest();
+
+        if (req.result == UnityWebRequest.Result.Success)
         {
-            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
-            req.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            req.downloadHandler = new DownloadHandlerBuffer();
-            req.SetRequestHeader("Content-Type", "application/json");
+            Debug.Log("✅ Login token sent successfully!");
+            string jsonResponse = req.downloadHandler.text;
 
-            yield return req.SendWebRequest();
-
-            if (req.result == UnityWebRequest.Result.Success)
-            {
-                Debug.Log("✅ Login token sent successfully!");
-                Debug.Log(req.downloadHandler.text); // backend response
-                onComplete?.Invoke(true);
-            }
-            else
-            {
-                Debug.LogError("Login API error: " + req.error + "\nResponse: " + req.downloadHandler.text);
-                Debug.LogError($"❌ Login API error ({req.responseCode}): {req.downloadHandler.text}");
-                onComplete?.Invoke(false);
-            }
+            LoginResponse response = LoginResponse.FromJson(jsonResponse);
+            onComplete?.Invoke(true, response.Data);
+        }
+        else
+        {
+            Debug.LogError(
+                "Login API error: " + req.error + "\nResponse: " + req.downloadHandler.text
+            );
+            Debug.LogError($"❌ Login API error ({req.responseCode}): {req.downloadHandler.text}");
+            onComplete?.Invoke(false, null);
         }
     }
-
-
-
-    
 }

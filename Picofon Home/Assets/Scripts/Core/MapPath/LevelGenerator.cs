@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using static Level;
 
@@ -30,47 +31,50 @@ public class PortraitLevelMapGenerator : MonoBehaviour
         "CrossTheRiverScene",
     };
 
-    private int levelCount = 0;
-
     private void Start()
     {
+        bool existsData = LevelDataStore.ExistsPlans();
+        if (existsData)
+        {
+            List<TherapyPlan> plans = LevelDataStore.Instance.GetAllPlans();
+            GenerateMap(plans);
+            return;
+        }
         StartCoroutine(LoadMapData());
     }
 
     IEnumerator LoadMapData()
     {
         TherapyAPI api = gameObject.AddComponent<TherapyAPI>();
+        LevelDataStore store = LevelDataStore.Instance;
 
         yield return StartCoroutine(
             api.LoadTherapyPlans(
                 ChildId,
                 (plans) =>
                 {
-                    if (plans != null && plans.Count > 0)
+                    if (plans is null)
                     {
-                        levelCount = plans.Count;
-                        Debug.Log($"✅ Child {ChildId} has {levelCount} therapy plans.");
-
-                        // foreach (var plan in plans)
-                        //     Debug.Log($"Template ID: {plan.Name}");
-                    }
-                    else
-                    {
-                        Debug.LogWarning("⚠️ No plans found — using default 12 levels.");
-                        levelCount = 12;
+                        Debug.LogError("❌ Failed to load therapy plans.");
+                        return;
                     }
 
-                    GenerateMap();
+                    foreach (var plan in plans)
+                    {
+                        store.RegisterPlan(plan);
+                    }
+
+                    GenerateMap(plans);
                 }
             )
         );
     }
 
-    private void GenerateMap()
+    private void GenerateMap(List<TherapyPlan> plans)
     {
         int lastCompleted = GamePrefs.LastCompletedLevel;
 
-        for (int i = 0; i < levelCount; i++)
+        for (int i = 0; i < plans.Count; i++)
         {
             float x = (i % 2 == 0) ? RightX : LeftX;
             float y = StartY + (i * StepY);
@@ -86,7 +90,6 @@ public class PortraitLevelMapGenerator : MonoBehaviour
             string sceneName = scenes[i % scenes.Length];
             LevelData levelData = sceneName switch
             {
-                "BasketScene" => BasketData,
                 "BalloonPopSeaScene" => SeaData,
                 "BalloonPopParty" => PartyData,
                 "CrossTheRiverScene" => RiverData,
@@ -94,13 +97,21 @@ public class PortraitLevelMapGenerator : MonoBehaviour
             };
 
             LevelType levelType = i % 2 == 0 ? LevelType.Syllable : LevelType.Phoneme;
+            int planId = plans[i].Id;
 
             levelComponent.Init(
                 levelData: levelData,
                 number: i + 1,
                 locked: isLocked,
-                levelType: levelType
+                levelType: levelType,
+                onClick: () => OnSelectLevel(planId: planId, sceneName: sceneName)
             );
         }
+    }
+
+    private void OnSelectLevel(int planId, string sceneName)
+    {
+        LevelPayload.PlanId = planId;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
 }

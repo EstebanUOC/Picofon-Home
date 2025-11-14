@@ -6,10 +6,10 @@ using System.Text.Json.Serialization;
 public class TherapyResponse
 {
     [JsonInclude]
-    public bool Success;
+    public bool Success { get; set; } = false;
 
     [JsonInclude]
-    public List<TherapyPlan> Data;
+    public List<TherapyPlan> Data { get; set; }
 
     public static TherapyResponse FromJson(string json)
     {

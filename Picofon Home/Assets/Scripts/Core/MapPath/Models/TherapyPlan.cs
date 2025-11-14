@@ -5,41 +5,41 @@ using System.Text.Json.Serialization;
 public class TherapyPlan
 {
     [JsonInclude]
-    public int TherapyTemplateId;
+    public int TherapyTemplateId { get; set; } = 0;
 
     [JsonInclude]
-    public string AssignedById;
+    public string AssignedById { get; set; } = string.Empty;
 
     [JsonInclude]
-    public string PlanNumber;
+    public string PlanNumber { get; set; } = string.Empty;
 
     [JsonInclude]
-    public string Name;
+    public string Name { get; set; } = string.Empty;
 
     [JsonInclude]
-    public int TargetSessions;
+    public int TargetSessions { get; set; } = 0;
 
     [JsonInclude]
-    public string Notes;
+    public string Notes { get; set; } = string.Empty;
 
     [JsonInclude]
-    public string Status;
+    public string Status { get; set; } = string.Empty;
 
     [JsonInclude]
-    public string StartDate;
+    public string StartDate { get; set; } = string.Empty;
 
     [JsonInclude]
-    public string ChildId;
+    public string ChildId { get; set; } = string.Empty;
 
     [JsonInclude]
-    public int Id;
+    public int Id { get; set; } = 0;
 
     [JsonInclude]
-    public string CreatedAt;
+    public string CreatedAt { get; set; } = string.Empty;
 
     [JsonInclude]
-    public string UpdatedAt;
+    public string UpdatedAt { get; set; } = string.Empty;
 
     [JsonInclude]
-    public TherapyTemplate TherapyTemplate;
+    public TherapyTemplate TherapyTemplate { get; set; }
 }
