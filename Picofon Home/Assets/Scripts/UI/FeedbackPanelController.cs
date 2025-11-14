@@ -17,9 +17,15 @@ public class FeedbackPanelController : MonoBehaviour
     [SerializeField] private TMP_Text textMain;
     [SerializeField] private TMP_Text textSub;
 
+    public System.Action OnFeedbackHidden; // 🔔 Notifica al manager cuando el panel se oculta
+
     private Coroutine hideRoutine;
     private Coroutine animRoutine;
     private Sprite spriteCloud;
+
+    // 🕒 Control global del tiempo del feedback
+    private const float FEEDBACK_TOTAL_DURATION = 2f;   // 🔧 Cambia este valor para ajustar el tiempo total
+    private const float ANIMATION_DURATION = 1.5f;       // 🔧 Duración de la animación (Correct o Neutral)
 
     private void Awake()
     {
@@ -32,6 +38,7 @@ public class FeedbackPanelController : MonoBehaviour
     public void ShowFeedback(Sprite left, Sprite right, bool correct, string syllWord1, string syllWord2)
     {
         if (panelFeedback == null) return;
+        OnFeedbackHidden = null;
 
         // ⚠️ Detener animaciones previas
         if (animRoutine != null)
@@ -48,10 +55,9 @@ public class FeedbackPanelController : MonoBehaviour
         background.raycastTarget = false;
         backgroundLumi.raycastTarget = false;
 
-        // Fondo back
+        // Fondo
         string backPath = correct ? "Images/Images/PanelFeedback/back_correct" : "Images/Images/PanelFeedback/back_neutral";
         Sprite backSprite = Resources.Load<Sprite>(backPath);
-
         if (background != null && backSprite != null)
         {
             background.enabled = true;
@@ -63,40 +69,28 @@ public class FeedbackPanelController : MonoBehaviour
         cloud.enabled = !correct;
         if (!correct && spriteCloud != null) cloud.sprite = spriteCloud;
 
-        // Images
+        // Images y texto
         imageLeft.enabled = left != null; imageLeft.sprite = left;
         imageRight.enabled = right != null; imageRight.sprite = right;
 
         textMain.text = ColorizeFirstSyllable(syllWord1, correct);
         textSub.text = ColorizeFirstSyllable(syllWord2, correct);
 
-        // ✅ Si es correcto, correr animación
+        // ✅ Ejecutar animación según tipo
         if (correct)
-        {
             animRoutine = StartCoroutine(PlayCorrectAnimation());
-        }
         else
-        {
-            Sprite neutral = Resources.Load<Sprite>("Images/Images/PanelFeedback/Neutral_Answer");
-            if (backgroundLumi != null)
-            {
-                backgroundLumi.enabled = true;
-                backgroundLumi.color = Color.white;
-                backgroundLumi.sprite = neutral;
-            }
-        }
+            animRoutine = StartCoroutine(PlayNeutralAnimation());
 
-        // ✅ Asegurar cierre tras 4s
+        // ✅ Cerrar automáticamente después del tiempo total configurado
         if (hideRoutine != null)
             StopCoroutine(hideRoutine);
-
-        hideRoutine = StartCoroutine(HideAfterDelay(4f));
+        hideRoutine = StartCoroutine(HideAfterDelay(FEEDBACK_TOTAL_DURATION));
     }
 
     private IEnumerator PlayCorrectAnimation()
     {
         Sprite[] frames = Resources.LoadAll<Sprite>("Images/Images/PanelFeedback/Correct_Feedback");
-
         if (frames.Length == 0)
         {
             Debug.LogWarning("⚠ No se encontraron frames en carpeta Correct_Feedback");
@@ -109,19 +103,45 @@ public class FeedbackPanelController : MonoBehaviour
             return int.Parse(num);
         }).ToArray();
 
-        float totalDuration = 1.25f;
-        float frameTime = totalDuration / frames.Length;
+        float frameTime = ANIMATION_DURATION / frames.Length;
 
-        // ✅ Bucle seguro
         foreach (var frame in frames)
         {
             if (backgroundLumi == null || !backgroundLumi.gameObject.activeInHierarchy)
-                yield break; // ⚠️ No intentar dibujar si desapareció
+                yield break;
 
             backgroundLumi.enabled = true;
             backgroundLumi.color = Color.white;
             backgroundLumi.sprite = frame;
+            yield return new WaitForSeconds(frameTime);
+        }
+    }
 
+    private IEnumerator PlayNeutralAnimation()
+    {
+        Sprite[] frames = Resources.LoadAll<Sprite>("Images/Images/PanelFeedback/Neutral_Feedback");
+        if (frames.Length == 0)
+        {
+            Debug.LogWarning("⚠ No se encontraron frames en carpeta Neutral_Feedback");
+            yield break;
+        }
+
+        frames = frames.OrderBy(f =>
+        {
+            string num = Regex.Replace(f.name, @"[^\d]", "");
+            return int.TryParse(num, out int n) ? n : 0;
+        }).ToArray();
+
+        float frameTime = ANIMATION_DURATION / frames.Length;
+
+        foreach (var frame in frames)
+        {
+            if (backgroundLumi == null || !backgroundLumi.gameObject.activeInHierarchy)
+                yield break;
+
+            backgroundLumi.enabled = true;
+            backgroundLumi.color = Color.white;
+            backgroundLumi.sprite = frame;
             yield return new WaitForSeconds(frameTime);
         }
     }
@@ -130,7 +150,6 @@ public class FeedbackPanelController : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
-        // ⚠️ Detener animación antes de cerrar panel
         if (animRoutine != null)
         {
             StopCoroutine(animRoutine);
@@ -142,6 +161,8 @@ public class FeedbackPanelController : MonoBehaviour
 
         if (backgroundLumi != null)
             backgroundLumi.enabled = false;
+
+        OnFeedbackHidden?.Invoke();
     }
 
     private void HidePrefabImageIfModeZero()

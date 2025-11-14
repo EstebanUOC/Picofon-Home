@@ -66,9 +66,10 @@ public class BalloonController : MonoBehaviour
 
         Debug.Log($"💥 Animación terminada en {gameObject.name}");
 
-        // 🔔 Notificar al manager
+        // 🔔 Notificar al manager cuando termina
         OnExplosionFinished?.Invoke(this);
     }
+
     // ============================================================
     // 🔄 Reiniciar animación al frame inicial
     // ============================================================
@@ -83,5 +84,4 @@ public class BalloonController : MonoBehaviour
         if (overlayImage != null)
             overlayImage.gameObject.SetActive(true);
     }
-
 }
