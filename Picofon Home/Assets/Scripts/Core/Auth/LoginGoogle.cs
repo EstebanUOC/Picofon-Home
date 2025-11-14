@@ -59,6 +59,8 @@ public class LoginWithGoogle : MonoBehaviour
     private bool birthdateGroupValid = false;
     private bool schoolGroupValid = false;
 
+    private string parentId = string.Empty;
+
     private void Start()
     {
         Debug.Log("Msg::::: Start()");
@@ -249,12 +251,16 @@ public class LoginWithGoogle : MonoBehaviour
                     StartCoroutine(
                         new LoginAPI().SendFirebaseToken(
                             firebaseIdToken,
-                            success =>
+                            (success, user) =>
                             {
-                                if (success)
-                                    Debug.Log("✅ Backend login success.");
-                                else
+                                if (!success)
+                                {
                                     Debug.LogError("❌ Backend login failed.");
+                                    return;
+                                }
+
+                                Debug.Log("Backend login successful, user: " + user);
+                                parentId = user.Id;
                             }
                         )
                     );
@@ -282,6 +288,7 @@ public class LoginWithGoogle : MonoBehaviour
     {
         Debug.Log("Msg::::: Continue button clicked.");
 
+        string id = ChildIDField.text.Trim();
         string firstName = ChildNameField.text.Trim();
         string lastName = ChildLastNameField.text.Trim();
 
@@ -315,8 +322,8 @@ public class LoginWithGoogle : MonoBehaviour
             School = school,
             Grade = grade,
             CenterId = 1,
-            OwnerId = "AwgdI1xsu5RoU6zgLvTfAZeklbn2", // Change if needed
-            Id = "62448460X", // Change if dynamic
+            OwnerId = parentId,
+            Id = id,
         };
 
         bool valid = ChildModel.Validate(child);
@@ -351,12 +358,13 @@ public class LoginWithGoogle : MonoBehaviour
 
     private void DebugLogin()
     {
-        // LoginPage.SetActive(false);
-        // ChildDataPage.SetActive(true);
+        LoginPage.SetActive(false);
+        ChildDataPage.SetActive(true);
 
-        // ChildRegister childRegister = ChildDataPage.GetComponent<ChildRegister>();
-        // childRegister.SetParentInfo("test@gmail.com", "Test User");
+        ChildRegister childRegister = ChildDataPage.GetComponent<ChildRegister>();
+        childRegister.SetParentInfo("test@gmail.com", "Test User");
+        parentId = "AwgdI1xsu5RoU6zgLvTfAZeklbn2";
 
-        SceneManager.LoadScene("BasketScene");
+        // SceneManager.LoadScene("BasketScene");
     }
 }

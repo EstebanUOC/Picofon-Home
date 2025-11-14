@@ -6085,7 +6085,7 @@ MonoBehaviour:
   LoginPage: {fileID: 1039029301}
   ChildDataPage: {fileID: 1660543415}
   LoginButton: {fileID: 1031013743}
-  ContinueButton: {fileID: 0}
+  ContinueButton: {fileID: 1049023208}
   DebugSignInButton: {fileID: 95402053}
   ChildNameField: {fileID: 329055233}
   ChildLastNameField: {fileID: 329239561}
