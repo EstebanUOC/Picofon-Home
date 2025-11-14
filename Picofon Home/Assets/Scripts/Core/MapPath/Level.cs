@@ -24,14 +24,12 @@ public class Level : MonoBehaviour
     private bool isLocked = false;
     private int levelNumber = 1;
 
-    private void SetData(LevelData value)
+    private void SetData(LevelData value, Action onClick)
     {
         data = value;
         IconImage.sprite = data.LevelIcon;
         button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(() =>
-            UnityEngine.SceneManagement.SceneManager.LoadScene(data.SceneName)
-        );
+        button.onClick.AddListener(() => onClick?.Invoke());
     }
 
     private void SetIsLocked(bool value)
@@ -72,10 +70,11 @@ public class Level : MonoBehaviour
         LevelData levelData,
         int number,
         bool locked,
-        LevelType levelType = LevelType.Syllable
+        LevelType levelType = LevelType.Syllable,
+        Action onClick = null
     )
     {
-        SetData(levelData);
+        SetData(levelData, onClick);
         SetLevelNumber(number);
         SetIsLocked(locked);
         SetBackgroundColor((int)levelType);

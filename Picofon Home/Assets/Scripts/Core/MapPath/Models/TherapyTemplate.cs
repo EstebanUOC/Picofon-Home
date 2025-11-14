@@ -5,35 +5,35 @@ using System.Text.Json.Serialization;
 public class TherapyTemplate
 {
     [JsonInclude]
-    public string Name;
+    public string Name { get; set; } = string.Empty;
 
     [JsonInclude]
-    public string Description;
+    public string Description { get; set; } = string.Empty;
 
     [JsonInclude]
-    public int TaskTypeId;
+    public int TaskTypeId { get; set; } = 0;
 
     [JsonInclude]
-    public int SoundId;
+    public int SoundId { get; set; } = 0;
 
     [JsonInclude]
-    public int SkillId;
+    public int SkillId { get; set; } = 0;
 
     [JsonInclude]
-    public int SyllablesNumber;
+    public int SyllablesNumber { get; set; } = 0;
 
     [JsonInclude]
-    public string SyllableStructure;
+    public string SyllableStructure { get; set; } = string.Empty;
 
     [JsonInclude]
-    public string SyllablePosition;
+    public string SyllablePosition { get; set; } = string.Empty;
 
     [JsonInclude]
-    public string DifficultyLevel;
+    public string DifficultyLevel { get; set; } = string.Empty;
 
     [JsonInclude]
-    public int Id;
+    public int Id { get; set; } = 0;
 
     [JsonInclude]
-    public bool IsActive;
+    public bool IsActive { get; set; } = false;
 }
