@@ -6,11 +6,19 @@ public class BallTest : MonoBehaviour
     public Transform DriblePosition;
 
     private float time = 0;
-    private Vector3 initial;
-    private readonly float duration = 0.5f;
+    private readonly float duration = 1;
 
+    private Vector3 initial;
     private bool ballIsFlying = false;
     private bool ballIsDribling = true;
+
+    private Rigidbody2D body;
+
+    private void Start()
+    {
+        Application.targetFrameRate = 60;
+        body = GetComponent<Rigidbody2D>();
+    }
 
     private void Update()
     {
@@ -29,10 +37,9 @@ public class BallTest : MonoBehaviour
 
             if (t01 >= 1)
             {
-                Rigidbody2D body = GetComponent<Rigidbody2D>();
                 body.bodyType = RigidbodyType2D.Dynamic;
+                body.velocity = new Vector2(1, -1) * 12.5f;
                 ballIsFlying = false;
-                time = 0;
             }
         }
 
@@ -45,13 +52,24 @@ public class BallTest : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Rigidbody2D body = GetComponent<Rigidbody2D>();
             body.bodyType = RigidbodyType2D.Kinematic;
+            body.angularVelocity = 200;
             initial = transform.position;
             time = 0;
 
             ballIsFlying = true;
             ballIsDribling = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            transform.position = DriblePosition.position;
+            body.bodyType = RigidbodyType2D.Kinematic;
+            body.angularVelocity = 0;
+            body.rotation = 0;
+            body.velocity = Vector2.zero;
+
+            ballIsDribling = true;
         }
     }
 }
