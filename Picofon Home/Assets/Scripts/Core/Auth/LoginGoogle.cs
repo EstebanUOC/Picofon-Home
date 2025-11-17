@@ -3,10 +3,7 @@ using System.Collections;
 using Firebase.Auth;
 using Firebase.Extensions;
 using Google;
-using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class LoginWithGoogle : MonoBehaviour
 {
@@ -14,61 +11,21 @@ public class LoginWithGoogle : MonoBehaviour
     public string GoogleAPI =
         "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
 
-    [Header("Panels")]
-    public GameObject LoginPage;
-    public GameObject ChildDataPage;
+    [Header("Form")]
+    public Form ChildForm;
 
-    [Header("Buttons")]
-    public Button LoginButton;
-    public Button ContinueButton;
-    public Button DebugSignInButton;
-
-    [Header("Child Data UI")]
-    public TMP_InputField ChildNameField;
-    public TMP_InputField ChildLastNameField;
-    public TMP_InputField ChildIDField;
-    public TMP_InputField ChildSchoolField;
-    public TMP_Dropdown ChildGradeField;
-
-    // public TMP_Dropdown AgeField;
-
-    [Header("Child Birthdate")]
-    public TMP_InputField BirthDayField;
-    public TMP_InputField BirthMonthField;
-    public TMP_InputField BirthYearField;
-
-    [Header("Disorder Toggles")]
-    public ToggleGroup DisorderToggleGroup;
-    public Toggle NoToggle;
-    public Toggle TELToggle;
-    public Toggle TEAToggle;
-    public Toggle TDAHToggle;
-    public Toggle OtherToggle;
-    public TMP_InputField OtherInput; // Assign in inspector if using "Others" text field
-
-    [Header("Modal")]
-    public Modal modal;
+    [Header("UI Manager")]
+    public UIManager UIManager;
 
     private FirebaseService firebaseService;
-    private FirebaseUser user;
 
     private bool isSigningIn = false;
 
-    private bool inputGroupValid = false;
-    private bool toogleGroupValid = false;
-    private bool birthdateGroupValid = false;
-    private bool schoolGroupValid = false;
-
-    private string parentId = string.Empty;
-
-    private void Start()
+    public void Start()
     {
-        Debug.Log("Msg::::: Start()");
-
         firebaseService = new FirebaseService();
         firebaseService.InitFirebase();
 
-        // Configure Google Sign-In
         GoogleSignIn.Configuration = new GoogleSignInConfiguration
         {
             RequestIdToken = true,
@@ -76,121 +33,11 @@ public class LoginWithGoogle : MonoBehaviour
             RequestEmail = true,
         };
 
-        InitComponents();
+        UIManager.SetLoginAction(Login);
+        UIManager.SetDebugSignInAction(DebugLogin);
     }
 
-    private void InitComponents()
-    {
-        // Login components
-        if (LoginButton != null)
-        {
-            LoginButton.onClick.RemoveAllListeners();
-            LoginButton.onClick.AddListener(Login);
-        }
-
-        if (DebugSignInButton != null)
-        {
-            DebugSignInButton.onClick.RemoveAllListeners();
-            DebugSignInButton.onClick.AddListener(DebugLogin);
-        }
-
-        LoginPage.SetActive(true);
-
-        // Child data components
-
-        if (ContinueButton != null)
-        {
-            ContinueButton.onClick.RemoveAllListeners();
-            ContinueButton.onClick.AddListener(OnContinue);
-        }
-
-        ChildDataPage.SetActive(false);
-        OtherInput.gameObject.SetActive(false);
-
-        // Listeners for input fields to update button state
-        ChildNameField.onValueChanged.AddListener(OnInputChange);
-        ChildLastNameField.onValueChanged.AddListener(OnInputChange);
-        ChildIDField.onValueChanged.AddListener(OnInputChange);
-        ChildSchoolField.onValueChanged.AddListener(OnInputChange);
-
-        // Birthdate fields
-        BirthDayField.onValueChanged.AddListener(OnInputChange);
-        BirthMonthField.onValueChanged.AddListener(OnInputChange);
-        BirthYearField.onValueChanged.AddListener(OnInputChange);
-
-        // Grade dropdown
-        ChildGradeField.onValueChanged.AddListener(OnDropdownChange);
-
-        NoToggle.onValueChanged.AddListener(OnToggleChange);
-        TELToggle.onValueChanged.AddListener(OnToggleChange);
-        TEAToggle.onValueChanged.AddListener(OnToggleChange);
-        TDAHToggle.onValueChanged.AddListener(OnToggleChange);
-        OtherToggle.onValueChanged.AddListener(OnToggleChange);
-        OtherToggle.onValueChanged.AddListener(OnToggleOtherChanged);
-    }
-
-    private void OnInputChange(string value)
-    {
-        ValidateAllFields();
-    }
-
-    private void OnDropdownChange(int value)
-    {
-        ValidateAllFields();
-    }
-
-    private void ValidateAllFields()
-    {
-        bool nameValid = !string.IsNullOrWhiteSpace(ChildNameField.text);
-        bool lastNameValid = !string.IsNullOrWhiteSpace(ChildLastNameField.text);
-        bool idValid = !string.IsNullOrWhiteSpace(ChildIDField.text);
-        inputGroupValid = nameValid && lastNameValid && idValid;
-
-        schoolGroupValid = !string.IsNullOrWhiteSpace(ChildSchoolField.text);
-
-        bool dayValid = !string.IsNullOrWhiteSpace(BirthDayField.text);
-        bool monthValid = !string.IsNullOrWhiteSpace(BirthMonthField.text);
-        bool yearValid = !string.IsNullOrWhiteSpace(BirthYearField.text);
-        birthdateGroupValid = dayValid && monthValid && yearValid;
-
-        UpdateContinueButton();
-    }
-
-    private void OnToggleChange(bool value)
-    {
-        bool valid = NoToggle.isOn || TELToggle.isOn || TEAToggle.isOn || TDAHToggle.isOn;
-
-        toogleGroupValid = valid;
-
-        if (!valid && OtherToggle.isOn)
-        {
-            OtherInput.onValueChanged.RemoveAllListeners();
-            OtherInput.onValueChanged.AddListener(text =>
-            {
-                bool otherValid = !string.IsNullOrWhiteSpace(OtherInput.text);
-                toogleGroupValid = otherValid;
-                UpdateContinueButton();
-            });
-        }
-
-        UpdateContinueButton();
-    }
-
-    private void OnToggleOtherChanged(bool isOn)
-    {
-        OtherInput.gameObject.SetActive(isOn);
-        if (!isOn)
-            OtherInput.text = string.Empty;
-    }
-
-    private void UpdateContinueButton()
-    {
-        bool allValid =
-            inputGroupValid && toogleGroupValid && birthdateGroupValid && schoolGroupValid;
-        ContinueButton.interactable = allValid;
-    }
-
-    public void Login()
+    private void Login()
     {
         if (!firebaseService.IsFirebaseReady)
         {
@@ -241,7 +88,7 @@ public class LoginWithGoogle : MonoBehaviour
 
                 try
                 {
-                    user = await firebaseService.SignIn(credential);
+                    FirebaseUser user = await firebaseService.SignIn(credential);
                     Debug.Log($"✅ Firebase Auth success. Logged in as: {user.DisplayName}");
 
                     // ✅ Get Firebase's ID token (NOT the Google OAuth token)
@@ -263,13 +110,11 @@ public class LoginWithGoogle : MonoBehaviour
                                 }
 
                                 Debug.Log("Backend login successful, user: " + user);
-                                parentId = user.Id;
                             }
                         )
                     );
 
-                    // Optional: trigger UI updates
-                    OnLoginSuccess();
+                    OnLoginSuccess(user);
                 }
                 catch (Exception ex)
                 {
@@ -278,57 +123,26 @@ public class LoginWithGoogle : MonoBehaviour
             });
     }
 
-    private void OnLoginSuccess()
+    private void OnLoginSuccess(FirebaseUser user)
     {
-        LoginPage.SetActive(false);
-        ChildDataPage.SetActive(true);
+        UIManager.SetParentInfo(user.Email, user.DisplayName);
 
-        ChildRegister childRegister = ChildDataPage.GetComponent<ChildRegister>();
-        childRegister.SetParentInfo(user.Email, user.DisplayName);
+        string parentId = user.UserId;
+        ChildForm.SetParentId(parentId);
+        ChildForm.SetContinueAction(OnContinue);
     }
 
-    private void OnContinue()
+    private void DebugLogin()
     {
-        Debug.Log("Msg::::: Continue button clicked.");
+        UIManager.SetParentInfo("test@gmail.com", "Test User");
 
-        string id = ChildIDField.text.Trim();
-        string firstName = ChildNameField.text.Trim();
-        string lastName = ChildLastNameField.text.Trim();
+        string parentId = "AwgdI1xsu5RoU6zgLvTfAZeklbn2";
+        ChildForm.SetParentId(parentId);
+        ChildForm.SetContinueAction(OnContinue);
+    }
 
-        string year = BirthYearField.text.Trim();
-        string month = BirthMonthField.text.Trim().PadLeft(2, '0');
-        string day = BirthDayField.text.Trim().PadLeft(2, '0');
-        string birthDate = $"{year}-{month}-{day}";
-
-        string school = ChildSchoolField.text.Trim();
-
-        int grade = ChildGradeField.value + 1;
-
-        IEnumerable toggles = DisorderToggleGroup.ActiveToggles();
-
-        string disorder = "No";
-        foreach (Toggle toggle in toggles)
-        {
-            if (toggle.name == "Other")
-            {
-                disorder = OtherInput != null ? OtherInput.text : string.Empty;
-            }
-            disorder = toggle.name;
-        }
-
-        ChildModel child = new()
-        {
-            FirstName = firstName,
-            LastName = lastName,
-            BirthDate = birthDate,
-            Disorder = disorder,
-            School = school,
-            Grade = grade,
-            CenterId = 1,
-            OwnerId = parentId,
-            Id = id,
-        };
-
+    private void OnContinue(ChildModel child)
+    {
         bool valid = ChildModel.Validate(child);
 
         if (!valid)
@@ -343,31 +157,21 @@ public class LoginWithGoogle : MonoBehaviour
 
     IEnumerator SendChildData(ChildModel data)
     {
-        void onComplete(bool success)
+        static void onComplete(bool success)
         {
             string message = success
                 ? "Les dades del nen s'han enviat correctament."
                 : "Hi ha hagut un error en enviar les dades del nen. Si us plau, torna-ho a intentar més tard.";
 
-            modal.Show(
-                success ? "Èxit" : "Error",
-                message,
-                success ? () => SceneManager.LoadScene("MapPathScene") : () => { }
-            );
+            Debug.Log("Msg::::: " + message);
+
+            // modal.Show(
+            //     success ? "Èxit" : "Error",
+            //     message,
+            //     success ? () => SceneManager.LoadScene("MapPathScene") : () => { }
+            // );
         }
 
         yield return new ChildService().SendChildData(data, onComplete);
-    }
-
-    private void DebugLogin()
-    {
-        LoginPage.SetActive(false);
-        ChildDataPage.SetActive(true);
-
-        ChildRegister childRegister = ChildDataPage.GetComponent<ChildRegister>();
-        childRegister.SetParentInfo("test@gmail.com", "Test User");
-        parentId = "AwgdI1xsu5RoU6zgLvTfAZeklbn2";
-
-        // SceneManager.LoadScene("BasketScene");
     }
 }

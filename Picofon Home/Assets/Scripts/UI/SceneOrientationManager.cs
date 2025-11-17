@@ -3,8 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class SceneOrientationManager : MonoBehaviour
 {
-    void Awake()
+    public void Awake()
     {
+        Application.targetFrameRate = 60;
         string sceneName = SceneManager.GetActiveScene().name;
 
         if (sceneName == "AuthScene" || sceneName == "MapPathScene")

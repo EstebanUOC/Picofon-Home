@@ -5,14 +5,14 @@ public class ChildRegister : MonoBehaviour
 {
     [Header("Parent Info")]
     [SerializeField]
-    private TMP_Text parentEmail;
+    private TMP_Text EmailText;
 
     [SerializeField]
-    private TMP_Text parentUsername;
+    private TMP_Text UsernameText;
 
     public void SetParentInfo(string email, string username)
     {
-        parentEmail.text = email;
-        parentUsername.text = username;
+        EmailText.text = email;
+        UsernameText.text = username;
     }
 }
