@@ -5,9 +5,10 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [Header("Panels")]
-    public GameObject LoginCanvas;
-    public GameObject DisclaimerCanvas;
-    public GameObject ChildDataCanvas;
+    public GameObject LoginPanel;
+    public GameObject DisclaimerPanel;
+    public GameObject UserChildrenPanel;
+    public GameObject RegisterChildPanel;
 
     [Header("Buttons")]
     public Button LoginButton;
@@ -22,28 +23,40 @@ public class UIManager : MonoBehaviour
 
         AcceptDisclaimerButton?.onClick.AddListener(ShowRegister);
         DeclineDisclaimerButton?.onClick.AddListener(ShowLogin);
+
         ShowLogin();
+    }
+
+    private void HideAllPanels()
+    {
+        LoginPanel.SetActive(false);
+        RegisterChildPanel.SetActive(false);
+        UserChildrenPanel.SetActive(false);
+        DisclaimerPanel.SetActive(false);
     }
 
     private void ShowLogin()
     {
-        LoginCanvas.SetActive(true);
-        ChildDataCanvas.SetActive(false);
-        DisclaimerCanvas.SetActive(false);
+        HideAllPanels();
+        LoginPanel.SetActive(true);
     }
 
     private void ShowRegister()
     {
-        ChildDataCanvas.SetActive(true);
-        LoginCanvas.SetActive(false);
-        DisclaimerCanvas.SetActive(false);
+        HideAllPanels();
+        RegisterChildPanel.SetActive(true);
     }
 
     private void ShowDisclaimer()
     {
-        DisclaimerCanvas.SetActive(true);
-        LoginCanvas.SetActive(false);
-        ChildDataCanvas.SetActive(false);
+        HideAllPanels();
+        DisclaimerPanel.SetActive(true);
+    }
+
+    private void ShowUserChildren()
+    {
+        HideAllPanels();
+        UserChildrenPanel.SetActive(true);
     }
 
     public void SetLoginAction(UnityAction action)
@@ -58,6 +71,6 @@ public class UIManager : MonoBehaviour
 
     public void SetParentInfo(string email, string username)
     {
-        ChildDataCanvas.GetComponent<ChildRegister>().SetParentInfo(email, username);
+        RegisterChildPanel.GetComponent<ChildRegister>().SetParentInfo(email, username);
     }
 }
