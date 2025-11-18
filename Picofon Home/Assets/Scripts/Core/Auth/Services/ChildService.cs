@@ -32,7 +32,6 @@ public class ChildService
             Debug.LogError(
                 "Child API error: " + req.error + "\nResponse: " + req.downloadHandler.text
             );
-            Debug.LogError($"❌ Child API error ({req.responseCode}): {req.downloadHandler.text}");
         }
     }
 }

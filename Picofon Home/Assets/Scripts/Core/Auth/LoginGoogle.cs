@@ -151,6 +151,7 @@ public class LoginWithGoogle : MonoBehaviour
             return;
         }
 
+        Debug.Log("Child Model is valid.");
         Debug.Log("ChildModel JSON: " + child.ToJson());
         StartCoroutine(SendChildData(child));
     }
