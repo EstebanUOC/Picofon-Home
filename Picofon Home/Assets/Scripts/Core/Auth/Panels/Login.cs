@@ -1,24 +1,22 @@
 using System;
-using System.Collections;
 using Firebase.Auth;
 using Firebase.Extensions;
 using Google;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class LoginWithGoogle : MonoBehaviour
+public class Login : MonoBehaviour
 {
-    [Header("Firebase")]
-    public string GoogleAPI =
-        "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
-
-    [Header("Form")]
-    public Form ChildForm;
-
-    [Header("UI Manager")]
     public UIManager UIManager;
 
-    private FirebaseService firebaseService;
+    [Header("Buttons")]
+    public Button LoginButton;
+    public Button DebugSignInButton;
 
+    private readonly string googleAPI =
+        "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
+
+    private FirebaseService firebaseService;
     private bool isSigningIn = false;
 
     public void Start()
@@ -29,15 +27,15 @@ public class LoginWithGoogle : MonoBehaviour
         GoogleSignIn.Configuration = new GoogleSignInConfiguration
         {
             RequestIdToken = true,
-            WebClientId = GoogleAPI,
+            WebClientId = googleAPI,
             RequestEmail = true,
         };
 
-        UIManager.SetLoginAction(Login);
-        UIManager.SetDebugSignInAction(OnDebugLogin);
+        LoginButton.onClick.AddListener(AuthenticateWithGoogle);
+        DebugSignInButton.onClick.AddListener(OnDebugLogin);
     }
 
-    private void Login()
+    private void AuthenticateWithGoogle()
     {
         if (!firebaseService.IsFirebaseReady)
         {
@@ -126,53 +124,12 @@ public class LoginWithGoogle : MonoBehaviour
     private void OnLoginSuccess(FirebaseUser user)
     {
         UIManager.SetParentInfo(user.Email, user.DisplayName);
-
-        string parentId = user.UserId;
-        ChildForm.SetParentId(parentId);
-        ChildForm.SetContinueAction(OnContinue);
+        UIManager.ShowDisclaimer();
     }
 
     private void OnDebugLogin()
     {
         UIManager.SetParentInfo("test@gmail.com", "Test User");
-
-        string parentId = "AwgdI1xsu5RoU6zgLvTfAZeklbn2";
-        ChildForm.SetParentId(parentId);
-        ChildForm.SetContinueAction(OnContinue);
-    }
-
-    private void OnContinue(ChildModel child)
-    {
-        bool valid = ChildModel.Validate(child);
-
-        if (!valid)
-        {
-            Debug.LogError("Validation failed for ChildModel fields.");
-            return;
-        }
-
-        Debug.Log("Child Model is valid.");
-        Debug.Log("ChildModel JSON: " + child.ToJson());
-        StartCoroutine(SendChildData(child));
-    }
-
-    IEnumerator SendChildData(ChildModel data)
-    {
-        static void onComplete(bool success)
-        {
-            string message = success
-                ? "Les dades del nen s'han enviat correctament."
-                : "Hi ha hagut un error en enviar les dades del nen. Si us plau, torna-ho a intentar més tard.";
-
-            Debug.Log("Msg::::: " + message);
-
-            // modal.Show(
-            //     success ? "Èxit" : "Error",
-            //     message,
-            //     success ? () => SceneManager.LoadScene("MapPathScene") : () => { }
-            // );
-        }
-
-        yield return new ChildService().SendChildData(data, onComplete);
+        UIManager.ShowDisclaimer();
     }
 }

@@ -35,25 +35,25 @@ public class UIManager : MonoBehaviour
         DisclaimerPanel.SetActive(false);
     }
 
-    private void ShowLogin()
+    public void ShowLogin()
     {
         HideAllPanels();
         LoginPanel.SetActive(true);
     }
 
-    private void ShowRegister()
+    public void ShowRegister()
     {
         HideAllPanels();
         RegisterChildPanel.SetActive(true);
     }
 
-    private void ShowDisclaimer()
+    public void ShowDisclaimer()
     {
         HideAllPanels();
         DisclaimerPanel.SetActive(true);
     }
 
-    private void ShowUserChildren()
+    public void ShowUserChildren()
     {
         HideAllPanels();
         UserChildrenPanel.SetActive(true);

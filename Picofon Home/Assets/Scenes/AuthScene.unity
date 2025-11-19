@@ -1104,7 +1104,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 929300374}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: LoginWithGoogle, Assembly-CSharp
         m_MethodName: DebugLogin
         m_Mode: 1
@@ -1363,9 +1363,9 @@ RectTransform:
   - {fileID: 304007498}
   m_Father: {fileID: 720522705}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 810, y: -100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 450, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &164450330
@@ -1802,10 +1802,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1684198826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -865.015}
-  m_SizeDelta: {x: 920, y: 1170.01}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &223064237
 MonoBehaviour:
@@ -2850,9 +2850,9 @@ RectTransform:
   - {fileID: 4196812}
   m_Father: {fileID: 720522705}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 270, y: -100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 450, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &299925526
@@ -5386,9 +5386,9 @@ RectTransform:
   - {fileID: 164450329}
   m_Father: {fileID: 941358964}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -2103.005}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1080, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &720522706
@@ -7009,10 +7009,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1684198826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -80}
-  m_SizeDelta: {x: 920, y: 150.01}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &870082322
 MonoBehaviour:
@@ -7518,53 +7518,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 914483143}
   m_CullTransparentMesh: 1
---- !u!1 &929300373
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 929300375}
-  - component: {fileID: 929300374}
-  m_Layer: 0
-  m_Name: Login Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &929300374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 929300373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd94b5fcf23344cdab20f047ec0e412a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GoogleAPI: 1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com
-  ChildForm: {fileID: 1708594604}
-  UIManager: {fileID: 1611279578}
---- !u!4 &929300375
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 929300373}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &933790979
 GameObject:
   m_ObjectHideFlags: 0
@@ -7825,13 +7778,14 @@ GameObject:
   - component: {fileID: 941358964}
   - component: {fileID: 941358966}
   - component: {fileID: 941358965}
+  - component: {fileID: 941358967}
   m_Layer: 5
   m_Name: Panel Disclaimer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &941358964
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7888,6 +7842,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 941358963}
   m_CullTransparentMesh: 1
+--- !u!114 &941358967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941358963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b2b303a95b8a66809455e9020cd6eef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UIManager: {fileID: 1611279578}
+  AcceptButton: {fileID: 299925526}
+  DeclineButton: {fileID: 164450330}
 --- !u!1 &966726363
 GameObject:
   m_ObjectHideFlags: 0
@@ -8429,7 +8398,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 929300374}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: LoginWithGoogle, Assembly-CSharp
         m_MethodName: Login
         m_Mode: 1
@@ -8516,6 +8485,7 @@ GameObject:
   - component: {fileID: 1039029302}
   - component: {fileID: 1039029304}
   - component: {fileID: 1039029305}
+  - component: {fileID: 1039029306}
   m_Layer: 5
   m_Name: Panel Login
   m_TagString: Untagged
@@ -8578,6 +8548,21 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1039029306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1039029301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 796c2c91cbdaea4489babbbb437f04f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UIManager: {fileID: 1611279578}
+  LoginButton: {fileID: 1031013743}
+  DebugSignInButton: {fileID: 95402053}
 --- !u!1 &1051406437
 GameObject:
   m_ObjectHideFlags: 0
@@ -10606,9 +10591,9 @@ RectTransform:
   - {fileID: 2052427838}
   m_Father: {fileID: 941358964}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -278}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1080, y: 150.01001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1279422085
@@ -13583,9 +13568,9 @@ RectTransform:
   - {fileID: 223064236}
   m_Father: {fileID: 941358964}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -1953.005}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1080, y: 1550}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1684198827
@@ -15807,10 +15792,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1279422084}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 125, y: -150.01001}
-  m_SizeDelta: {x: 830, y: 100.01}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100.01}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &2052427839
 MonoBehaviour:
@@ -16099,6 +16084,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf0a1b3cc753490619650d2cb61c40d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UIManager: {fileID: 1611279578}
   childrenDropdown: {fileID: 341550861}
 --- !u!1 &2088620078
 GameObject:
@@ -16446,6 +16432,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 643617528}
   - {fileID: 1770898598}
-  - {fileID: 929300375}
   - {fileID: 1611279576}
   - {fileID: 941148679}
