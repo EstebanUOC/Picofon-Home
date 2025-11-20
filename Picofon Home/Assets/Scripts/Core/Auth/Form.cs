@@ -13,8 +13,6 @@ public class Form : MonoBehaviour
     public TMP_InputField ChildSchoolField;
     public TMP_Dropdown ChildGradeField;
 
-    // public TMP_Dropdown AgeField;
-
     [Header("Birthdate")]
     public TMP_InputField BirthDayField;
     public TMP_InputField BirthMonthField;
@@ -52,13 +50,47 @@ public class Form : MonoBehaviour
         ParentId = parentId;
     }
 
-    public void SetContinueAction(Action<ChildModel> action)
+    public ChildCreateDTO GatherChildData()
     {
-        ContinueButton.onClick.RemoveAllListeners();
-        ContinueButton.onClick.AddListener(() =>
+        string id = ChildIDField.text.Trim();
+        string firstName = ChildNameField.text.Trim();
+        string lastName = ChildLastNameField.text.Trim();
+
+        string year = BirthYearField.text.Trim();
+        string month = BirthMonthField.text.Trim().PadLeft(2, '0');
+        string day = BirthDayField.text.Trim().PadLeft(2, '0');
+        string birthDate = $"{year}-{month}-{day}";
+
+        string school = ChildSchoolField.text.Trim();
+
+        int grade = ChildGradeField.value + 1;
+
+        IEnumerable toggles = DisorderToggleGroup.ActiveToggles();
+
+        string disorder = "No";
+        foreach (Toggle toggle in toggles)
         {
-            action.Invoke(GatherChildData());
-        });
+            if (toggle.name == "Other")
+            {
+                disorder = OtherInput != null ? OtherInput.text : string.Empty;
+            }
+            disorder = toggle.name;
+        }
+
+        ChildCreateDTO child = new()
+        {
+            FirstName = firstName,
+            LastName = lastName,
+            BirthDate = birthDate,
+            Disorder = disorder,
+            School = school,
+            Grade = grade,
+            CenterId = 1,
+            OwnerId = ParentId,
+            Id = id,
+        };
+
+        return child;
     }
 
     private void InitComponents()
@@ -146,47 +178,5 @@ public class Form : MonoBehaviour
         bool allValid =
             inputGroupValid && toogleGroupValid && birthdateGroupValid && schoolGroupValid;
         ContinueButton.interactable = allValid;
-    }
-
-    private ChildModel GatherChildData()
-    {
-        string id = ChildIDField.text.Trim();
-        string firstName = ChildNameField.text.Trim();
-        string lastName = ChildLastNameField.text.Trim();
-
-        string year = BirthYearField.text.Trim();
-        string month = BirthMonthField.text.Trim().PadLeft(2, '0');
-        string day = BirthDayField.text.Trim().PadLeft(2, '0');
-        string birthDate = $"{year}-{month}-{day}";
-
-        string school = ChildSchoolField.text.Trim();
-
-        int grade = ChildGradeField.value + 1;
-
-        IEnumerable toggles = DisorderToggleGroup.ActiveToggles();
-
-        string disorder = "No";
-        foreach (Toggle toggle in toggles)
-        {
-            if (toggle.name == "Other")
-            {
-                disorder = OtherInput != null ? OtherInput.text : string.Empty;
-            }
-            disorder = toggle.name;
-        }
-
-        ChildModel child = new()
-        {
-            FirstName = firstName,
-            LastName = lastName,
-            BirthDate = birthDate,
-            Disorder = disorder,
-            School = school,
-            Grade = grade,
-            CenterId = 1,
-            OwnerId = ParentId,
-            Id = id,
-        };
-        return child;
     }
 }

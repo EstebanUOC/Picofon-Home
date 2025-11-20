@@ -20,23 +20,13 @@ public class RegisterChild : MonoBehaviour
 
         EmailText.text = parentData.Email;
         UsernameText.text = parentData.Username;
+        ChildRegistrationForm.SetParentId(parentData.Id);
+
+        ContinueButton.onClick.AddListener(OnContinue);
     }
 
     private void OnContinue()
     {
-        // string parentEmail = EmailText.text;
-        // string parentUsername = UsernameText.text;
-        //
-        // if (string.IsNullOrEmpty(parentEmail) || string.IsNullOrEmpty(parentUsername))
-        // {
-        //     Debug.LogWarning("⚠️ Parent email or username is empty.");
-        //     return;
-        // }
-        //
-        // // Here you would typically validate the email format and username
-        // Debug.Log($"🚀 Registering child for parent: {parentUsername} ({parentEmail})");
-        //
-        // // Proceed to the next step in registration
-        // UIManager.ShowNextPanel();
+        ChildCreateDTO childData = ChildRegistrationForm.GatherChildData();
     }
 }

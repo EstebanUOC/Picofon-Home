@@ -1,26 +1,24 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class UserService
 {
-    private const string BaseUrl = "https://api.example.com/users";
+    private const string BaseUrl =
+        "https://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/children/owner/";
 
     public async Task<List<ChildListItemDTO>> GetUserChildren(
         string userId,
         CancellationTokenSource cts
     )
     {
-        string url = $"{BaseUrl}/{userId}?active=true";
+        string url = $"{BaseUrl}/{userId}?is_active=true";
 
-        // Simulate list
-        await Task.Delay(5000, cts.Token);
-        List<ChildListItemDTO> simulatedList = new()
-        {
-            new ChildListItemDTO { Id = "child1", Name = "Alice" },
-            new ChildListItemDTO { Id = "child2", Name = "Bob" },
-        };
+        string textRaw = await HttpClientUnity.GetAsync(url, cancellationToken: cts.Token);
+        Debug.Log($"GetUserChildren response: {textRaw}");
+        UserChildrenResponse response = JsonHelper.FromJson<UserChildrenResponse>(textRaw);
 
-        return simulatedList;
+        return response.Data;
     }
 }

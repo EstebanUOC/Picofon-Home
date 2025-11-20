@@ -16,9 +16,13 @@ public class UserChildren : MonoBehaviour
 
     public void Start()
     {
-        LoadChildren();
         SelectChildButton.onClick.AddListener(OnSelectChild);
         RegisterChildButton.onClick.AddListener(OnRegisterChild);
+    }
+
+    public void Initialize()
+    {
+        LoadChildren();
     }
 
     private async void LoadChildren()
@@ -33,7 +37,8 @@ public class UserChildren : MonoBehaviour
         childrenDropdown.ClearOptions();
         foreach (var child in children)
         {
-            TMP_Dropdown.OptionData option = new(child.Name);
+            string fullName = child.FirstName + " " + child.LastName;
+            TMP_Dropdown.OptionData option = new(fullName);
             childrenDropdown.options.Add(option);
         }
         childrenDropdown.RefreshShownValue();

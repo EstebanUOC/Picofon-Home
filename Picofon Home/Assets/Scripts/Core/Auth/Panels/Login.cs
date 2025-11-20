@@ -138,7 +138,7 @@ public class Login : MonoBehaviour
     {
         UserDataDTO debugUser = new()
         {
-            Id = "debug_user_001",
+            Id = "AwgdI1xsu5RoU6zgLvTfAZeklbn2",
             Email = "test@gmail.com",
             Username = "Debug User",
         };
