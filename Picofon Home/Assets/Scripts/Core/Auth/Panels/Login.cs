@@ -123,13 +123,27 @@ public class Login : MonoBehaviour
 
     private void OnLoginSuccess(FirebaseUser user)
     {
-        UIManager.SetParentInfo(user.Email, user.DisplayName);
+        UserDataDTO userData = new()
+        {
+            Id = user.UserId,
+            Email = user.Email,
+            Username = user.DisplayName,
+        };
+
+        UIManager.User = userData;
         UIManager.ShowDisclaimer();
     }
 
     private void OnDebugLogin()
     {
-        UIManager.SetParentInfo("test@gmail.com", "Test User");
+        UserDataDTO debugUser = new()
+        {
+            Id = "debug_user_001",
+            Email = "test@gmail.com",
+            Username = "Debug User",
+        };
+
+        UIManager.User = debugUser;
         UIManager.ShowDisclaimer();
     }
 }
