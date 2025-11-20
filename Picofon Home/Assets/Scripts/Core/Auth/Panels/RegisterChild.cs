@@ -27,7 +27,7 @@ public class RegisterChild : Panel
 
         EmailText.text = parentData.Email;
         UsernameText.text = parentData.Username;
-        ChildRegistrationForm.SetParentId(parentData.Id);
+        ChildRegistrationForm.ParentId = parentData.Id;
     }
 
     private async void OnContinue()
