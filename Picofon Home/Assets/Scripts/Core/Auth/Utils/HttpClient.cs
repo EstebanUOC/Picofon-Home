@@ -31,6 +31,38 @@ public static class HttpClientUnity
         return request.downloadHandler.text;
     }
 
+    public static async Task<string> PostAsync(
+        string url,
+        string data,
+        int timeoutSeconds = 10,
+        CancellationToken cancellationToken = default
+    )
+    {
+        using var request = new UnityWebRequest(url, "POST");
+
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(data);
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        request.timeout = timeoutSeconds;
+
+        var op = request.SendWebRequest();
+
+        cancellationToken.Register(() =>
+        {
+            if (!request.isDone)
+                request.Abort();
+        });
+
+        await AwaitRequest(op, cancellationToken);
+
+        if (request.result != UnityWebRequest.Result.Success)
+            throw new Exception($"HTTP POST Error: {request.error} | URL: {url}");
+
+        return request.downloadHandler.text;
+    }
+
     private static Task AwaitRequest(UnityWebRequestAsyncOperation op, CancellationToken ct)
     {
         var tcs = new TaskCompletionSource<bool>();

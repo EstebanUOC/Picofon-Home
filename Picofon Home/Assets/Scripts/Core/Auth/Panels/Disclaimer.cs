@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Disclaimer : MonoBehaviour
+public class Disclaimer : Panel
 {
     public UIManager UIManager;
 
