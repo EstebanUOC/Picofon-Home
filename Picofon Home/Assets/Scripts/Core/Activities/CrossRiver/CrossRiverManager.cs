@@ -133,9 +133,9 @@ public class CrossRiverManager : MonoBehaviour
             yield break;
         }
 
-        yield return apiService.LoadActivity(mode,
-            json => LoadMode(mode, json),
-            err => Debug.LogError(err));
+      //  yield return apiService.LoadActivity(mode,
+      //       json => LoadMode(mode, json),
+      //      err => Debug.LogError(err));
     }
 
     public void LoadMode(int mode, string json)

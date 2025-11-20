@@ -21,7 +21,7 @@ public abstract class ActivityBaseManager : MonoBehaviour
             return;
         }
 
-        StartCoroutine(api.LoadActivity(mode, OnJsonLoaded, OnError));
+       // StartCoroutine(api.LoadActivity(mode, OnJsonLoaded, OnError));
     }
 
     protected abstract void OnJsonLoaded(string json);

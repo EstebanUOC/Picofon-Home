@@ -3,69 +3,82 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
-/// <summary>
-/// 🌐 Servicio centralizado para cargar actividades desde la API.
-/// Compatible con todos los modos (Judge, Relate, Create, Select).
-/// </summary>
 public class GameAPIService : MonoBehaviour
 {
-    // ============================================================
-    // 🔗 URL base del nuevo servidor HTTPS
-    // ============================================================
     private const string BASE_URL = "https://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/questions/";
 
-    // ============================================================
-    // 📚 Endpoints por modo (orden: 0=Judge, 1=Select, 2=Relate, 3=Create)
-    // ============================================================
-    private readonly string[] MODE_ENDPOINTS = {
-        "32/87654321X",   // 🧠 JUDGE
-        "34/87654321X",  // 🎯 SELECT
-        "9/1805359203",   // 🔗 RELATE
-        "10/1805359203"    // ✍️ CREATE
-    };
-
-    // ============================================================
-    // 🟢 Cargar actividad según el modo de juego
-    // ============================================================
-    public IEnumerator LoadActivity(int mode, Action<string> onSuccess, Action<string> onError = null)
+    public IEnumerator LoadActivity(Action<string> onSuccess, Action<string> onError = null)
     {
-        // Ajusta el índice para evitar errores fuera de rango
-        mode = Mathf.Clamp(mode, 0, MODE_ENDPOINTS.Length - 1);
-        string url = BASE_URL + MODE_ENDPOINTS[mode];
+        // 🔍 Obtener el TherapyPlan actual desde LevelDataStore
+        int currentPlanId = LevelPayload.PlanId;
+        TherapyPlan currentPlan = LevelDataStore.Instance.GetLevelPlan(currentPlanId);
 
-        Debug.Log($"🌐 Solicitando datos del modo {mode} → {url}");
+        if (currentPlan == null)
+        {
+            string errorMsg = "❌ No se pudo obtener el TherapyPlan actual";
+            Debug.LogError(errorMsg);
+            onError?.Invoke(errorMsg);
+            yield break;
+        }
+
+        // 🎯 CORREGIDO: Usar el ID del plan de terapia (32) no el template ID (10)
+        string therapyPlanId = currentPlan.Id.ToString(); // 🔥 CAMBIADO: currentPlan.Id en lugar de currentPlan.TherapyTemplateId
+        string childId = currentPlan.ChildId;
+        string url = BASE_URL + therapyPlanId + "/" + childId;
+
+        Debug.Log($"🌐 Solicitando datos del plan {currentPlanId} → {url}");
+        Debug.Log($"📋 Modo de juego: {currentPlan.TherapyTemplate?.TaskTypeId} - {currentPlan.TherapyTemplate?.TaskTypeName}");
 
         using (UnityWebRequest req = UnityWebRequest.Get(url))
         {
-            // Desactiva validación SSL solo si el servidor tiene certificado autofirmado
             req.certificateHandler = new BypassCertificate();
-            req.timeout = 15; // segundos
+            req.timeout = 15;
 
             yield return req.SendWebRequest();
 
             if (req.result == UnityWebRequest.Result.Success && req.responseCode == 200)
             {
                 string json = req.downloadHandler.text;
-                Debug.Log($"✅ Respuesta recibida (modo {mode}) — longitud: {json.Length}");
+                Debug.Log($"✅ Respuesta recibida (plan {currentPlanId}) — longitud: {json.Length}");
+                
+                // Log the actual JSON to see what we're getting
+                Debug.Log($"📄 JSON Response: {json}");
+                
                 onSuccess?.Invoke(json);
             }
             else
             {
-                string errorMsg = $"❌ Error al solicitar modo {mode}: {req.error} (HTTP {req.responseCode})";
+                string errorMsg = $"❌ Error al solicitar plan {currentPlanId}: {req.error} (HTTP {req.responseCode})";
                 Debug.LogError(errorMsg);
+                
+                // Log the response body even for errors
+                if (req.downloadHandler != null && !string.IsNullOrEmpty(req.downloadHandler.text))
+                {
+                    Debug.LogError($"📄 Error Response: {req.downloadHandler.text}");
+                }
+                
                 onError?.Invoke(errorMsg);
             }
         }
     }
 
-    // ============================================================
-    // 🧩 Clase auxiliar — Desactiva verificación SSL para entornos de prueba
-    // ============================================================
+    public int GetCurrentTaskType()
+    {
+        int currentPlanId = LevelPayload.PlanId;
+        TherapyPlan currentPlan = LevelDataStore.Instance.GetLevelPlan(currentPlanId);
+        
+        if (currentPlan?.TherapyTemplate != null)
+        {
+            return currentPlan.TherapyTemplate.TaskTypeId;
+        }
+        
+        return 1; // Default to Judge if no plan found
+    }
+
     private class BypassCertificate : CertificateHandler
     {
         protected override bool ValidateCertificate(byte[] certificateData)
         {
-            // ⚠️ IMPORTANTE: usar solo para desarrollo (no en producción)
             return true;
         }
     }

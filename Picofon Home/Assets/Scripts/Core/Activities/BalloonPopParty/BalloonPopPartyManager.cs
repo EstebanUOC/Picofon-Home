@@ -84,9 +84,9 @@ public class BalloonPopPartyManager : MonoBehaviour
             yield break;
         }
 
-        yield return apiService.LoadActivity(mode,
-            json => LoadMode(mode, json),
-            err => Debug.LogError(err));
+       // yield return apiService.LoadActivity(mode,
+       //     json => LoadMode(mode, json),
+       //     err => Debug.LogError(err));
     }
 
     // ============================================================

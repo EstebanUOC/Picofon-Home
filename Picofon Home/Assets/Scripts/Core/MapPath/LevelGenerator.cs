@@ -62,6 +62,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
                     foreach (var plan in plans)
                     {
                         store.RegisterPlan(plan);
+                        Debug.Log($" plan to be registered {plan}");
                     }
 
                     GenerateMap(plans);
@@ -113,5 +114,6 @@ public class PortraitLevelMapGenerator : MonoBehaviour
     {
         LevelPayload.PlanId = planId;
         UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+        Debug.Log($" LevelPayload.PlanId {LevelPayload.PlanId}");
     }
 }

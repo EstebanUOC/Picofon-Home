@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System; // 🔥 ADD THIS for Exception class
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -7,103 +8,139 @@ using Picofon.Games.Judge;
 
 public class BalloonPopSeaManager : MonoBehaviour
 {
-    [Header("🎮 Botones Top Modes")]
-    [SerializeField] private Button buttonMode0;
-    [SerializeField] private Button buttonMode1;
-    [SerializeField] private Button buttonMode2;
-
-
-
     [Header("🫧 Burbujas")]
     [SerializeField] private Transform bubbleContainerHorizontal1;
     [SerializeField] private Transform bubbleContainerHorizontal2;
-
     [SerializeField] private GameObject bubblePrefab;
 
-    [Header("✅ Botones Sí / No")]
+    [Header("✅ Botones Sí / No (solo para modo Judge)")]
     [SerializeField] private Button buttonYes;
     [SerializeField] private Button buttonNo;
 
     [Header("⭐ Feedback Panel")]
     [SerializeField] private FeedbackPanelController feedbackController;
 
-    [Header("🌐 API (BalloonPopSeaAPI)")]
-    [SerializeField] private GameAPIService balloonPopAPI;   // 🔥 API asignable desde el inspector
+    [Header("🌐 API Service")]
+    [SerializeField] private GameAPIService balloonPopAPI;
 
     private ActivityJudge currentActivity;
     private readonly List<GameObject> spawnedBubbles = new();
-    private int currentMode = 0; // siempre Judge por ahora
-    private Picofon.Games.Relate.ActivityRelate currentRelateActivity; // ✅ AGREGA ESTA VARIABLE ARRIBA
+    private int currentTaskType = 1; // 🔥 1=Judge, 2=Select, 3=Relate (from TherapyPlan)
+    private Picofon.Games.Relate.ActivityRelate currentRelateActivity;
 
     private void Start()
     {
         if (balloonPopAPI == null)
         {
-            Debug.LogError("❌ No se asignó BalloonPopSeaAPI (GameAPIService) en el inspector.");
+            Debug.LogError("❌ No se asignó GameAPIService en el inspector.");
             return;
         }
 
-        // 🎮 Listeners de modos
-        // 🎮 Listeners correctos para los modos
-        buttonMode0.onClick.AddListener(() => ChangeMode(0)); // Judge
-        buttonMode1.onClick.AddListener(() => ChangeMode(1)); // Select
-        buttonMode2.onClick.AddListener(() => ChangeMode(2)); // Relate 
+        // 🎯 Obtener el tipo de tarea del TherapyPlan actual
+        currentTaskType = balloonPopAPI.GetCurrentTaskType();
+        Debug.Log($"🎮 Tipo de tarea detectado: {currentTaskType}");
 
-
-        // ✅ Iniciar automáticamente en modo 0 (Judge)
-        ChangeMode(0);
+        // ✅ Iniciar automáticamente la actividad
+        LoadCurrentActivity();
     }
 
-    private void ChangeMode(int mode)
+    // ============================================================
+    // 🔥 NEW METHOD - Load activity based on TherapyPlan
+    // ============================================================
+    private void LoadCurrentActivity()
     {
-        currentMode = mode;
-
-        Debug.Log($"🔄 Cambiando modo BalloonPop a {mode}");
+        Debug.Log($"🔄 Cargando actividad para tipo de tarea: {currentTaskType}");
 
         StartCoroutine(balloonPopAPI.LoadActivity(
-            currentMode,
-            json => LoadMode(mode, json),
+            json => ProcessActivityResponse(json),
             err => Debug.LogError(err)
         ));
     }
 
-
-    public void LoadMode(int mode, string json)
+    // ============================================================
+    // 🔥 UPDATED METHOD - Process response based on current task type
+    // ============================================================
+    private void ProcessActivityResponse(string json)
     {
-        currentMode = mode;
+        try
+        {
+            if (string.IsNullOrEmpty(json))
+            {
+                Debug.LogError("❌ JSON response is null or empty");
+                return;
+            }
 
-        if (mode == 0) // Judge
-        {
-            var data = JsonUtility.FromJson<ApiResponseJudge>(json);
-            LoadJudgeMode(data.data.activity1);
+            Debug.Log($"📄 Processing JSON: {json}");
+
+            switch (currentTaskType)
+            {
+                case 1: // Judge
+                    var judgeData = JsonUtility.FromJson<Picofon.Games.Judge.ApiResponseJudge>(json); // 🔥 USE FULL NAMESPACE
+                    if (judgeData?.data?.activity1 != null)
+                    {
+                        LoadJudgeMode(judgeData.data.activity1);
+                        Debug.Log($"✅ Successfully loaded Judge activity: {judgeData.data.activity1.word1.word} vs {judgeData.data.activity1.word2.word}");
+                    }
+                    else
+                    {
+                        Debug.LogError("❌ Datos Judge inválidos o nulos");
+                        if (judgeData != null)
+                        {
+                            Debug.LogError($"🔍 Judge Data Structure - Success: {judgeData.success}, Data: {judgeData.data != null}, Activity1: {judgeData.data?.activity1 != null}");
+                        }
+                    }
+                    break;
+                    
+                case 2: // Select
+                    var selectData = JsonUtility.FromJson<Picofon.Games.Select.ApiResponseSelect>(json);
+                    if (selectData?.data?.activity1 != null)
+                    {
+                        LoadSelectMode(selectData.data.activity1);
+                    }
+                    else
+                    {
+                        Debug.LogError("❌ Datos Select inválidos o nulos");
+                    }
+                    break;
+                    
+                case 3: // Relate
+                    var relateData = JsonUtility.FromJson<Picofon.Games.Relate.ApiResponseRelate>(json);
+                    if (relateData?.data?.activity1 != null)
+                    {
+                        LoadRelateMode(relateData.data.activity1);
+                    }
+                    else
+                    {
+                        Debug.LogError("❌ Datos Relate inválidos o nulos");
+                    }
+                    break;
+                    
+                default:
+                    Debug.LogError($"❌ Tipo de tarea no soportado: {currentTaskType}");
+                    break;
+            }
         }
-        else if (mode == 1) // Select
+        catch (Exception e)
         {
-            var data = JsonUtility.FromJson<Picofon.Games.Select.ApiResponseSelect>(json);
-            LoadSelectMode(data.data.activity1);
-        }
-        else if (mode == 2) // Relate
-        {
-            var data = JsonUtility.FromJson<Picofon.Games.Relate.ApiResponseRelate>(json);
-            LoadRelateMode(data.data.activity1);
+            Debug.LogError($"❌ Error procesando respuesta JSON: {e.Message}");
+            Debug.LogError($"🔍 Stack trace: {e.StackTrace}");
+            Debug.LogError($"📄 Problematic JSON: {json}");
         }
     }
 
 
-
+    // ======================
+    // 🧠 MODO JUDGE (1)
+    // ======================
     private void LoadJudgeMode(ActivityJudge activity)
     {
         currentActivity = activity;
 
-        // ✅ Volver a mostrar botones Sí/No
+        // ✅ Mostrar botones Sí/No solo para Judge
         buttonYes.gameObject.SetActive(true);
         buttonNo.gameObject.SetActive(true);
-
-        // ✅ Habilitar raycast otra vez
         buttonYes.GetComponent<Image>().raycastTarget = true;
         buttonNo.GetComponent<Image>().raycastTarget = true;
-
-        // También por seguridad en el botón
         buttonYes.interactable = true;
         buttonNo.interactable = true;
 
@@ -123,19 +160,17 @@ public class BalloonPopSeaManager : MonoBehaviour
     }
 
     // ======================
-    // 🎯 MODO SELECT (1)
+    // 🎯 MODO SELECT (2)
     // ======================
     private void LoadSelectMode(Picofon.Games.Select.ActivitySelect activity)
     {
         ClearBubbles();
 
-        // ✅ Ocultar botones Sí/No y quitar raycast
+        // ❌ Ocultar botones Sí/No para Select
         buttonYes.gameObject.SetActive(false);
         buttonNo.gameObject.SetActive(false);
-
         buttonYes.GetComponent<Image>().raycastTarget = false;
         buttonNo.GetComponent<Image>().raycastTarget = false;
-
         buttonYes.interactable = false;
         buttonNo.interactable = false;
 
@@ -164,7 +199,7 @@ public class BalloonPopSeaManager : MonoBehaviour
     }
 
     // ======================
-    // 🔗 MODO RELATE (2)
+    // 🔗 MODO RELATE (3)
     // ======================
     private void LoadRelateMode(Picofon.Games.Relate.ActivityRelate activity)
     {
@@ -178,8 +213,13 @@ public class BalloonPopSeaManager : MonoBehaviour
 
         currentRelateActivity = activity;
 
+        // ❌ Ocultar botones Sí/No para Relate
         buttonYes.gameObject.SetActive(false);
         buttonNo.gameObject.SetActive(false);
+        buttonYes.GetComponent<Image>().raycastTarget = false;
+        buttonNo.GetComponent<Image>().raycastTarget = false;
+        buttonYes.interactable = false;
+        buttonNo.interactable = false;
 
         var layout = bubbleContainerHorizontal2.GetComponent<HorizontalLayoutGroup>();
         if (layout != null) layout.spacing = 150f;
@@ -248,27 +288,9 @@ public class BalloonPopSeaManager : MonoBehaviour
             );
 
             if (isCorrect)
-                StartCoroutine(NextActivity_Relate());
+                StartCoroutine(NextActivity());
         });
     }
-
-
-    private IEnumerator NextActivity_Relate()
-    {
-        yield return new WaitForSeconds(2.2f);
-
-        StartCoroutine(balloonPopAPI.LoadActivity(
-            currentMode,
-            json =>
-            {
-                var data = JsonUtility.FromJson<Picofon.Games.Relate.ApiResponseRelate>(json);
-                LoadRelateMode(data.data.activity1);
-            },
-            err => Debug.LogError(err)
-        ));
-    }
-
-
 
     private void CreateSelectBubble(
     (Sprite sprite, string word, string syll, bool correct) option,
@@ -301,7 +323,7 @@ public class BalloonPopSeaManager : MonoBehaviour
                     activity.main_word.syllabified_word
                 );
 
-                StartCoroutine(NextActivity_Select());
+                StartCoroutine(NextActivity());
             }
             else
             {
@@ -321,7 +343,7 @@ public class BalloonPopSeaManager : MonoBehaviour
                 neutralList.RemoveAll(o => o.sprite == correctSprite);
 
                 // 🎯 Seleccionar una incorrecta aleatoria
-                var randomOther = neutralList[Random.Range(0, neutralList.Count)];
+                var randomOther = neutralList[UnityEngine.Random.Range(0, neutralList.Count)];
 
                 // ✅ Feedback Neutral: seleccionada + otra incorrecta
                 feedbackController.ShowFeedback(
@@ -334,29 +356,6 @@ public class BalloonPopSeaManager : MonoBehaviour
             }
         });
     }
-
-
-    private IEnumerator NextActivity_Select()
-    {
-        yield return new WaitForSeconds(2.2f);
-
-        StartCoroutine(balloonPopAPI.LoadActivity(
-            currentMode,
-            json => LoadMode(1, json),
-            err => Debug.LogError(err)
-        ));
-    }
-    private void Shuffle<T>(List<T> list)
-    {
-        for (int i = 0; i < list.Count; i++)
-        {
-            T temp = list[i];
-            int randomIndex = Random.Range(i, list.Count);
-            list[i] = list[randomIndex];
-            list[randomIndex] = temp;
-        }
-    }
-
 
     private void Answer(bool guess)
     {
@@ -373,36 +372,31 @@ public class BalloonPopSeaManager : MonoBehaviour
             currentActivity.word2.syllabified_word
         );
 
-        StartCoroutine(NextActivity(correct));
-
+        if (correct)
+        {
+            StartCoroutine(NextActivity());
+        }
     }
 
-    private IEnumerator NextActivity(bool correct)
+    // ============================================================
+    // 🔥 UPDATED - Single NextActivity method for all task types
+    // ============================================================
+    private IEnumerator NextActivity()
     {
         yield return new WaitForSeconds(2.2f);
-
-        if (!correct) yield break; // ❌ No avanzar si estuvo mal
-
-        StartCoroutine(balloonPopAPI.LoadActivity(
-            currentMode,
-            json => LoadMode(0, json),
-            err => Debug.LogError(err)
-        ));
+        LoadCurrentActivity();
     }
-
 
     private void CreateBubble(Sprite sprite)
     {
         Transform targetContainer = bubbleContainerHorizontal1;
 
         // 📌 Para futuros modos (Select/Relate)
-        if (currentMode != 0)
+        if (currentTaskType != 1) // 🔥 1 = Judge
             targetContainer = bubbleContainerHorizontal2;
 
         GameObject b = Instantiate(bubblePrefab, targetContainer);
         spawnedBubbles.Add(b);
-
-
 
         Image img = b.transform.Find("Image").GetComponent<Image>();
         if (img == null)
@@ -414,13 +408,10 @@ public class BalloonPopSeaManager : MonoBehaviour
         img.sprite = sprite;
         img.preserveAspect = true;
 
-        if (img) img.sprite = sprite;
-
         Button btn = b.GetComponentInChildren<Button>();
         if (btn) btn.interactable = false;
         b.transform.localScale = Vector3.one;
         b.transform.localRotation = Quaternion.identity;
-
     }
 
     private void ClearBubbles()
@@ -439,7 +430,17 @@ public class BalloonPopSeaManager : MonoBehaviour
 
         return s;
     }
+
+    private void Shuffle<T>(List<T> list)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            T temp = list[i];
+            int randomIndex = UnityEngine.Random.Range(i, list.Count);
+            list[i] = list[randomIndex];
+            list[randomIndex] = temp;
+        }
+    }
 }
 
-[System.Serializable] public class ApiResponseJudge { public JudgeData data; }
-[System.Serializable] public class JudgeData { public ActivityJudge activity1; }
+

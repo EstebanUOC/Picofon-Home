@@ -30,7 +30,7 @@ public class CrossRiverGameManager : MonoBehaviour
         }
 
         Debug.Log($"🌐 Solicitando actividades del modo {currentMode} (Judge)...");
-        StartCoroutine(api.LoadActivity(currentMode, OnJsonLoaded, OnError));
+        //StartCoroutine(api.LoadActivity(currentMode, OnJsonLoaded, OnError));
     }
 
     /// <summary>

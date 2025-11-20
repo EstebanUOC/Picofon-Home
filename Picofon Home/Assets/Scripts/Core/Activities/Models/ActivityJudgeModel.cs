@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Picofon.Games.Judge
@@ -53,14 +53,14 @@ namespace Picofon.Games.Judge
         public ActivityJudge activity3;
         public ActivityJudge activity4;
         public ActivityJudge activity5;
-        public AvailabilityInfo availability_info;
+        public AvailabilityInfo availability_info; // 🔥 ADD THIS
     }
 
     [Serializable]
     public class ApiResponseJudge
     {
-        public bool success;
-        public MessageData message;
+        public bool success; // 🔥 ADD THIS
+        public MessageData message; // 🔥 ADD THIS
         public DataJudge data;
     }
 }
