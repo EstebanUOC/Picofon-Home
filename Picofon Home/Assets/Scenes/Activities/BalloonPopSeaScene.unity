@@ -819,16 +819,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5a64a920c06f38e7916aa03c21fdd89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonMode0: {fileID: 0}
-  buttonMode1: {fileID: 0}
-  buttonMode2: {fileID: 0}
-  bubbleContainerHorizontal1: {fileID: 0}
-  bubbleContainerHorizontal2: {fileID: 0}
-  bubblePrefab: {fileID: 0}
-  buttonYes: {fileID: 0}
-  buttonNo: {fileID: 0}
-  feedbackController: {fileID: 0}
-  balloonPopAPI: {fileID: 0}
+  buttonMode0: {fileID: 1812669796}
+  buttonMode1: {fileID: 782371062}
+  buttonMode2: {fileID: 198470518}
+  bubbleContainerHorizontal1: {fileID: 2122582203}
+  bubbleContainerHorizontal2: {fileID: 1845014092}
+  bubblePrefab: {fileID: 7750018717267140773, guid: f7d84f8145c06aa49b2ff77d3605a8f5, type: 3}
+  buttonYes: {fileID: 457695533}
+  buttonNo: {fileID: 430822535}
+  feedbackController: {fileID: 33416244}
+  balloonPopAPI: {fileID: 1242380395}
 --- !u!1 &782371060
 GameObject:
   m_ObjectHideFlags: 0
@@ -1565,6 +1565,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4963189777871428817, guid: 41505f96722200641aeca44d7f60735d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 527a5c1b3571079378b93876a1a9ccc7, type: 3}
+    - target: {fileID: 5531686447338980988, guid: 41505f96722200641aeca44d7f60735d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 926eca0e0efbfd95fbe4df2203c19fa3, type: 3}
+    - target: {fileID: 9046530012282399195, guid: 41505f96722200641aeca44d7f60735d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9a1a0243b3818fd529cf33b22942bc9b, type: 3}
     - target: {fileID: 1351965189959182413, guid: c0e8f8f5cb1669e4898b6bbb0f1512d4, type: 3}
       propertyPath: m_SizeDelta.x
       value: 250

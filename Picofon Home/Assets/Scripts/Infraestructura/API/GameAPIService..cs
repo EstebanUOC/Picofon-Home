@@ -18,8 +18,8 @@ public class GameAPIService : MonoBehaviour
     // 📚 Endpoints por modo (orden: 0=Judge, 1=Select, 2=Relate, 3=Create)
     // ============================================================
     private readonly string[] MODE_ENDPOINTS = {
-        "1/1805359203",   // 🧠 JUDGE
-        "8/1805359203",  // 🎯 SELECT
+        "32/87654321X",   // 🧠 JUDGE
+        "34/87654321X",  // 🎯 SELECT
         "9/1805359203",   // 🔗 RELATE
         "10/1805359203"    // ✍️ CREATE
     };
