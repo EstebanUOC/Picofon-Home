@@ -2442,7 +2442,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapSceneName: MapPathScene
-  currentLevelNumber: 1
 --- !u!1 &2038829625
 GameObject:
   m_ObjectHideFlags: 0

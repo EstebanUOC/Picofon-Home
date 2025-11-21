@@ -966,7 +966,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   apiService: {fileID: 394124562}
   feedbackPanel: {fileID: 1464500871}
-  balloonPrefab: {fileID: 5765348341571530215, guid: cb2f5dec76c5f9248adce8ad1625fab9, type: 3}
+  balloonPrefab: {fileID: 6887404101647062603, guid: a451fe78257b37e49899a073e5b21617, type: 3}
   container: {fileID: 563438489}
   buttonYes: {fileID: 1668776656}
   buttonNo: {fileID: 2111921645}

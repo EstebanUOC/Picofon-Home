@@ -29,11 +29,6 @@ public class CrossRiverManager : MonoBehaviour
     [SerializeField] private Image firstImage;
     [SerializeField] private Image secondImage;
 
-    [Header("🧠 Panel de feedback y pregunta")]
-    [SerializeField] private GameObject panelFeedback;
-    [SerializeField] private TMP_Text feedbackText;
-    [SerializeField] private TMP_Text questionText;
-
     [Header("📦 Botones de cambio de modo (TopButtons)")]
     [SerializeField] private Transform topButtonsContainer;
 

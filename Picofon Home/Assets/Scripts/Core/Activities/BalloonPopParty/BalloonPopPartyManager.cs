@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System; // 🔥 ADD THIS for Exception class
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -19,17 +18,21 @@ public class BalloonPopPartyManager : MonoBehaviour
     [SerializeField] private FeedbackPanelController feedbackPanel;
     [SerializeField] private GameObject balloonPrefab;
     [SerializeField] private RectTransform container;
+    [SerializeField] private Transform topButtonsContainer;
     [SerializeField] private Button buttonYes;
     [SerializeField] private Button buttonNo;
     [SerializeField] private Image imageMain; // 🔹 Referencia en el Canvas (asignar en Inspector)
     [SerializeField] private Image imageMainBack; // imagen cupcake
 
-    private ActivityJudge currentJudgeActivity;
-    private int currentTaskType = 1; // 🔥 1=Judge, 2=Select, 3=Relate (from TherapyPlan)
+    private ActivityJudge currentJudgeActivity; // Guardamos la actividad actual
 
     // 🔹 Espaciado solo para modo Judge (en píxeles)
     private const float JudgeContainerSpacing = 150f;
 
+
+
+
+    private int currentMode = 0; // 0 = Judge, 1 = Select, 2 = Relate
     private readonly List<GameObject> spawnedBalloons = new();
 
     // ============================================================
@@ -41,19 +44,38 @@ public class BalloonPopPartyManager : MonoBehaviour
         if (feedbackPanel == null)
             feedbackPanel = FindObjectOfType<FeedbackPanelController>();
 
-        // 🎯 Obtener el tipo de tarea del TherapyPlan actual
-        currentTaskType = apiService.GetCurrentTaskType();
-        Debug.Log($"🎮 Tipo de tarea detectado: {currentTaskType}");
-
-        // ✅ Iniciar automáticamente la actividad
-        StartCoroutine(LoadCurrentActivity());
+        AssignModeButtons();
+        StartCoroutine(LoadModeFromAPI(0));
     }
 
     // ============================================================
-    // 🔥 NEW METHOD - Load activity based on TherapyPlan
-    // ============================================================
-    private IEnumerator LoadCurrentActivity()
+    private void AssignModeButtons()
     {
+        if (topButtonsContainer == null)
+            topButtonsContainer = GameObject.Find("TopButtons")?.transform;
+
+        if (topButtonsContainer == null)
+        {
+            Debug.LogWarning("⚠️ No se encontró TopButtons en la escena.");
+            return;
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            int mode = i;
+            Transform button = topButtonsContainer.Find($"Button{i}");
+            if (button != null && button.TryGetComponent(out Button btn))
+            {
+                btn.onClick.RemoveAllListeners();
+                btn.onClick.AddListener(() => StartCoroutine(LoadModeFromAPI(mode)));
+            }
+        }
+    }
+
+    // ============================================================
+    private IEnumerator LoadModeFromAPI(int mode)
+    {
+        currentMode = mode;
         ClearBalloons();
 
         if (apiService == null)
@@ -62,115 +84,69 @@ public class BalloonPopPartyManager : MonoBehaviour
             yield break;
         }
 
-        yield return apiService.LoadActivity(
-            json => ProcessActivityResponse(json),
+        yield return apiService.LoadActivity(mode,
+            json => LoadMode(mode, json),
             err => Debug.LogError(err));
     }
 
     // ============================================================
-    // 🔥 UPDATED METHOD - Process response based on current task type
-    // ============================================================
-    private void ProcessActivityResponse(string json)
+    private void LoadMode(int mode, string json)
     {
-        try
+        ClearBalloons();
+        // Ocultar imagen backgorund principal fuera del modo Relate
+        if (imageMainBack != null)
+            imageMainBack.gameObject.SetActive(mode == 2);
+        // Ocultar imagen principal fuera del modo Relate
+        if (imageMain != null)
+            imageMain.gameObject.SetActive(mode == 2);
+        // 🔹 Ocultar botones Yes/No por defecto
+        buttonYes.gameObject.SetActive(false);
+        buttonNo.gameObject.SetActive(false);
+        // Ajustar el espaciado del contenedor según el modo
+        var layout = container.GetComponent<HorizontalLayoutGroup>();
+        if (layout != null)
         {
-            if (string.IsNullOrEmpty(json))
+            if (mode == 0) // Modo Judge
             {
-                Debug.LogError("❌ JSON response is null or empty");
-                return;
+                layout.spacing = JudgeContainerSpacing;
+                layout.childAlignment = TextAnchor.MiddleCenter;
+                layout.childForceExpandWidth = false;
+                layout.childForceExpandHeight = false;
             }
-
-            Debug.Log($"📄 Processing JSON: {json}");
-
-            ClearBalloons();
-            
-            // Ocultar imagen background principal fuera del modo Relate
-            if (imageMainBack != null)
-                imageMainBack.gameObject.SetActive(currentTaskType == 3); // 🔥 3 = Relate
-            
-            // Ocultar imagen principal fuera del modo Relate
-            if (imageMain != null)
-                imageMain.gameObject.SetActive(currentTaskType == 3); // 🔥 3 = Relate
-            
-            // 🔹 Ocultar botones Yes/No por defecto
-            buttonYes.gameObject.SetActive(false);
-            buttonNo.gameObject.SetActive(false);
-            
-            // Ajustar el espaciado del contenedor según el modo
-            var layout = container.GetComponent<HorizontalLayoutGroup>();
-            if (layout != null)
+            else // Modo Select o Relate
             {
-                if (currentTaskType == 1) // 🔥 1 = Judge
-                {
-                    layout.spacing = JudgeContainerSpacing;
-                    layout.childAlignment = TextAnchor.MiddleCenter;
-                    layout.childForceExpandWidth = false;
-                    layout.childForceExpandHeight = false;
-                }
-                else // Modo Select o Relate
-                {
-                    // Restaurar configuración por defecto (sin separación)
-                    layout.spacing = 0;
-                    layout.childAlignment = TextAnchor.UpperLeft;
-                    layout.childForceExpandWidth = true;
-                    layout.childForceExpandHeight = true;
-                }
-            }
-
-            switch (currentTaskType)
-            {
-                case 1: // Judge
-                    var judgeData = JsonUtility.FromJson<Picofon.Games.Judge.ApiResponseJudge>(json);
-                    if (judgeData?.data?.activity1 != null)
-                    {
-                        LoadJudgeMode(judgeData.data.activity1);
-                        Debug.Log($"✅ Successfully loaded Judge activity: {judgeData.data.activity1.word1.word} vs {judgeData.data.activity1.word2.word}");
-                    }
-                    else
-                    {
-                        Debug.LogError("❌ Datos Judge inválidos o nulos");
-                    }
-                    break;
-
-                case 2: // Select
-                    var selectData = JsonUtility.FromJson<ApiResponseSelect>(json);
-                    if (selectData?.data?.activity1 != null)
-                    {
-                        LoadSelectMode(selectData.data.activity1);
-                    }
-                    else
-                    {
-                        Debug.LogError("❌ Datos Select inválidos o nulos");
-                    }
-                    break;
-
-                case 3: // Relate
-                    var relateData = JsonUtility.FromJson<ApiResponseRelate>(json);
-                    if (relateData?.data?.activity1 != null)
-                    {
-                        LoadRelateMode(relateData.data.activity1);
-                    }
-                    else
-                    {
-                        Debug.LogError("❌ Datos Relate inválidos o nulos");
-                    }
-                    break;
-
-                default:
-                    Debug.LogError($"❌ Tipo de tarea no soportado: {currentTaskType}");
-                    break;
+                // Restaurar configuración por defecto (sin separación)
+                layout.spacing = 0;
+                layout.childAlignment = TextAnchor.UpperLeft;
+                layout.childForceExpandWidth = true;
+                layout.childForceExpandHeight = true;
             }
         }
-        catch (Exception e)
+
+        switch (mode)
         {
-            Debug.LogError($"❌ Error procesando respuesta JSON: {e.Message}");
-            Debug.LogError($"🔍 Stack trace: {e.StackTrace}");
-            Debug.LogError($"📄 Problematic JSON: {json}");
+            case 0:
+                var judgeData = JsonUtility.FromJson<ApiResponseJudge>(json);
+                if (judgeData?.data?.activity1 != null)
+                    LoadJudgeMode(judgeData.data.activity1);
+                break;
+
+            case 1:
+                var selectData = JsonUtility.FromJson<ApiResponseSelect>(json);
+                if (selectData?.data?.activity1 != null)
+                    LoadSelectMode(selectData.data.activity1);
+                break;
+
+            case 2:
+                var relateData = JsonUtility.FromJson<ApiResponseRelate>(json);
+                if (relateData?.data?.activity1 != null)
+                    LoadRelateMode(relateData.data.activity1);
+                break;
         }
     }
 
     // ============================================================
-    // 🟢 MODO 1 — JUDGE (clic → animación 4 frames → feedback)
+    // 🟢 MODO 0 — JUDGE (clic → animación 4 frames → feedback)
     // ============================================================
     private void LoadJudgeMode(ActivityJudge activity)
     {
@@ -221,12 +197,12 @@ public class BalloonPopPartyManager : MonoBehaviour
         buttonYes.interactable = true; 
         buttonNo.interactable = true;   
 
+
         buttonYes.onClick.RemoveAllListeners();
         buttonNo.onClick.RemoveAllListeners();
 
         buttonYes.onClick.AddListener(() =>
         {
-            Debug.Log($"buttonYes.onClick.AddListener start");
             foreach (var b in spawnedBalloons)
             {
                 var controller = b.GetComponent<BalloonController>();
@@ -254,7 +230,7 @@ public class BalloonPopPartyManager : MonoBehaviour
                         }
 
                         if (currentJudgeActivity.answer)
-                            StartCoroutine(LoadCurrentActivity()); // 🔥 CHANGED
+                            StartCoroutine(LoadModeFromAPI(0));
                     };
                 };
 
@@ -288,7 +264,7 @@ public class BalloonPopPartyManager : MonoBehaviour
                         }
 
                         if (!currentJudgeActivity.answer)
-                            StartCoroutine(LoadCurrentActivity()); // 🔥 CHANGED
+                            StartCoroutine(LoadModeFromAPI(0));
                     };
                 };
 
@@ -296,6 +272,7 @@ public class BalloonPopPartyManager : MonoBehaviour
             }
         });
     }
+
 
     private void ShowJudgeFeedback(bool correct)
     {
@@ -311,7 +288,11 @@ public class BalloonPopPartyManager : MonoBehaviour
             currentJudgeActivity.word1.syllabified_word,
             currentJudgeActivity.word2.syllabified_word
         );
+
+
     }
+
+
 
     // ============================================================
     // 🎬 Secuencia Judge: animación → feedback → reinicio
@@ -350,17 +331,22 @@ public class BalloonPopPartyManager : MonoBehaviour
 
             var bc = b.GetComponent<BalloonController>();
             if (bc != null)
-                bc.ResetAnimation();
+                bc.ResetAnimation(); // 🔹 Método nuevo (ver abajo)
             b.SetActive(true);
         }
 
         // 7️⃣ Si fue correcta la respuesta, recargar el modo
         if (correct)
-            StartCoroutine(LoadCurrentActivity()); // 🔥 CHANGED
+            StartCoroutine(LoadModeFromAPI(currentMode));
     }
 
+
+
+
+
+
     // ============================================================
-    // 🔵 MODO 2 — SELECT
+    // 🔵 MODO 1 — SELECT
     // ============================================================
     private void LoadSelectMode(ActivitySelect activity)
     {
@@ -450,7 +436,7 @@ public class BalloonPopPartyManager : MonoBehaviour
                     activity.main_word.syllabified_word
                 );
 
-                StartCoroutine(NextActivity());
+                StartCoroutine(NextActivity_Select());
             }
             else
             {
@@ -468,7 +454,7 @@ public class BalloonPopPartyManager : MonoBehaviour
                 neutralList.RemoveAll(o => o.sprite == correctSprite);
 
                 // Seleccionar una al azar
-                var randomOther = neutralList[UnityEngine.Random.Range(0, neutralList.Count)];
+                var randomOther = neutralList[Random.Range(0, neutralList.Count)];
 
                 feedbackPanel.ShowFeedback(
                     option.sprite,
@@ -497,16 +483,32 @@ public class BalloonPopPartyManager : MonoBehaviour
                 StartCoroutine(controller.PlayExplosionCoroutine());
         });
     }
+    private void Shuffle<T>(List<T> list)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            T temp = list[i];
+            int randomIndex = Random.Range(i, list.Count);
+            list[i] = list[randomIndex];
+            list[randomIndex] = temp;
+        }
+    }
+    private IEnumerator NextActivity_Select()
+    {
+        yield return new WaitForSeconds(2.2f);
+        StartCoroutine(LoadModeFromAPI(1));
+    }
+
 
     // ============================================================
-    // 🟣 MODO 3 — RELATE
+    // 🟣 MODO 2 — RELATE
     // ============================================================
     private void LoadRelateMode(ActivityRelate activity)
     {
         if (activity == null || activity.main_word == null)
         {
             Debug.LogError(" Activity o main_word es nulo en LoadRelateMode.");
-            StartCoroutine(LoadCurrentActivity()); // 🔥 CHANGED
+            StartCoroutine(LoadModeFromAPI(2)); // 🔁 vuelve a pedir la siguiente
             return;
         }
 
@@ -577,7 +579,6 @@ public class BalloonPopPartyManager : MonoBehaviour
             }
         }
     }
-
     private void ConfigureRelateBalloonClick(
     BalloonController controller,
     (Sprite sprite, string syll, bool correct) option,
@@ -614,7 +615,7 @@ public class BalloonPopPartyManager : MonoBehaviour
                 }
 
                 if (isCorrect)
-                    StartCoroutine(LoadCurrentActivity()); // 🔥 CHANGED
+                    StartCoroutine(LoadModeFromAPI(2)); // 🔁 Cargar nueva actividad si acierta
             };
         };
 
@@ -626,24 +627,79 @@ public class BalloonPopPartyManager : MonoBehaviour
     }
 
     // ============================================================
-    // 🔥 UPDATED - Single NextActivity method for all task types
+    // 🎬 CLIC → ANIMACIÓN → FEEDBACK
     // ============================================================
-    private IEnumerator NextActivity()
+    // ============================================================
+    // 🎬 CLIC → ANIMACIÓN → FEEDBACK (genérico para todos los modos)
+    // ============================================================
+    private void ConfigureBalloonClick<T>(
+    BalloonController controller,
+    bool correct,
+    T wordA,
+    T wordB)
+    where T : class
     {
-        yield return new WaitForSeconds(2.2f);
-        StartCoroutine(LoadCurrentActivity());
+        // Limpiar listeners previos
+        controller.buttonOp.onClick.RemoveAllListeners();
+
+        // Asignar listener para cuando termina la animación
+        controller.OnExplosionFinished = (balloon) =>
+        {
+            // 🔹 1️⃣ Ocultar todos los globos
+            foreach (var b in spawnedBalloons)
+                if (b != null) b.SetActive(false);
+
+            // 🔹 2️⃣ Mostrar el feedback
+            string pathA = wordA.GetType().GetProperty("PATH")?.GetValue(wordA)?.ToString();
+            string pathB = wordB.GetType().GetProperty("PATH")?.GetValue(wordB)?.ToString();
+            string syllA = wordA.GetType().GetProperty("syllabified_word")?.GetValue(wordA)?.ToString();
+            string syllB = wordB.GetType().GetProperty("syllabified_word")?.GetValue(wordB)?.ToString();
+
+            feedbackPanel.ShowFeedback(
+                LoadLocalSprite(pathA),
+                LoadLocalSprite(pathB),
+                correct,
+                syllA,
+                syllB
+            );
+
+            // 🔹 3️⃣ Suscribirse al evento OnFeedbackHidden
+            feedbackPanel.OnFeedbackHidden = () =>
+            {
+                foreach (var b in spawnedBalloons)
+                {
+                    if (b == null) continue;
+
+                    var bc = b.GetComponent<BalloonController>();
+                    if (bc != null)
+                        bc.ResetAnimation(); // 🔁 restaura el frame base
+
+                    b.SetActive(true); // los muestra otra vez
+                }
+
+                // 🔹 4️⃣ Si fue correcta → cargar nueva actividad
+                if (correct)
+                    StartCoroutine(LoadModeFromAPI(currentMode));
+            };
+        };
+
+        // 🔹 Click del botón → iniciar animación
+        controller.buttonOp.onClick.AddListener(() =>
+        {
+            if (controller.IsIdle)
+                StartCoroutine(controller.PlayExplosionCoroutine());
+        });
     }
 
-    private void Shuffle<T>(List<T> list)
+
+    private IEnumerator NextAfterDelay(bool correct)
     {
-        for (int i = 0; i < list.Count; i++)
-        {
-            T temp = list[i];
-            int randomIndex = UnityEngine.Random.Range(i, list.Count);
-            list[i] = list[randomIndex];
-            list[randomIndex] = temp;
-        }
+        yield return new WaitForSeconds(2.5f);
+        if (correct)
+            StartCoroutine(LoadModeFromAPI(currentMode));
     }
+
+
 
     // ============================================================
     private void ClearBalloons()
@@ -663,7 +719,7 @@ public class BalloonPopPartyManager : MonoBehaviour
 
         // ✅ Obtiene el nombre del archivo sin extensión
         string fileName = System.IO.Path.GetFileNameWithoutExtension(imageName).Trim();
-        string path = $"Images/ImgButtons/{fileName}";
+        string path = $"Images/ImgButtons/{fileName}"; // ✅ Nueva ruta
 
         Sprite sprite = Resources.Load<Sprite>(path);
 
@@ -672,4 +728,5 @@ public class BalloonPopPartyManager : MonoBehaviour
 
         return sprite;
     }
+
 }
