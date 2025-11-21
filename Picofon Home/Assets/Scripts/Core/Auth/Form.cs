@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Form : MonoBehaviour
 {
     [Header("Basic Info")]
-    public InputField ChildIDField;
+    public InputDNI ChildIDField;
     public Toggle IsPassportToggle;
     public TMP_InputField ChildNameField;
     public TMP_InputField ChildLastNameField;
