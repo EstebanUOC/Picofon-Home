@@ -1,12 +1,13 @@
+using System.Threading;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
     [Header("Panels")]
-    public GameObject LoginPanel;
-    public GameObject DisclaimerPanel;
-    public GameObject UserChildrenPanel;
-    public GameObject RegisterChildPanel;
+    public Panel LoginPanel;
+    public Panel DisclaimerPanel;
+    public Panel UserChildrenPanel;
+    public Panel RegisterChildPanel;
 
     private UserDataDTO user;
 
@@ -15,41 +16,44 @@ public class UIManager : MonoBehaviour
         get { return user; }
         set { user = value; }
     }
+    public UserService UserService = new();
+    public CancellationTokenSource Cts = new();
 
     public void Start()
     {
-        ShowLogin();
+        // ShowLogin();
+        ShowRegisterChild();
     }
 
     private void HideAllPanels()
     {
-        LoginPanel.SetActive(false);
-        RegisterChildPanel.SetActive(false);
-        UserChildrenPanel.SetActive(false);
-        DisclaimerPanel.SetActive(false);
+        LoginPanel.Hide();
+        RegisterChildPanel.Hide();
+        UserChildrenPanel.Hide();
+        DisclaimerPanel.Hide();
     }
 
     public void ShowLogin()
     {
         HideAllPanels();
-        LoginPanel.SetActive(true);
+        LoginPanel.Show();
     }
 
     public void ShowRegisterChild()
     {
         HideAllPanels();
-        RegisterChildPanel.SetActive(true);
+        RegisterChildPanel.Show();
     }
 
     public void ShowDisclaimer()
     {
         HideAllPanels();
-        DisclaimerPanel.SetActive(true);
+        DisclaimerPanel.Show();
     }
 
     public void ShowUserChildren()
     {
         HideAllPanels();
-        UserChildrenPanel.SetActive(true);
+        UserChildrenPanel.Show();
     }
 }

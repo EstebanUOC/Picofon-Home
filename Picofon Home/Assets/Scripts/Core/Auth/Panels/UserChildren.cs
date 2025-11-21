@@ -1,9 +1,10 @@
 using System.Threading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class UserChildren : MonoBehaviour
+public class UserChildren : Panel
 {
     public UIManager UIManager;
 
@@ -20,15 +21,16 @@ public class UserChildren : MonoBehaviour
         RegisterChildButton.onClick.AddListener(OnRegisterChild);
     }
 
-    public void Initialize()
+    public override void Show()
     {
+        base.Show();
         LoadChildren();
     }
 
     private async void LoadChildren()
     {
-        UserService userService = new();
-        CancellationTokenSource cts = new();
+        UserService userService = UIManager.UserService;
+        CancellationTokenSource cts = UIManager.Cts;
 
         string userId = UIManager.User.Id;
 
@@ -48,6 +50,7 @@ public class UserChildren : MonoBehaviour
     {
         // string selectedChild = childrenDropdown.options[childrenDropdown.value].text;
         // UIManager.ShowChildDashboard(selectedChild);
+        SceneManager.LoadScene("MapPathScene");
     }
 
     private void OnRegisterChild()

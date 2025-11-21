@@ -5,7 +5,7 @@ using Google;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Login : MonoBehaviour
+public class Login : Panel
 {
     public UIManager UIManager;
 

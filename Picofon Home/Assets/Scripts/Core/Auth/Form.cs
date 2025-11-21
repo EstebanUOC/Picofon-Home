@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -7,9 +6,10 @@ using UnityEngine.UI;
 public class Form : MonoBehaviour
 {
     [Header("Basic Info")]
+    public InputField ChildIDField;
+    public Toggle IsPassportToggle;
     public TMP_InputField ChildNameField;
     public TMP_InputField ChildLastNameField;
-    public TMP_InputField ChildIDField;
     public TMP_InputField ChildSchoolField;
     public TMP_Dropdown ChildGradeField;
 
@@ -25,9 +25,11 @@ public class Form : MonoBehaviour
     public Toggle TEAToggle;
     public Toggle TDAHToggle;
     public Toggle OtherToggle;
-    public TMP_InputField OtherInput; // Assign in inspector if using "Others" text field
+    public TMP_InputField OtherInput;
 
     public Button ContinueButton;
+
+    public string ParentId { get; set; } = string.Empty;
 
     // [Header("Modal")]
     // public Modal modal;
@@ -37,22 +39,15 @@ public class Form : MonoBehaviour
     private bool birthdateGroupValid = false;
     private bool schoolGroupValid = false;
 
-    private string ParentId { get; set; } = string.Empty;
-
     public void Start()
     {
         InitComponents();
         ContinueButton.interactable = false;
     }
 
-    public void SetParentId(string parentId)
-    {
-        ParentId = parentId;
-    }
-
     public ChildCreateDTO GatherChildData()
     {
-        string id = ChildIDField.text.Trim();
+        // string id = ChildIDField.text.Trim();
         string firstName = ChildNameField.text.Trim();
         string lastName = ChildLastNameField.text.Trim();
 
@@ -87,7 +82,7 @@ public class Form : MonoBehaviour
             Grade = grade,
             CenterId = 1,
             OwnerId = ParentId,
-            Id = id,
+            // Id = id,
         };
 
         return child;
@@ -100,7 +95,6 @@ public class Form : MonoBehaviour
         // Listeners for input fields to update button state
         ChildNameField.onValueChanged.AddListener(OnInputChange);
         ChildLastNameField.onValueChanged.AddListener(OnInputChange);
-        ChildIDField.onValueChanged.AddListener(OnInputChange);
         ChildSchoolField.onValueChanged.AddListener(OnInputChange);
 
         // Birthdate fields
@@ -160,8 +154,7 @@ public class Form : MonoBehaviour
     {
         bool nameValid = !string.IsNullOrWhiteSpace(ChildNameField.text);
         bool lastNameValid = !string.IsNullOrWhiteSpace(ChildLastNameField.text);
-        bool idValid = !string.IsNullOrWhiteSpace(ChildIDField.text);
-        inputGroupValid = nameValid && lastNameValid && idValid;
+        inputGroupValid = nameValid && lastNameValid;
 
         schoolGroupValid = !string.IsNullOrWhiteSpace(ChildSchoolField.text);
 
