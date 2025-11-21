@@ -74,7 +74,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
     private void GenerateMap(List<TherapyPlan> plans)
     {
         int lastCompleted = GamePrefs.LastCompletedLevel;
-
+        Debug.Log($" MAP: GamePrefs.LastCompletedLevel {lastCompleted}");
         for (int i = 0; i < plans.Count; i++)
         {
             float x = (i % 2 == 0) ? RightX : LeftX;

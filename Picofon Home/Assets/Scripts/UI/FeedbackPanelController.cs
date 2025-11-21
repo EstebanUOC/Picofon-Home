@@ -32,7 +32,7 @@ public class FeedbackPanelController : MonoBehaviour
         if (panelFeedback != null)
             panelFeedback.SetActive(false);
 
-        spriteCloud = Resources.Load<Sprite>("Images/Images/PanelFeedback/Cloud");
+        spriteCloud = Resources.Load<Sprite>("Images/PanelFeedback/Cloud");
     }
 
     public void ShowFeedback(Sprite left, Sprite right, bool correct, string syllWord1, string syllWord2)
@@ -56,7 +56,7 @@ public class FeedbackPanelController : MonoBehaviour
         backgroundLumi.raycastTarget = false;
 
         // Fondo
-        string backPath = correct ? "Images/Images/PanelFeedback/back_correct" : "Images/Images/PanelFeedback/back_neutral";
+        string backPath = correct ? "Images/PanelFeedback/back_correct" : "Images/PanelFeedback/back_neutral";
         Sprite backSprite = Resources.Load<Sprite>(backPath);
         if (background != null && backSprite != null)
         {
@@ -90,7 +90,7 @@ public class FeedbackPanelController : MonoBehaviour
 
     private IEnumerator PlayCorrectAnimation()
     {
-        Sprite[] frames = Resources.LoadAll<Sprite>("Images/Images/PanelFeedback/Correct_Feedback");
+        Sprite[] frames = Resources.LoadAll<Sprite>("Images/PanelFeedback/Correct_Feedback");
         if (frames.Length == 0)
         {
             Debug.LogWarning("⚠ No se encontraron frames en carpeta Correct_Feedback");
@@ -119,7 +119,7 @@ public class FeedbackPanelController : MonoBehaviour
 
     private IEnumerator PlayNeutralAnimation()
     {
-        Sprite[] frames = Resources.LoadAll<Sprite>("Images/Images/PanelFeedback/Neutral_Feedback");
+        Sprite[] frames = Resources.LoadAll<Sprite>("Images/PanelFeedback/Neutral_Feedback");
         if (frames.Length == 0)
         {
             Debug.LogWarning("⚠ No se encontraron frames en carpeta Neutral_Feedback");
