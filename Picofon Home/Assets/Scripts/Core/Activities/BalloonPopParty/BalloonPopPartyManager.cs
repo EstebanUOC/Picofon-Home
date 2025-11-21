@@ -83,10 +83,10 @@ public class BalloonPopPartyManager : MonoBehaviour
             Debug.LogError("❌ GameAPIService no encontrado.");
             yield break;
         }
-
-        yield return apiService.LoadActivity(mode,
-            json => LoadMode(mode, json),
-            err => Debug.LogError(err));
+     // Importante revisar el nuevo LoadActivity   
+     //   yield return apiService.LoadActivity(mode,
+     //       json => LoadMode(mode, json),
+     //       err => Debug.LogError(err));
     }
 
     // ============================================================
