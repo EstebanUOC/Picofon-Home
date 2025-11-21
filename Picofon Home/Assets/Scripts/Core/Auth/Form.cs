@@ -6,11 +6,10 @@ using UnityEngine.UI;
 public class Form : MonoBehaviour
 {
     [Header("Basic Info")]
-    public InputDNI ChildIDField;
-    public Toggle IsPassportToggle;
-    public TMP_InputField ChildNameField;
-    public TMP_InputField ChildLastNameField;
-    public TMP_InputField ChildSchoolField;
+    public InputField ChildIDField;
+    public InputField ChildNameField;
+    public InputField ChildLastNameField;
+    public InputField ChildSchoolField;
     public TMP_Dropdown ChildGradeField;
 
     [Header("Birthdate")]
@@ -47,16 +46,16 @@ public class Form : MonoBehaviour
 
     public ChildCreateDTO GatherChildData()
     {
-        // string id = ChildIDField.text.Trim();
-        string firstName = ChildNameField.text.Trim();
-        string lastName = ChildLastNameField.text.Trim();
+        string id = ChildIDField.GetText();
+        string firstName = ChildNameField.GetText();
+        string lastName = ChildLastNameField.GetText();
 
-        string year = BirthYearField.text.Trim();
-        string month = BirthMonthField.text.Trim().PadLeft(2, '0');
-        string day = BirthDayField.text.Trim().PadLeft(2, '0');
+        string year = BirthYearField.text;
+        string month = BirthMonthField.text.PadLeft(2, '0');
+        string day = BirthDayField.text.PadLeft(2, '0');
         string birthDate = $"{year}-{month}-{day}";
 
-        string school = ChildSchoolField.text.Trim();
+        string school = ChildSchoolField.GetText();
 
         int grade = ChildGradeField.value + 1;
 
@@ -82,7 +81,7 @@ public class Form : MonoBehaviour
             Grade = grade,
             CenterId = 1,
             OwnerId = ParentId,
-            // Id = id,
+            Id = id,
         };
 
         return child;
@@ -91,11 +90,6 @@ public class Form : MonoBehaviour
     private void InitComponents()
     {
         OtherInput.gameObject.SetActive(false);
-
-        // Listeners for input fields to update button state
-        ChildNameField.onValueChanged.AddListener(OnInputChange);
-        ChildLastNameField.onValueChanged.AddListener(OnInputChange);
-        ChildSchoolField.onValueChanged.AddListener(OnInputChange);
 
         // Birthdate fields
         BirthDayField.onValueChanged.AddListener(OnInputChange);
@@ -115,12 +109,12 @@ public class Form : MonoBehaviour
 
     private void OnInputChange(string value)
     {
-        ValidateAllFields();
+        // ValidateAllFields();
     }
 
     private void OnDropdownChange(int value)
     {
-        ValidateAllFields();
+        // ValidateAllFields();
     }
 
     private void OnToggleChange(bool value)
@@ -150,21 +144,21 @@ public class Form : MonoBehaviour
             OtherInput.text = string.Empty;
     }
 
-    private void ValidateAllFields()
-    {
-        bool nameValid = !string.IsNullOrWhiteSpace(ChildNameField.text);
-        bool lastNameValid = !string.IsNullOrWhiteSpace(ChildLastNameField.text);
-        inputGroupValid = nameValid && lastNameValid;
-
-        schoolGroupValid = !string.IsNullOrWhiteSpace(ChildSchoolField.text);
-
-        bool dayValid = !string.IsNullOrWhiteSpace(BirthDayField.text);
-        bool monthValid = !string.IsNullOrWhiteSpace(BirthMonthField.text);
-        bool yearValid = !string.IsNullOrWhiteSpace(BirthYearField.text);
-        birthdateGroupValid = dayValid && monthValid && yearValid;
-
-        UpdateContinueButton();
-    }
+    // private void ValidateAllFields()
+    // {
+    //     bool nameValid = !string.IsNullOrWhiteSpace(ChildNameField.text);
+    //     bool lastNameValid = !string.IsNullOrWhiteSpace(ChildLastNameField.text);
+    //     inputGroupValid = nameValid && lastNameValid;
+    //
+    //     schoolGroupValid = !string.IsNullOrWhiteSpace(ChildSchoolField.text);
+    //
+    //     bool dayValid = !string.IsNullOrWhiteSpace(BirthDayField.text);
+    //     bool monthValid = !string.IsNullOrWhiteSpace(BirthMonthField.text);
+    //     bool yearValid = !string.IsNullOrWhiteSpace(BirthYearField.text);
+    //     birthdateGroupValid = dayValid && monthValid && yearValid;
+    //
+    //     UpdateContinueButton();
+    // }
 
     private void UpdateContinueButton()
     {

@@ -589,8 +589,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5590d12e069351db8847fa2b25129fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Label: {fileID: 464630421}
   Input: {fileID: 1138706006}
+  Label: {fileID: 464630421}
   Placeholder: {fileID: 331442994}
   InfoText: {fileID: 547213403}
   IsPassportToggle: {fileID: 141963656}
@@ -1150,7 +1150,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 0.6784314, g: 0.27450982, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -9955,7 +9955,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 0.6784314, g: 0.27450982, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -13073,10 +13073,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ChildIDField: {fileID: 0}
-  IsPassportToggle: {fileID: 141963656}
-  ChildNameField: {fileID: 1107392797}
-  ChildLastNameField: {fileID: 1259874333}
-  ChildSchoolField: {fileID: 128531871}
+  ChildNameField: {fileID: 0}
+  ChildLastNameField: {fileID: 0}
+  ChildSchoolField: {fileID: 0}
   ChildGradeField: {fileID: 933790981}
   BirthDayField: {fileID: 827482406}
   BirthMonthField: {fileID: 1238699866}

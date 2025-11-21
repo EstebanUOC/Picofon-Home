@@ -2,24 +2,19 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InputDNI : MonoBehaviour
+public class InputDNI : InputField
 {
     public TMP_Text Label;
-    public TMP_InputField Input;
     public TMP_Text Placeholder;
     public TMP_Text InfoText;
     public Toggle IsPassportToggle;
 
-    private bool _valid = false;
-    public bool Valid
-    {
-        get { return _valid; }
-    }
+    private readonly int DNILimit = 9;
+    private readonly int passportLimit = 12;
 
-    public void Start()
+    public override void Start()
     {
-        Input.onValueChanged.AddListener(OnInputChange);
-
+        base.Start();
         IsPassportToggle.onValueChanged.AddListener(OnToggleChange);
     }
 
@@ -35,41 +30,46 @@ public class InputDNI : MonoBehaviour
         Placeholder.text = placeholder;
         InfoText.text = infoMessage;
 
-        Input.characterLimit = isOn ? 12 : 9;
+        Input.characterLimit = isOn ? passportLimit : DNILimit;
     }
 
-    private void OnInputChange(string input)
+    protected override void OnInputChange(string input)
     {
         Input.text = input.ToUpper();
+        base.OnInputChange(input);
+    }
+
+    protected override void ValidateInput(string input)
+    {
         ValidateChildId(input);
     }
 
     private void ValidateChildId(string input)
     {
         if (IsPassportToggle.isOn)
-        {
             ValidatePassport(input);
-            return;
-        }
-
-        if (string.IsNullOrEmpty(input))
-        {
-            _valid = false;
-            return;
-        }
-
-        char firstChar = input.ToUpper()[0];
-        if (char.IsDigit(firstChar))
-        {
-            _valid = ValidateDNI(input);
-        }
-        else if (firstChar == 'X' || firstChar == 'Y' || firstChar == 'Z')
-        {
-            _valid = ValidateNIE(input);
-        }
         else
+            ValidateLegalId(input);
+    }
+
+    private void ValidateLegalId(string input)
+    {
+        if (string.IsNullOrEmpty(input) || input.Length < DNILimit)
         {
+            _error = false;
             _valid = false;
+            return;
+        }
+
+        bool isDNI = char.IsDigit(input[0]);
+        _valid = isDNI ? ValidateDNI(input) : ValidateNIE(input);
+
+        if (!_valid)
+        {
+            InfoText.text =
+                "Format invàlid. DNI: 8 dígits + lletra, NIE: X/Y/Z + 7 dígits + lletra";
+            InfoText.color = _errorColor;
+            _error = true;
         }
     }
 
@@ -82,11 +82,6 @@ public class InputDNI : MonoBehaviour
         }
 
         _valid = passport.Length >= 5 && passport.Length <= 12;
-
-        if (_valid)
-        {
-            Input.image.color = Color.green;
-        }
     }
 
     private bool ValidateDNI(string dni)
@@ -94,7 +89,7 @@ public class InputDNI : MonoBehaviour
         if (string.IsNullOrEmpty(dni) || dni.Length != 9)
             return false;
 
-        string numbers = dni.Substring(0, 8);
+        string numbers = dni[..8];
 
         if (!int.TryParse(numbers, out int dniNumber))
             return false;

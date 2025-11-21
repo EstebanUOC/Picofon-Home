@@ -13,24 +13,28 @@ public abstract class InputField : MonoBehaviour
 
     protected Color _defaultColor;
     protected Color _validColor;
+    protected Color _errorColor;
 
     protected ColorBlock _defaultColorBlock;
 
     protected bool _valid = false;
-    protected bool _changed = false;
+    protected bool _error = false;
 
-    public void Start()
+    private bool _changed = false;
+
+    public virtual void Start()
     {
         Input.onValueChanged.AddListener(OnInputChange);
 
         _defaultColorBlock = Input.colors;
-        _defaultColor = ColorUtility.TryParseHtmlString("#AD46FF", out var tempColor)
-            ? tempColor
-            : Color.white;
+        _defaultColor = ParseColorOrDefault("#AD46FF", Color.white);
+        _validColor = ParseColorOrDefault("#00C950", Color.white);
+        _errorColor = ParseColorOrDefault("#FB2C36", Color.white);
+    }
 
-        _validColor = ColorUtility.TryParseHtmlString("#00C950", out var tempColorValid)
-            ? tempColorValid
-            : Color.white;
+    public virtual string GetText()
+    {
+        return Input.text;
     }
 
     protected virtual void ValidateInput(string input)
@@ -38,24 +42,46 @@ public abstract class InputField : MonoBehaviour
         _valid = input.Length > 3;
     }
 
-    private void OnInputChange(string input)
+    protected virtual void OnInputChange(string input)
     {
         ValidateInput(input);
         ChangeColor();
     }
 
+    protected virtual void OnError()
+    {
+        _defaultColorBlock.selectedColor = _errorColor;
+    }
+
+    protected virtual void OnValid()
+    {
+        _defaultColorBlock.selectedColor = _validColor;
+    }
+
+    protected virtual void OnReset()
+    {
+        _defaultColorBlock.selectedColor = _defaultColor;
+    }
+
     private void ChangeColor()
     {
-        if (_changed == _valid)
+        if (_changed == _valid && !_error)
             return;
 
         _changed = _valid;
 
-        if (_valid)
-            _defaultColorBlock.selectedColor = _validColor;
+        if (_error)
+            OnError();
+        else if (_valid)
+            OnValid();
         else
-            _defaultColorBlock.selectedColor = _defaultColor;
+            OnReset();
 
         Input.colors = _defaultColorBlock;
+    }
+
+    private Color ParseColorOrDefault(string hex, Color fallback)
+    {
+        return ColorUtility.TryParseHtmlString(hex, out Color c) ? c : fallback;
     }
 }
