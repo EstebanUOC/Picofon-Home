@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Form : MonoBehaviour
 {
     [Header("Basic Info")]
-    public TMP_InputField ChildIDField;
+    public InputField ChildIDField;
     public Toggle IsPassportToggle;
     public TMP_InputField ChildNameField;
     public TMP_InputField ChildLastNameField;
@@ -25,7 +25,7 @@ public class Form : MonoBehaviour
     public Toggle TEAToggle;
     public Toggle TDAHToggle;
     public Toggle OtherToggle;
-    public TMP_InputField OtherInput; // Assign in inspector if using "Others" text field
+    public TMP_InputField OtherInput;
 
     public Button ContinueButton;
 
@@ -38,7 +38,6 @@ public class Form : MonoBehaviour
     private bool toogleGroupValid = false;
     private bool birthdateGroupValid = false;
     private bool schoolGroupValid = false;
-    private bool childIdValid = false;
 
     public void Start()
     {
@@ -48,7 +47,7 @@ public class Form : MonoBehaviour
 
     public ChildCreateDTO GatherChildData()
     {
-        string id = ChildIDField.text.Trim();
+        // string id = ChildIDField.text.Trim();
         string firstName = ChildNameField.text.Trim();
         string lastName = ChildLastNameField.text.Trim();
 
@@ -83,7 +82,7 @@ public class Form : MonoBehaviour
             Grade = grade,
             CenterId = 1,
             OwnerId = ParentId,
-            Id = id,
+            // Id = id,
         };
 
         return child;
@@ -96,8 +95,6 @@ public class Form : MonoBehaviour
         // Listeners for input fields to update button state
         ChildNameField.onValueChanged.AddListener(OnInputChange);
         ChildLastNameField.onValueChanged.AddListener(OnInputChange);
-        ChildIDField.onValueChanged.AddListener(OnInputChange);
-        ChildIDField.onValueChanged.AddListener(OnChildIdChange);
         ChildSchoolField.onValueChanged.AddListener(OnInputChange);
 
         // Birthdate fields
@@ -166,120 +163,13 @@ public class Form : MonoBehaviour
         bool yearValid = !string.IsNullOrWhiteSpace(BirthYearField.text);
         birthdateGroupValid = dayValid && monthValid && yearValid;
 
-        // Validate ChildID separately using the new validation logic
-        ValidateChildId(ChildIDField.text);
-
         UpdateContinueButton();
     }
 
     private void UpdateContinueButton()
     {
         bool allValid =
-            inputGroupValid
-            && toogleGroupValid
-            && birthdateGroupValid
-            && schoolGroupValid
-            && childIdValid;
+            inputGroupValid && toogleGroupValid && birthdateGroupValid && schoolGroupValid;
         ContinueButton.interactable = allValid;
-    }
-
-    private void OnChildIdChange(string value)
-    {
-        ValidateChildId(value);
-    }
-
-    private void ValidateChildId(string input)
-    {
-        if (IsPassportToggle.isOn)
-        {
-            childIdValid = ValidatePassport(input);
-        }
-        else
-        {
-            if (string.IsNullOrEmpty(input))
-            {
-                childIdValid = false;
-                return;
-            }
-
-            // Detect if it's DNI (starts with number) or NIE (starts with letter)
-            char firstChar = input.ToUpper()[0];
-            if (char.IsDigit(firstChar))
-            {
-                childIdValid = ValidateDNI(input);
-            }
-            else if (firstChar == 'X' || firstChar == 'Y' || firstChar == 'Z')
-            {
-                childIdValid = ValidateNIE(input);
-            }
-            else
-            {
-                childIdValid = false;
-            }
-        }
-
-        UpdateContinueButton();
-    }
-
-    private bool ValidatePassport(string passport)
-    {
-        if (string.IsNullOrEmpty(passport))
-            return false;
-
-        return passport.Length >= 5 && passport.Length <= 12;
-    }
-
-    private bool ValidateDNI(string dni)
-    {
-        if (string.IsNullOrEmpty(dni) || dni.Length != 9)
-            return false;
-
-        string numbers = dni.Substring(0, 8);
-
-        if (!int.TryParse(numbers, out int dniNumber))
-            return false;
-
-        char letter = dni.ToUpper()[8];
-        char calculatedLetter = CalculateControlLetter(dniNumber);
-
-        return letter == calculatedLetter;
-    }
-
-    private bool ValidateNIE(string nie)
-    {
-        if (string.IsNullOrEmpty(nie) || nie.Length != 9)
-            return false;
-
-        char firstChar = nie.ToUpper()[0];
-
-        if (firstChar != 'X' && firstChar != 'Y' && firstChar != 'Z')
-            return false;
-
-        int firstDigit =
-            firstChar == 'X' ? 0
-            : firstChar == 'Y' ? 1
-            : 2;
-
-        string middleNumbers = nie.Substring(1, 7);
-
-        if (!int.TryParse(middleNumbers, out int nieNumbers))
-            return false;
-
-        string fullNumber = firstDigit.ToString() + middleNumbers;
-        int nieNumber = int.Parse(fullNumber);
-
-        char letter = nie.ToUpper()[8];
-        char calculatedLetter = CalculateControlLetter(nieNumber);
-
-        return letter == calculatedLetter;
-    }
-
-    private char CalculateControlLetter(int number)
-    {
-        string letters = "TRWAGMYFPDXBNJZSQVHLCKE";
-
-        int remainder = number % 23;
-
-        return letters[remainder];
     }
 }

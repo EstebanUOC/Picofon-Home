@@ -21,7 +21,8 @@ public class UIManager : MonoBehaviour
 
     public void Start()
     {
-        ShowLogin();
+        // ShowLogin();
+        ShowRegisterChild();
     }
 
     private void HideAllPanels()
