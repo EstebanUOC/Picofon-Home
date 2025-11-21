@@ -12,10 +12,17 @@ public class InputDNI : InputField
     private readonly int DNILimit = 9;
     private readonly int passportLimit = 12;
 
+    private Color colorInfo;
+    private Color colorImage;
+
+    private string errorMessage;
+
     public override void Start()
     {
         base.Start();
         IsPassportToggle.onValueChanged.AddListener(OnToggleChange);
+        colorInfo = InfoText.color;
+        colorImage = Input.image.color;
     }
 
     private void OnToggleChange(bool isOn)
@@ -31,6 +38,9 @@ public class InputDNI : InputField
         InfoText.text = infoMessage;
 
         Input.characterLimit = isOn ? passportLimit : DNILimit;
+        Error = false;
+        Valid = false;
+        OnInputChange(Input.text);
     }
 
     protected override void OnInputChange(string input)
@@ -39,12 +49,31 @@ public class InputDNI : InputField
         base.OnInputChange(input);
     }
 
-    protected override void ValidateInput(string input)
+    protected override void OnValid()
     {
-        ValidateChildId(input);
+        base.OnValid();
+        Input.image.color = _validColor;
     }
 
-    private void ValidateChildId(string input)
+    protected override void OnError()
+    {
+        base.OnError();
+        InfoText.text = errorMessage;
+        InfoText.color = _errorColor;
+        Input.image.color = _errorColor;
+    }
+
+    protected override void OnReset()
+    {
+        base.OnReset();
+        InfoText.text = IsPassportToggle.isOn
+            ? "Passaport: 3 lletres seguides de 6 números"
+            : "DNI: 8 dígits + lletra | NIE: X/Y/Z + 7 dígits + lletra";
+        InfoText.color = colorInfo;
+        Input.image.color = colorImage;
+    }
+
+    protected override void ValidateInput(string input)
     {
         if (IsPassportToggle.isOn)
             ValidatePassport(input);
@@ -52,36 +81,31 @@ public class InputDNI : InputField
             ValidateLegalId(input);
     }
 
+    private void ValidatePassport(string passport)
+    {
+        Valid = !string.IsNullOrEmpty(passport) && passport.Length >= passportLimit;
+    }
+
     private void ValidateLegalId(string input)
     {
         if (string.IsNullOrEmpty(input) || input.Length < DNILimit)
         {
-            _error = false;
-            _valid = false;
+            Error = false;
+            Valid = false;
             return;
         }
 
         bool isDNI = char.IsDigit(input[0]);
-        _valid = isDNI ? ValidateDNI(input) : ValidateNIE(input);
+        bool isValid = isDNI ? ValidateDNI(input) : ValidateNIE(input);
 
-        if (!_valid)
+        if (isValid)
         {
-            InfoText.text =
-                "Format invàlid. DNI: 8 dígits + lletra, NIE: X/Y/Z + 7 dígits + lletra";
-            InfoText.color = _errorColor;
-            _error = true;
-        }
-    }
-
-    private void ValidatePassport(string passport)
-    {
-        if (string.IsNullOrEmpty(passport))
-        {
-            _valid = false;
+            Valid = true;
             return;
         }
 
-        _valid = passport.Length >= 5 && passport.Length <= 12;
+        errorMessage = isDNI ? "DNI invàlid." : "NIE invàlid.";
+        Error = true;
     }
 
     private bool ValidateDNI(string dni)

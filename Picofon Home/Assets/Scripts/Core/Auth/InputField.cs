@@ -9,6 +9,33 @@ public abstract class InputField : MonoBehaviour
     public bool Valid
     {
         get { return _valid; }
+        set
+        {
+            if (_valid == value)
+                return;
+
+            _valid = value;
+            if (_valid)
+                OnValid();
+            else
+                OnReset();
+        }
+    }
+
+    public bool Error
+    {
+        get { return _error; }
+        set
+        {
+            if (_error == value)
+                return;
+
+            _error = value;
+            if (_error)
+                OnError();
+            else
+                OnReset();
+        }
     }
 
     protected Color _defaultColor;
@@ -17,10 +44,8 @@ public abstract class InputField : MonoBehaviour
 
     protected ColorBlock _defaultColorBlock;
 
-    protected bool _valid = false;
-    protected bool _error = false;
-
-    private bool _changed = false;
+    private bool _valid = false;
+    private bool _error = false;
 
     public virtual void Start()
     {
@@ -37,46 +62,28 @@ public abstract class InputField : MonoBehaviour
         return Input.text;
     }
 
-    protected virtual void ValidateInput(string input)
-    {
-        _valid = input.Length > 3;
-    }
-
     protected virtual void OnInputChange(string input)
     {
         ValidateInput(input);
-        ChangeColor();
     }
+
+    protected virtual void ValidateInput(string input) { }
 
     protected virtual void OnError()
     {
         _defaultColorBlock.selectedColor = _errorColor;
+        Input.colors = _defaultColorBlock;
     }
 
     protected virtual void OnValid()
     {
         _defaultColorBlock.selectedColor = _validColor;
+        Input.colors = _defaultColorBlock;
     }
 
     protected virtual void OnReset()
     {
         _defaultColorBlock.selectedColor = _defaultColor;
-    }
-
-    private void ChangeColor()
-    {
-        if (_changed == _valid && !_error)
-            return;
-
-        _changed = _valid;
-
-        if (_error)
-            OnError();
-        else if (_valid)
-            OnValid();
-        else
-            OnReset();
-
         Input.colors = _defaultColorBlock;
     }
 

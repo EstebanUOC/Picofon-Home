@@ -4,6 +4,6 @@ public class BasicInput : InputField
 
     protected override void ValidateInput(string input)
     {
-        _valid = input.Length >= MinLength;
+        Valid = input.Length >= MinLength;
     }
 }
