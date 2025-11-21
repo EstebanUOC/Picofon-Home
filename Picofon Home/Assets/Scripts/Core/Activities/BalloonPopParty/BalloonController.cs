@@ -29,7 +29,7 @@ public class BalloonController : MonoBehaviour
         explosionFrames = new Sprite[4];
         for (int i = 0; i < 4; i++)
         {
-            string path = $"Images/Images/PopParty/exploding/balloon_exploding00{i + 1}";
+            string path = $"Images/PopParty/exploding/balloon_exploding00{i + 1}";
             explosionFrames[i] = Resources.Load<Sprite>(path);
         }
 

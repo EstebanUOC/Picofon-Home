@@ -163,21 +163,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 23765453}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de51ea34dca12e54db86598cff5910ef, type: 3}
+  m_Script: {fileID: 11500000, guid: b1c666ac0a5844f4f95b77a03c05f1c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  feedbackController: {fileID: 1800297419}
-  imageMain: {fileID: 1250806921}
-  buttonPrefab: {fileID: 7750018717267140773, guid: 7a8feadecfe8aeb4d9c2105055873c1d, type: 3}
-  buttonContainer: {fileID: 1517973498}
-  firstImage: {fileID: 1643230086}
-  secondImage: {fileID: 81930222}
+  feedbackController: {fileID: 0}
+  imageMain: {fileID: 0}
+  buttonPrefab: {fileID: 0}
+  buttonContainer: {fileID: 0}
+  firstImage: {fileID: 0}
+  secondImage: {fileID: 0}
   panelFeedback: {fileID: 0}
   feedbackText: {fileID: 0}
   questionText: {fileID: 0}
-  topButtonsContainer: {fileID: 1140672014}
-  buttonMapScene: {fileID: 753088081}
-  buttonNextScene: {fileID: 1775471879}
+  topButtonsContainer: {fileID: 0}
+  buttonMapScene: {fileID: 0}
+  buttonNextScene: {fileID: 0}
 --- !u!1 &30078968
 GameObject:
   m_ObjectHideFlags: 0
@@ -1714,7 +1714,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 33978398f6bd6a14e9db2580b638b2dd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2bfb6b6c6d3901cbbb4b9956584008b4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2854,7 +2854,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: deb1f3abeb833f248b2a33eb12b3c01c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 33aa9a1d5c2fb86e2bf9565472948a39, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
