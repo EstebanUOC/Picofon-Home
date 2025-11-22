@@ -28,7 +28,7 @@ public class BalloonPopPartyManager : MonoBehaviour
     private int currentTaskType = 1; // 🔥 1=Judge, 2=Select, 3=Relate (from TherapyPlan)
 
     // 🔹 Espaciado solo para modo Judge (en píxeles)
-    private const float JudgeContainerSpacing = 150f;
+    private const float JudgeContainerSpacing = 100f;
 
     private readonly List<GameObject> spawnedBalloons = new();
 
@@ -180,11 +180,12 @@ public class BalloonPopPartyManager : MonoBehaviour
 
         // =========================
         // Crear 2 globos con las imágenes
+        // Important: remember is important the width of teh prefab, if this is big,  the positions of the vector did not modify.
         // =========================
         Sprite sprite1 = LoadLocalSprite(activity.word1.PATH);
         Sprite sprite2 = LoadLocalSprite(activity.word2.PATH);
 
-        Vector2[] positions = { new Vector2(-250, 0), new Vector2(250, 0) };
+        Vector2[] positions = { new Vector2(-150, 0), new Vector2(150, 0) };
         Sprite[] sprites = { sprite1, sprite2 };
 
         for (int i = 0; i < 2; i++)
