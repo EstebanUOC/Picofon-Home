@@ -2,25 +2,24 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InputField : MonoBehaviour
+public class IdInput : BasicInput
 {
     public TMP_Text Label;
-    public TMP_InputField Input;
     public TMP_Text Placeholder;
     public TMP_Text InfoText;
-    public Toggle IsPassportToggle;
+    public Toggle PassportToggle;
 
-    private bool _valid = false;
-    public bool Valid
+    private readonly int DNILimit = 9;
+    private readonly int passportLimit = 12;
+
+    private Color colorInfo;
+    private string errorMessage;
+
+    public override void Start()
     {
-        get { return _valid; }
-    }
-
-    public void Start()
-    {
-        Input.onValueChanged.AddListener(OnInputChange);
-
-        IsPassportToggle.onValueChanged.AddListener(OnToggleChange);
+        base.Start();
+        PassportToggle.onValueChanged.AddListener(OnToggleChange);
+        colorInfo = InfoText.color;
     }
 
     private void OnToggleChange(bool isOn)
@@ -35,58 +34,73 @@ public class InputField : MonoBehaviour
         Placeholder.text = placeholder;
         InfoText.text = infoMessage;
 
-        Input.characterLimit = isOn ? 12 : 9;
+        Input.characterLimit = isOn ? passportLimit : DNILimit;
+        Error = false;
+        Valid = false;
+        OnInputChange(Input.text);
     }
 
-    private void OnInputChange(string input)
+    protected override void OnInputChange(string input)
     {
         Input.text = input.ToUpper();
-        ValidateChildId(input);
+        base.OnInputChange(input);
     }
 
-    private void ValidateChildId(string input)
+    protected override void OnValid()
     {
-        if (IsPassportToggle.isOn)
-        {
+        base.OnValid();
+        Input.image.color = _validColor;
+    }
+
+    protected override void OnError()
+    {
+        base.OnError();
+        InfoText.text = errorMessage;
+        InfoText.color = _errorColor;
+    }
+
+    protected override void OnReset()
+    {
+        base.OnReset();
+        InfoText.text = PassportToggle.isOn
+            ? "Passaport: 3 lletres seguides de 6 números"
+            : "DNI: 8 dígits + lletra | NIE: X/Y/Z + 7 dígits + lletra";
+        InfoText.color = colorInfo;
+    }
+
+    protected override void ValidateInput(string input)
+    {
+        if (PassportToggle.isOn)
             ValidatePassport(input);
-            return;
-        }
-
-        if (string.IsNullOrEmpty(input))
-        {
-            _valid = false;
-            return;
-        }
-
-        char firstChar = input.ToUpper()[0];
-        if (char.IsDigit(firstChar))
-        {
-            _valid = ValidateDNI(input);
-        }
-        else if (firstChar == 'X' || firstChar == 'Y' || firstChar == 'Z')
-        {
-            _valid = ValidateNIE(input);
-        }
         else
-        {
-            _valid = false;
-        }
+            ValidateLegalId(input);
     }
 
     private void ValidatePassport(string passport)
     {
-        if (string.IsNullOrEmpty(passport))
+        Valid = !string.IsNullOrEmpty(passport) && passport.Length >= passportLimit;
+    }
+
+    private void ValidateLegalId(string input)
+    {
+        if (string.IsNullOrEmpty(input) || input.Length < DNILimit)
         {
-            _valid = false;
+            Error = false;
+            Valid = false;
             return;
         }
 
-        _valid = passport.Length >= 5 && passport.Length <= 12;
+        bool isDNI = char.IsDigit(input[0]);
+        bool isValid = isDNI ? ValidateDNI(input) : ValidateNIE(input);
 
-        if (_valid)
+        if (isValid)
         {
-            Input.image.color = Color.green;
+            Valid = true;
+            return;
         }
+
+        errorMessage = isDNI ? "DNI invàlid." : "NIE invàlid.";
+        Error = true;
     }
 
     private bool ValidateDNI(string dni)
@@ -94,7 +108,7 @@ public class InputField : MonoBehaviour
         if (string.IsNullOrEmpty(dni) || dni.Length != 9)
             return false;
 
-        string numbers = dni.Substring(0, 8);
+        string numbers = dni[..8];
 
         if (!int.TryParse(numbers, out int dniNumber))
             return false;
