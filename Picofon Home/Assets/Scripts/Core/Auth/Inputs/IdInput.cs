@@ -2,27 +2,24 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InputDNI : InputField
+public class IdInput : BasicInput
 {
     public TMP_Text Label;
     public TMP_Text Placeholder;
     public TMP_Text InfoText;
-    public Toggle IsPassportToggle;
+    public Toggle PassportToggle;
 
     private readonly int DNILimit = 9;
     private readonly int passportLimit = 12;
 
     private Color colorInfo;
-    private Color colorImage;
-
     private string errorMessage;
 
     public override void Start()
     {
         base.Start();
-        IsPassportToggle.onValueChanged.AddListener(OnToggleChange);
+        PassportToggle.onValueChanged.AddListener(OnToggleChange);
         colorInfo = InfoText.color;
-        colorImage = Input.image.color;
     }
 
     private void OnToggleChange(bool isOn)
@@ -60,22 +57,20 @@ public class InputDNI : InputField
         base.OnError();
         InfoText.text = errorMessage;
         InfoText.color = _errorColor;
-        Input.image.color = _errorColor;
     }
 
     protected override void OnReset()
     {
         base.OnReset();
-        InfoText.text = IsPassportToggle.isOn
+        InfoText.text = PassportToggle.isOn
             ? "Passaport: 3 lletres seguides de 6 números"
             : "DNI: 8 dígits + lletra | NIE: X/Y/Z + 7 dígits + lletra";
         InfoText.color = colorInfo;
-        Input.image.color = colorImage;
     }
 
     protected override void ValidateInput(string input)
     {
-        if (IsPassportToggle.isOn)
+        if (PassportToggle.isOn)
             ValidatePassport(input);
         else
             ValidateLegalId(input);

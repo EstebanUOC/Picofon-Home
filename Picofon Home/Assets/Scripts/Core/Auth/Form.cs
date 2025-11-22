@@ -1,148 +1,122 @@
-using System.Collections;
-using TMPro;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum ChildFields
+{
+    ID,
+    FirstName,
+    LastName,
+    BirthDate,
+    Disorder,
+    School,
+    Grade,
+}
+
 public class Form : MonoBehaviour
 {
-    [Header("Basic Info")]
-    public InputField ChildIDField;
-    public InputField ChildNameField;
-    public InputField ChildLastNameField;
-    public InputField ChildSchoolField;
-    public TMP_Dropdown ChildGradeField;
-
-    [Header("Birthdate")]
-    public TMP_InputField BirthDayField;
-    public TMP_InputField BirthMonthField;
-    public TMP_InputField BirthYearField;
-
-    [Header("Disorder Toggles")]
-    public ToggleGroup DisorderToggleGroup;
-    public Toggle NoToggle;
-    public Toggle TELToggle;
-    public Toggle TEAToggle;
-    public Toggle TDAHToggle;
-    public Toggle OtherToggle;
-    public TMP_InputField OtherInput;
-
+    // public Modal modal;
     public Button ContinueButton;
 
     public string ParentId { get; set; } = string.Empty;
 
-    // [Header("Modal")]
-    // public Modal modal;
+    private readonly Dictionary<ChildFields, FormInput> _fields = new();
 
-    private bool inputGroupValid = false;
-    private bool toogleGroupValid = false;
-    private bool birthdateGroupValid = false;
-    private bool schoolGroupValid = false;
-
-    public void Start()
+    public void Awake()
     {
-        InitComponents();
+        FormInput[] inputs = GetComponentsInChildren<FormInput>();
+        foreach (FormInput input in inputs)
+        {
+            input.AddOnValidatedListener(UpdateContinueButton);
+            _fields.Add(input.Key, input);
+        }
         ContinueButton.interactable = false;
+    }
+
+    private void UpdateContinueButton()
+    {
+        bool allValid = true;
+        foreach (KeyValuePair<ChildFields, FormInput> pair in _fields)
+        {
+            if (!pair.Value.Valid)
+            {
+                allValid = false;
+                break;
+            }
+        }
+
+        Debug.Log($"Form validation status: {allValid}");
+        ContinueButton.interactable = allValid;
     }
 
     public ChildCreateDTO GatherChildData()
     {
-        string id = ChildIDField.GetText();
-        string firstName = ChildNameField.GetText();
-        string lastName = ChildLastNameField.GetText();
+        // string id = ChildIDField.GetData();
+        // string firstName = ChildNameField.GetData();
+        // string lastName = ChildLastNameField.GetData();
+        //
+        // string year = BirthYearField.text;
+        // string month = BirthMonthField.text.PadLeft(2, '0');
+        // string day = BirthDayField.text.PadLeft(2, '0');
+        // string birthDate = $"{year}-{month}-{day}";
+        //
+        // string school = ChildSchoolField.GetData();
+        //
+        // int grade = ChildGradeField.value + 1;
+        //
+        // IEnumerable toggles = DisorderToggleGroup.ActiveToggles();
+        //
+        // string disorder = "No";
+        // foreach (Toggle toggle in toggles)
+        // {
+        //     if (toggle.name == "Other")
+        //     {
+        //         disorder = OtherInput != null ? OtherInput.text : string.Empty;
+        //     }
+        //     disorder = toggle.name;
+        // }
 
-        string year = BirthYearField.text;
-        string month = BirthMonthField.text.PadLeft(2, '0');
-        string day = BirthDayField.text.PadLeft(2, '0');
-        string birthDate = $"{year}-{month}-{day}";
-
-        string school = ChildSchoolField.GetText();
-
-        int grade = ChildGradeField.value + 1;
-
-        IEnumerable toggles = DisorderToggleGroup.ActiveToggles();
-
-        string disorder = "No";
-        foreach (Toggle toggle in toggles)
-        {
-            if (toggle.name == "Other")
-            {
-                disorder = OtherInput != null ? OtherInput.text : string.Empty;
-            }
-            disorder = toggle.name;
-        }
-
-        ChildCreateDTO child = new()
-        {
-            FirstName = firstName,
-            LastName = lastName,
-            BirthDate = birthDate,
-            Disorder = disorder,
-            School = school,
-            Grade = grade,
-            CenterId = 1,
-            OwnerId = ParentId,
-            Id = id,
-        };
+        ChildCreateDTO child = new();
 
         return child;
     }
 
-    private void InitComponents()
-    {
-        OtherInput.gameObject.SetActive(false);
-
-        // Birthdate fields
-        BirthDayField.onValueChanged.AddListener(OnInputChange);
-        BirthMonthField.onValueChanged.AddListener(OnInputChange);
-        BirthYearField.onValueChanged.AddListener(OnInputChange);
-
-        // Grade dropdown
-        ChildGradeField.onValueChanged.AddListener(OnDropdownChange);
-
-        NoToggle.onValueChanged.AddListener(OnToggleChange);
-        TELToggle.onValueChanged.AddListener(OnToggleChange);
-        TEAToggle.onValueChanged.AddListener(OnToggleChange);
-        TDAHToggle.onValueChanged.AddListener(OnToggleChange);
-        OtherToggle.onValueChanged.AddListener(OnToggleChange);
-        OtherToggle.onValueChanged.AddListener(OnToggleOtherChanged);
-    }
-
-    private void OnInputChange(string value)
-    {
-        // ValidateAllFields();
-    }
-
-    private void OnDropdownChange(int value)
-    {
-        // ValidateAllFields();
-    }
-
-    private void OnToggleChange(bool value)
-    {
-        bool valid = NoToggle.isOn || TELToggle.isOn || TEAToggle.isOn || TDAHToggle.isOn;
-
-        toogleGroupValid = valid;
-
-        if (!valid && OtherToggle.isOn)
-        {
-            OtherInput.onValueChanged.RemoveAllListeners();
-            OtherInput.onValueChanged.AddListener(text =>
-            {
-                bool otherValid = !string.IsNullOrWhiteSpace(OtherInput.text);
-                toogleGroupValid = otherValid;
-                UpdateContinueButton();
-            });
-        }
-
-        UpdateContinueButton();
-    }
-
-    private void OnToggleOtherChanged(bool isOn)
-    {
-        OtherInput.gameObject.SetActive(isOn);
-        if (!isOn)
-            OtherInput.text = string.Empty;
-    }
+    // private void OnInputChange(string value)
+    // {
+    //     // ValidateAllFields();
+    // }
+    //
+    // private void OnDropdownChange(int value)
+    // {
+    //     // ValidateAllFields();
+    // }
+    //
+    // private void OnToggleChange(bool value)
+    // {
+    //     bool valid = NoToggle.isOn || TELToggle.isOn || TEAToggle.isOn || TDAHToggle.isOn;
+    //
+    //     toogleGroupValid = valid;
+    //
+    //     if (!valid && OtherToggle.isOn)
+    //     {
+    //         OtherInput.onValueChanged.RemoveAllListeners();
+    //         OtherInput.onValueChanged.AddListener(text =>
+    //         {
+    //             bool otherValid = !string.IsNullOrWhiteSpace(OtherInput.text);
+    //             toogleGroupValid = otherValid;
+    //             UpdateContinueButton();
+    //         });
+    //     }
+    //
+    //     UpdateContinueButton();
+    // }
+    //
+    // private void OnToggleOtherChanged(bool isOn)
+    // {
+    //     OtherInput.gameObject.SetActive(isOn);
+    //     if (!isOn)
+    //         OtherInput.text = string.Empty;
+    // }
 
     // private void ValidateAllFields()
     // {
@@ -159,11 +133,4 @@ public class Form : MonoBehaviour
     //
     //     UpdateContinueButton();
     // }
-
-    private void UpdateContinueButton()
-    {
-        bool allValid =
-            inputGroupValid && toogleGroupValid && birthdateGroupValid && schoolGroupValid;
-        ContinueButton.interactable = allValid;
-    }
 }
