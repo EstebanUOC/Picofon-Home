@@ -172,12 +172,9 @@ MonoBehaviour:
   buttonContainer: {fileID: 1517973498}
   firstImage: {fileID: 1643230086}
   secondImage: {fileID: 81930222}
-  panelFeedback: {fileID: 0}
-  feedbackText: {fileID: 0}
-  questionText: {fileID: 0}
   topButtonsContainer: {fileID: 1517973498}
-  buttonMapScene: {fileID: 0}
-  buttonNextScene: {fileID: 0}
+  buttonMapScene: {fileID: 753088081}
+  buttonNextScene: {fileID: 1775471879}
 --- !u!1 &30078968
 GameObject:
   m_ObjectHideFlags: 0

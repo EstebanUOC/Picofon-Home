@@ -28,7 +28,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
     {
         "BalloonPopSeaScene",
         "BalloonPopParty",
-        "CrossTheRiverScene",
+        "CrossRiverScene",
     };
 
     private void Start()
@@ -93,7 +93,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
             {
                 "BalloonPopSeaScene" => SeaData,
                 "BalloonPopParty" => PartyData,
-                "CrossTheRiverScene" => RiverData,
+                "CrossRiverScene" => RiverData,
                 _ => BasketData,
             };
 
