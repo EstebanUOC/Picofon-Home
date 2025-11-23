@@ -1,10 +1,20 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 public abstract class FormInput : MonoBehaviour
 {
+    protected static readonly Color _defaultColor = ParseColorOrDefault("#AD46FF", Color.white);
+    protected static readonly Color _validColor = ParseColorOrDefault("#00C950", Color.white);
+    protected static readonly Color _errorColor = ParseColorOrDefault("#FB2C36", Color.white);
+
     [Space(15)]
     public ChildFields Key;
+
+    private bool _valid = false;
+    private bool _error = false;
+
+    public Action OnValidated;
+    public Action OnInvalidated;
 
     public bool Valid
     {
@@ -14,14 +24,19 @@ public abstract class FormInput : MonoBehaviour
             if (_valid == value)
                 return;
 
+            _error = false;
+
             _valid = value;
             if (_valid)
             {
                 OnValid();
-                onValidated.Invoke();
+                OnValidated?.Invoke();
             }
             else
+            {
                 OnReset();
+                OnInvalidated?.Invoke();
+            }
         }
     }
 
@@ -33,6 +48,8 @@ public abstract class FormInput : MonoBehaviour
             if (_error == value)
                 return;
 
+            _valid = false;
+
             _error = value;
             if (_error)
                 OnError();
@@ -41,32 +58,18 @@ public abstract class FormInput : MonoBehaviour
         }
     }
 
-    private readonly UnityEvent onValidated = new();
-
-    private bool _valid = false;
-    private bool _error = false;
-
-    protected static Color _defaultColor = ParseColorOrDefault("#AD46FF", Color.white);
-    protected static Color _validColor = ParseColorOrDefault("#00C950", Color.white);
-    protected static Color _errorColor = ParseColorOrDefault("#FB2C36", Color.white);
-
-    private static Color ParseColorOrDefault(string hex, Color fallback)
-    {
-        return ColorUtility.TryParseHtmlString(hex, out Color c) ? c : fallback;
-    }
-
-    public void AddOnValidatedListener(UnityAction call)
-    {
-        onValidated.AddListener(call);
-    }
-
     public abstract string GetData();
 
-    protected abstract void ValidateInput(string input);
+    protected virtual void ValidateInput() { }
 
-    protected abstract void OnError();
+    protected virtual void ValidateInput(string input) { }
 
-    protected abstract void OnValid();
+    protected virtual void OnError() { }
 
-    protected abstract void OnReset();
+    protected virtual void OnValid() { }
+
+    protected virtual void OnReset() { }
+
+    private static Color ParseColorOrDefault(string hex, Color fallback) =>
+        ColorUtility.TryParseHtmlString(hex, out Color c) ? c : fallback;
 }

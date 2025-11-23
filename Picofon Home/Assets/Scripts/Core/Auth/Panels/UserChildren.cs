@@ -15,6 +15,8 @@ public class UserChildren : Panel
     public Button SelectChildButton;
     public Button RegisterChildButton;
 
+    private CancellationTokenSource cts;
+
     public void Start()
     {
         SelectChildButton.onClick.AddListener(OnSelectChild);
@@ -30,7 +32,7 @@ public class UserChildren : Panel
     private async void LoadChildren()
     {
         UserService userService = UIManager.UserService;
-        CancellationTokenSource cts = UIManager.Cts;
+        cts = new CancellationTokenSource();
 
         string userId = UIManager.User.Id;
 
@@ -56,5 +58,6 @@ public class UserChildren : Panel
     private void OnRegisterChild()
     {
         UIManager.ShowRegisterChild();
+        cts.Cancel();
     }
 }

@@ -1,4 +1,3 @@
-using System.Threading;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -17,12 +16,11 @@ public class UIManager : MonoBehaviour
         set { user = value; }
     }
     public UserService UserService = new();
-    public CancellationTokenSource Cts = new();
 
     public void Start()
     {
-        // ShowLogin();
-        ShowRegisterChild();
+        ShowLogin();
+        // ShowRegisterChild();
     }
 
     private void HideAllPanels()

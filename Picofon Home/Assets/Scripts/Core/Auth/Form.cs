@@ -24,12 +24,22 @@ public class Form : MonoBehaviour
 
     public void Awake()
     {
-        FormInput[] inputs = GetComponentsInChildren<FormInput>();
-        foreach (FormInput input in inputs)
+        Transform parent = transform;
+        foreach (Transform child in parent)
         {
-            input.AddOnValidatedListener(UpdateContinueButton);
-            _fields.Add(input.Key, input);
+            FormInput input = child.GetComponent<FormInput>();
+            if (input != null)
+            {
+                input.OnValidated += UpdateContinueButton;
+                input.OnInvalidated += DisableButton;
+                _fields.Add(input.Key, input);
+            }
         }
+        ContinueButton.interactable = false;
+    }
+
+    private void DisableButton()
+    {
         ContinueButton.interactable = false;
     }
 
@@ -45,92 +55,24 @@ public class Form : MonoBehaviour
             }
         }
 
-        Debug.Log($"Form validation status: {allValid}");
+        Debug.Log($"All inputs valid: {allValid}");
         ContinueButton.interactable = allValid;
     }
 
     public ChildCreateDTO GatherChildData()
     {
-        // string id = ChildIDField.GetData();
-        // string firstName = ChildNameField.GetData();
-        // string lastName = ChildLastNameField.GetData();
-        //
-        // string year = BirthYearField.text;
-        // string month = BirthMonthField.text.PadLeft(2, '0');
-        // string day = BirthDayField.text.PadLeft(2, '0');
-        // string birthDate = $"{year}-{month}-{day}";
-        //
-        // string school = ChildSchoolField.GetData();
-        //
-        // int grade = ChildGradeField.value + 1;
-        //
-        // IEnumerable toggles = DisorderToggleGroup.ActiveToggles();
-        //
-        // string disorder = "No";
-        // foreach (Toggle toggle in toggles)
-        // {
-        //     if (toggle.name == "Other")
-        //     {
-        //         disorder = OtherInput != null ? OtherInput.text : string.Empty;
-        //     }
-        //     disorder = toggle.name;
-        // }
-
-        ChildCreateDTO child = new();
+        ChildCreateDTO child = new()
+        {
+            OwnerId = ParentId,
+            Id = _fields[ChildFields.ID].GetData(),
+            FirstName = _fields[ChildFields.FirstName].GetData(),
+            LastName = _fields[ChildFields.LastName].GetData(),
+            BirthDate = _fields[ChildFields.BirthDate].GetData(),
+            Disorder = _fields[ChildFields.Disorder].GetData(),
+            School = _fields[ChildFields.School].GetData(),
+            Grade = int.Parse(_fields[ChildFields.Grade].GetData()),
+        };
 
         return child;
     }
-
-    // private void OnInputChange(string value)
-    // {
-    //     // ValidateAllFields();
-    // }
-    //
-    // private void OnDropdownChange(int value)
-    // {
-    //     // ValidateAllFields();
-    // }
-    //
-    // private void OnToggleChange(bool value)
-    // {
-    //     bool valid = NoToggle.isOn || TELToggle.isOn || TEAToggle.isOn || TDAHToggle.isOn;
-    //
-    //     toogleGroupValid = valid;
-    //
-    //     if (!valid && OtherToggle.isOn)
-    //     {
-    //         OtherInput.onValueChanged.RemoveAllListeners();
-    //         OtherInput.onValueChanged.AddListener(text =>
-    //         {
-    //             bool otherValid = !string.IsNullOrWhiteSpace(OtherInput.text);
-    //             toogleGroupValid = otherValid;
-    //             UpdateContinueButton();
-    //         });
-    //     }
-    //
-    //     UpdateContinueButton();
-    // }
-    //
-    // private void OnToggleOtherChanged(bool isOn)
-    // {
-    //     OtherInput.gameObject.SetActive(isOn);
-    //     if (!isOn)
-    //         OtherInput.text = string.Empty;
-    // }
-
-    // private void ValidateAllFields()
-    // {
-    //     bool nameValid = !string.IsNullOrWhiteSpace(ChildNameField.text);
-    //     bool lastNameValid = !string.IsNullOrWhiteSpace(ChildLastNameField.text);
-    //     inputGroupValid = nameValid && lastNameValid;
-    //
-    //     schoolGroupValid = !string.IsNullOrWhiteSpace(ChildSchoolField.text);
-    //
-    //     bool dayValid = !string.IsNullOrWhiteSpace(BirthDayField.text);
-    //     bool monthValid = !string.IsNullOrWhiteSpace(BirthMonthField.text);
-    //     bool yearValid = !string.IsNullOrWhiteSpace(BirthYearField.text);
-    //     birthdateGroupValid = dayValid && monthValid && yearValid;
-    //
-    //     UpdateContinueButton();
-    // }
 }

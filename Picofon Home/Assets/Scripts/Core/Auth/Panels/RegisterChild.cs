@@ -15,6 +15,8 @@ public class RegisterChild : Panel
     public Form ChildRegistrationForm;
     public Button ContinueButton;
 
+    private CancellationTokenSource cts;
+
     public void Start()
     {
         ContinueButton.onClick.AddListener(OnContinue);
@@ -34,8 +36,20 @@ public class RegisterChild : Panel
     {
         ChildCreateDTO childData = ChildRegistrationForm.GatherChildData();
 
+        Debug.Log(
+            "Registering child with data:"
+                + $"\nID: {childData.Id}"
+                + $"\nFirst Name: {childData.FirstName}"
+                + $"\nLast Name: {childData.LastName}"
+                + $"\nBirth Date: {childData.BirthDate}"
+                + $"\nDisorder: {childData.Disorder}"
+                + $"\nSchool: {childData.School}"
+                + $"\nGrade: {childData.Grade}"
+                + $"\nParent ID: {childData.OwnerId}"
+        );
+
         UserService userService = UIManager.UserService;
-        CancellationTokenSource cts = UIManager.Cts;
+        cts = new CancellationTokenSource();
 
         var response = await userService.RegisterChild(childData, cts);
 

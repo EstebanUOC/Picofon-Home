@@ -17,13 +17,15 @@ public static class HttpClientUnity
 
         var op = request.SendWebRequest();
 
-        cancellationToken.Register(() =>
+        var registration = cancellationToken.Register(() =>
         {
-            if (!request.isDone)
+            if (request != null && !request.isDone)
                 request.Abort();
         });
 
         await AwaitRequest(op, cancellationToken);
+
+        registration.Dispose();
 
         if (request.result != UnityWebRequest.Result.Success)
             throw new Exception($"HTTP GET Error: {request.error} | URL: {url}");
@@ -49,13 +51,15 @@ public static class HttpClientUnity
 
         var op = request.SendWebRequest();
 
-        cancellationToken.Register(() =>
+        var registration = cancellationToken.Register(() =>
         {
-            if (!request.isDone)
+            if (request != null && !request.isDone)
                 request.Abort();
         });
 
         await AwaitRequest(op, cancellationToken);
+
+        registration.Dispose();
 
         if (request.result != UnityWebRequest.Result.Success)
             throw new Exception($"HTTP POST Error: {request.error} | URL: {url}");

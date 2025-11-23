@@ -13,89 +13,118 @@ public class DateInput : FormInput
     public TMP_Text InfoText;
 
     private ColorBlock _defaultColorBlock;
-    private Color colorInfo;
+    private Color _colorImage;
+    private Color _colorInfo;
+
+    private const int MinDay = 1;
+    private const int MaxDay = 31;
+    private const int MinMonth = 1;
+    private const int MaxMonth = 12;
+    private const int MinYear = 2000;
 
     public void Start()
     {
         _defaultColorBlock = DayInput.colors;
-        colorInfo = InfoText.color;
+        _colorImage = DayInput.image.color;
+        _colorInfo = InfoText.color;
 
-        DayInput.onEndEdit.AddListener(OnDayInputChange);
-        MonthInput.onEndEdit.AddListener(OnMonthInputChange);
+        DayInput.onEndEdit.AddListener(input =>
+            ValidateAndFormatInput(DayInput, MinDay, MaxDay, input)
+        );
+        MonthInput.onEndEdit.AddListener(input =>
+            ValidateAndFormatInput(MonthInput, MinMonth, MaxMonth, input)
+        );
         YearInput.onEndEdit.AddListener(OnYearInputChange);
     }
 
-    private void OnDayInputChange(string input)
+    private void ValidateAndFormatInput(TMP_InputField inputField, int min, int max, string input)
     {
-        if (!int.TryParse(input, out int day))
+        if (!int.TryParse(input, out int value))
+        {
+            Valid = false;
+            Error = false;
             return;
+        }
 
-        if (day <= 0)
-            day = 1;
-
-        if (day < 10)
-            DayInput.text = day.ToString().PadLeft(2, '0');
-        else if (day > 31)
-            DayInput.text = "31";
-    }
-
-    private void OnMonthInputChange(string input)
-    {
-        if (!int.TryParse(input, out int month))
-            return;
-
-        if (month <= 0)
-            month = 1;
-
-        if (month < 10)
-            MonthInput.text = month.ToString().PadLeft(2, '0');
-        else if (month > 12)
-            MonthInput.text = "12";
+        value = Mathf.Clamp(value, min, max);
+        inputField.text = value.ToString("D2");
+        ValidateInput();
     }
 
     private void OnYearInputChange(string input)
     {
         if (!int.TryParse(input, out int year))
+        {
+            Valid = false;
+            Error = false;
             return;
+        }
 
         int currentYear = System.DateTime.Now.Year;
-        int age = currentYear - year;
-
-        if (year < 2000)
-            YearInput.text = "2000";
-        else if (year > currentYear)
-            YearInput.text = currentYear.ToString();
-
-        Debug.Log("Date: " + GetData());
-        // ValidateInput(GetData());
+        year = Mathf.Clamp(year, MinYear, currentYear);
+        YearInput.text = year.ToString();
+        ValidateInput();
     }
 
-    protected override void OnError() { }
-
-    protected override void OnReset() { }
-
-    protected override void OnValid() { }
-
-    protected override void ValidateInput(string input)
+    protected override void OnError()
     {
-        string[] parts = input.Split('-');
-        if (parts.Length != 3)
+        _defaultColorBlock.selectedColor = _errorColor;
+        UpdateInputColors(_defaultColorBlock, _errorColor);
+        UpdateInfoContent("Data invàlida. Si us plau, comprova els valors.", _errorColor);
+    }
+
+    protected override void OnReset()
+    {
+        _defaultColorBlock.selectedColor = _defaultColor;
+        UpdateInputColors(_defaultColorBlock, _colorImage);
+        UpdateInfoContent("Introdueix la teva data de naixement.", _colorInfo);
+    }
+
+    protected override void OnValid()
+    {
+        _defaultColorBlock.selectedColor = _validColor;
+        UpdateInputColors(_defaultColorBlock, _validColor);
+        UpdateInfoContent("Introdueix la teva data de naixement.", _colorInfo);
+    }
+
+    private void UpdateInfoContent(string message, Color color)
+    {
+        InfoText.text = message;
+        InfoText.color = color;
+    }
+
+    private void UpdateInputColors(ColorBlock colorBlock, Color imageColor)
+    {
+        DayInput.colors = colorBlock;
+        MonthInput.colors = colorBlock;
+        YearInput.colors = colorBlock;
+
+        DayInput.image.color = imageColor;
+        MonthInput.image.color = imageColor;
+        YearInput.image.color = imageColor;
+    }
+
+    protected override void ValidateInput()
+    {
+        bool allFieldsFilled =
+            !string.IsNullOrEmpty(DayInput.text)
+            && !string.IsNullOrEmpty(MonthInput.text)
+            && !string.IsNullOrEmpty(YearInput.text);
+
+        if (!allFieldsFilled)
         {
             Valid = false;
             return;
         }
 
-        if (
-            !int.TryParse(parts[0], out int year)
-            || !int.TryParse(parts[1], out int month)
-            || !int.TryParse(parts[2], out int day)
-        )
-        {
-            Valid = false;
-            return;
-        }
+        string data = GetData();
 
-        Valid = System.DateTime.TryParse($"{year}-{month}-{day}", out _);
+        bool isValid = System.DateTime.TryParse(data, out _);
+
+        if (isValid)
+            Valid = true;
+        else
+            Error = true;
     }
 
     public override string GetData()
