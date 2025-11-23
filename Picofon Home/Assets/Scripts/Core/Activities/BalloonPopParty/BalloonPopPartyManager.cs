@@ -102,10 +102,10 @@ public class BalloonPopPartyManager : MonoBehaviour
             {
                 if (currentTaskType == 1) // 🔥 1 = Judge
                 {
-                    layout.spacing = JudgeContainerSpacing;
+                    layout.spacing = JudgeContainerSpacing;                  
                     layout.childAlignment = TextAnchor.MiddleCenter;
                     layout.childForceExpandWidth = false;
-                    layout.childForceExpandHeight = false;
+                    layout.childForceExpandHeight = true;
                 }
                 else // Modo Select o Relate
                 {
@@ -185,7 +185,7 @@ public class BalloonPopPartyManager : MonoBehaviour
         Sprite sprite1 = LoadLocalSprite(activity.word1.PATH);
         Sprite sprite2 = LoadLocalSprite(activity.word2.PATH);
 
-        Vector2[] positions = { new Vector2(-150, 0), new Vector2(150, 0) };
+        Vector2[] positions = { new Vector2(-150, 150), new Vector2(150, 150) };
         Sprite[] sprites = { sprite1, sprite2 };
 
         for (int i = 0; i < 2; i++)
@@ -380,12 +380,12 @@ public class BalloonPopPartyManager : MonoBehaviour
 
         // ✅ Crear lista de opciones
         var options = new List<(Sprite sprite, string syll, bool correct)>
-    {
-        (spriteMain,   activity.main_word.syllabified_word,   false),
-        (spriteCorrect,activity.correct_option.syllabified_word, true),
-        (spriteWrong1, activity.wrong_option1.syllabified_word, false),
-        (spriteWrong2, activity.wrong_option2.syllabified_word, false)
-    };
+        {
+            (spriteMain,   activity.main_word.syllabified_word,   false),
+            (spriteCorrect,activity.correct_option.syllabified_word, true),
+            (spriteWrong1, activity.wrong_option1.syllabified_word, false),
+            (spriteWrong2, activity.wrong_option2.syllabified_word, false)
+        };
 
         // ✅ Aleatorizar el orden
         Shuffle(options);
@@ -393,16 +393,16 @@ public class BalloonPopPartyManager : MonoBehaviour
         // ✅ Posiciones fijas (cuatro globos)
         Vector2[] pos =
         {
-        new Vector2(-300, 150), new Vector2(300, 150),
-        new Vector2(-300, -150), new Vector2(300, -150)
-    };
+            new Vector2(-300, 150), new Vector2(300, 150),
+            new Vector2(-300, -150), new Vector2(300, -150)
+        };
 
         // ✅ Crear cada globo
         for (int i = 0; i < options.Count; i++)
         {
             GameObject balloon = Instantiate(balloonPrefab, container);
             balloon.name = $"Balloon_Select_{i + 1}";
-            balloon.GetComponent<RectTransform>().anchoredPosition = pos[i];
+            // balloon.GetComponent<RectTransform>().anchoredPosition = pos[i];
             spawnedBalloons.Add(balloon);
 
             // Imagen principal
@@ -532,28 +532,28 @@ public class BalloonPopPartyManager : MonoBehaviour
 
         // ✅ Crear lista de opciones con bandera de correcto
         var options = new List<(Sprite sprite, string syll, bool correct)>
-    {
-        (spriteCorrect, activity.correct_option.syllabified_word, true),
-        (spriteWrong1, activity.wrong_option1.syllabified_word, false),
-        (spriteWrong2, activity.wrong_option2.syllabified_word, false),
-        (spriteWrong3, activity.wrong_option3.syllabified_word, false)
-    };
+        {
+            (spriteCorrect, activity.correct_option.syllabified_word, true),
+            (spriteWrong1, activity.wrong_option1.syllabified_word, false),
+            (spriteWrong2, activity.wrong_option2.syllabified_word, false),
+            (spriteWrong3, activity.wrong_option3.syllabified_word, false)
+        };
 
         // ✅ Posiciones fijas de globos
         Vector2[] positions =
         {
-        new Vector2(-350, 100),
-        new Vector2(350, 100),
-        new Vector2(-350, -150),
-        new Vector2(350, -150)
-    };
+            new Vector2(-350, 100),
+            new Vector2(350, 100),
+            new Vector2(-350, -150),
+            new Vector2(350, -150)
+        };
 
         // ✅ Crear los globos
         for (int i = 0; i < options.Count; i++)
         {
             GameObject balloon = Instantiate(balloonPrefab, container);
             balloon.name = $"Balloon_Relate_{i + 1}";
-            balloon.GetComponent<RectTransform>().anchoredPosition = positions[i];
+            //balloon.GetComponent<RectTransform>().anchoredPosition = positions[i];
             spawnedBalloons.Add(balloon);
 
             // Asignar imagen

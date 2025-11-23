@@ -26,9 +26,13 @@ public class PortraitLevelMapGenerator : MonoBehaviour
 
     private readonly string[] scenes = new string[]
     {
-        "BalloonPopSeaScene",
         "BalloonPopParty",
-        "CrossRiverScene",
+        "BalloonPopParty",
+        "BalloonPopParty",
+
+       // "BalloonPopSeaScene",
+       // "BalloonPopParty",
+       // "CrossRiverScene",
     };
 
     private void Start()
@@ -91,6 +95,10 @@ public class PortraitLevelMapGenerator : MonoBehaviour
             string sceneName = scenes[i % scenes.Length];
             LevelData levelData = sceneName switch
             {
+               // "BalloonPopSeaScene" => SeaData,
+               // "BalloonPopParty" => PartyData,
+               // "CrossRiverScene" => RiverData,
+            
                 "BalloonPopSeaScene" => SeaData,
                 "BalloonPopParty" => PartyData,
                 "CrossRiverScene" => RiverData,
