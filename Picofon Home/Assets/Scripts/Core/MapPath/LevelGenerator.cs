@@ -26,10 +26,12 @@ public class PortraitLevelMapGenerator : MonoBehaviour
 
     private readonly string[] scenes = new string[]
     {
+        // Modify here depen of what GameMechanic you want to render.
         "BalloonPopParty",
         "BalloonPopParty",
         "BalloonPopParty",
 
+        // this is the normal order.
        // "BalloonPopSeaScene",
        // "BalloonPopParty",
        // "CrossRiverScene",
@@ -94,10 +96,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
 
             string sceneName = scenes[i % scenes.Length];
             LevelData levelData = sceneName switch
-            {
-               // "BalloonPopSeaScene" => SeaData,
-               // "BalloonPopParty" => PartyData,
-               // "CrossRiverScene" => RiverData,
+            {              
             
                 "BalloonPopSeaScene" => SeaData,
                 "BalloonPopParty" => PartyData,
