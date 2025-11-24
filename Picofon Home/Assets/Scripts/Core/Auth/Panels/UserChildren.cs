@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using TMPro;
 using UnityEngine;
@@ -16,6 +17,8 @@ public class UserChildren : Panel
     public Button RegisterChildButton;
 
     private CancellationTokenSource cts;
+
+    private readonly Dictionary<string, string> childrenDict = new();
 
     public void Start()
     {
@@ -44,14 +47,19 @@ public class UserChildren : Panel
             string fullName = child.FirstName + " " + child.LastName;
             TMP_Dropdown.OptionData option = new(fullName);
             childrenDropdown.options.Add(option);
+
+            childrenDict[fullName] = child.Id;
         }
         childrenDropdown.RefreshShownValue();
     }
 
     private void OnSelectChild()
     {
-        // string selectedChild = childrenDropdown.options[childrenDropdown.value].text;
-        // UIManager.ShowChildDashboard(selectedChild);
+        string childName = childrenDropdown.options[childrenDropdown.value].text;
+        string childId = childrenDict[childName];
+
+        MapPathPayload.ChildId = childId;
+
         SceneManager.LoadScene("MapPathScene");
     }
 

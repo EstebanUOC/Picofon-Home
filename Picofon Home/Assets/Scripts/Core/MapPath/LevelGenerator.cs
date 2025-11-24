@@ -5,9 +5,6 @@ using static Level;
 
 public class PortraitLevelMapGenerator : MonoBehaviour
 {
-    [Header("API var")]
-    public string ChildId = "1805359203";
-
     [Header("Levels")]
     public RectTransform LevelContainer;
     public GameObject LevelPrefab;
@@ -32,12 +29,14 @@ public class PortraitLevelMapGenerator : MonoBehaviour
         "BalloonPopParty",
 
         // this is the normal order.
-       // "BalloonPopSeaScene",
-       // "BalloonPopParty",
-       // "CrossRiverScene",
+        // "BalloonPopSeaScene",
+        // "BalloonPopParty",
+        // "CrossRiverScene",
     };
 
-    private void Start()
+    private string ChildId = string.Empty;
+
+    public void Start()
     {
         bool existsData = LevelDataStore.ExistsPlans();
         if (existsData)
@@ -46,6 +45,9 @@ public class PortraitLevelMapGenerator : MonoBehaviour
             GenerateMap(plans);
             return;
         }
+
+        ChildId = MapPathPayload.ChildId;
+
         StartCoroutine(LoadMapData());
     }
 
@@ -96,8 +98,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
 
             string sceneName = scenes[i % scenes.Length];
             LevelData levelData = sceneName switch
-            {              
-            
+            {
                 "BalloonPopSeaScene" => SeaData,
                 "BalloonPopParty" => PartyData,
                 "CrossRiverScene" => RiverData,
