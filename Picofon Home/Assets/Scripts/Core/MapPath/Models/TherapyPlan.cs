@@ -41,7 +41,7 @@ public class TherapyPlan
     public string ChildId { get; set; } = string.Empty;
 
     [JsonInclude]
-    [JsonPropertyName("id")]
+    [JsonPropertyName("therapy_plan_id")]
     public int Id { get; set; } = 0;
 
     [JsonInclude]
