@@ -23,21 +23,24 @@ public class PortraitLevelMapGenerator : MonoBehaviour
 
     private readonly string[] scenes = new string[]
     {
-        // Modify here depen of what GameMechanic you want to render.
-        "BalloonPopParty",
-        "BalloonPopParty",
-        "BalloonPopParty",
+       // Modify here depen of what GameMechanic you want to render.
+       "BalloonPopSeaScene",
+       "BalloonPopSeaScene",
+       "BalloonPopSeaScene",
 
         // this is the normal order.
-        // "BalloonPopSeaScene",
-        // "BalloonPopParty",
-        // "CrossRiverScene",
+        //"BalloonPopSeaScene",
+        //"BalloonPopParty",
+        //"BalloonPopSeaScene",
     };
 
     private string ChildId = string.Empty;
 
     public void Start()
     {
+        // TESTING: Hardcode a specific child ID
+        // ChildId = "19013454K"; // ← Add this line
+
         bool existsData = LevelDataStore.ExistsPlans();
         if (existsData)
         {
@@ -45,7 +48,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
             GenerateMap(plans);
             return;
         }
-
+        // Comment out or remove this line since we're hardcoding above
         ChildId = MapPathPayload.ChildId;
 
         StartCoroutine(LoadMapData());
@@ -83,8 +86,13 @@ public class PortraitLevelMapGenerator : MonoBehaviour
     {
         int lastCompleted = GamePrefs.LastCompletedLevel;
         Debug.Log($" MAP: GamePrefs.LastCompletedLevel {lastCompleted}");
+
+        // Print all plan IDs obtained from API
+        Debug.Log("📋 All Plan IDs obtained from API:");
+
         for (int i = 0; i < plans.Count; i++)
         {
+            Debug.Log($"   Level {i + 1}: Plan ID = {plans[i].Id}, Scene = {scenes[i % scenes.Length]}");
             float x = (i % 2 == 0) ? RightX : LeftX;
             float y = StartY + (i * StepY);
             Vector2 position = new(x, y);
@@ -115,7 +123,10 @@ public class PortraitLevelMapGenerator : MonoBehaviour
                 levelType: levelType,
                 onClick: () => OnSelectLevel(planId: planId, sceneName: sceneName)
             );
+            // Print individual level creation info
+            Debug.Log($"🎮 Created Level {i + 1}: Plan ID = {planId}, Scene = {sceneName}, Position = {position}, Locked = {isLocked}");
         }
+        Debug.Log($"✅ Total levels generated: {plans.Count}");
     }
 
     private void OnSelectLevel(int planId, string sceneName)
