@@ -41,11 +41,10 @@ public class CrossRiverManager : MonoBehaviour
     [SerializeField] private Button buttonMapScene;
     [SerializeField] private Button buttonNextScene;
 
-    private readonly string mapSceneName = "MapPath";
-    private readonly string nextSceneName = "BalloonPopSeaScene";
+
     private ActivityJudge lastActivityShown;
 
-
+    private int currentTaskType = 1;
 
 
     // 🧍‍♂️ Personaje
@@ -61,6 +60,13 @@ public class CrossRiverManager : MonoBehaviour
     private List<GameObject> spawnedButtons = new();
     private int currentMode = 0;
     private GameAPIService apiService;
+
+
+    private List<ActivityJudge> judgeActivities = new();
+    private List<ActivitySelect> selectActivities = new();
+    private List<ActivityRelate> relateActivities = new();
+
+    private int currentActivityIndex = 0;
 
     // ============================================================
     // 🔹 Coordenadas configurables SOLO desde código
@@ -104,21 +110,20 @@ public class CrossRiverManager : MonoBehaviour
 
     private void Start()
     {
+        apiService = FindObjectOfType<GameAPIService>();
+        if (apiService == null)
+        {
+            Debug.LogError(" GameAPIService no encontrado.");
+            return;
+        }
+
+  
+        currentTaskType = apiService.GetCurrentTaskType();
+        Debug.Log($" CrossRiver Start() → task_type_id detectado = {currentTaskType}");
+
         AssignModeButtons();
-        if (buttonMapScene != null)
-        {
-            buttonMapScene.onClick.RemoveAllListeners();
-            buttonMapScene.onClick.AddListener(() => ChangeScene(mapSceneName));
-        }
 
-        if (buttonNextScene != null)
-        {
-            buttonNextScene.onClick.RemoveAllListeners();
-            buttonNextScene.onClick.AddListener(() => ChangeScene(nextSceneName));
-        }
-
-
-        StartCoroutine(LoadModeFromAPI(0));
+        StartCoroutine(LoadModeFromAPI(currentTaskType));
     }
 
     // ============================================================
@@ -126,84 +131,112 @@ public class CrossRiverManager : MonoBehaviour
     // ============================================================
     private IEnumerator LoadModeFromAPI(int mode)
     {
-        currentMode = mode;
+        currentTaskType = mode;
+
         if (apiService == null)
         {
-            Debug.LogError("❌ No se encontró GameAPIService en la escena.");
+            Debug.LogError(" No se encontró GameAPIService.");
             yield break;
         }
 
-      // Important change because have a new format API.  
-      //  yield return apiService.LoadActivity(mode,
-      //      json => LoadMode(mode, json),
-      //      err => Debug.LogError(err));
+        Debug.Log($" CrossRiver: Loading mode = {mode}");
+
+        yield return apiService.LoadActivity(
+            json => LoadMode(mode, json),
+            err => Debug.LogError($" CrossRiver API error: {err}")
+        );
+
+        // Important change because have a new format API.  
+        //  yield return apiService.LoadActivity(mode,
+        //      json => LoadMode(mode, json),
+        //      err => Debug.LogError(err));
     }
 
     public void LoadMode(int mode, string json)
     {
         ClearButtons();
-        currentMode = mode;
 
-        // 🔹 Controla visibilidad de imageMain
-        if (imageMain != null)
-            imageMain.gameObject.SetActive(mode == 2); // 👈 solo visible en modo Relate
+        if (string.IsNullOrEmpty(json))
+        {
+            Debug.LogError(" JSON vacío en LoadMode");
+            return;
+        }
+
+        Debug.Log($" CrossRiver → procesando JSON para modo {mode}");
 
         switch (mode)
         {
-            case 0:
-                var judgeData = JsonUtility.FromJson<ApiResponseJudge>(json);
-                if (judgeData?.data?.activity1 != null)
-                    LoadJudgeMode(judgeData.data.activity1);
-                else
-                    Debug.LogError("❌ JSON no contiene activity1 válido.");
-                break;
-
             case 1:
-                HideWordImages();
-                Resources.UnloadUnusedAssets();
-                System.GC.Collect();
+                var judgeData = JsonUtility.FromJson<ApiResponseJudge>(json);
 
-                var selectData = JsonUtility.FromJson<ApiResponseSelect>(json);
-                if (selectData?.data?.activity1 != null)
-                    LoadSelectMode(selectData.data.activity1);
-                else
-                    Debug.LogError("❌ JSON no contiene activity1 válido para modo Select.");
+                if (judgeData?.data == null)
+                {
+                    Debug.LogError(" JSON sin data (Judge)");
+                    return;
+                }
+
+                // limpiar lista
+                judgeActivities.Clear();
+                currentActivityIndex = 0;
+
+                // agregar actividades
+                if (judgeData.data.activity1 != null) judgeActivities.Add(judgeData.data.activity1);
+                if (judgeData.data.activity2 != null) judgeActivities.Add(judgeData.data.activity2);
+                if (judgeData.data.activity3 != null) judgeActivities.Add(judgeData.data.activity3);
+                if (judgeData.data.activity4 != null) judgeActivities.Add(judgeData.data.activity4);
+                if (judgeData.data.activity5 != null) judgeActivities.Add(judgeData.data.activity5);
+
+                LoadJudgeMode(judgeActivities[currentActivityIndex]);
                 break;
+
 
             case 2:
-                HideWordImages();
+                var selectData = JsonUtility.FromJson<ApiResponseSelect>(json);
 
-                // 🧹 Limpieza completa antes de deserializar
-                Resources.UnloadUnusedAssets();
-                System.GC.Collect();
-
-                var relateActivity = ParseRelateActivity(json);
-
-                if (relateActivity != null)
+                if (selectData?.data == null)
                 {
-                    Debug.Log($"🟣 RELATE cargado correctamente:");
-                    Debug.Log($" main_word={relateActivity.main_word.word} ({relateActivity.main_word.PATH})");
-                    Debug.Log($" correct_option={relateActivity.correct_option.word} ({relateActivity.correct_option.PATH})");
-                    Debug.Log($" wrong_option1={relateActivity.wrong_option1.word} ({relateActivity.wrong_option1.PATH})");
-                    Debug.Log($" wrong_option2={relateActivity.wrong_option2.word} ({relateActivity.wrong_option2.PATH})");
-                    Debug.Log($" wrong_option3={relateActivity.wrong_option3.word} ({relateActivity.wrong_option3.PATH})");
+                    Debug.LogError(" JSON sin data (Select)");
+                    return;
+                }
 
-                    LoadRelateMode(relateActivity);
-                }
-                else
-                {
-                    Debug.LogError("❌ No se pudo parsear correctamente el modo Relate.");
-                }
+                selectActivities.Clear();
+                currentActivityIndex = 0;
+
+                if (selectData.data.activity1 != null) selectActivities.Add(selectData.data.activity1);
+                if (selectData.data.activity2 != null) selectActivities.Add(selectData.data.activity2);
+                if (selectData.data.activity3 != null) selectActivities.Add(selectData.data.activity3);
+
+
+                LoadSelectMode(selectActivities[currentActivityIndex]);
                 break;
 
+
+            case 3:
+                var relateData = JsonUtility.FromJson<ApiResponseRelate>(json);
+
+                if (relateData?.data == null)
+                {
+                    Debug.LogError("❌ JSON sin data (Relate)");
+                    return;
+                }
+
+                relateActivities.Clear();
+                currentActivityIndex = 0;
+
+                if (relateData.data.activity1 != null) relateActivities.Add(relateData.data.activity1);
+                if (relateData.data.activity2 != null) relateActivities.Add(relateData.data.activity2);
+
+
+                LoadRelateMode(relateActivities[currentActivityIndex]);
+                break;
 
 
             default:
-                HideWordImages();
-                Debug.LogWarning($"⚠️ Modo {mode} no implementado.");
+                Debug.LogError($" task_type_id no soportado: {mode}");
                 break;
         }
     }
+
 
     // ============================================================
     // 🧩 Normaliza campos PATH del JSON (para RELATE o SELECT)
@@ -240,14 +273,18 @@ public class CrossRiverManager : MonoBehaviour
     {
         ClearButtons();
 
-        // 📄 Texto de la consigna
+        if (firstImage != null)
+            firstImage.gameObject.SetActive(false);
+        if (secondImage != null)
+            secondImage.gameObject.SetActive(false);
+
         if (questionText != null)
             questionText.text = activity.question;
 
-        // 🧩 Normaliza los PATH antes de cargar sprites
+
         NormalizePaths_Relate(activity);
 
-        // 🖼️ Imagen principal (main_word)
+
         if (imageMain != null)
         {
             imageMain.gameObject.SetActive(true);
@@ -420,7 +457,12 @@ public class CrossRiverManager : MonoBehaviour
 
         // 6️⃣ Si fue correcto, recargar nueva actividad
         if (correct)
-            yield return StartCoroutine(LoadModeFromAPI(currentMode));
+        {
+            yield return StartCoroutine(NextActivity());
+        }
+
+
+
 
         isAnimating = false;
     }
@@ -432,6 +474,14 @@ public class CrossRiverManager : MonoBehaviour
     // ============================================================
     private void LoadSelectMode(ActivitySelect activity)
     {
+        if (imageMain != null)
+            imageMain.gameObject.SetActive(false);
+
+        if (firstImage != null) 
+            firstImage.gameObject.SetActive(false);
+        if (secondImage != null) 
+            secondImage.gameObject.SetActive(false);
+
         if (questionText != null)
             questionText.text = activity.question;
 
@@ -668,7 +718,8 @@ public class CrossRiverManager : MonoBehaviour
 
         // 6) Recargar la actividad del modo actual si fue correcta (igual que en modo 0)
         if (correct)
-            yield return StartCoroutine(LoadModeFromAPI(currentMode));
+            yield return StartCoroutine(LoadModeFromAPI(currentTaskType));
+
 
         isAnimating = false;
     }
@@ -715,7 +766,8 @@ public class CrossRiverManager : MonoBehaviour
             }
 
             // Nueva petición segura al backend
-            yield return StartCoroutine(LoadModeFromAPI(currentMode));
+            yield return StartCoroutine(LoadModeFromAPI(currentTaskType));
+
         }
 
         isAnimating = false;
@@ -773,7 +825,8 @@ public class CrossRiverManager : MonoBehaviour
         yield return new WaitForSeconds(2.5f);
 
         // Recargar siguiente actividad del mismo modo
-        StartCoroutine(LoadModeFromAPI(currentMode));
+        StartCoroutine(LoadModeFromAPI(currentTaskType));
+
 
         isAnimating = false;
     }
@@ -792,6 +845,12 @@ public class CrossRiverManager : MonoBehaviour
     // ============================================================
     private void LoadJudgeMode(ActivityJudge activity)
     {
+        if (imageMain != null)
+            imageMain.gameObject.SetActive(false);
+        if (firstImage != null) 
+            firstImage.gameObject.SetActive(false);
+        if (secondImage != null) 
+            secondImage.gameObject.SetActive(false);
         lastActivityShown = activity;
         if (questionText != null)
             questionText.text = activity.question;
@@ -1028,7 +1087,8 @@ public class CrossRiverManager : MonoBehaviour
         yield return MoveToCurve(imageCharacter, startCharacterPos);
 
         // 🔹 5. Nueva petición para recargar imágenes del modo actual
-        StartCoroutine(LoadModeFromAPI(currentMode));
+        StartCoroutine(LoadModeFromAPI(currentTaskType));
+
 
         isAnimating = false;
     }
@@ -1149,22 +1209,28 @@ public class CrossRiverManager : MonoBehaviour
 
         if (topButtonsContainer == null)
         {
-            Debug.LogWarning("⚠️ No se encontró TopButtons.");
+            Debug.LogWarning(" No se encontró TopButtons.");
             return;
         }
 
         for (int i = 0; i < 3; i++)
         {
-            int mode = i;
             Transform button = topButtonsContainer.Find($"Button{i}");
             if (button != null && button.TryGetComponent(out Button btn))
             {
                 btn.onClick.RemoveAllListeners();
-                btn.onClick.AddListener(() => StartCoroutine(LoadModeFromAPI(mode)));
-                Debug.Log($"🎮 Asignado Button{i} → modo {mode}");
+                btn.onClick.AddListener(() =>
+                {
+                    currentTaskType = apiService.GetCurrentTaskType();
+                    Debug.Log($" Recargando modo real: {currentTaskType}");
+                    StartCoroutine(LoadModeFromAPI(currentTaskType));
+                });
+
+                Debug.Log($" Botón Button{i} asignado (recarga task_type).");
             }
         }
     }
+
 
     // ============================================================
     // 🌀 Movimiento del personaje
@@ -1313,6 +1379,48 @@ public class CrossRiverManager : MonoBehaviour
             return null;
         }
     }
+    private IEnumerator NextActivity()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        currentActivityIndex++;
+
+        // Judge
+        if (currentTaskType == 1)
+        {
+            if (currentActivityIndex < judgeActivities.Count)
+            {
+                LoadJudgeMode(judgeActivities[currentActivityIndex]);
+                yield break;
+            }
+        }
+
+        // Select
+        if (currentTaskType == 2)
+        {
+            if (currentActivityIndex < selectActivities.Count)
+            {
+                LoadSelectMode(selectActivities[currentActivityIndex]);
+                yield break;
+            }
+        }
+
+        // Relate
+        if (currentTaskType == 3)
+        {
+            if (currentActivityIndex < relateActivities.Count)
+            {
+                LoadRelateMode(relateActivities[currentActivityIndex]);
+                yield break;
+            }
+        }
+
+        // Si ya no quedan actividades → pedir nuevo set
+        Debug.Log(" FIN DEL GRUPO → Cargar nuevo set");
+        currentActivityIndex = 0; 
+        StartCoroutine(LoadModeFromAPI(currentTaskType));
+    }
+
 
 
 
