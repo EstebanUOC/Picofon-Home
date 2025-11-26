@@ -9,16 +9,19 @@ public class UserChildren : Panel
 {
     public UIManager UIManager;
 
-    [Header("Dropdowns")]
+    [Space(15)]
     public TMP_Dropdown childrenDropdown;
 
-    [Header("Buttons")]
+    [Space(15)]
     public Button SelectChildButton;
     public Button RegisterChildButton;
 
-    private CancellationTokenSource cts;
+    [Space(15)]
+    public Button LogoutButton;
 
     private readonly Dictionary<string, string> childrenDict = new();
+
+    private CancellationTokenSource cts;
 
     public void Start()
     {

@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Activities/BasketScene 1.unity
     guid: 62a070b40cc6b917381e3b30303a3561
   - enabled: 1
