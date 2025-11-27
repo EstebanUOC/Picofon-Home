@@ -39,7 +39,6 @@ public class Panel : MonoBehaviour
 
     private IEnumerator FadeOut()
     {
-        Debug.Log("Hiding panel: " + gameObject.name);
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
 

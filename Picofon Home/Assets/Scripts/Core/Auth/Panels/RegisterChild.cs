@@ -1,6 +1,8 @@
+using System;
 using System.Threading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class RegisterChild : Panel
@@ -53,13 +55,32 @@ public class RegisterChild : Panel
 
         var response = await userService.RegisterChild(childData, cts);
 
-        if (!response.Success)
+        string message = string.Empty;
+
+        if (response.Success)
         {
-            Debug.LogError("Child registration failed: ");
+            message = "Les dades del nen s'han enviat correctament.";
+        }
+        else
+        {
             foreach (var error in response.Message.Content)
             {
-                Debug.LogError(error);
+                Debug.LogError($"Error registering child: {error}");
+                message += error + "\n";
             }
         }
+
+        Action callback = response.Success
+            ? () => SceneManager.LoadScene("MapPathScene")
+            : () => { };
+
+        ModalData modalData = new()
+        {
+            Title = "Registre de nen",
+            Message = message,
+            OnClose = callback,
+        };
+
+        UIManager.ShowModal(modalData);
     }
 }

@@ -55,7 +55,6 @@ public class Form : MonoBehaviour
             }
         }
 
-        Debug.Log($"All inputs valid: {allValid}");
         ContinueButton.interactable = allValid;
     }
 

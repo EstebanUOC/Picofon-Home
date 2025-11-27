@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    [Header("Panels")]
+    [Space(15)]
     public Panel LoginPanel;
     public Panel DisclaimerPanel;
     public Panel UserChildrenPanel;
@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
 
     [Space(15)]
     public Panel LoadingPanel;
+    public Modal ModalPanel;
 
     public UserDataDTO CurrentUser { get; set; }
 
@@ -18,7 +19,6 @@ public class UIManager : MonoBehaviour
     public void Start()
     {
         LoginPanel.Show();
-        // ShowRegisterChild();
     }
 
     private void HideAllPanels()
@@ -51,5 +51,10 @@ public class UIManager : MonoBehaviour
     {
         HideAllPanels();
         UserChildrenPanel.Show();
+    }
+
+    public void ShowModal(ModalData data)
+    {
+        ModalPanel.Show(data);
     }
 }
