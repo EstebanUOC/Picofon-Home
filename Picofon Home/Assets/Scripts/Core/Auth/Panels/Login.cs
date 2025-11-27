@@ -22,7 +22,6 @@ public class Login : Panel
     public void Start()
     {
         firebaseService = new FirebaseService();
-        firebaseService.InitFirebase();
 
         GoogleSignIn.Configuration = new GoogleSignInConfiguration
         {
@@ -130,7 +129,7 @@ public class Login : Panel
             Username = user.DisplayName,
         };
 
-        UIManager.User = userData;
+        UIManager.CurrentUser = userData;
         UIManager.ShowDisclaimer();
     }
 
@@ -143,7 +142,7 @@ public class Login : Panel
             Username = "Debug User",
         };
 
-        UIManager.User = debugUser;
+        UIManager.CurrentUser = debugUser;
         UIManager.ShowDisclaimer();
     }
 }

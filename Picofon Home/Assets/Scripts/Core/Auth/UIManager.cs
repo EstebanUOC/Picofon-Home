@@ -8,18 +8,16 @@ public class UIManager : MonoBehaviour
     public Panel UserChildrenPanel;
     public Panel RegisterChildPanel;
 
-    private UserDataDTO user;
+    [Space(15)]
+    public Panel LoadingPanel;
 
-    public UserDataDTO User
-    {
-        get { return user; }
-        set { user = value; }
-    }
+    public UserDataDTO CurrentUser { get; set; }
+
     public UserService UserService = new();
 
     public void Start()
     {
-        ShowLogin();
+        LoginPanel.Show();
         // ShowRegisterChild();
     }
 

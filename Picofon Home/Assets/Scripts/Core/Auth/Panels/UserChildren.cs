@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading;
+using Firebase.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -40,7 +41,7 @@ public class UserChildren : Panel
         UserService userService = UIManager.UserService;
         cts = new CancellationTokenSource();
 
-        string userId = UIManager.User.Id;
+        string userId = UIManager.CurrentUser.Id;
 
         var children = await userService.GetUserChildren(userId, cts);
 

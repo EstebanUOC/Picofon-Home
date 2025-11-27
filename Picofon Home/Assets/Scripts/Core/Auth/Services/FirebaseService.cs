@@ -4,16 +4,14 @@ using Firebase.Auth;
 using Firebase.Extensions;
 using UnityEngine;
 
-public class FirebaseService : MonoBehaviour
+public class FirebaseService
 {
     private FirebaseAuth auth;
-    private bool _isFirebaseReady = false;
 
-    public bool IsFirebaseReady => _isFirebaseReady;
+    public bool IsFirebaseReady { get; private set; }
 
-    public void InitFirebase()
+    public FirebaseService()
     {
-        Debug.Log("Firebase initialized.");
         FirebaseApp
             .CheckAndFixDependenciesAsync()
             .ContinueWithOnMainThread(task =>
@@ -22,7 +20,7 @@ public class FirebaseService : MonoBehaviour
                 if (status == DependencyStatus.Available)
                 {
                     auth = FirebaseAuth.DefaultInstance;
-                    _isFirebaseReady = true;
+                    IsFirebaseReady = true;
                     Debug.Log("Firebase ready for authentication.");
                 }
                 else

@@ -25,7 +25,7 @@ public class RegisterChild : Panel
     public override void Show()
     {
         base.Show();
-        UserDataDTO parentData = UIManager.User;
+        UserDataDTO parentData = UIManager.CurrentUser;
 
         EmailText.text = parentData.Email;
         UsernameText.text = parentData.Username;
