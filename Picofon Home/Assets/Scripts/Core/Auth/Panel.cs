@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Panel : MonoBehaviour
 {
-    public float FadeDuration = 10;
+    public float FadeDuration = 0.2f;
 
     private CanvasGroup canvasGroup;
 
