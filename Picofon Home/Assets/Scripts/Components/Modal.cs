@@ -1,29 +1,31 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+public struct ModalData
+{
+    public string Title;
+    public string Message;
+    public Action OnClose;
+}
+
 public class Modal : MonoBehaviour
 {
-    [Header("Properties")]
-    public TextMeshProUGUI titleText;
-    public TextMeshProUGUI messageText;
-    public Button confirmButton;
+    [Space(15)]
+    public TextMeshProUGUI Title;
+    public TextMeshProUGUI Message;
+    public Button ConfirmButton;
 
-    private void Awake()
+    public void Show(ModalData data)
     {
-        gameObject.SetActive(false);
-    }
-
-    public void Show(string title, string message, UnityEngine.Events.UnityAction onConfirm)
-    {
-        titleText.text = title;
-        messageText.text = message;
-
-        confirmButton.onClick.RemoveAllListeners();
-        confirmButton.onClick.AddListener(onConfirm);
-        confirmButton.onClick.AddListener(Hide);
-
         gameObject.SetActive(true);
+        Title.text = data.Title;
+        Message.text = data.Message;
+
+        ConfirmButton.onClick.RemoveAllListeners();
+        ConfirmButton.onClick.AddListener(() => data.OnClose?.Invoke());
+        ConfirmButton.onClick.AddListener(Hide);
     }
 
     public void Hide()

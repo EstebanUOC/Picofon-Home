@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class BallTest : MonoBehaviour
 {
-    public Transform TargetPoint;
+    public Transform TargetPosition { get; set; }
+
     public Transform DriblePosition;
 
     private float time = 0;
@@ -14,42 +15,14 @@ public class BallTest : MonoBehaviour
 
     private Rigidbody2D body;
 
-    private void Start()
+    public void Start()
     {
         Application.targetFrameRate = 60;
         body = GetComponent<Rigidbody2D>();
     }
 
-    private void Update()
+    public void Update()
     {
-        if (ballIsFlying)
-        {
-            time += Time.deltaTime;
-            float t01 = time / duration;
-
-            Vector3 a = initial;
-            Vector3 b = TargetPoint.position;
-
-            Vector3 pos = Vector3.Lerp(a, b, t01);
-            Vector3 arc = Vector3.up * 5 * Mathf.Sin(t01 * 3.14f);
-
-            transform.position = pos + arc;
-
-            if (t01 >= 1)
-            {
-                body.bodyType = RigidbodyType2D.Dynamic;
-                body.velocity = new Vector2(1, -1) * 12.5f;
-                ballIsFlying = false;
-            }
-        }
-
-        if (ballIsDribling)
-        {
-            time += Time.deltaTime;
-            Vector3 drible = Vector3.up * Mathf.Abs(Mathf.Sin(time * 5));
-            transform.position = DriblePosition.position + drible;
-        }
-
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             body.bodyType = RigidbodyType2D.Kinematic;
@@ -70,6 +43,38 @@ public class BallTest : MonoBehaviour
             body.velocity = Vector2.zero;
 
             ballIsDribling = true;
+        }
+    }
+
+    public void FixedUpdate()
+    {
+        if (ballIsFlying)
+        {
+            time += Time.deltaTime;
+            float t01 = time / duration;
+
+            Vector3 a = initial;
+            Vector3 b = TargetPosition.position;
+
+            Vector3 pos = Vector3.Lerp(a, b, t01);
+            Vector3 arc = Vector3.up * 5 * Mathf.Sin(t01 * 3.14f);
+
+            transform.position = pos + arc;
+
+            if (t01 >= 1)
+            {
+                body.bodyType = RigidbodyType2D.Dynamic;
+                // body.velocity = new Vector2(-1, -1) * 12.5f;
+                body.velocity = new Vector2(1, -1) * 12.5f;
+                ballIsFlying = false;
+            }
+        }
+
+        if (ballIsDribling)
+        {
+            time += Time.deltaTime;
+            Vector3 drible = Vector3.up * Mathf.Abs(Mathf.Sin(time * 5));
+            transform.position = DriblePosition.position + drible;
         }
     }
 }

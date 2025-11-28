@@ -5,7 +5,7 @@ public class Disclaimer : Panel
 {
     public UIManager UIManager;
 
-    [Header("Buttons")]
+    [Space(15)]
     public Button AcceptButton;
     public Button DeclineButton;
 
@@ -13,10 +13,19 @@ public class Disclaimer : Panel
     {
         AcceptButton.onClick.AddListener(OnAccept);
         DeclineButton.onClick.AddListener(OnDecline);
+
+        if (Debug.isDebugBuild)
+            return;
+
+        if (GamePrefs.HasAcceptedTerms)
+            UIManager.ShowUserChildren();
     }
 
     private void OnAccept()
     {
+        if (!Debug.isDebugBuild)
+            GamePrefs.HasAcceptedTerms = true;
+
         UIManager.ShowUserChildren();
     }
 
