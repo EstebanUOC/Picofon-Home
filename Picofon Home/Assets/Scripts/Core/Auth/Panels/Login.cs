@@ -13,22 +13,22 @@ public class Login : Panel
     public Button LoginButton;
     public Button DebugSignInButton;
 
-    private readonly string googleAPI =
-        "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
-
     private FirebaseService firebaseService;
     private bool isSigningIn = false;
 
+    private readonly string googleAPI =
+        "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
+
     public void Start()
     {
-        firebaseService = new FirebaseService();
-
         GoogleSignIn.Configuration = new GoogleSignInConfiguration
         {
             RequestIdToken = true,
             WebClientId = googleAPI,
             RequestEmail = true,
         };
+
+        firebaseService = new FirebaseService();
 
         LoginButton.onClick.AddListener(AuthenticateWithGoogle);
         DebugSignInButton.onClick.AddListener(OnDebugLogin);

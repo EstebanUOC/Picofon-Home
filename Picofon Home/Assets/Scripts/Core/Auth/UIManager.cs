@@ -18,7 +18,7 @@ public class UIManager : MonoBehaviour
 
     public void Start()
     {
-        LoginPanel.Show();
+        ShowLogin();
     }
 
     private void HideAllPanels()

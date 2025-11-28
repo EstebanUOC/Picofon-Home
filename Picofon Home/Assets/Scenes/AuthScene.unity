@@ -970,15 +970,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 93977536}
-  - component: {fileID: 93977537}
   - component: {fileID: 93977538}
+  - component: {fileID: 93977540}
+  - component: {fileID: 93977539}
   m_Layer: 5
   m_Name: Panel Loading
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &93977536
 RectTransform:
   m_ObjectHideFlags: 0
@@ -999,18 +1000,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!225 &93977537
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 93977535}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!114 &93977538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1023,7 +1012,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8c7d93d48b6f751fbad752ad5c4e9d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FadeDuration: 0.2
+--- !u!114 &93977539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 93977535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &93977540
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 93977535}
+  m_CullTransparentMesh: 1
 --- !u!1 &128531869
 GameObject:
   m_ObjectHideFlags: 0
@@ -1550,7 +1576,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &201032545
 MonoBehaviour:
@@ -1569,7 +1595,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 1
+  m_ChildAlignment: 4
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -1724,7 +1750,7 @@ GameObject:
   - component: {fileID: 222163233}
   - component: {fileID: 222163232}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1744,10 +1770,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 201032544}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -50}
-  m_SizeDelta: {x: 1080, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &222163232
 MonoBehaviour:
@@ -1769,7 +1795,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Carregant...
+  m_text: Picofone
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c9fee1c54bcaee4099e5b14c562842c, type: 2}
   m_sharedMaterial: {fileID: 4011702492835129195, guid: 6c9fee1c54bcaee4099e5b14c562842c, type: 2}
@@ -1778,8 +1804,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4294404990
+  m_fontColor: {r: 0.49411765, g: 0.41960785, b: 0.96862745, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1796,8 +1822,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 100
+  m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -7543,7 +7569,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8727d9695311e174a977e72da05af79c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FadeDuration: 0.2
   UIManager: {fileID: 1611279578}
   EmailText: {fileID: 283359479}
   UsernameText: {fileID: 1813850168}
@@ -8432,7 +8457,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b2b303a95b8a66809455e9020cd6eef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FadeDuration: 0.2
   UIManager: {fileID: 1611279578}
   AcceptButton: {fileID: 1882287604}
   DeclineButton: {fileID: 417242775}
@@ -8843,7 +8867,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 796c2c91cbdaea4489babbbb437f04f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FadeDuration: 0.2
   UIManager: {fileID: 1611279578}
   LoginButton: {fileID: 1479818090}
   DebugSignInButton: {fileID: 1977639348}
@@ -16900,7 +16923,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf0a1b3cc753490619650d2cb61c40d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FadeDuration: 0.2
   UIManager: {fileID: 1611279578}
   childrenDropdown: {fileID: 341550861}
   SelectChildButton: {fileID: 2024222802}
