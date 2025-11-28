@@ -10,6 +10,9 @@ public class DateInput : FormInput
     public TMP_InputField YearInput;
 
     [Space(15)]
+    public int MaxAge = 0;
+
+    [Space(15)]
     public TMP_Text InfoText;
 
     private ColorBlock _defaultColorBlock;
@@ -20,7 +23,7 @@ public class DateInput : FormInput
     private const int MaxDay = 31;
     private const int MinMonth = 1;
     private const int MaxMonth = 12;
-    private const int MinYear = 2000;
+    private int _minYear = 2000;
 
     public void Start()
     {
@@ -35,6 +38,8 @@ public class DateInput : FormInput
             ValidateAndFormatInput(MonthInput, MinMonth, MaxMonth, input)
         );
         YearInput.onEndEdit.AddListener(OnYearInputChange);
+
+        _minYear = System.DateTime.Now.Year - MaxAge;
     }
 
     private void ValidateAndFormatInput(TMP_InputField inputField, int min, int max, string input)
@@ -61,7 +66,8 @@ public class DateInput : FormInput
         }
 
         int currentYear = System.DateTime.Now.Year;
-        year = Mathf.Clamp(year, MinYear, currentYear);
+
+        year = Mathf.Clamp(year, _minYear, currentYear);
         YearInput.text = year.ToString();
         ValidateInput();
     }
