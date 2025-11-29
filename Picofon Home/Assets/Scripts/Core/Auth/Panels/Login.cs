@@ -36,11 +36,11 @@ public class Login : Panel
 
     private void AuthenticateWithGoogle()
     {
-        if (!firebaseService.IsFirebaseReady)
-        {
-            Debug.LogWarning("⚠️ Firebase not ready yet. Please wait...");
-            return;
-        }
+        // if (!firebaseService.IsFirebaseReady)
+        // {
+        //     Debug.LogWarning("⚠️ Firebase not ready yet. Please wait...");
+        //     return;
+        // }
 
         if (isSigningIn)
         {

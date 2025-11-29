@@ -1,14 +1,15 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
 using UnityEngine;
 
-public class FirebaseService
+public class FirebaseService : ILoadTask
 {
-    private FirebaseAuth auth;
+    public bool IsCritical => true;
 
-    public bool IsFirebaseReady { get; private set; }
+    private FirebaseAuth auth;
 
     public FirebaseService()
     {
@@ -20,7 +21,6 @@ public class FirebaseService
                 if (status == DependencyStatus.Available)
                 {
                     auth = FirebaseAuth.DefaultInstance;
-                    IsFirebaseReady = true;
                     Debug.Log("Firebase ready for authentication.");
                 }
                 else
@@ -28,6 +28,11 @@ public class FirebaseService
                     Debug.LogError("Firebase dependencies not available: " + status);
                 }
             });
+    }
+
+    public Task RunAsync(CancellationToken ct)
+    {
+        throw new System.NotImplementedException();
     }
 
     public async Task<FirebaseUser> SignIn(Credential credential)
