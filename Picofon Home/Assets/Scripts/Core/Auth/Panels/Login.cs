@@ -12,9 +12,6 @@ public class Login : Panel
     public Button LoginButton;
     public Button DebugSignInButton;
 
-    private FirebaseService firebaseService;
-    private bool isSigningIn = false;
-
     private readonly string googleAPI =
         "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
 
@@ -27,8 +24,6 @@ public class Login : Panel
             RequestEmail = true,
         };
 
-        firebaseService = new FirebaseService();
-
         LoginButton.onClick.AddListener(AuthenticateWithGoogle);
         DebugSignInButton.onClick.AddListener(OnDebugLogin);
 
@@ -37,19 +32,6 @@ public class Login : Panel
 
     private void AuthenticateWithGoogle()
     {
-        // if (!firebaseService.IsFirebaseReady)
-        // {
-        //     Debug.LogWarning("⚠️ Firebase not ready yet. Please wait...");
-        //     return;
-        // }
-
-        if (isSigningIn)
-        {
-            Debug.LogWarning("⚠️ Already signing in. Please wait.");
-            return;
-        }
-
-        isSigningIn = true;
         Debug.Log("🚀 Starting Google Sign-In...");
 
         // Make sure there’s no existing session
@@ -60,8 +42,6 @@ public class Login : Panel
             .DefaultInstance.SignIn()
             .ContinueWithOnMainThread(async googleTask =>
             {
-                isSigningIn = false;
-
                 if (googleTask.IsFaulted)
                 {
                     Debug.LogError($"<DEBUG> Google Sign-In failed: {googleTask.Exception}");
