@@ -22,6 +22,8 @@ public class RegisterChild : Panel
     public void Start()
     {
         ContinueButton.onClick.AddListener(OnContinue);
+
+        OnHide += () => gameObject.SetActive(false);
     }
 
     public override void Show()

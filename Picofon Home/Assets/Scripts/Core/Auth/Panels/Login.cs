@@ -1,4 +1,3 @@
-using System;
 using Firebase.Auth;
 using Firebase.Extensions;
 using Google;
@@ -32,6 +31,8 @@ public class Login : Panel
 
         LoginButton.onClick.AddListener(AuthenticateWithGoogle);
         DebugSignInButton.onClick.AddListener(OnDebugLogin);
+
+        OnHide += () => gameObject.SetActive(false);
     }
 
     private void AuthenticateWithGoogle()
@@ -83,40 +84,41 @@ public class Login : Panel
                 Credential credential = GoogleAuthProvider.GetCredential(googleIdToken, null);
                 Debug.Log($"token: {credential}");
 
-                try
-                {
-                    FirebaseUser user = await firebaseService.SignIn(credential);
-                    Debug.Log($"✅ Firebase Auth success. Logged in as: {user.DisplayName}");
-
-                    // ✅ Get Firebase's ID token (NOT the Google OAuth token)
-                    string firebaseIdToken = await user.TokenAsync(true);
-                    Debug.Log($"Important firebaseIdToken {firebaseIdToken}");
-
-                    Debug.Log($"📤 Sending Firebase ID Token to backend for {user.Email}");
-
-                    // Send the ID token to your backend
-                    StartCoroutine(
-                        new LoginAPI().SendFirebaseToken(
-                            firebaseIdToken,
-                            (success, user) =>
-                            {
-                                if (!success)
-                                {
-                                    Debug.LogError("❌ Backend login failed.");
-                                    return;
-                                }
-
-                                Debug.Log("Backend login successful, user: " + user);
-                            }
-                        )
-                    );
-
-                    OnLoginSuccess(user);
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError($"🔥 Firebase Auth exception: {ex.Message}");
-                }
+                // try
+                // {
+                //     // FirebaseUser user = await firebaseService.SignIn(credential);
+                //     FirebaseUser user = new FirebaseUser();
+                //     Debug.Log($"✅ Firebase Auth success. Logged in as: {user.DisplayName}");
+                //
+                //     // ✅ Get Firebase's ID token (NOT the Google OAuth token)
+                //     string firebaseIdToken = await user.TokenAsync(true);
+                //     Debug.Log($"Important firebaseIdToken {firebaseIdToken}");
+                //
+                //     Debug.Log($"📤 Sending Firebase ID Token to backend for {user.Email}");
+                //
+                //     // Send the ID token to your backend
+                //     StartCoroutine(
+                //         new LoginAPI().SendFirebaseToken(
+                //             firebaseIdToken,
+                //             (success, user) =>
+                //             {
+                //                 if (!success)
+                //                 {
+                //                     Debug.LogError("❌ Backend login failed.");
+                //                     return;
+                //                 }
+                //
+                //                 Debug.Log("Backend login successful, user: " + user);
+                //             }
+                //         )
+                //     );
+                //
+                //     OnLoginSuccess(user);
+                // }
+                // catch (Exception ex)
+                // {
+                //     Debug.LogError($"🔥 Firebase Auth exception: {ex.Message}");
+                // }
             });
     }
 

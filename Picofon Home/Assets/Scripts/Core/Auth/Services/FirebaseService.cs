@@ -1,44 +1,36 @@
 using System.Threading;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Firebase;
-using Firebase.Auth;
-using Firebase.Extensions;
 using UnityEngine;
 
-public class FirebaseService : ILoadTask
+public class FirebaseService : ILoadTaskSimple
 {
     public bool IsCritical => true;
 
-    private FirebaseAuth auth;
-
-    public FirebaseService()
+    public async UniTask<bool> RunAsync(CancellationToken ct, CancellationToken timeoutCt = default)
     {
-        FirebaseApp
+        var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(ct, timeoutCt);
+
+        var (isCancelled, dependencyStatus) = await FirebaseApp
             .CheckAndFixDependenciesAsync()
-            .ContinueWithOnMainThread(task =>
-            {
-                var status = task.Result;
-                if (status == DependencyStatus.Available)
-                {
-                    auth = FirebaseAuth.DefaultInstance;
-                    Debug.Log("Firebase ready for authentication.");
-                }
-                else
-                {
-                    Debug.LogError("Firebase dependencies not available: " + status);
-                }
-            });
-    }
+            .AsUniTask()
+            .AttachExternalCancellation(linkedTokenSource.Token)
+            .SuppressCancellationThrow();
 
-    public Task RunAsync(CancellationToken ct)
-    {
-        throw new System.NotImplementedException();
-    }
+        if (isCancelled)
+        {
+            Debug.LogWarning("Firebase dependency check was cancelled.");
+            return false;
+        }
 
-    public async Task<FirebaseUser> SignIn(Credential credential)
-    {
-        FirebaseUser user = await auth.SignInWithCredentialAsync(credential);
+        if (dependencyStatus != DependencyStatus.Available)
+        {
+            Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
+            return false;
+        }
 
-        return user;
+        Debug.Log("Firebase dependencies are available.");
+
+        return true;
     }
 }

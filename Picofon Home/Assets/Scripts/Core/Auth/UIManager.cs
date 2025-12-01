@@ -1,3 +1,7 @@
+using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using Firebase.Auth;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -13,12 +17,38 @@ public class UIManager : MonoBehaviour
     public Modal ModalPanel;
 
     public UserDataDTO CurrentUser { get; set; }
-
     public UserService UserService = new();
+
+    public FirebaseAuth FirebaseAuthInstance { get; private set; }
 
     public void Start()
     {
-        ShowLogin();
+        LoadingPanel.Show();
+        LoadThins().Forget();
+    }
+
+    private async UniTaskVoid LoadThins()
+    {
+        CancellationToken ct = this.GetCancellationTokenOnDestroy();
+
+        TimeoutController timeoutController = new();
+        CancellationToken timeoutCt = timeoutController.Timeout(TimeSpan.FromSeconds(30));
+
+        FirebaseService firebaseService = new();
+
+        bool success = await firebaseService.RunAsync(ct, timeoutCt);
+
+        if (!success)
+        {
+            Debug.LogError("Firebase failed to initialize.");
+            return;
+        }
+
+        await UniTask.WaitForSeconds(2, cancellationToken: ct);
+        LoadingPanel.Hide();
+        timeoutController.Reset();
+        timeoutController.Dispose();
+        FirebaseAuthInstance = FirebaseAuth.DefaultInstance;
     }
 
     private void HideAllPanels()
