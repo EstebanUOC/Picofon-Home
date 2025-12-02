@@ -892,9 +892,9 @@ public class CrossRiverManager : MonoBehaviour
 
                     // 🔹 Solo en modo 0 y en el primer prefab → usar el rosa
                     if (currentMode == 0 && i == 0)
-                        spritePath = "Images/Images/CrossRiver/lifebelt_pink_Lluni";
+                        spritePath = "Images/CrossRiver/lifebelt_pink_Lluni";
                     else
-                        spritePath = "Images/Images/CrossRiver/lifebelt_violet_Lluni";
+                        spritePath = "Images/CrossRiver/lifebelt_violet_Lluni";
 
                     Sprite lifebeltSprite = Resources.Load<Sprite>(spritePath);
                     if (lifebeltSprite != null)
