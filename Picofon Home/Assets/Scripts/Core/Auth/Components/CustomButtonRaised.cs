@@ -76,6 +76,7 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
             return;
 
         Debug.Log("CustomButtonRaised Clicked");
+        OnClick?.Invoke();
     }
 
     public override void OnPointerEnter(PointerEventData eventData)

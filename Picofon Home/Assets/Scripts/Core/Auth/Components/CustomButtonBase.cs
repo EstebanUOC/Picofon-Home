@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,6 +8,8 @@ public abstract class CustomButtonBase
         IPointerEnterHandler,
         IPointerExitHandler
 {
+    public Action OnClick;
+
     public virtual void OnPointerClick(PointerEventData eventData) { }
 
     public virtual void OnPointerEnter(PointerEventData eventData) { }

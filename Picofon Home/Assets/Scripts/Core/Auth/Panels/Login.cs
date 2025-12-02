@@ -2,15 +2,14 @@ using Firebase.Auth;
 using Firebase.Extensions;
 using Google;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Login : Panel
 {
     public UIManager UIManager;
 
     [Header("Buttons")]
-    public Button LoginButton;
-    public Button DebugSignInButton;
+    public CustomButtonBase LoginButton;
+    public CustomButtonBase DebugLoginButton;
 
     private readonly string googleAPI =
         "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
@@ -24,8 +23,8 @@ public class Login : Panel
             RequestEmail = true,
         };
 
-        LoginButton.onClick.AddListener(AuthenticateWithGoogle);
-        DebugSignInButton.onClick.AddListener(OnDebugLogin);
+        LoginButton.OnClick += AuthenticateWithGoogle;
+        DebugLoginButton.OnClick += OnDebugLogin;
 
         OnHide += () => gameObject.SetActive(false);
     }
