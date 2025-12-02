@@ -2597,8 +2597,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Duration: 0.1
   BackgroundRect: {fileID: 548234988}
-  ContentImage: {fileID: 170011393}
   ContentRect: {fileID: 170011391}
+  ContentCanvasGroup: {fileID: 170011392}
+  ContentImage: {fileID: 170011393}
   HoverColor: {r: 0.92156863, g: 0.8901961, b: 1, a: 1}
 --- !u!1 &276661676
 GameObject:
