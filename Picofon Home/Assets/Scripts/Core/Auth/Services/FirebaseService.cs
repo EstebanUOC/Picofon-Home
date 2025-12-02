@@ -1,39 +1,36 @@
-using System.Threading.Tasks;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Firebase;
-using Firebase.Auth;
-using Firebase.Extensions;
 using UnityEngine;
 
-public class FirebaseService
+public class FirebaseService : ILoadTaskSimple
 {
-    private FirebaseAuth auth;
+    public bool IsCritical => true;
 
-    public bool IsFirebaseReady { get; private set; }
-
-    public FirebaseService()
+    public async UniTask<bool> RunAsync(CancellationToken ct, CancellationToken timeoutCt = default)
     {
-        FirebaseApp
+        var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(ct, timeoutCt);
+
+        var (isCancelled, dependencyStatus) = await FirebaseApp
             .CheckAndFixDependenciesAsync()
-            .ContinueWithOnMainThread(task =>
-            {
-                var status = task.Result;
-                if (status == DependencyStatus.Available)
-                {
-                    auth = FirebaseAuth.DefaultInstance;
-                    IsFirebaseReady = true;
-                    Debug.Log("Firebase ready for authentication.");
-                }
-                else
-                {
-                    Debug.LogError("Firebase dependencies not available: " + status);
-                }
-            });
-    }
+            .AsUniTask()
+            .AttachExternalCancellation(linkedTokenSource.Token)
+            .SuppressCancellationThrow();
 
-    public async Task<FirebaseUser> SignIn(Credential credential)
-    {
-        FirebaseUser user = await auth.SignInWithCredentialAsync(credential);
+        if (isCancelled)
+        {
+            Debug.LogWarning("Firebase dependency check was cancelled.");
+            return false;
+        }
 
-        return user;
+        if (dependencyStatus != DependencyStatus.Available)
+        {
+            Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
+            return false;
+        }
+
+        Debug.Log("Firebase dependencies are available.");
+
+        return true;
     }
 }

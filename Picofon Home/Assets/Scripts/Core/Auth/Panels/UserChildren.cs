@@ -28,6 +28,8 @@ public class UserChildren : Panel
     {
         SelectChildButton.onClick.AddListener(OnSelectChild);
         RegisterChildButton.onClick.AddListener(OnRegisterChild);
+
+        OnHide += () => gameObject.SetActive(false);
     }
 
     public override void Show()

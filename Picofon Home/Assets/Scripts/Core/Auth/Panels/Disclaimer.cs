@@ -14,6 +14,8 @@ public class Disclaimer : Panel
         AcceptButton.onClick.AddListener(OnAccept);
         DeclineButton.onClick.AddListener(OnDecline);
 
+        OnHide += () => gameObject.SetActive(false);
+
         if (Debug.isDebugBuild)
             return;
 
