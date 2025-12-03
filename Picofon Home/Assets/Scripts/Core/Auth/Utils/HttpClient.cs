@@ -1,12 +1,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using UnityEngine;
+using Cysharp.Threading.Tasks;
 using UnityEngine.Networking;
 
 public static class HttpClientUnity
 {
-    public static async Task<string> GetAsync(
+    public static async UniTask<string> GetAsync(
         string url,
         int timeoutSeconds = 10,
         CancellationToken cancellationToken = default
@@ -16,9 +16,7 @@ public static class HttpClientUnity
 
         request.timeout = timeoutSeconds;
 
-        var op = request.SendWebRequest();
-
-        await AwaitRequest(op, request, cancellationToken);
+        await request.SendWebRequest().WithCancellation(cancellationToken);
 
         if (request.result != UnityWebRequest.Result.Success)
             throw new Exception($"HTTP GET Error: {request.error} | URL: {url}");
@@ -26,7 +24,7 @@ public static class HttpClientUnity
         return request.downloadHandler.text;
     }
 
-    public static async Task<string> PostAsync(
+    public static async UniTask<string> PostAsync(
         string url,
         string data,
         int timeoutSeconds = 10,
@@ -42,71 +40,12 @@ public static class HttpClientUnity
 
         request.timeout = timeoutSeconds;
 
-        var op = request.SendWebRequest();
-
-        var registration = cancellationToken.Register(() =>
-        {
-            if (request != null && !request.isDone)
-                request.Abort();
-        });
-
-        await AwaitRequest(op, request, cancellationToken);
-
-        registration.Dispose();
+        // await request.SendWebRequest().WithCancellation(cancellationToken);
+        await request.SendWebRequest();
 
         if (request.result != UnityWebRequest.Result.Success)
             throw new Exception($"HTTP POST Error: {request.error} | URL: {url}");
 
         return request.downloadHandler.text;
-    }
-
-    private static Task AwaitRequest(
-        UnityWebRequestAsyncOperation op,
-        UnityWebRequest request,
-        CancellationToken ct
-    )
-    {
-        if (ct.IsCancellationRequested)
-        {
-            try
-            {
-                request?.Abort();
-            }
-            catch { }
-            return Task.FromCanceled(ct);
-        }
-
-        var tcs = new TaskCompletionSource<bool>();
-
-        CancellationTokenRegistration registration = default;
-
-        void callbackComplete(AsyncOperation _)
-        {
-            registration.Dispose();
-
-            if (ct.IsCancellationRequested)
-                tcs.TrySetCanceled(ct);
-            else
-                tcs.TrySetResult(true);
-
-            op.completed -= callbackComplete;
-        }
-
-        op.completed += callbackComplete;
-
-        registration = ct.Register(() =>
-        {
-            try
-            {
-                request?.Abort();
-            }
-            catch { }
-
-            tcs.TrySetCanceled(ct);
-
-            op.completed -= callbackComplete;
-        });
-
-        return tcs.Task;
     }
 }

@@ -7,9 +7,4 @@ public class LoginResponse
 
     [JsonInclude]
     public UserModel Data { get; set; }
-
-    public static LoginResponse FromJson(string json)
-    {
-        return JsonHelper.FromJson<LoginResponse>(json);
-    }
 }

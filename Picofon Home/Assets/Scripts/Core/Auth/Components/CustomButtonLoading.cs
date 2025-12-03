@@ -1,3 +1,5 @@
+using System;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,32 +11,39 @@ public class CustomButtonLoading : CustomButtonRaised
     public CanvasGroup InfoCanvasGroup;
     public CanvasGroup LoadingCanvasGroup;
 
-    private Sequence fadeSequence;
-    private Tween loadingTween;
+    public Func<UniTask> OnClickAsync;
 
-    private bool _loading = false;
     private bool Loading
     {
         get => _loading;
         set
         {
+            if (_loading == value)
+                return;
+
             _loading = value;
 
             if (_loading)
             {
+                Interactable = false;
                 InfoCanvasGroup.alpha = 0;
                 fadeSequence.Restart();
-
                 loadingTween.Restart();
             }
             else
             {
+                Interactable = true;
+                InfoCanvasGroup.alpha = 1;
                 fadeSequence.PlayBackwards();
                 loadingTween.Pause();
-                InfoCanvasGroup.alpha = 1;
             }
         }
     }
+
+    private bool _loading = false;
+
+    private Sequence fadeSequence;
+    private Tween loadingTween;
 
     public void Start()
     {
@@ -57,7 +66,7 @@ public class CustomButtonLoading : CustomButtonRaised
         if (Loading)
             return;
 
-        Loading = true;
+        HandleClickAsync().Forget();
     }
 
     public override void OnPointerEnter(PointerEventData eventData)
@@ -74,5 +83,12 @@ public class CustomButtonLoading : CustomButtonRaised
             return;
 
         base.OnPointerExit(eventData);
+    }
+
+    private async UniTaskVoid HandleClickAsync()
+    {
+        Loading = true;
+        await (OnClickAsync?.Invoke() ?? UniTask.CompletedTask);
+        Loading = false;
     }
 }

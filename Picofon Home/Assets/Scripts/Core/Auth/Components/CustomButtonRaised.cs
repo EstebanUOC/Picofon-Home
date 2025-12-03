@@ -22,21 +22,26 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
         get => _interactable;
         set
         {
+            if (_interactable == value)
+                return;
+
             _interactable = value;
+            float fade = _interactable ? 1f : 0.6f;
+            ContentCanvasGroup.DOFade(fade, Duration);
+
             if (_interactable)
             {
                 _hoverSequence.PlayBackwards();
-                ContentCanvasGroup.DOFade(1f, Duration);
+                return;
             }
-            else
-            {
+
+            if (!_isHovered)
                 _hoverSequence.Restart();
-                ContentCanvasGroup.DOFade(0.6f, Duration);
-            }
         }
     }
 
     private bool _interactable = true;
+    private bool _isHovered = false;
 
     private Sequence _hoverSequence;
 
@@ -75,7 +80,6 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
         if (!_interactable)
             return;
 
-        Debug.Log("CustomButtonRaised Clicked");
         OnClick?.Invoke();
     }
 
@@ -84,6 +88,7 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
         if (!_interactable)
             return;
 
+        _isHovered = true;
         _hoverSequence.Restart();
     }
 
@@ -92,6 +97,7 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
         if (!_interactable)
             return;
 
+        _isHovered = false;
         _hoverSequence.PlayBackwards();
     }
 
