@@ -16,6 +16,9 @@ public class UIManager : MonoBehaviour
     public Panel LoadingPanel;
     public Modal ModalPanel;
 
+    [Space(15)]
+    public float VersionNumber = 0.2f;
+
     public UserDataDTO CurrentUser { get; set; }
     public UserService UserService = new();
 

@@ -8,9 +8,12 @@ public class Login : Panel
 {
     public UIManager UIManager;
 
-    [Header("Buttons")]
+    [Space(15)]
     public CustomButtonLoading LoginButton;
     public CustomButtonBase DebugLoginButton;
+
+    [Space(15)]
+    public TMPro.TMP_Text VersionText;
 
     private readonly string googleAPI =
         "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
@@ -28,6 +31,8 @@ public class Login : Panel
         DebugLoginButton.OnClick += OnDebugLogin;
 
         OnHide += () => gameObject.SetActive(false);
+
+        VersionText.text = UIManager.VersionNumber.ToString("0.0");
     }
 
     private async UniTask AuthenticateWithGoogle()
