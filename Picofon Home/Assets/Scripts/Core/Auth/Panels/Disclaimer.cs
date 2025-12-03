@@ -1,20 +1,19 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Disclaimer : Panel
 {
     public UIManager UIManager;
 
     [Space(15)]
-    public Button AcceptButton;
-    public Button DeclineButton;
+    public CustomButtonBase AcceptButton;
+    public CustomButtonBase DeclineButton;
 
     public void Start()
     {
-        AcceptButton.onClick.AddListener(OnAccept);
-        DeclineButton.onClick.AddListener(OnDecline);
-
         OnHide += () => gameObject.SetActive(false);
+
+        AcceptButton.OnClick += OnAccept;
+        DeclineButton.OnClick += OnDecline;
 
         if (Debug.isDebugBuild)
             return;

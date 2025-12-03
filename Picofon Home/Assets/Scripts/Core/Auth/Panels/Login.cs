@@ -89,11 +89,12 @@ public class Login : Panel
         }
         catch (Exception e)
         {
+            // TODO: Show error with modal (Ej. "Usuari no trobat")
             Debug.LogError("<DEBUG> User service login failed, Error: " + e.Message);
             return;
         }
 
-        Debug.Log("<DEBUG> User logged in successfully: " + user.Email);
+        OnLoginSuccess(user);
     }
 
     private void OnLoginSuccess(UserModel user)
@@ -102,7 +103,7 @@ public class Login : Panel
         {
             Id = user.Id,
             Email = user.Email,
-            Username = "John Doe",
+            Username = user.FirstName,
         };
 
         UIManager.CurrentUser = userData;

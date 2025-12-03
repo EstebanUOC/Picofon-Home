@@ -1,61 +1,51 @@
 using System;
 using System.Threading;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class RegisterChild : Panel
 {
     public UIManager UIManager;
 
-    [Header("Parent Info")]
+    [Space(15)]
     public TMP_Text EmailText;
     public TMP_Text UsernameText;
 
-    [Header("Form")]
+    [Space(15)]
     public Form ChildRegistrationForm;
-    public Button ContinueButton;
+    public CustomButtonLoading ContinueButton;
 
     private CancellationTokenSource cts;
 
     public void Start()
     {
-        ContinueButton.onClick.AddListener(OnContinue);
-
         OnHide += () => gameObject.SetActive(false);
+
+        ContinueButton.OnClickAsync += OnContinue;
+        ContinueButton.Interactable = false;
     }
 
     public override void Show()
     {
         base.Show();
-        UserDataDTO parentData = UIManager.CurrentUser;
 
-        EmailText.text = parentData.Email;
-        UsernameText.text = parentData.Username;
-        ChildRegistrationForm.ParentId = parentData.Id;
+        EmailText.text = UIManager.CurrentUser.Email;
+        UsernameText.text = UIManager.CurrentUser.Username;
+        ChildRegistrationForm.ParentId = UIManager.CurrentUser.Id;
     }
 
-    private async void OnContinue()
+    private async UniTask OnContinue()
     {
         ChildCreateDTO childData = ChildRegistrationForm.GatherChildData();
-
-        Debug.Log(
-            "Registering child with data:"
-                + $"\nID: {childData.Id}"
-                + $"\nFirst Name: {childData.FirstName}"
-                + $"\nLast Name: {childData.LastName}"
-                + $"\nBirth Date: {childData.BirthDate}"
-                + $"\nDisorder: {childData.Disorder}"
-                + $"\nSchool: {childData.School}"
-                + $"\nGrade: {childData.Grade}"
-                + $"\nParent ID: {childData.OwnerId}"
-        );
 
         UserService userService = UIManager.UserService;
         cts = new CancellationTokenSource();
 
-        var response = await userService.RegisterChild(childData, cts);
+        UserRegisterChildResponse response;
+
+        response = await userService.RegisterChild(childData, cts);
 
         string message = string.Empty;
 

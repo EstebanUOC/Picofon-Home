@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Threading;
-using Firebase.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,8 +13,8 @@ public class UserChildren : Panel
     public TMP_Dropdown childrenDropdown;
 
     [Space(15)]
-    public Button SelectChildButton;
-    public Button RegisterChildButton;
+    public CustomButtonBase SelectChildButton;
+    public CustomButtonBase RegisterChildButton;
 
     [Space(15)]
     public Button LogoutButton;
@@ -26,10 +25,10 @@ public class UserChildren : Panel
 
     public void Start()
     {
-        SelectChildButton.onClick.AddListener(OnSelectChild);
-        RegisterChildButton.onClick.AddListener(OnRegisterChild);
-
         OnHide += () => gameObject.SetActive(false);
+
+        SelectChildButton.OnClick += OnSelectChild;
+        RegisterChildButton.OnClick += OnRegisterChild;
     }
 
     public override void Show()
@@ -45,7 +44,22 @@ public class UserChildren : Panel
 
         string userId = UIManager.CurrentUser.Id;
 
-        var children = await userService.GetUserChildren(userId, cts);
+        List<ChildListItemDTO> children;
+        try
+        {
+            children = await userService.GetUserChildren(userId, cts);
+        }
+        catch (System.Exception)
+        {
+            ModalData modalData = new()
+            {
+                Title = "Error",
+                Message = "Could not load children. Please try again later.",
+                OnClose = () => { },
+            };
+            UIManager.ShowModal(modalData);
+            return;
+        }
 
         childrenDropdown.ClearOptions();
         foreach (var child in children)

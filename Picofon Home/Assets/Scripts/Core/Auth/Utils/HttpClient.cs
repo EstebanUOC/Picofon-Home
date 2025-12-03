@@ -40,8 +40,7 @@ public static class HttpClientUnity
 
         request.timeout = timeoutSeconds;
 
-        // await request.SendWebRequest().WithCancellation(cancellationToken);
-        await request.SendWebRequest();
+        await request.SendWebRequest().WithCancellation(cancellationToken);
 
         if (request.result != UnityWebRequest.Result.Success)
             throw new Exception($"HTTP POST Error: {request.error} | URL: {url}");
