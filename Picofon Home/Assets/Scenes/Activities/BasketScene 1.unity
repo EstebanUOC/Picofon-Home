@@ -549,9 +549,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e48d1bf037de15031ac8e80916a26d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HoopPositive: {fileID: 0}
-  HoopNegative: {fileID: 0}
-  Ball: {fileID: 0}
+  HoopPositive: {fileID: 1080419528}
+  HoopNegative: {fileID: 2033493543}
+  Ball: {fileID: 1628458930}
 --- !u!1 &1080419525
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,7 +653,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b11ef20b87d047de782a4ac6abb6ddc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ballTarget: {fileID: 400938557}
+  BallTarget: {fileID: 400938557}
 --- !u!1 &1165722880
 GameObject:
   m_ObjectHideFlags: 0
@@ -1241,7 +1241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b11ef20b87d047de782a4ac6abb6ddc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ballTarget: {fileID: 1389891076}
+  BallTarget: {fileID: 1389891076}
 --- !u!1 &2089137962
 GameObject:
   m_ObjectHideFlags: 0

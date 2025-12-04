@@ -27,10 +27,10 @@ public class UIManager : MonoBehaviour
     public void Start()
     {
         LoadingPanel.Show();
-        LoadThins().Forget();
+        BootstrapApplicacion().Forget();
     }
 
-    private async UniTaskVoid LoadThins()
+    private async UniTaskVoid BootstrapApplicacion()
     {
         CancellationToken ct = this.GetCancellationTokenOnDestroy();
 
@@ -48,10 +48,49 @@ public class UIManager : MonoBehaviour
         }
 
         await UniTask.WaitForSeconds(2, cancellationToken: ct);
-        LoadingPanel.Hide();
+
         timeoutController.Reset();
         timeoutController.Dispose();
         FirebaseAuthInstance = FirebaseAuth.DefaultInstance;
+
+        if (FirebaseAuthInstance.CurrentUser is null)
+        {
+            ShowLogin();
+            LoadingPanel.Hide();
+            return;
+        }
+
+#if !UNITY_EDITOR
+        Debug.Log(
+            "User is already logged in, DisplayName: "
+                + FirebaseAuthInstance.CurrentUser.DisplayName
+        );
+#endif
+
+        string firebaseIdToken = await FirebaseAuthInstance
+            .CurrentUser.TokenAsync(false)
+            .AsUniTask()
+            .AttachExternalCancellation(ct);
+
+        UserModel user = await UserService.LoginWithFirebaseToken(firebaseIdToken);
+
+        CurrentUser = new UserDataDTO
+        {
+            Id = user.Id,
+            Email = user.Email,
+            Username = user.FirstName,
+        };
+
+        if (GamePrefs.HasAcceptedTerms)
+        {
+            ShowUserChildren();
+        }
+        else
+        {
+            ShowDisclaimer();
+        }
+
+        LoadingPanel.Hide();
     }
 
     private void HideAllPanels()

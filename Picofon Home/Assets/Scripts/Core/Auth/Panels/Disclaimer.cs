@@ -14,18 +14,13 @@ public class Disclaimer : Panel
 
         AcceptButton.OnClick += OnAccept;
         DeclineButton.OnClick += OnDecline;
-
-        if (Debug.isDebugBuild)
-            return;
-
-        if (GamePrefs.HasAcceptedTerms)
-            UIManager.ShowUserChildren();
     }
 
     private void OnAccept()
     {
-        if (!Debug.isDebugBuild)
-            GamePrefs.HasAcceptedTerms = true;
+#if !UNITY_EDITOR
+        GamePrefs.HasAcceptedTerms = true;
+#endif
 
         UIManager.ShowUserChildren();
     }
