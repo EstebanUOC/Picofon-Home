@@ -38,7 +38,6 @@ public class Login : Panel
     private async UniTask AuthenticateWithGoogle()
     {
         // Prune any previous sessions
-        GoogleSignIn.DefaultInstance.Disconnect();
         GoogleSignIn.DefaultInstance.SignOut();
 
         GoogleSignInUser googleUser;

@@ -126,8 +126,6 @@ public class UIManager : MonoBehaviour
     public void Logout()
     {
         FirebaseAuthInstance.SignOut();
-        GoogleSignIn.DefaultInstance.SignOut();
-        GoogleSignIn.DefaultInstance.Disconnect();
 
         CurrentUser = null;
 
