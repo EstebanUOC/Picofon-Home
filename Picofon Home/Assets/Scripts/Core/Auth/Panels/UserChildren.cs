@@ -29,6 +29,7 @@ public class UserChildren : Panel
 
         SelectChildButton.OnClick += OnSelectChild;
         RegisterChildButton.OnClick += OnRegisterChild;
+        LogoutButton.onClick.AddListener(OnLogout);
     }
 
     public override void Show()
@@ -86,6 +87,12 @@ public class UserChildren : Panel
     private void OnRegisterChild()
     {
         UIManager.ShowRegisterChild();
+        cts.Cancel();
+    }
+
+    private void OnLogout()
+    {
+        UIManager.Logout();
         cts.Cancel();
     }
 }

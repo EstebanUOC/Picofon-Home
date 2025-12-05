@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Firebase.Auth;
+using Google;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -93,14 +94,6 @@ public class UIManager : MonoBehaviour
         LoadingPanel.Hide();
     }
 
-    private void HideAllPanels()
-    {
-        LoginPanel.Hide();
-        RegisterChildPanel.Hide();
-        UserChildrenPanel.Hide();
-        DisclaimerPanel.Hide();
-    }
-
     public void ShowLogin()
     {
         HideAllPanels();
@@ -128,5 +121,25 @@ public class UIManager : MonoBehaviour
     public void ShowModal(ModalData data)
     {
         ModalPanel.Show(data);
+    }
+
+    public void Logout()
+    {
+        FirebaseAuthInstance.SignOut();
+        GoogleSignIn.DefaultInstance.SignOut();
+        GoogleSignIn.DefaultInstance.Disconnect();
+
+        CurrentUser = null;
+
+        GamePrefs.ClearAll();
+        ShowLogin();
+    }
+
+    private void HideAllPanels()
+    {
+        LoginPanel.Hide();
+        RegisterChildPanel.Hide();
+        UserChildrenPanel.Hide();
+        DisclaimerPanel.Hide();
     }
 }

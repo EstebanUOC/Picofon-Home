@@ -22,6 +22,12 @@ public static class GamePrefs
         }
     }
 
+    public static void ClearAll()
+    {
+        PlayerPrefs.DeleteAll();
+        Save();
+    }
+
     private static void Save()
     {
         PlayerPrefs.Save();
