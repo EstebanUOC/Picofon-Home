@@ -12,6 +12,6 @@ public class UserRegisterChildResponse
     public class MessageContent
     {
         [JsonInclude]
-        public List<string> Content { get; set; } = new List<string>();
+        public List<string> Content { get; set; }
     }
 }

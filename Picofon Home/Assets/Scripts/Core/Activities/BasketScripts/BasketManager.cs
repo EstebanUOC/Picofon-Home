@@ -23,6 +23,8 @@ public class BasketManager : MonoBehaviour
             Destroy(gameObject);
 
         Instance = this;
+
+        ChooseHoop(HoopType.Negative);
     }
 
     public void ChooseHoop(HoopType hoopType)

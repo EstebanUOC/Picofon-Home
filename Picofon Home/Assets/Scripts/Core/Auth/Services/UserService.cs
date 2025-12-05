@@ -1,40 +1,88 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 public class UserService
 {
-    private const string BaseUrl =
+    private const string ChildrenURL =
         "https://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/children";
 
-    public async Task<List<ChildListItemDTO>> GetUserChildren(
-        string userId,
-        CancellationTokenSource cts
+    private const string UserURL =
+        "https://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/auth/login";
+
+    public async UniTask<UserModel> LoginWithFirebaseToken(
+        string firebaseToken,
+        CancellationTokenSource cancellationTokenSource = default
     )
     {
-        string url = $"{BaseUrl}/owner/{userId}?is_active=true";
+        const string URL = UserURL;
 
-        string textRaw = await HttpClientUnity.GetAsync(url, cancellationToken: cts.Token);
-        UserChildrenResponse response = JsonHelper.FromJson<UserChildrenResponse>(textRaw);
+        LoginRequest loginRequest = new() { FirebaseIdToken = firebaseToken };
+        string loginRequestJson = JsonHelper.ToJson(loginRequest);
+
+        string rawResponse = await HttpClientUnity.PostAsync(
+            url: URL,
+            data: loginRequestJson,
+            cancellationToken: cancellationTokenSource?.Token ?? CancellationToken.None
+        );
+
+        LoginResponse response = JsonHelper.FromJson<LoginResponse>(rawResponse);
+
+        if (!response.Success)
+        {
+            throw new System.Exception(
+                "Login failed: " + string.Join(", ", response.Message.Content)
+            );
+        }
+
+        return response.Data.User;
+    }
+
+    public async UniTask<List<ChildListItemDTO>> GetUserChildren(
+        string userId,
+        CancellationTokenSource cancellationTokenSource = default
+    )
+    {
+        string url = $"{ChildrenURL}/owner/{userId}?is_active=true";
+
+        string rawResponse = await HttpClientUnity.GetAsync(
+            url: url,
+            cancellationToken: cancellationTokenSource?.Token ?? CancellationToken.None
+        );
+
+        UserChildrenResponse response = JsonHelper.FromJson<UserChildrenResponse>(rawResponse);
+
+        if (!response.Success)
+        {
+            throw new System.Exception("Get children failed");
+        }
 
         return response.Data;
     }
 
-    public async Task<UserRegisterChildResponse> RegisterChild(
+    public async UniTask<UserRegisterChildResponse> RegisterChild(
         ChildCreateDTO childCreateDTO,
-        CancellationTokenSource cts
+        CancellationTokenSource cancellationTokenSource = default
     )
     {
-        string url = $"{BaseUrl}/";
+        string url = $"{ChildrenURL}/";
 
         string jsonRequest = JsonHelper.ToJson(childCreateDTO);
-        string textRaw = await HttpClientUnity.PostAsync(
-            url,
+        string rawResponse = await HttpClientUnity.PostAsync(
+            url: url,
             data: jsonRequest,
-            cancellationToken: cts.Token
+            cancellationToken: cancellationTokenSource?.Token ?? CancellationToken.None
         );
 
-        var response = JsonHelper.FromJson<UserRegisterChildResponse>(textRaw);
+        var response = JsonHelper.FromJson<UserRegisterChildResponse>(rawResponse);
+
+        // TODO: Handle errors properly
+        // if (!response.Success)
+        // {
+        //     Debug.LogError("Register child failed: " + string.Join(", ", response.Message.Content));
+        // }
 
         return response;
     }

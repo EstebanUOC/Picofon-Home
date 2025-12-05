@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class BallTest : MonoBehaviour
 {
-    public Transform TargetPosition { get; set; }
-
     public Transform DriblePosition;
+
+    public Transform TargetPosition { get; set; }
 
     private float time = 0;
     private readonly float duration = 1;

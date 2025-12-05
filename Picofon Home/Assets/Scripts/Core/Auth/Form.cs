@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public enum ChildFields
 {
@@ -15,8 +14,7 @@ public enum ChildFields
 
 public class Form : MonoBehaviour
 {
-    // public Modal modal;
-    public Button ContinueButton;
+    public CustomButtonLoading ContinueButton;
 
     public string ParentId { get; set; } = string.Empty;
 
@@ -35,12 +33,12 @@ public class Form : MonoBehaviour
                 _fields.Add(input.Key, input);
             }
         }
-        ContinueButton.interactable = false;
+        ContinueButton.Interactable = false;
     }
 
     private void DisableButton()
     {
-        ContinueButton.interactable = false;
+        ContinueButton.Interactable = false;
     }
 
     private void UpdateContinueButton()
@@ -55,7 +53,7 @@ public class Form : MonoBehaviour
             }
         }
 
-        ContinueButton.interactable = allValid;
+        ContinueButton.Interactable = allValid;
     }
 
     public ChildCreateDTO GatherChildData()
