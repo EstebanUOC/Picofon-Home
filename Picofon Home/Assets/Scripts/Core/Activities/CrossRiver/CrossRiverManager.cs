@@ -15,6 +15,12 @@ using UnityEngine.UI;
 
 public class CrossRiverManager : MonoBehaviour
 {
+    [Header(" White Bubbles (solo modo Judge)")]
+    [SerializeField] private Image whiteBubble01;
+    [SerializeField] private Image whiteBubble02;
+    [SerializeField] private Image whiteBubble03;
+
+
     [Header("🧩 Controlador de Feedback")]
     [SerializeField] private FeedbackPanelController feedbackController;
 
@@ -40,8 +46,13 @@ public class CrossRiverManager : MonoBehaviour
     [Header("🧭 Botones de cambio de escena")]
     [SerializeField] private Button buttonMapScene;
     [SerializeField] private Button buttonNextScene;
+    [Header("EyeButton")]
+    [SerializeField] private Button eyeButton;
+    [SerializeField] private Transform canvasRoot;
 
-
+    private readonly float eyeDuration = 3f;
+    private Coroutine eyeRoutine = null;
+    private List<TMP_Text> activeLabels = new();
     private ActivityJudge lastActivityShown;
 
     private int currentTaskType = 1;
@@ -53,7 +64,7 @@ public class CrossRiverManager : MonoBehaviour
     private readonly float arcHeight = 150f;
     private readonly AnimationCurve moveCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
-    private Vector2 startCharacterPos = new(250, 200);
+    private Vector2 startCharacterPos = new(125, 300);
     private Vector2 finalCharacterPos = new(1700, 800);
     private bool isAnimating = false;
 
@@ -61,6 +72,11 @@ public class CrossRiverManager : MonoBehaviour
     private int currentMode = 0;
     private GameAPIService apiService;
 
+    // Judge label settings applied strictly from code
+    private const int JUDGE_FONT_SIZE = 40;
+    private const bool JUDGE_USE_BOLD = true;
+    private const float JUDGE_Y_OFFSET = 220f;
+    private const float SELECT_Y_OFFSET = 150f;
 
     private List<ActivityJudge> judgeActivities = new();
     private List<ActivitySelect> selectActivities = new();
@@ -122,6 +138,8 @@ public class CrossRiverManager : MonoBehaviour
         Debug.Log($" CrossRiver Start() → task_type_id detectado = {currentTaskType}");
 
         AssignModeButtons();
+        if (eyeButton != null)
+            eyeButton.onClick.AddListener(OnEyePressed);
 
         StartCoroutine(LoadModeFromAPI(currentTaskType));
     }
@@ -272,6 +290,7 @@ public class CrossRiverManager : MonoBehaviour
     private void LoadRelateMode(Picofon.Games.Relate.ActivityRelate activity)
     {
         ClearButtons();
+        ShowWhiteBubblesForMode(3);
 
         if (firstImage != null)
             firstImage.gameObject.SetActive(false);
@@ -361,6 +380,8 @@ public class CrossRiverManager : MonoBehaviour
             Transform buttonOp = btnObj.transform.Find("ButtonOp");
             if (buttonOp != null && buttonOp.TryGetComponent(out Button button))
             {
+                btnObj.AddComponent<TempWordHolder>().word = opt.word;
+
                 bool isCorrect = opt.isCorrect;
                 Sprite selectedSprite = opt.sprite;
                 string selectedWord = opt.syllWord;
@@ -439,6 +460,7 @@ public class CrossRiverManager : MonoBehaviour
         // 3️⃣ Mostrar feedback con las dos imágenes (main + elegida)
         if (feedbackController != null)
         {
+            HideAllLabels();
             feedbackController.ShowFeedback(
                 mainSprite,     // Imagen de main_word
                 chosenSprite,   // Imagen del prefab seleccionado
@@ -474,6 +496,8 @@ public class CrossRiverManager : MonoBehaviour
     // ============================================================
     private void LoadSelectMode(ActivitySelect activity)
     {
+        ShowWhiteBubblesForMode(2);
+
         if (imageMain != null)
             imageMain.gameObject.SetActive(false);
 
@@ -578,6 +602,8 @@ public class CrossRiverManager : MonoBehaviour
             Transform buttonOp = btnObj.transform.Find("ButtonOp");
             if (buttonOp != null && buttonOp.TryGetComponent(out Button button))
             {
+                btnObj.AddComponent<TempWordHolder>().word = options[i].word;
+
                 bool isCorrect = options[i].isCorrect;
                 Sprite selectedSprite = options[i].sprite;
                 RectTransform targetRect = rect; // 👈 capturamos a dónde animar
@@ -700,6 +726,7 @@ public class CrossRiverManager : MonoBehaviour
         // 3) Mostrar feedback (imágenes + palabras silábicas)
         if (feedbackController != null)
         {
+            HideAllLabels();
             feedbackController.ShowFeedback(
                 sprite1,
                 sprite2,
@@ -737,6 +764,7 @@ public class CrossRiverManager : MonoBehaviour
         if (feedbackController != null)
         {
             // Muestra las dos imágenes y las palabras asociadas
+            HideAllLabels();
             feedbackController.ShowFeedback(
                 sprite1,
                 sprite2,
@@ -845,6 +873,8 @@ public class CrossRiverManager : MonoBehaviour
     // ============================================================
     private void LoadJudgeMode(ActivityJudge activity)
     {
+        ShowWhiteBubblesForMode(1);
+
         if (imageMain != null)
             imageMain.gameObject.SetActive(false);
         if (firstImage != null) 
@@ -1132,15 +1162,18 @@ public class CrossRiverManager : MonoBehaviour
 
     private void ShowFeedback(string message, bool correct)
     {
+        // Hide any active eye labels when feedback appears
+        HideAllLabels();
+
         if (feedbackController == null) return;
 
-        var currentActivity = lastActivityShown; // referencia que guardaremos al mostrar el modo actual
+        var currentActivity = lastActivityShown;
         if (currentActivity == null)
         {
-            Debug.LogWarning("⚠️ No hay actividad cargada para mostrar feedback.");
+            Debug.LogWarning("No activity loaded to show feedback.");
             return;
         }
-
+        HideAllLabels();
         feedbackController.ShowFeedback(
             firstImage.sprite,
             secondImage.sprite,
@@ -1149,6 +1182,8 @@ public class CrossRiverManager : MonoBehaviour
             currentActivity.word2.syllabified_word
         );
     }
+
+
 
 
     // ============================================================
@@ -1422,6 +1457,219 @@ public class CrossRiverManager : MonoBehaviour
     }
 
 
+    private void OnEyePressed()
+    {
+        // If labels are currently displayed, hide immediately
+        if (eyeRoutine != null)
+        {
+            StopCoroutine(eyeRoutine);
+            HideAllLabels();
+            return;
+        }
+
+        // Otherwise show the labels for the active mode
+        ShowLabelsForCurrentMode();
+        eyeRoutine = StartCoroutine(AutoHideLabels());
+    }
+    private void ShowLabelsForCurrentMode()
+    {
+        HideAllLabels(); // Clean existing labels
+
+        // ----- MODE 1: JUDGE -----
+        if (currentTaskType == 1 && lastActivityShown != null)
+        {
+            CreateTextUnderImage(firstImage, lastActivityShown.word1.word);
+            CreateTextUnderImage(secondImage, lastActivityShown.word2.word);
+            return;
+        }
+
+        // ----- MODE 2: SELECT -----
+        if (currentTaskType == 2 && selectActivities.Count > 0)
+        {
+            var activity = selectActivities[currentActivityIndex];
+
+            // Obtener los 4 botones generados
+            foreach (var btn in spawnedButtons)
+            {
+                RectTransform rect = btn.GetComponent<RectTransform>();
+                if (rect == null) continue;
+
+                string word = ExtractWordFromSelectButton(activity, btn.name);
+                if (string.IsNullOrEmpty(word)) continue;
+
+                CreateTextUnderSelectButton(rect, word);
+            }
+            return;
+        }
+
+        // ----- MODE 3: RELATE -----
+        if (currentTaskType == 3 && relateActivities.Count > 0)
+        {
+            var activity = relateActivities[currentActivityIndex];
+
+            // 1) Texto bajo la imagen principal (main_word)
+            CreateTextUnderImage(imageMain, activity.main_word.word);
+
+            // 2) Texto bajo los 4 prefabs
+            foreach (var btn in spawnedButtons)
+            {
+                RectTransform rect = btn.GetComponent<RectTransform>();
+                if (rect == null) continue;
+
+                string word = ExtractWordFromRelateButton(activity, btn.name);
+                if (string.IsNullOrEmpty(word)) continue;
+
+                CreateTextUnderSelectButton(rect, word);
+            }
+
+            return;
+        }
+
+    }
+    private string ExtractWordFromSelectButton(ActivitySelect activity, string buttonName)
+    {
+        var holder = GameObject.Find(buttonName)?.GetComponent<TempWordHolder>();
+        return holder != null ? holder.word : null;
+    }
+
+
+    private void CreateTextUnderSelectButton(RectTransform buttonRT, string text)
+    {
+        if (buttonRT == null || canvasRoot == null)
+            return;
+
+        Transform bgChild = buttonRT.Find("BackgroundLifebelt");
+        if (bgChild == null)
+        {
+            Debug.LogWarning("BackgroundLifebelt not found in prefab.");
+            return;
+        }
+
+        RectTransform bgRT = bgChild.GetComponent<RectTransform>();
+        if (bgRT == null)
+        {
+            Debug.LogWarning("BackgroundLifebelt has no RectTransform.");
+            return;
+        }
+
+        // Step 1: calculate world position of the lifebelt
+        Vector3 worldPos = bgRT.TransformPoint(Vector3.zero);
+
+        // Step 2: convert world position to canvasRoot local space
+        Vector2 canvasLocalPos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRoot as RectTransform,
+            RectTransformUtility.WorldToScreenPoint(null, worldPos),
+            null,
+            out canvasLocalPos
+        );
+
+        // Step 3: create the label under canvasRoot
+        GameObject go = new GameObject("DynamicSelectLabel", typeof(RectTransform));
+        go.transform.SetParent(canvasRoot, false);
+
+        TextMeshProUGUI label = go.AddComponent<TextMeshProUGUI>();
+        label.text = text.Replace("#", "").ToUpper();
+        label.fontSize = JUDGE_FONT_SIZE;
+        label.enableAutoSizing = false;
+        label.color = Color.white;
+        label.alignment = TextAlignmentOptions.Center;
+        label.fontStyle = JUDGE_USE_BOLD ? FontStyles.Bold : FontStyles.Normal;
+
+        RectTransform labelRT = go.GetComponent<RectTransform>();
+        labelRT.sizeDelta = new Vector2(600, 120);
+
+        // Step 4: apply offset correctly in canvas coordinates
+        labelRT.anchoredPosition = new Vector2(canvasLocalPos.x, canvasLocalPos.y - SELECT_Y_OFFSET);
+
+        activeLabels.Add(label);
+    }
+
+
+
+
+    private void CreateTextUnderImage(Image img, string text)
+    {
+        if (img == null || canvasRoot == null)
+            return;
+
+        RectTransform imgRT = img.GetComponent<RectTransform>();
+
+        Vector3 worldPos = imgRT.TransformPoint(Vector3.zero);
+
+        Vector2 canvasLocalPos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRoot as RectTransform,
+            RectTransformUtility.WorldToScreenPoint(null, worldPos),
+            null,
+            out canvasLocalPos
+        );
+
+        GameObject go = new GameObject("DynamicJudgeLabel", typeof(RectTransform));
+        go.transform.SetParent(canvasRoot, false);
+
+        TextMeshProUGUI label = go.AddComponent<TextMeshProUGUI>();
+        label.text = text.Replace("#", "").ToUpper();
+        label.fontSize = JUDGE_FONT_SIZE;
+        label.enableAutoSizing = false;
+        label.color = Color.white;
+        label.alignment = TextAlignmentOptions.Center;
+        label.fontStyle = JUDGE_USE_BOLD ? FontStyles.Bold : FontStyles.Normal;
+
+        RectTransform labelRT = go.GetComponent<RectTransform>();
+        labelRT.sizeDelta = new Vector2(700, 140);
+
+        labelRT.anchoredPosition = new Vector2(canvasLocalPos.x, canvasLocalPos.y - JUDGE_Y_OFFSET);
+
+        activeLabels.Add(label);
+    }
+
+
+
+
+    private void HideAllLabels()
+    {
+        foreach (var label in activeLabels)
+            if (label != null) Destroy(label.gameObject);
+
+        activeLabels.Clear();
+        eyeRoutine = null;
+    }
+    private IEnumerator AutoHideLabels()
+    {
+        yield return new WaitForSeconds(eyeDuration);
+        HideAllLabels();
+    }
+    private string ExtractWordFromRelateButton(ActivityRelate activity, string buttonName)
+    {
+        var holder = GameObject.Find(buttonName)?.GetComponent<TempWordHolder>();
+        return holder != null ? holder.word : null;
+    }
+
+    private class TempWordHolder : MonoBehaviour
+    {
+        public string word;
+    }
+    private void ShowWhiteBubblesForMode(int mode)
+    {
+        if (whiteBubble01 != null) whiteBubble01.gameObject.SetActive(false);
+        if (whiteBubble02 != null) whiteBubble02.gameObject.SetActive(false);
+        if (whiteBubble03 != null) whiteBubble03.gameObject.SetActive(false);
+
+        if (mode == 3)
+        {
+            if (whiteBubble01 != null) whiteBubble01.gameObject.SetActive(true);
+            return;
+        }
+
+        if (mode == 1)
+        {
+            if (whiteBubble02 != null) whiteBubble02.gameObject.SetActive(true);
+            if (whiteBubble03 != null) whiteBubble03.gameObject.SetActive(true);
+            return;
+        }
+
+    }
 
 
 }
