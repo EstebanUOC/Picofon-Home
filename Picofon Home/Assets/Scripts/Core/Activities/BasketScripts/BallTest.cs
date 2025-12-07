@@ -23,17 +23,6 @@ public class BallTest : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            body.bodyType = RigidbodyType2D.Kinematic;
-            body.angularVelocity = 200;
-            initial = transform.position;
-            time = 0;
-
-            ballIsFlying = true;
-            ballIsDribling = false;
-        }
-
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             transform.position = DriblePosition.position;
@@ -76,5 +65,16 @@ public class BallTest : MonoBehaviour
             Vector3 drible = Vector3.up * Mathf.Abs(Mathf.Sin(time * 5));
             transform.position = DriblePosition.position + drible;
         }
+    }
+
+    public void Launch()
+    {
+        body.bodyType = RigidbodyType2D.Kinematic;
+        body.angularVelocity = 200;
+        initial = transform.position;
+        time = 0;
+
+        ballIsFlying = true;
+        ballIsDribling = false;
     }
 }
