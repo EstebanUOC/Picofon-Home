@@ -24,14 +24,14 @@ public class PortraitLevelMapGenerator : MonoBehaviour
     private readonly string[] scenes = new string[]
     {
        // Modify here depen of what GameMechanic you want to render.
-       "CrossRiverScene",
-       "CrossRiverScene",
-       "CrossRiverScene",
+       //"BalloonPopParty",
+       //"BalloonPopParty",
+       //"BalloonPopParty",
 
         // this is the normal order.
-        //"BalloonPopSeaScene",
-        //"BalloonPopParty",
-        //"CrossRiverScene",
+        "BalloonPopSeaScene",
+        "CrossRiverScene",
+        "BalloonPopSeaScene",
     };
 
     private string ChildId = string.Empty;
@@ -39,7 +39,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
     public void Start()
     {
         // TESTING: Hardcode a specific child ID
-         ChildId = "19013454K"; // ← Add this line
+        // ChildId = "19013454K"; // ← Add this line
 
         bool existsData = LevelDataStore.ExistsPlans();
         if (existsData)
@@ -49,7 +49,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
             return;
         }
         // Comment out or remove this line since we're hardcoding above
-        //ChildId = MapPathPayload.ChildId;
+        ChildId = MapPathPayload.ChildId;
 
         StartCoroutine(LoadMapData());
     }
