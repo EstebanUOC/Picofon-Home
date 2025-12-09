@@ -1,21 +1,21 @@
 using UnityEngine;
 
+public enum HoopType
+{
+    Positive,
+    Negative,
+}
+
 public class BasketManager : MonoBehaviour
 {
-    [Space(15)]
-    public Hoop HoopPositive;
-    public Hoop HoopNegative;
+    public static BasketManager Instance;
 
     [Space(15)]
     public BallTest Ball;
 
-    public enum HoopType
-    {
-        Positive,
-        Negative,
-    }
-
-    public static BasketManager Instance;
+    [Space(15)]
+    public Hoop HoopPositive;
+    public Hoop HoopNegative;
 
     public void Awake()
     {
@@ -23,11 +23,9 @@ public class BasketManager : MonoBehaviour
             Destroy(gameObject);
 
         Instance = this;
-
-        ChooseHoop(HoopType.Negative);
     }
 
-    public void ChooseHoop(HoopType hoopType)
+    public void LaunchBall(HoopType hoopType)
     {
         switch (hoopType)
         {
@@ -38,5 +36,6 @@ public class BasketManager : MonoBehaviour
                 Ball.TargetPosition = HoopNegative.BallTarget;
                 break;
         }
+        Ball.Launch();
     }
 }
