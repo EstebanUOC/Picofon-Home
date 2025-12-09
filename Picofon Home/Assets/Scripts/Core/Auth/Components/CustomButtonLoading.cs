@@ -63,7 +63,7 @@ public class CustomButtonLoading : CustomButtonRaised
 
     public override void OnPointerClick(PointerEventData eventData)
     {
-        if (Loading)
+        if (Loading || !Interactable)
             return;
 
         HandleClickAsync().Forget();

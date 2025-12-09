@@ -27,8 +27,9 @@ public class UIManager : MonoBehaviour
 
     public void Start()
     {
-        LoadingPanel.Show();
-        BootstrapApplicacion().Forget();
+        // LoadingPanel.Show();
+        // BootstrapApplicacion().Forget();
+        ShowRegisterChild();
     }
 
     private async UniTaskVoid BootstrapApplicacion()
