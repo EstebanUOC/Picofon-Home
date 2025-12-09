@@ -5,8 +5,8 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/Activities/BasketScene 1.unity
+  - enabled: 0
+    path: Assets/Scenes/Activities/BasketScene.unity
     guid: 62a070b40cc6b917381e3b30303a3561
   - enabled: 1
     path: Assets/Scenes/AuthScene.unity
@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MapPathScene.unity
     guid: c4107749ff3e9d021bd203ce41d3238e
   - enabled: 0
-    path: Assets/Scenes/Activities/BasketScene.unity
+    path: Assets/Scenes/Activities/BasketScene1.unity
     guid: 522be987656138a5488dd45b8214d791
   - enabled: 0
     path: Assets/Scenes/Activities/BalloonPopSeaScene.unity
