@@ -290,6 +290,140 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &176265676
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 176265677}
+  - component: {fileID: 176265678}
+  m_Layer: 0
+  m_Name: Collision Blocker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &176265677
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 176265676}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1080419527}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &176265678
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 176265676}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1.6, y: 0.3}
+  m_Direction: 1
+--- !u!1 &186162823
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 186162824}
+  - component: {fileID: 186162825}
+  m_Layer: 0
+  m_Name: Collision Blocker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &186162824
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186162823}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2033493542}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &186162825
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186162823}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1.6, y: 0.3}
+  m_Direction: 1
 --- !u!1 &217971343
 GameObject:
   m_ObjectHideFlags: 0
@@ -384,7 +518,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400938557}
   m_Layer: 0
-  m_Name: Target
+  m_Name: Target Position
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -516,7 +650,7 @@ GameObject:
   - component: {fileID: 606603855}
   - component: {fileID: 606603856}
   m_Layer: 0
-  m_Name: LimitArea
+  m_Name: Collision Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -531,7 +665,7 @@ Transform:
   m_GameObject: {fileID: 606603854}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 1, z: 0}
+  m_LocalPosition: {x: 1.1, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -583,7 +717,7 @@ GameObject:
   - component: {fileID: 664135943}
   - component: {fileID: 664135944}
   m_Layer: 0
-  m_Name: LimitRight
+  m_Name: Collision Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -598,7 +732,7 @@ Transform:
   m_GameObject: {fileID: 664135942}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6, y: 0, z: 0}
+  m_LocalPosition: {x: 0.75, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -637,8 +771,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.5, y: 0.3}
-  m_Direction: 1
+  m_Size: {x: 0.2, y: 0.3}
+  m_Direction: 0
 --- !u!1 &664958781
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,7 +784,7 @@ GameObject:
   - component: {fileID: 664958782}
   - component: {fileID: 664958783}
   m_Layer: 0
-  m_Name: LimitRight
+  m_Name: Collision Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1054,7 +1188,7 @@ GameObject:
   - component: {fileID: 1080419526}
   - component: {fileID: 1080419528}
   m_Layer: 0
-  m_Name: Hoop Positive
+  m_Name: Positive
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1128,6 +1262,7 @@ Transform:
   - {fileID: 400938557}
   - {fileID: 2026460717}
   - {fileID: 664135943}
+  - {fileID: 176265677}
   - {fileID: 1682146617}
   m_Father: {fileID: 487383562}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1144,6 +1279,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BallTarget: {fileID: 400938557}
+  ColliderLeft: {fileID: 2026460718}
+  ColliderRight: {fileID: 664135944}
+  ColliderBlocker: {fileID: 176265678}
 --- !u!1 &1165722880
 GameObject:
   m_ObjectHideFlags: 0
@@ -1465,7 +1603,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1389891076}
   m_Layer: 0
-  m_Name: Target
+  m_Name: Target Position
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1497,7 +1635,7 @@ GameObject:
   - component: {fileID: 1413084487}
   - component: {fileID: 1413084488}
   m_Layer: 0
-  m_Name: LimitLeft
+  m_Name: Collision Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1726,7 +1864,7 @@ GameObject:
   - component: {fileID: 1682146617}
   - component: {fileID: 1682146618}
   m_Layer: 0
-  m_Name: LimitArea
+  m_Name: Collision Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1741,7 +1879,7 @@ Transform:
   m_GameObject: {fileID: 1682146616}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1, y: 1, z: 0}
+  m_LocalPosition: {x: -1.1, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1971,7 +2109,7 @@ GameObject:
   - component: {fileID: 2026460717}
   - component: {fileID: 2026460718}
   m_Layer: 0
-  m_Name: LimitLeft
+  m_Name: Collision Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1986,7 +2124,7 @@ Transform:
   m_GameObject: {fileID: 2026460716}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.6, y: 0, z: 0}
+  m_LocalPosition: {x: -0.75, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2025,8 +2163,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.5, y: 0.3}
-  m_Direction: 1
+  m_Size: {x: 0.2, y: 0.3}
+  m_Direction: 0
 --- !u!1 &2033493540
 GameObject:
   m_ObjectHideFlags: 0
@@ -2039,7 +2177,7 @@ GameObject:
   - component: {fileID: 2033493541}
   - component: {fileID: 2033493543}
   m_Layer: 0
-  m_Name: Hoop Negative
+  m_Name: Negative
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2113,6 +2251,7 @@ Transform:
   - {fileID: 1389891076}
   - {fileID: 1413084487}
   - {fileID: 664958782}
+  - {fileID: 186162824}
   - {fileID: 606603855}
   m_Father: {fileID: 487383562}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2129,6 +2268,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BallTarget: {fileID: 1389891076}
+  ColliderLeft: {fileID: 1413084488}
+  ColliderRight: {fileID: 664958783}
+  ColliderBlocker: {fileID: 186162825}
 --- !u!1 &2089137962
 GameObject:
   m_ObjectHideFlags: 0
@@ -2313,5 +2455,5 @@ SceneRoots:
   - {fileID: 668804226}
   - {fileID: 487383562}
   - {fileID: 1255441401}
-  - {fileID: 1628458927}
   - {fileID: 1984792079}
+  - {fileID: 1628458927}

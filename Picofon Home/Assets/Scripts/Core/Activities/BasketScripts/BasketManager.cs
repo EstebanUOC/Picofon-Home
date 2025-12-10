@@ -23,6 +23,8 @@ public class BasketManager : MonoBehaviour
             Destroy(gameObject);
 
         Instance = this;
+
+        HoopPositive.Blocked = true;
     }
 
     public void LaunchBall(HoopType hoopType)
