@@ -24,7 +24,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
     private readonly string[] scenes = new string[]
     {
         // Modify here depen of what GameMechanic you want to render.
-        "BalloonPopParty",
+        "BasketScene",
         "BalloonPopParty",
         "BalloonPopParty",
 
@@ -48,6 +48,17 @@ public class PortraitLevelMapGenerator : MonoBehaviour
 
         ChildId = MapPathPayload.ChildId;
 
+        if (string.IsNullOrEmpty(ChildId))
+        {
+#if !UNITY_EDITOR
+            Debug.LogError("ChildId is null or empty in MapPathPayload.");
+            return;
+# else
+            ChildId = "98765432M";
+            Debug.LogWarning("Using default ChildId for testing in Unity Editor.");
+# endif
+        }
+
         StartCoroutine(LoadMapData());
     }
 
@@ -70,7 +81,6 @@ public class PortraitLevelMapGenerator : MonoBehaviour
                     foreach (var plan in plans)
                     {
                         store.RegisterPlan(plan);
-                        Debug.Log($" plan to be registered {plan}");
                     }
 
                     GenerateMap(plans);
@@ -106,7 +116,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
             };
 
             LevelType levelType = i % 2 == 0 ? LevelType.Syllable : LevelType.Phoneme;
-            int planId = plans[i].Id;
+            int planId = plans[i].TherapyPlanId;
 
             levelComponent.Init(
                 levelData: levelData,

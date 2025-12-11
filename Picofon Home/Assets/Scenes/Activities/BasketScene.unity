@@ -217,7 +217,7 @@ GameObject:
   - component: {fileID: 105925568}
   - component: {fileID: 105925569}
   m_Layer: 0
-  m_Name: Sun
+  m_Name: Image Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -435,7 +435,7 @@ GameObject:
   - component: {fileID: 217971345}
   - component: {fileID: 217971344}
   m_Layer: 0
-  m_Name: Board
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -885,7 +885,7 @@ GameObject:
   - component: {fileID: 756760224}
   - component: {fileID: 756760225}
   m_Layer: 0
-  m_Name: Mom
+  m_Name: Image Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1176,6 +1176,8 @@ MonoBehaviour:
   Ball: {fileID: 1628458930}
   HoopPositive: {fileID: 1080419528}
   HoopNegative: {fileID: 2033493543}
+  ImageLeftWord: {fileID: 756760225}
+  ImageRightWord: {fileID: 105925569}
 --- !u!1 &1080419525
 GameObject:
   m_ObjectHideFlags: 0
@@ -1278,7 +1280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b11ef20b87d047de782a4ac6abb6ddc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BallTarget: {fileID: 400938557}
+  TargetPosition: {fileID: 400938557}
   ColliderLeft: {fileID: 2026460718}
   ColliderRight: {fileID: 664135944}
   ColliderBlocker: {fileID: 176265678}
@@ -2267,7 +2269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b11ef20b87d047de782a4ac6abb6ddc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BallTarget: {fileID: 1389891076}
+  TargetPosition: {fileID: 1389891076}
   ColliderLeft: {fileID: 1413084488}
   ColliderRight: {fileID: 664958783}
   ColliderBlocker: {fileID: 186162825}

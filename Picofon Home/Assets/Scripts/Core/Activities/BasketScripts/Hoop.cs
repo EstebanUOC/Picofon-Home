@@ -3,7 +3,7 @@ using UnityEngine;
 public class Hoop : MonoBehaviour
 {
     [Space(15)]
-    public Transform BallTarget;
+    public Transform TargetPosition;
 
     [Space(15)]
     public CapsuleCollider2D ColliderLeft;
