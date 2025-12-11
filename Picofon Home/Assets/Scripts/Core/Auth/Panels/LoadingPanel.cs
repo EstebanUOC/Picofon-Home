@@ -27,8 +27,9 @@ public class LoadingPanel : MonoBehaviour
         Tween fadeIn = CanvasContent.DOFade(1, 0.5f);
         Tween scaleUp = RectContent.DOScale(1, 0.6f).SetEase(Ease.OutBack);
 
-        // Add time delay before starting fade out (Android build)
+#if UNITY_ANDROID
         seq.AppendInterval(1f);
+#endif
 
         seq.Append(fadeIn).Join(scaleUp).Play();
     }

@@ -1,7 +1,5 @@
-using System;
 using System.Text.Json.Serialization;
 
-[Serializable]
 public class TherapyPlan
 {
     [JsonInclude]
@@ -41,8 +39,7 @@ public class TherapyPlan
     public string ChildId { get; set; } = string.Empty;
 
     [JsonInclude]
-    [JsonPropertyName("therapy_plan_id")]
-    public int Id { get; set; } = 0;
+    public int TherapyPlanId { get; set; } = 0;
 
     [JsonInclude]
     [JsonPropertyName("created_at")]

@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Activities/BasketScene.unity
     guid: 522be987656138a5488dd45b8214d791
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Activities/BalloonPopSeaScene.unity
     guid: 81b1509e4f43893e6a4d489c6d3a289b
   - enabled: 0

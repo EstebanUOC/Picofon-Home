@@ -1,8 +1,6 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public struct ModalData
 {
@@ -16,7 +14,7 @@ public class Modal : MonoBehaviour
     [Space(15)]
     public TextMeshProUGUI Title;
     public TextMeshProUGUI Message;
-    public Button ConfirmButton;
+    public CustomButtonBase ConfirmButton;
 
     public void Show(ModalData data)
     {
@@ -24,29 +22,18 @@ public class Modal : MonoBehaviour
         Title.text = data.Title;
         Message.text = data.Message;
 
-        ConfirmButton.onClick.RemoveAllListeners();
-        ConfirmButton.onClick.AddListener(() => data.OnClose?.Invoke());
-        ConfirmButton.onClick.AddListener(() =>
-        {
-            Hide();
-        });
+        ConfirmButton.RemoveAllListeners();
+        ConfirmButton.OnClick += () => data.OnClose?.Invoke();
+        ConfirmButton.OnClick += () => Hide();
     }
 
     public void Start()
     {
-        ConfirmButton.onClick.AddListener(() =>
-        {
-            Hide();
-        });
+        ConfirmButton.OnClick += () => Hide();
     }
 
     public void Hide()
     {
-        EventSystem.current?.SetSelectedGameObject(null);
-
-        var anim = ConfirmButton.animator;
-        anim?.Rebind();
-
         gameObject.SetActive(false);
     }
 }

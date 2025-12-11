@@ -7,7 +7,7 @@ public class LevelDataStore : MonoBehaviour
 
     private readonly Dictionary<int, TherapyPlan> cachedPlans = new();
 
-    private void Awake()
+    public void Awake()
     {
         if (Instance == null)
         {
@@ -21,7 +21,7 @@ public class LevelDataStore : MonoBehaviour
 
     public void RegisterPlan(TherapyPlan plan)
     {
-        cachedPlans.Add(plan.Id, plan);
+        cachedPlans.Add(plan.TherapyPlanId, plan);
     }
 
     public TherapyPlan GetLevelPlan(int planId)

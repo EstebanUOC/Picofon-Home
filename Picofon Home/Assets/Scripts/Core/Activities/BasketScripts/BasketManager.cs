@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public enum HoopType
@@ -17,25 +18,53 @@ public class BasketManager : MonoBehaviour
     public Hoop HoopPositive;
     public Hoop HoopNegative;
 
+    [Space(15)]
+    public SpriteRenderer ImageLeftWord;
+    public SpriteRenderer ImageRightWord;
+
     public void Awake()
     {
-        if (Instance != this)
-            Destroy(gameObject);
-
         Instance = this;
+    }
+
+    public void Start()
+    {
+        LoadActivities().Forget();
+    }
+
+    public async UniTaskVoid LoadActivities()
+    {
+        BasketService basketService = new();
+
+        var activities = await basketService.GetActivities();
+
+        Debug.Log(
+            $"Successfully loaded Judge activity: {activities.Activity1.Word1.Path} vs {activities.Activity1.Word2.Path}"
+        );
+
+        // Provisional code to load images
+        ImageLeftWord.sprite = LoadSprite(activities.Activity1.Word1.Path);
+        ImageRightWord.sprite = LoadSprite(activities.Activity1.Word2.Path);
+    }
+
+    private Sprite LoadSprite(string p)
+    {
+        string file = System.IO.Path.GetFileNameWithoutExtension(p);
+        Sprite s = Resources.Load<Sprite>($"Images/ImgButtons/{file}");
+
+        if (!s)
+            Debug.LogWarning($"⚠ No se encontró sprite: {file}");
+
+        return s;
     }
 
     public void LaunchBall(HoopType hoopType)
     {
-        switch (hoopType)
-        {
-            case HoopType.Positive:
-                Ball.TargetPosition = HoopPositive.BallTarget;
-                break;
-            case HoopType.Negative:
-                Ball.TargetPosition = HoopNegative.BallTarget;
-                break;
-        }
+        Ball.TargetPosition =
+            hoopType == HoopType.Positive
+                ? HoopPositive.TargetPosition
+                : HoopNegative.TargetPosition;
+
         Ball.Launch();
     }
 }

@@ -15,6 +15,11 @@ public abstract class CustomButtonBase
     public virtual void OnPointerEnter(PointerEventData eventData) { }
 
     public virtual void OnPointerExit(PointerEventData eventData) { }
+
+    public virtual void RemoveAllListeners()
+    {
+        OnClick = null;
+    }
 }
 
 public interface IInteractableButton

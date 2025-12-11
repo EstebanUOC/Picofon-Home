@@ -10,6 +10,7 @@ public enum ChildFields
     Disorder,
     School,
     Grade,
+    Center,
 }
 
 public class Form : MonoBehaviour
@@ -68,6 +69,7 @@ public class Form : MonoBehaviour
             Disorder = _fields[ChildFields.Disorder].GetData(),
             School = _fields[ChildFields.School].GetData(),
             Grade = int.Parse(_fields[ChildFields.Grade].GetData()),
+            CenterId = int.Parse(_fields[ChildFields.Center].GetData()),
         };
 
         return child;
