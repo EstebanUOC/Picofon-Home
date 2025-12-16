@@ -14,6 +14,27 @@ namespace BasketResponses
         public ActivitiesData Data { get; set; }
     }
 
+    public class ActivitiesData
+    {
+        [JsonInclude]
+        public Activity Activity1 { get; set; }
+
+        [JsonInclude]
+        public Activity Activity2 { get; set; }
+
+        [JsonInclude]
+        public Activity Activity3 { get; set; }
+
+        [JsonInclude]
+        public Activity Activity4 { get; set; }
+
+        [JsonInclude]
+        public Activity Activity5 { get; set; }
+
+        [JsonInclude]
+        public AvailabilityInfo AvailabilityInfo { get; set; }
+    }
+
     public class Activity
     {
         [JsonInclude]
@@ -57,26 +78,6 @@ namespace BasketResponses
         public string SyllabifiedWord { get; set; }
     }
 
-    public class ActivitiesData
-    {
-        [JsonInclude]
-        public Activity Activity1 { get; set; }
-
-        [JsonInclude]
-        public Activity Activity2 { get; set; }
-
-        [JsonInclude]
-        public Activity Activity3 { get; set; }
-
-        [JsonInclude]
-        public Activity Activity4 { get; set; }
-
-        [JsonInclude]
-        public Activity Activity5 { get; set; }
-
-        [JsonInclude]
-        public AvailabilityInfo AvailabilityInfo { get; set; }
-    }
 
     public class AvailabilityInfo
     {
