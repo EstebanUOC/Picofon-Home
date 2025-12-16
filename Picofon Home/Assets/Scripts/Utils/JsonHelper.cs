@@ -15,6 +15,12 @@ public static class JsonHelper
         return data;
     }
 
+    public static T FromJsonElement<T>(JsonElement element)
+    {
+        T data = JsonSerializer.Deserialize<T>(element, jsonOptions);
+        return data;
+    }
+
     public static string ToJson<T>(T data)
     {
         string json = JsonSerializer.Serialize(data, jsonOptions);

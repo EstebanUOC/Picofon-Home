@@ -2,64 +2,39 @@ using System.Text.Json.Serialization;
 
 namespace BasketResponses
 {
-    public class GetActiviesResponse
+    public sealed class ApiResult<T>
     {
-        [JsonInclude]
-        public bool Success { get; set; } = false;
+        public bool Success { get; }
+        public string? Message { get; }
+        public T? Data { get; }
 
-        [JsonInclude]
-        public MessageData Message { get; set; }
+        public ApiResult(bool success, string? message, T? data)
+        {
+            Success = success;
+            Message = message;
+            Data = data;
+        }
 
-        [JsonInclude]
-        public ActivitiesData Data { get; set; }
+        public static ApiResult<T> Ok(T data)
+            => new(true, null, data);
+
+        public static ApiResult<T> Fail(string message)
+            => new(false, message, default);
     }
 
     public class ActivitiesData
     {
         [JsonInclude]
-        public Activity Activity1 { get; set; }
-
-        [JsonInclude]
-        public Activity Activity2 { get; set; }
-
-        [JsonInclude]
-        public Activity Activity3 { get; set; }
-
-        [JsonInclude]
-        public Activity Activity4 { get; set; }
-
-        [JsonInclude]
-        public Activity Activity5 { get; set; }
-
-        [JsonInclude]
-        public AvailabilityInfo AvailabilityInfo { get; set; }
+        public Activity[] Activities { get; set; }
     }
 
     public class Activity
     {
         [JsonInclude]
-        public string Question { get; set; }
-
-        [JsonInclude]
-        public WordInfo Word1 { get; set; }
-
-        [JsonInclude]
-        public WordInfo Word2 { get; set; }
+        public WordInfo[] Words { get; set; }
 
         [JsonInclude]
         public bool Answer { get; set; }
-
-        [JsonInclude]
-        public string AnswerType { get; set; }
-
-        [JsonInclude]
-        public string FeedbackPositive { get; set; }
-
-        [JsonInclude]
-        public string FeedbackNeutral { get; set; }
-
-        [JsonInclude]
-        public string FeedbackNoAnswer { get; set; }
     }
 
     public class WordInfo
@@ -68,41 +43,13 @@ namespace BasketResponses
         public string Word { get; set; }
 
         [JsonInclude]
-        [JsonPropertyName("PATH")]
         public string Path { get; set; }
 
         [JsonInclude]
-        public int Id { get; set; }
-
-        [JsonInclude]
         public string SyllabifiedWord { get; set; }
-    }
-
-
-    public class AvailabilityInfo
-    {
-        [JsonInclude]
-        public int WordsAvailable { get; set; }
 
         [JsonInclude]
-        public int QuestionsPossible { get; set; }
-
-        [JsonInclude]
-        public int TherapyPlanRequested { get; set; }
-
-        [JsonInclude]
-        public int WordsPerQuestion { get; set; }
-
-        [JsonInclude]
-        public bool SufficientWords { get; set; }
-
-        [JsonInclude]
-        public int ActivityNumber { get; set; }
-
-        [JsonInclude]
-        public int ActivitiesCreated { get; set; }
-
-        [JsonInclude]
-        public int ActivitiesRequested { get; set; }
+        [JsonPropertyName("word_sound")]
+        public string Sound { get; set; }
     }
 }

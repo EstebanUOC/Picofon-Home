@@ -1,3 +1,4 @@
+using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -36,15 +37,25 @@ public class BasketManager : MonoBehaviour
     {
         BasketService basketService = new();
 
-        var activities = await basketService.GetActivities();
+        ApiResult<ActivitiesData> result = await basketService.GetActivities<ActivitiesData>();
+
+        if (!result.Success)
+        {
+            Debug.LogError($"Error loading activities: {result.Message}");
+            return;
+        }
+
+        BasketResponses.Activity[] activities = result.Data.Activities;
+
+        string word1Path = activities[0].Words[0].Path;
+        string word2Path = activities[0].Words[1].Path;
 
         Debug.Log(
-            $"Successfully loaded Judge activity: {activities.Activity1.Word1.Path} vs {activities.Activity1.Word2.Path}"
+            $"Successfully loaded Judge activity: {word1Path} vs {word2Path}"
         );
 
-        // Provisional code to load images
-        ImageLeftWord.sprite = LoadSprite(activities.Activity1.Word1.Path);
-        ImageRightWord.sprite = LoadSprite(activities.Activity1.Word2.Path);
+        ImageLeftWord.sprite = LoadSprite(word1Path);
+        ImageRightWord.sprite = LoadSprite(word2Path);
     }
 
     private Sprite LoadSprite(string p)
@@ -53,7 +64,7 @@ public class BasketManager : MonoBehaviour
         Sprite s = Resources.Load<Sprite>($"Images/ImgButtons/{file}");
 
         if (!s)
-            Debug.LogWarning($"⚠ No se encontró sprite: {file}");
+            Debug.LogWarning($"No se encontró sprite: {file}");
 
         return s;
     }
