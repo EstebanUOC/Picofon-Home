@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -24,7 +24,7 @@ public class FeedbackPanelController : MonoBehaviour
     private Sprite spriteCloud;
 
     // 🕒 Control global del tiempo del feedback
-    private const float FEEDBACK_TOTAL_DURATION = 2f;   // 🔧 Cambia este valor para ajustar el tiempo total
+    private const float FEEDBACK_TOTAL_DURATION = 10f;   // 🔧 Cambia este valor para ajustar el tiempo total
     private const float ANIMATION_DURATION = 1.5f;       // 🔧 Duración de la animación (Correct o Neutral)
 
     private void Awake()

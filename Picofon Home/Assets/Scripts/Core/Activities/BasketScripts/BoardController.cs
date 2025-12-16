@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BoardController : MonoBehaviour
 {
     [Space(15)]
-    public SpriteRenderer ImageLeft;
-    public SpriteRenderer ImageRight;
+    public Image ImageLeft;
+    public Image ImageRight;
 
     public void Start()
     {
