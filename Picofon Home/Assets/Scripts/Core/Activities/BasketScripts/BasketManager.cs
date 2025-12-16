@@ -1,3 +1,4 @@
+using System;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -19,9 +20,10 @@ public class BasketManager : MonoBehaviour
     public Hoop HoopPositive;
     public Hoop HoopNegative;
 
-    [Space(15)]
-    public SpriteRenderer ImageLeftWord;
-    public SpriteRenderer ImageRightWord;
+    public Action<BasketResponses.Activity> OnActivityChange;
+
+    private BasketResponses.Activity[] _activities;
+    private int _currentActivityIndex = 0;
 
     public void Awake()
     {
@@ -45,28 +47,15 @@ public class BasketManager : MonoBehaviour
             return;
         }
 
-        BasketResponses.Activity[] activities = result.Data.Activities;
+        _activities = result.Data.Activities;
 
-        string word1Path = activities[0].Words[0].Path;
-        string word2Path = activities[0].Words[1].Path;
+        if (_activities is null || _activities.Length == 0)
+        {
+            Debug.LogWarning("No hay actividades cargadas.");
+            return;
+        }
 
-        Debug.Log(
-            $"Successfully loaded Judge activity: {word1Path} vs {word2Path}"
-        );
-
-        ImageLeftWord.sprite = LoadSprite(word1Path);
-        ImageRightWord.sprite = LoadSprite(word2Path);
-    }
-
-    private Sprite LoadSprite(string p)
-    {
-        string file = System.IO.Path.GetFileNameWithoutExtension(p);
-        Sprite s = Resources.Load<Sprite>($"Images/ImgButtons/{file}");
-
-        if (!s)
-            Debug.LogWarning($"No se encontró sprite: {file}");
-
-        return s;
+        ChangeActivity();
     }
 
     public void LaunchBall(HoopType hoopType)
@@ -77,5 +66,18 @@ public class BasketManager : MonoBehaviour
                 : HoopNegative.TargetPosition;
 
         Ball.Launch();
+        InitCount().Forget();
+    }
+
+    private void ChangeActivity()
+    {
+        OnActivityChange?.Invoke(_activities[_currentActivityIndex]);
+        _currentActivityIndex++;
+    }
+
+    private async UniTaskVoid InitCount()
+    {
+        await UniTask.WaitForSeconds(2f);
+        ChangeActivity();
     }
 }

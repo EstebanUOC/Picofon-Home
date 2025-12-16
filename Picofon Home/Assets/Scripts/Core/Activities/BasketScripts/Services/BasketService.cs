@@ -83,20 +83,20 @@ public class BasketService
                 ""words"": [
                     {
                         ""word"": ""martell"",
-                        ""path"": ""img3.png"",
+                        ""path"": ""IMG_0019.png"",
                         ""id"": 1003,
                         ""syllabified_word"": ""mar#tell"",
                         ""word_sound"": ""sound00x.wav""
                     },
                     {
                         ""word"": ""calze"",
-                        ""path"": ""img4.png"",
+                        ""path"": ""IMG_0031.png"",
                         ""id"": 1004,
                         ""syllabified_word"": ""cal#ze"",
                         ""word_sound"": ""sound00x.wav""
                     }
                 ],
-                ""answer"": true
+                ""answer"": false
             }
         ]
     }

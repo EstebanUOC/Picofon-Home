@@ -615,6 +615,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 487383562}
+  - component: {fileID: 487383563}
   m_Layer: 0
   m_Name: Hoops
   m_TagString: Untagged
@@ -639,6 +640,20 @@ Transform:
   - {fileID: 2033493542}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &487383563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 487383561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56825ffef9d44204baaee90d31fe3d5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HoopPositive: {fileID: 1080419528}
+  HoopNegative: {fileID: 2033493543}
 --- !u!1 &606603854
 GameObject:
   m_ObjectHideFlags: 0
@@ -1176,8 +1191,6 @@ MonoBehaviour:
   Ball: {fileID: 1628458930}
   HoopPositive: {fileID: 1080419528}
   HoopNegative: {fileID: 2033493543}
-  ImageLeftWord: {fileID: 756760225}
-  ImageRightWord: {fileID: 105925569}
 --- !u!1 &1080419525
 GameObject:
   m_ObjectHideFlags: 0
@@ -2075,6 +2088,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1984792079}
+  - component: {fileID: 1984792080}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -2100,6 +2114,20 @@ Transform:
   - {fileID: 105925568}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1984792080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1984792078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c442ceef128db7ab7afc4cb0cdb69dbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ImageLeft: {fileID: 756760225}
+  ImageRight: {fileID: 105925569}
 --- !u!1 &2026460716
 GameObject:
   m_ObjectHideFlags: 0
@@ -2455,7 +2483,7 @@ SceneRoots:
   - {fileID: 1165722883}
   - {fileID: 1056132853}
   - {fileID: 668804226}
+  - {fileID: 1984792079}
   - {fileID: 487383562}
   - {fileID: 1255441401}
-  - {fileID: 1984792079}
   - {fileID: 1628458927}
