@@ -13,6 +13,8 @@ public class FeedbackController : MonoBehaviour
     [Space(15)]
     public Button ContinueButton;
 
+    public FeedbackView FeedbackView;
+
     public UniTask WaitUntilClicked => _taskCompletion.Task;
 
     private UniTaskCompletionSource _taskCompletion;
@@ -33,6 +35,7 @@ public class FeedbackController : MonoBehaviour
     public async UniTask ShowFeedback(FeedbackType feedbackType)
     {
         gameObject.SetActive(true);
+        FeedbackView.ShowFeedback(feedbackType);
         await WaitUntilClicked;
     }
 

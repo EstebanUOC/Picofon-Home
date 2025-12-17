@@ -80,7 +80,10 @@ public class BasketManager : MonoBehaviour
     {
         await UniTask.WaitForSeconds(2f);
 
-        await FeedbackController.ShowFeedback(FeedbackType.Positive);
+        FeedbackType feedbackType =
+            _currentActivityIndex % 2 == 0 ? FeedbackType.Negative : FeedbackType.Positive;
+
+        await FeedbackController.ShowFeedback(feedbackType);
 
         ChangeActivity();
     }
