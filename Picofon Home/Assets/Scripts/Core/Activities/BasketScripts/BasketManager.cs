@@ -15,6 +15,7 @@ public class BasketManager : MonoBehaviour
 
     [Space(15)]
     public BallTest Ball;
+    public FeedbackController FeedbackController;
 
     [Space(15)]
     public Hoop HoopPositive;
@@ -78,6 +79,9 @@ public class BasketManager : MonoBehaviour
     private async UniTaskVoid InitCount()
     {
         await UniTask.WaitForSeconds(2f);
+
+        await FeedbackController.ShowFeedback(FeedbackType.Positive);
+
         ChangeActivity();
     }
 }
