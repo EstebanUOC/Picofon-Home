@@ -19,20 +19,8 @@ public class BallTest : MonoBehaviour
     {
         Application.targetFrameRate = 60;
         body = GetComponent<Rigidbody2D>();
-    }
 
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            transform.position = DriblePosition.position;
-            body.bodyType = RigidbodyType2D.Kinematic;
-            body.angularVelocity = 0;
-            body.rotation = 0;
-            body.velocity = Vector2.zero;
-
-            ballIsDribling = true;
-        }
+        BasketManager.Instance.OnActivityChange += Reset;
     }
 
     public void FixedUpdate()
@@ -76,5 +64,16 @@ public class BallTest : MonoBehaviour
 
         ballIsFlying = true;
         ballIsDribling = false;
+    }
+
+    private void Reset(BasketResponses.Activity _)
+    {
+        transform.position = DriblePosition.position;
+        body.bodyType = RigidbodyType2D.Kinematic;
+        body.angularVelocity = 0;
+        body.rotation = 0;
+        body.velocity = Vector2.zero;
+
+        ballIsDribling = true;
     }
 }

@@ -1,3 +1,5 @@
+using System;
+using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -7,20 +9,33 @@ public enum HoopType
     Negative,
 }
 
+public enum AnswerResult
+{
+    Correct,
+    Incorrect,
+}
+
 public class BasketManager : MonoBehaviour
 {
     public static BasketManager Instance;
 
-    [Space(15)]
     public BallTest Ball;
 
     [Space(15)]
-    public Hoop HoopPositive;
-    public Hoop HoopNegative;
+    public FeedbackController FeedbackController;
 
-    [Space(15)]
-    public SpriteRenderer ImageLeftWord;
-    public SpriteRenderer ImageRightWord;
+    public AnswerController AnswerController;
+    public HoopsControllers HoopsControllers;
+
+    public Sprite LeftSprite { get; set; }
+    public Sprite RightSprite { get; set; }
+
+    public event Action<BasketResponses.Activity> OnActivityChange;
+
+    private int _currentActivityIndex = 0;
+
+    private BasketResponses.Activity[] _activities;
+    private BasketResponses.Activity _currentActivity;
 
     public void Awake()
     {
@@ -29,6 +44,7 @@ public class BasketManager : MonoBehaviour
 
     public void Start()
     {
+        AnswerController.OnAnswerSelected += LaunchBall;
         LoadActivities().Forget();
     }
 
@@ -36,35 +52,59 @@ public class BasketManager : MonoBehaviour
     {
         BasketService basketService = new();
 
-        var activities = await basketService.GetActivities();
+        ApiResult<ActivitiesData> result = await basketService.GetActivities<ActivitiesData>();
 
-        Debug.Log(
-            $"Successfully loaded Judge activity: {activities.Activity1.Word1.Path} vs {activities.Activity1.Word2.Path}"
-        );
+        if (!result.Success)
+        {
+            Debug.LogError($"Error loading activities: {result.Message}");
+            return;
+        }
 
-        // Provisional code to load images
-        ImageLeftWord.sprite = LoadSprite(activities.Activity1.Word1.Path);
-        ImageRightWord.sprite = LoadSprite(activities.Activity1.Word2.Path);
-    }
+        _activities = result.Data.Activities;
 
-    private Sprite LoadSprite(string p)
-    {
-        string file = System.IO.Path.GetFileNameWithoutExtension(p);
-        Sprite s = Resources.Load<Sprite>($"Images/ImgButtons/{file}");
+        if (_activities is null || _activities.Length == 0)
+        {
+            Debug.LogWarning("No hay actividades cargadas.");
+            return;
+        }
 
-        if (!s)
-            Debug.LogWarning($"⚠ No se encontró sprite: {file}");
-
-        return s;
+        ChangeActivity();
     }
 
     public void LaunchBall(HoopType hoopType)
     {
-        Ball.TargetPosition =
-            hoopType == HoopType.Positive
-                ? HoopPositive.TargetPosition
-                : HoopNegative.TargetPosition;
-
+        Ball.TargetPosition = HoopsControllers.GetHoopTarget(hoopType);
         Ball.Launch();
+
+        bool answer = hoopType == HoopType.Positive;
+
+        AnswerResult answerResult =
+            _currentActivity.Answer == answer ? AnswerResult.Correct : AnswerResult.Incorrect;
+
+        InitCount(answerResult).Forget();
+    }
+
+    private void ChangeActivity()
+    {
+        _currentActivity = _activities[_currentActivityIndex];
+
+        OnActivityChange?.Invoke(_currentActivity);
+
+        _currentActivityIndex++;
+
+        if (_currentActivityIndex == _activities.Length)
+            _currentActivityIndex = 0;
+    }
+
+    private async UniTaskVoid InitCount(AnswerResult answerResult)
+    {
+        await UniTask.WaitForSeconds(2f);
+
+        FeedbackType feedbackType =
+            answerResult == AnswerResult.Correct ? FeedbackType.Positive : FeedbackType.Neutral;
+
+        await FeedbackController.ShowFeedback(feedbackType, LeftSprite, RightSprite);
+
+        ChangeActivity();
     }
 }

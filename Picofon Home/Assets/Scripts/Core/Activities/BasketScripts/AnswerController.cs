@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class AnswerController : MonoBehaviour
@@ -6,9 +7,16 @@ public class AnswerController : MonoBehaviour
     public Answer PositiveAnswer;
     public Answer NegativeAnswer;
 
+    public event Action<HoopType> OnAnswerSelected;
+
     public void Start()
     {
-        PositiveAnswer.OnClick += () => BasketManager.Instance.LaunchBall(HoopType.Positive);
-        NegativeAnswer.OnClick += () => BasketManager.Instance.LaunchBall(HoopType.Negative);
+        PositiveAnswer.OnClick += () => AnswerSelected(HoopType.Positive);
+        NegativeAnswer.OnClick += () => AnswerSelected(HoopType.Negative);
+    }
+
+    private void AnswerSelected(HoopType hoopType)
+    {
+        OnAnswerSelected?.Invoke(hoopType);
     }
 }

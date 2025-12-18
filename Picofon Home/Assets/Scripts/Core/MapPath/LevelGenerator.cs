@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static Level;
@@ -24,7 +24,7 @@ public class PortraitLevelMapGenerator : MonoBehaviour
     private readonly string[] scenes = new string[]
     {
         // Modify here depen of what GameMechanic you want to render.
-        "BasketScene",
+        "BalloonPopSeaScene",
         "BalloonPopParty",
         "BalloonPopParty",
 

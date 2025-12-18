@@ -24,6 +24,24 @@ public static class HttpClientUnity
         return request.downloadHandler.text;
     }
 
+    public static async UniTask<byte[]> GetAsyncBytes(
+        string url,
+        int timeoutSeconds = 10,
+        CancellationToken cancellationToken = default
+    )
+    {
+        using var request = UnityWebRequest.Get(url);
+
+        request.timeout = timeoutSeconds;
+
+        await request.SendWebRequest().WithCancellation(cancellationToken);
+
+        if (request.result != UnityWebRequest.Result.Success)
+            throw new Exception($"HTTP GET Error: {request.error} | URL: {url}");
+
+        return request.downloadHandler.data;
+    }
+
     public static async UniTask<string> PostAsync(
         string url,
         string data,
