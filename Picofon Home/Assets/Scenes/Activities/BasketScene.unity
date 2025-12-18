@@ -582,8 +582,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29c6b989033b02b1c90757cfe846dec8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ContinueButton: {fileID: 1168516863}
   FeedbackView: {fileID: 862919297}
+  ImageLeft: {fileID: 564142482}
+  ImageRight: {fileID: 192128270}
 --- !u!223 &127598251
 Canvas:
   m_ObjectHideFlags: 0
@@ -1773,8 +1774,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Ball: {fileID: 1628458930}
   FeedbackController: {fileID: 127598250}
-  HoopPositive: {fileID: 1080419528}
-  HoopNegative: {fileID: 2033493543}
+  AnswerController: {fileID: 420709779}
+  HoopsControllers: {fileID: 487383563}
 --- !u!1 &1075156704
 GameObject:
   m_ObjectHideFlags: 0
@@ -2356,7 +2357,7 @@ Transform:
   m_GameObject: {fileID: 1389891075}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

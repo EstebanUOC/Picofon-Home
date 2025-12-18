@@ -14,8 +14,14 @@ public class BoardController : MonoBehaviour
 
     private void UpdateImages(BasketResponses.Activity activity)
     {
-        ImageLeft.sprite = LoadSprite(activity.Words[0].Path);
-        ImageRight.sprite = LoadSprite(activity.Words[1].Path);
+        Sprite leftSprite = LoadSprite(activity.Words[0].Path);
+        Sprite rightSprite = LoadSprite(activity.Words[1].Path);
+
+        ImageLeft.sprite = leftSprite;
+        ImageRight.sprite = rightSprite;
+
+        BasketManager.Instance.LeftSprite = leftSprite;
+        BasketManager.Instance.RightSprite = rightSprite;
     }
 
     private Sprite LoadSprite(string p)

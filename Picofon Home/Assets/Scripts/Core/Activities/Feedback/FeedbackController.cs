@@ -2,18 +2,14 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum FeedbackType
-{
-    Positive,
-    Negative,
-}
-
 public class FeedbackController : MonoBehaviour
 {
     [Space(15)]
-    public Button ContinueButton;
-
     public FeedbackView FeedbackView;
+
+    [Space(15)]
+    public Image ImageLeft;
+    public Image ImageRight;
 
     public UniTask WaitUntilClicked => _taskCompletion.Task;
 
@@ -23,25 +19,34 @@ public class FeedbackController : MonoBehaviour
     {
         _taskCompletion = new UniTaskCompletionSource();
 
-        ContinueButton.onClick.AddListener(OnContinueButtonClicked);
+        FeedbackView.OnContinueClicked += OnContinueButtonClicked;
     }
 
     public void OnDestroy()
     {
-        ContinueButton.onClick.RemoveListener(OnContinueButtonClicked);
         _taskCompletion.TrySetCanceled();
     }
 
-    public async UniTask ShowFeedback(FeedbackType feedbackType)
+    public async UniTask ShowFeedback(
+        FeedbackType feedbackType,
+        Sprite leftSprite,
+        Sprite rightSprite
+    )
     {
         gameObject.SetActive(true);
+
+        ImageLeft.sprite = leftSprite;
+        ImageRight.sprite = rightSprite;
+
         FeedbackView.ShowFeedback(feedbackType);
+
         await WaitUntilClicked;
     }
 
     private void OnContinueButtonClicked()
     {
-        gameObject.SetActive(false);
         _taskCompletion?.TrySetResult();
+
+        gameObject.SetActive(false);
     }
 }
