@@ -1,15 +1,15 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class BoardController : MonoBehaviour
 {
     [Space(15)]
-    public Image ImageLeft;
-    public Image ImageRight;
+    public ImageFrameController FrameLeft;
+    public ImageFrameController FrameRight;
 
     public void Start()
     {
         BasketManager.Instance.OnActivityChange += UpdateImages;
+        BasketManager.Instance.OnClueActived += ShowClues;
     }
 
     private void UpdateImages(BasketResponses.Activity activity)
@@ -17,11 +17,20 @@ public class BoardController : MonoBehaviour
         Sprite leftSprite = LoadSprite(activity.Words[0].Path);
         Sprite rightSprite = LoadSprite(activity.Words[1].Path);
 
-        ImageLeft.sprite = leftSprite;
-        ImageRight.sprite = rightSprite;
-
         BasketManager.Instance.LeftSprite = leftSprite;
         BasketManager.Instance.RightSprite = rightSprite;
+
+        FrameLeft.UpdateFrame(leftSprite, activity.Words[0].Word);
+        FrameRight.UpdateFrame(rightSprite, activity.Words[1].Word);
+    }
+
+    private void ShowClues(bool active)
+    {
+        if (active)
+        {
+            FrameLeft.ShowText();
+            FrameRight.ShowText();
+        }
     }
 
     private Sprite LoadSprite(string p)

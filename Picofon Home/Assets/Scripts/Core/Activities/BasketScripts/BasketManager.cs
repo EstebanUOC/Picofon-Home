@@ -2,6 +2,7 @@ using System;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum HoopType
 {
@@ -27,10 +28,13 @@ public class BasketManager : MonoBehaviour
     public AnswerController AnswerController;
     public HoopsControllers HoopsControllers;
 
+    public Button ClueButton;
+
     public Sprite LeftSprite { get; set; }
     public Sprite RightSprite { get; set; }
 
     public event Action<BasketResponses.Activity> OnActivityChange;
+    public event Action<bool> OnClueActived;
 
     private int _currentActivityIndex = 0;
 
@@ -46,6 +50,12 @@ public class BasketManager : MonoBehaviour
     {
         AnswerController.OnAnswerSelected += LaunchBall;
         LoadActivities().Forget();
+
+        // Codigo que sera borrado
+        ClueButton.onClick.AddListener(() =>
+        {
+            OnClueActived?.Invoke(true);
+        });
     }
 
     public async UniTaskVoid LoadActivities()
