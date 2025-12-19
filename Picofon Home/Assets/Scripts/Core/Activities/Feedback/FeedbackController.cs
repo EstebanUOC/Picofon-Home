@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class FeedbackController : MonoBehaviour
 {
@@ -8,8 +7,8 @@ public class FeedbackController : MonoBehaviour
     public FeedbackView FeedbackView;
 
     [Space(15)]
-    public Image ImageLeft;
-    public Image ImageRight;
+    public ImageFrameController FrameLeft;
+    public ImageFrameController FrameRight;
 
     public UniTask WaitUntilClicked => _taskCompletion.Task;
 
@@ -35,8 +34,8 @@ public class FeedbackController : MonoBehaviour
     {
         gameObject.SetActive(true);
 
-        ImageLeft.sprite = leftSprite;
-        ImageRight.sprite = rightSprite;
+        FrameLeft.UpdateFrame(leftSprite, "Prueba");
+        FrameRight.UpdateFrame(rightSprite, "Prueba");
 
         FeedbackView.ShowFeedback(feedbackType);
 

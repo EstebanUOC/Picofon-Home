@@ -12,7 +12,7 @@ public class ImageFrameController : MonoBehaviour
     private Image _imageComponent;
     private RectTransform _imageRect;
 
-    private const float _TextShowYPosition = 23;
+    private const float _TextShowYPosition = 28;
     private const float _TextShowDuration = 0.2f;
 
     private float _originalYPosition;
