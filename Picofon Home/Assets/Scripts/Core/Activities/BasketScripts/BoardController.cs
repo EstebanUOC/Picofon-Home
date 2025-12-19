@@ -28,8 +28,8 @@ public class BoardController : MonoBehaviour
     {
         if (active)
         {
-            FrameLeft.ShowText();
-            FrameRight.ShowText();
+            FrameLeft.ShowClue();
+            FrameRight.ShowClue();
         }
     }
 

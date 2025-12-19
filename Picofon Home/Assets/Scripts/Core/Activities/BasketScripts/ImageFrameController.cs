@@ -44,8 +44,13 @@ public class ImageFrameController : MonoBehaviour
         Text.text = word;
     }
 
-    public void ShowText()
+    public void ShowClue()
     {
         _moveTween.Restart();
+    }
+
+    public void OnDestroy()
+    {
+        _moveTween.Kill();
     }
 }
