@@ -19,18 +19,25 @@ public class BasketManager : MonoBehaviour
 {
     public static BasketManager Instance;
 
-    public BallTest Ball;
-
     [Space(15)]
     public FeedbackController FeedbackController;
-
     public AnswerController AnswerController;
     public HoopsControllers HoopsControllers;
+    public ClueController ClueController;
 
-    public Sprite LeftSprite { get; set; }
-    public Sprite RightSprite { get; set; }
+    public event ActionIn<BasketResponses.BasketActivity> OnActivityChange;
 
-    public event Action<BasketResponses.Activity> OnActivityChange;
+    public event Action<bool> OnClueActived
+    {
+        add { ClueController.OnClueActived += value; }
+        remove { ClueController.OnClueActived -= value; }
+    }
+
+    public event Action<HoopType> OnAnswerSelected
+    {
+        add { AnswerController.OnAnswerSelected += value; }
+        remove { AnswerController.OnAnswerSelected -= value; }
+    }
 
     private int _currentActivityIndex = 0;
 
@@ -39,16 +46,16 @@ public class BasketManager : MonoBehaviour
 
     public void Awake()
     {
-        Instance = this;
-    }
+        Application.targetFrameRate = 60;
+        AnswerController.OnAnswerSelected += HandleAnswerSelected;
 
-    public void Start()
-    {
-        AnswerController.OnAnswerSelected += LaunchBall;
+        Instance = this;
+        FeedbackController.Init();
+
         LoadActivities().Forget();
     }
 
-    public async UniTaskVoid LoadActivities()
+    private async UniTaskVoid LoadActivities()
     {
         BasketService basketService = new();
 
@@ -71,24 +78,49 @@ public class BasketManager : MonoBehaviour
         ChangeActivity();
     }
 
-    public void LaunchBall(HoopType hoopType)
+    private void HandleAnswerSelected(HoopType hoopType)
     {
-        Ball.TargetPosition = HoopsControllers.GetHoopTarget(hoopType);
-        Ball.Launch();
+        InitCount(hoopType).Forget();
+    }
 
+    private async UniTaskVoid InitCount(HoopType hoopType)
+    {
         bool answer = hoopType == HoopType.Positive;
 
         AnswerResult answerResult =
             _currentActivity.Answer == answer ? AnswerResult.Correct : AnswerResult.Incorrect;
 
-        InitCount(answerResult).Forget();
+        await UniTask.WaitForSeconds(2f);
+
+        FeedbackType feedbackType =
+            answerResult == AnswerResult.Correct ? FeedbackType.Positive : FeedbackType.Neutral;
+
+        await FeedbackController.ShowFeedback(feedbackType);
+
+        ChangeActivity();
     }
 
     private void ChangeActivity()
     {
         _currentActivity = _activities[_currentActivityIndex];
 
-        OnActivityChange?.Invoke(_currentActivity);
+        Sprite leftSprite = LoadSprite(_currentActivity.Words[0].Path);
+        Sprite rightSprite = LoadSprite(_currentActivity.Words[1].Path);
+
+        string leftWord = _currentActivity.Words[0].Word;
+        string rightWord = _currentActivity.Words[1].Word;
+
+        BasketResponses.BasketActivity activity = new(
+            leftSprite,
+            rightSprite,
+            leftWord,
+            rightWord,
+            _currentActivity.Words[0].Sound,
+            _currentActivity.Words[1].Sound,
+            _currentActivity.Answer
+        );
+
+        OnActivityChange?.Invoke(activity);
 
         _currentActivityIndex++;
 
@@ -96,15 +128,14 @@ public class BasketManager : MonoBehaviour
             _currentActivityIndex = 0;
     }
 
-    private async UniTaskVoid InitCount(AnswerResult answerResult)
+    private Sprite LoadSprite(string p)
     {
-        await UniTask.WaitForSeconds(2f);
+        string file = System.IO.Path.GetFileNameWithoutExtension(p);
+        Sprite s = Resources.Load<Sprite>($"Images/ImgButtons/{file}");
 
-        FeedbackType feedbackType =
-            answerResult == AnswerResult.Correct ? FeedbackType.Positive : FeedbackType.Neutral;
+        if (!s)
+            Debug.LogWarning($"No se encontró sprite: {file}");
 
-        await FeedbackController.ShowFeedback(feedbackType, LeftSprite, RightSprite);
-
-        ChangeActivity();
+        return s;
     }
 }

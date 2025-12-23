@@ -1,62 +1,29 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
-public class BallController : MonoBehaviour, IPointerClickHandler
+public class BallController : MonoBehaviour
 {
-    [Header("References")]
-    public Image innerImage; // Image shown on top of the ball
-    private Transform hoopTarget;
-    private bool isMoving = false;
-    private float timeElapsed = 0f;
-    private float travelTime = 1.0f;
-    private float arcHeight = 200f;
-    private bool isClickable = true;
+    [Space(15)]
+    public Transform PositiveTarget;
+    public Transform NegativeTarget;
 
-    public void Initialize(Transform target, Sprite contentSprite, bool clickable)
+    private BallMovement BallMovement;
+
+    public void Start()
     {
-        hoopTarget = target;
-        isClickable = clickable;
+        BallMovement = GetComponent<BallMovement>();
 
-        if (innerImage != null && contentSprite != null)
-            innerImage.sprite = contentSprite;
+        BasketManager.Instance.OnAnswerSelected += LaunchBall;
+        BasketManager.Instance.OnActivityChange += Reset;
     }
 
-    public void StartMoveTo(Transform target)
+    private void LaunchBall(HoopType hoopType)
     {
-        hoopTarget = target;
-        isMoving = true;
-        timeElapsed = 0f;
+        Transform target = hoopType == HoopType.Positive ? PositiveTarget : NegativeTarget;
+        BallMovement.Launch(target);
     }
 
-
-    public void OnPointerClick(PointerEventData eventData)
+    private void Reset(in BasketResponses.BasketActivity _)
     {
-        if (!isClickable || isMoving || hoopTarget == null)
-            return;
-
-        isMoving = true;
-        timeElapsed = 0f;
-    }
-
-    void Update()
-    {
-        if (!isMoving) return;
-
-        timeElapsed += Time.deltaTime;
-        float t = timeElapsed / travelTime;
-
-        Vector3 startPos = transform.position;
-        Vector3 targetPos = hoopTarget.position;
-
-        Vector3 currentPos = Vector3.Lerp(startPos, targetPos, t);
-        currentPos.y += arcHeight * Mathf.Sin(Mathf.PI * t);
-        transform.position = currentPos;
-
-        if (t >= 1f)
-        {
-            isMoving = false;
-            Destroy(gameObject, 0.2f);
-        }
+        BallMovement.Reset();
     }
 }

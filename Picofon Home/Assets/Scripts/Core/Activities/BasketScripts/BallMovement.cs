@@ -1,10 +1,8 @@
 using UnityEngine;
 
-public class BallTest : MonoBehaviour
+public class BallMovement : MonoBehaviour
 {
     public Transform DriblePosition;
-
-    public Transform TargetPosition { get; set; }
 
     private float time = 0;
     private readonly float duration = 1;
@@ -13,14 +11,13 @@ public class BallTest : MonoBehaviour
     private bool ballIsFlying = false;
     private bool ballIsDribling = true;
 
+    private Transform TargetPosition { get; set; }
+
     private Rigidbody2D body;
 
     public void Start()
     {
-        Application.targetFrameRate = 60;
         body = GetComponent<Rigidbody2D>();
-
-        BasketManager.Instance.OnActivityChange += Reset;
     }
 
     public void FixedUpdate()
@@ -55,8 +52,10 @@ public class BallTest : MonoBehaviour
         }
     }
 
-    public void Launch()
+    public void Launch(Transform target)
     {
+        TargetPosition = target;
+
         body.bodyType = RigidbodyType2D.Kinematic;
         body.angularVelocity = 200;
         initial = transform.position;
@@ -66,7 +65,7 @@ public class BallTest : MonoBehaviour
         ballIsDribling = false;
     }
 
-    private void Reset(BasketResponses.Activity _)
+    public void Reset()
     {
         transform.position = DriblePosition.position;
         body.bodyType = RigidbodyType2D.Kinematic;
