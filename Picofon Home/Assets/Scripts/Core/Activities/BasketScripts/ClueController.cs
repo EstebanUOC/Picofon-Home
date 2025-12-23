@@ -8,10 +8,12 @@ public class ClueController : MonoBehaviour
 
     private Button _buttonComponent;
 
+    private bool _isClueActive = false;
+
     public void Awake()
     {
         _buttonComponent = GetComponent<Button>();
-        _buttonComponent.onClick.AddListener(OnClueButtonClicked);
+        _buttonComponent.onClick.AddListener(HandleButtonClick);
 
         BasketManager.Instance.OnActivityChange += Reset;
     }
@@ -21,9 +23,10 @@ public class ClueController : MonoBehaviour
         _buttonComponent.interactable = true;
     }
 
-    private void OnClueButtonClicked()
+    private void HandleButtonClick()
     {
-        OnClueActived?.Invoke(true);
-        _buttonComponent.interactable = false;
+        _isClueActive = !_isClueActive;
+
+        OnClueActived?.Invoke(_isClueActive);
     }
 }

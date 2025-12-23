@@ -28,5 +28,10 @@ public class BoardController : MonoBehaviour
             FrameLeft.ShowClue();
             FrameRight.ShowClue();
         }
+        else
+        {
+            FrameLeft.HideClue();
+            FrameRight.HideClue();
+        }
     }
 }
