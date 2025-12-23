@@ -2322,7 +2322,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e48d1bf037de15031ac8e80916a26d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ball: {fileID: 1628458930}
   FeedbackController: {fileID: 127598250}
   AnswerController: {fileID: 1277141778}
   HoopsControllers: {fileID: 487383563}
@@ -4193,6 +4192,7 @@ GameObject:
   - component: {fileID: 1628458928}
   - component: {fileID: 1628458929}
   - component: {fileID: 1628458930}
+  - component: {fileID: 1628458931}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -4342,6 +4342,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DriblePosition: {fileID: 2089137963}
+--- !u!114 &1628458931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628458925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1fbfdbe9e210495e9dd5c6fbcad9805, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PositiveTarget: {fileID: 400938557}
+  NegativeTarget: {fileID: 1389891076}
 --- !u!1 &1649309280
 GameObject:
   m_ObjectHideFlags: 0

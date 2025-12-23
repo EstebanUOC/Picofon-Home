@@ -19,8 +19,6 @@ public class BasketManager : MonoBehaviour
 {
     public static BasketManager Instance;
 
-    public BallTest Ball;
-
     [Space(15)]
     public FeedbackController FeedbackController;
     public AnswerController AnswerController;
@@ -28,10 +26,17 @@ public class BasketManager : MonoBehaviour
     public ClueController ClueController;
 
     public event ActionIn<BasketResponses.BasketActivity> OnActivityChange;
+
     public event Action<bool> OnClueActived
     {
         add { ClueController.OnClueActived += value; }
         remove { ClueController.OnClueActived -= value; }
+    }
+
+    public event Action<HoopType> OnAnswerSelected
+    {
+        add { AnswerController.OnAnswerSelected += value; }
+        remove { AnswerController.OnAnswerSelected -= value; }
     }
 
     private int _currentActivityIndex = 0;
@@ -41,17 +46,16 @@ public class BasketManager : MonoBehaviour
 
     public void Awake()
     {
+        Application.targetFrameRate = 60;
+        AnswerController.OnAnswerSelected += HandleAnswerSelected;
+
         Instance = this;
         FeedbackController.Init();
-    }
 
-    public void Start()
-    {
-        AnswerController.OnAnswerSelected += LaunchBall;
         LoadActivities().Forget();
     }
 
-    public async UniTaskVoid LoadActivities()
+    private async UniTaskVoid LoadActivities()
     {
         BasketService basketService = new();
 
@@ -74,17 +78,26 @@ public class BasketManager : MonoBehaviour
         ChangeActivity();
     }
 
-    public void LaunchBall(HoopType hoopType)
+    private void HandleAnswerSelected(HoopType hoopType)
     {
-        Ball.TargetPosition = HoopsControllers.GetHoopTarget(hoopType);
-        Ball.Launch();
+        InitCount(hoopType).Forget();
+    }
 
+    private async UniTaskVoid InitCount(HoopType hoopType)
+    {
         bool answer = hoopType == HoopType.Positive;
 
         AnswerResult answerResult =
             _currentActivity.Answer == answer ? AnswerResult.Correct : AnswerResult.Incorrect;
 
-        InitCount(answerResult).Forget();
+        await UniTask.WaitForSeconds(2f);
+
+        FeedbackType feedbackType =
+            answerResult == AnswerResult.Correct ? FeedbackType.Positive : FeedbackType.Neutral;
+
+        await FeedbackController.ShowFeedback(feedbackType);
+
+        ChangeActivity();
     }
 
     private void ChangeActivity()
@@ -113,18 +126,6 @@ public class BasketManager : MonoBehaviour
 
         if (_currentActivityIndex == _activities.Length)
             _currentActivityIndex = 0;
-    }
-
-    private async UniTaskVoid InitCount(AnswerResult answerResult)
-    {
-        await UniTask.WaitForSeconds(2f);
-
-        FeedbackType feedbackType =
-            answerResult == AnswerResult.Correct ? FeedbackType.Positive : FeedbackType.Neutral;
-
-        await FeedbackController.ShowFeedback(feedbackType);
-
-        ChangeActivity();
     }
 
     private Sprite LoadSprite(string p)

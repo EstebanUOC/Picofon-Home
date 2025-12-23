@@ -11,13 +11,6 @@ public class HoopsControllers : MonoBehaviour
         BasketManager.Instance.OnActivityChange += UpdateHoops;
     }
 
-    public Transform GetHoopTarget(HoopType hoopType)
-    {
-        return hoopType == HoopType.Positive
-            ? HoopPositive.TargetPosition
-            : HoopNegative.TargetPosition;
-    }
-
     private void UpdateHoops(in BasketResponses.BasketActivity activity)
     {
         HoopPositive.Blocked = !activity.Answer;

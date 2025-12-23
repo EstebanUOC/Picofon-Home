@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class JudgeController : MonoBehaviour
 {
@@ -10,7 +10,7 @@ public class JudgeController : MonoBehaviour
     public Transform hoopLeft;
     public Transform hoopCenter;
     public TMP_Text hoopLeftLabel;
-    public TMP_Text hoopCenterLabel;  
+    public TMP_Text hoopCenterLabel;
     public List<BallController> activeBalls = new List<BallController>();
 
     [Header("✅ Answer Settings")]
@@ -45,10 +45,10 @@ public class JudgeController : MonoBehaviour
 
         foreach (BallController ball in activeBalls)
         {
-            if (ball != null)
-            {
-                ball.StartMoveTo(target);
-            }
+            // if (ball != null)
+            // {
+            //     ball.StartMoveTo(target);
+            // }
         }
     }
 }
