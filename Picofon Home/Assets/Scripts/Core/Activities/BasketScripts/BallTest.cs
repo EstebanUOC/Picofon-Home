@@ -66,7 +66,7 @@ public class BallTest : MonoBehaviour
         ballIsDribling = false;
     }
 
-    private void Reset(BasketResponses.Activity _)
+    private void Reset(in BasketResponses.BasketActivity _)
     {
         transform.position = DriblePosition.position;
         body.bodyType = RigidbodyType2D.Kinematic;

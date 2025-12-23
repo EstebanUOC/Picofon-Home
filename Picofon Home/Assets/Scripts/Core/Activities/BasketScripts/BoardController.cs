@@ -3,8 +3,8 @@ using UnityEngine;
 public class BoardController : MonoBehaviour
 {
     [Space(15)]
-    public ImageFrameController FrameLeft;
-    public ImageFrameController FrameRight;
+    public GameFrameController FrameLeft;
+    public GameFrameController FrameRight;
 
     public void Start()
     {
@@ -12,16 +12,13 @@ public class BoardController : MonoBehaviour
         BasketManager.Instance.OnClueActived += ShowClues;
     }
 
-    private void UpdateImages(BasketResponses.Activity activity)
+    private void UpdateImages(in BasketResponses.BasketActivity activity)
     {
-        Sprite leftSprite = LoadSprite(activity.Words[0].Path);
-        Sprite rightSprite = LoadSprite(activity.Words[1].Path);
+        Sprite leftSprite = activity.LeftImage;
+        Sprite rightSprite = activity.RightImage;
 
-        BasketManager.Instance.LeftSprite = leftSprite;
-        BasketManager.Instance.RightSprite = rightSprite;
-
-        FrameLeft.UpdateFrame(leftSprite, activity.Words[0].Word);
-        FrameRight.UpdateFrame(rightSprite, activity.Words[1].Word);
+        FrameLeft.UpdateFrame(leftSprite, activity.LeftWord);
+        FrameRight.UpdateFrame(rightSprite, activity.RightWord);
     }
 
     private void ShowClues(bool active)
@@ -31,16 +28,5 @@ public class BoardController : MonoBehaviour
             FrameLeft.ShowClue();
             FrameRight.ShowClue();
         }
-    }
-
-    private Sprite LoadSprite(string p)
-    {
-        string file = System.IO.Path.GetFileNameWithoutExtension(p);
-        Sprite s = Resources.Load<Sprite>($"Images/ImgButtons/{file}");
-
-        if (!s)
-            Debug.LogWarning($"No se encontró sprite: {file}");
-
-        return s;
     }
 }

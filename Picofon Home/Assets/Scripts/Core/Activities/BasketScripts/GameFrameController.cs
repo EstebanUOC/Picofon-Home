@@ -3,11 +3,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ImageFrameController : MonoBehaviour
+public class GameFrameController : MonoBehaviour
 {
     [Space(15)]
     public GameObject Image;
-    public TextMeshProUGUI Text;
+    public TMP_Text Text;
 
     private Image _imageComponent;
     private RectTransform _imageRect;

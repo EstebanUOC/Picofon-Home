@@ -7,18 +7,33 @@ public class FeedbackController : MonoBehaviour
     public FeedbackView FeedbackView;
 
     [Space(15)]
-    public ImageFrameController FrameLeft;
-    public ImageFrameController FrameRight;
+    public UIFrameController FrameLeft;
+    public UIFrameController FrameRight;
 
-    public UniTask WaitUntilClicked => _taskCompletion.Task;
-
-    private UniTaskCompletionSource _taskCompletion;
+    private ReusableCompletionSource<bool> _taskCompletion;
 
     public void Awake()
     {
-        _taskCompletion = new UniTaskCompletionSource();
+        _taskCompletion = new ReusableCompletionSource<bool>();
 
         FeedbackView.OnContinueClicked += OnContinueButtonClicked;
+        BasketManager.Instance.OnActivityChange += UpdateFrames;
+    }
+
+    public void Init()
+    {
+        gameObject.SetActive(true);
+        gameObject.SetActive(false);
+    }
+
+    public async UniTask<bool> ShowFeedback(FeedbackType feedbackType)
+    {
+        gameObject.SetActive(true);
+        FeedbackView.ShowFeedback(feedbackType);
+
+        _taskCompletion.Reset();
+
+        return await _taskCompletion.Task;
     }
 
     public void OnDestroy()
@@ -26,25 +41,15 @@ public class FeedbackController : MonoBehaviour
         _taskCompletion.TrySetCanceled();
     }
 
-    public async UniTask ShowFeedback(
-        FeedbackType feedbackType,
-        Sprite leftSprite,
-        Sprite rightSprite
-    )
+    private void UpdateFrames(in BasketResponses.BasketActivity activity)
     {
-        gameObject.SetActive(true);
-
-        FrameLeft.UpdateFrame(leftSprite, "Prueba");
-        FrameRight.UpdateFrame(rightSprite, "Prueba");
-
-        FeedbackView.ShowFeedback(feedbackType);
-
-        await WaitUntilClicked;
+        FrameLeft.UpdateFrame(activity.LeftImage, activity.LeftWord);
+        FrameRight.UpdateFrame(activity.RightImage, activity.RightWord);
     }
 
     private void OnContinueButtonClicked()
     {
-        _taskCompletion?.TrySetResult();
+        _taskCompletion.TrySetResult(true);
 
         gameObject.SetActive(false);
     }

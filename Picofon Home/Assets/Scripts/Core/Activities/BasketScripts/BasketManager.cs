@@ -2,7 +2,6 @@ using System;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
 public enum HoopType
 {
@@ -24,17 +23,16 @@ public class BasketManager : MonoBehaviour
 
     [Space(15)]
     public FeedbackController FeedbackController;
-
     public AnswerController AnswerController;
     public HoopsControllers HoopsControllers;
+    public ClueController ClueController;
 
-    public Button ClueButton;
-
-    public Sprite LeftSprite { get; set; }
-    public Sprite RightSprite { get; set; }
-
-    public event Action<BasketResponses.Activity> OnActivityChange;
-    public event Action<bool> OnClueActived;
+    public event ActionIn<BasketResponses.BasketActivity> OnActivityChange;
+    public event Action<bool> OnClueActived
+    {
+        add { ClueController.OnClueActived += value; }
+        remove { ClueController.OnClueActived -= value; }
+    }
 
     private int _currentActivityIndex = 0;
 
@@ -44,18 +42,13 @@ public class BasketManager : MonoBehaviour
     public void Awake()
     {
         Instance = this;
+        FeedbackController.Init();
     }
 
     public void Start()
     {
         AnswerController.OnAnswerSelected += LaunchBall;
         LoadActivities().Forget();
-
-        // Codigo que sera borrado
-        ClueButton.onClick.AddListener(() =>
-        {
-            OnClueActived?.Invoke(true);
-        });
     }
 
     public async UniTaskVoid LoadActivities()
@@ -98,7 +91,23 @@ public class BasketManager : MonoBehaviour
     {
         _currentActivity = _activities[_currentActivityIndex];
 
-        OnActivityChange?.Invoke(_currentActivity);
+        Sprite leftSprite = LoadSprite(_currentActivity.Words[0].Path);
+        Sprite rightSprite = LoadSprite(_currentActivity.Words[1].Path);
+
+        string leftWord = _currentActivity.Words[0].Word;
+        string rightWord = _currentActivity.Words[1].Word;
+
+        BasketResponses.BasketActivity activity = new(
+            leftSprite,
+            rightSprite,
+            leftWord,
+            rightWord,
+            _currentActivity.Words[0].Sound,
+            _currentActivity.Words[1].Sound,
+            _currentActivity.Answer
+        );
+
+        OnActivityChange?.Invoke(activity);
 
         _currentActivityIndex++;
 
@@ -113,8 +122,19 @@ public class BasketManager : MonoBehaviour
         FeedbackType feedbackType =
             answerResult == AnswerResult.Correct ? FeedbackType.Positive : FeedbackType.Neutral;
 
-        await FeedbackController.ShowFeedback(feedbackType, LeftSprite, RightSprite);
+        await FeedbackController.ShowFeedback(feedbackType);
 
         ChangeActivity();
+    }
+
+    private Sprite LoadSprite(string p)
+    {
+        string file = System.IO.Path.GetFileNameWithoutExtension(p);
+        Sprite s = Resources.Load<Sprite>($"Images/ImgButtons/{file}");
+
+        if (!s)
+            Debug.LogWarning($"No se encontró sprite: {file}");
+
+        return s;
     }
 }
