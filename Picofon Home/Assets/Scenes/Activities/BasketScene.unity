@@ -717,8 +717,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FeedbackView: {fileID: 862919297}
-  FrameLeft: {fileID: 1215397327}
-  FrameRight: {fileID: 1188468139}
+  WordItemLeft: {fileID: 1215397327}
+  WordItemRight: {fileID: 1188468139}
 --- !u!223 &127598251
 Canvas:
   m_ObjectHideFlags: 0
@@ -794,7 +794,7 @@ GameObject:
   - component: {fileID: 135834000}
   - component: {fileID: 135833999}
   m_Layer: 5
-  m_Name: Background
+  m_Name: Background Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1797,7 +1797,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: mundo
+  m_text: <color=green>mun</color>do
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c9fee1c54bcaee4099e5b14c562842c, type: 2}
   m_sharedMaterial: {fileID: 4011702492835129195, guid: 6c9fee1c54bcaee4099e5b14c562842c, type: 2}
@@ -1960,6 +1960,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FeedbackPositive: {fileID: 2097014717}
   FeedbackNeutral: {fileID: 1696328810}
+  WordItemLeft: {fileID: 1215397327}
+  WordItemRight: {fileID: 1188468139}
 --- !u!1 &956518089
 GameObject:
   m_ObjectHideFlags: 0
@@ -2091,7 +2093,7 @@ GameObject:
   - component: {fileID: 980984528}
   - component: {fileID: 980984529}
   m_Layer: 5
-  m_Name: Frames
+  m_Name: Word Items
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2594,7 +2596,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Buho
+  m_text: <color=orange>bu</color>ho
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c9fee1c54bcaee4099e5b14c562842c, type: 2}
   m_sharedMaterial: {fileID: 4011702492835129195, guid: 6c9fee1c54bcaee4099e5b14c562842c, type: 2}
@@ -2896,7 +2898,7 @@ GameObject:
   - component: {fileID: 1188468138}
   - component: {fileID: 1188468139}
   m_Layer: 5
-  m_Name: Frame Right
+  m_Name: Word Item Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2975,7 +2977,7 @@ GameObject:
   - component: {fileID: 1215397326}
   - component: {fileID: 1215397327}
   m_Layer: 5
-  m_Name: Frame Left
+  m_Name: Word Item Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5094,7 +5096,7 @@ GameObject:
   - component: {fileID: 1981592652}
   - component: {fileID: 1981592651}
   m_Layer: 5
-  m_Name: Background
+  m_Name: Background Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

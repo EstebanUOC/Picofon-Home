@@ -115,6 +115,8 @@ public class BasketManager : MonoBehaviour
             rightSprite,
             leftWord,
             rightWord,
+            _currentActivity.Words[0].SyllabifiedWord,
+            _currentActivity.Words[1].SyllabifiedWord,
             _currentActivity.Words[0].Sound,
             _currentActivity.Words[1].Sound,
             _currentActivity.Answer

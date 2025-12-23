@@ -14,26 +14,30 @@ public class FeedbackView : MonoBehaviour
     public GameObject FeedbackPositive;
     public GameObject FeedbackNeutral;
 
+    [Space(15)]
+    public WordItemController WordItemLeft;
+    public WordItemController WordItemRight;
+
     public event Action OnContinueClicked;
 
     public void Start()
     {
-        Button positiveButton;
-        Button neutralButton;
-
-        positiveButton = FeedbackPositive.GetComponentInChildren<Button>();
-        neutralButton = FeedbackNeutral.GetComponentInChildren<Button>();
+        Button positiveButton = FeedbackPositive.GetComponentInChildren<Button>();
+        Button neutralButton = FeedbackNeutral.GetComponentInChildren<Button>();
 
         positiveButton.onClick.AddListener(HandleContinueClicked);
         neutralButton.onClick.AddListener(HandleContinueClicked);
     }
 
-    public void ShowFeedback(FeedbackType feedbackType)
+    public void DisplayFeedbackType(FeedbackType feedbackType)
     {
         bool isPositive = feedbackType == FeedbackType.Positive;
 
         FeedbackPositive.SetActive(isPositive);
         FeedbackNeutral.SetActive(!isPositive);
+
+        WordItemLeft.ConfigureItemByType(feedbackType);
+        WordItemRight.ConfigureItemByType(feedbackType);
     }
 
     private void HandleContinueClicked()

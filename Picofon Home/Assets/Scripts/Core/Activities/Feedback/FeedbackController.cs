@@ -7,8 +7,8 @@ public class FeedbackController : MonoBehaviour
     public FeedbackView FeedbackView;
 
     [Space(15)]
-    public UIFrameController FrameLeft;
-    public UIFrameController FrameRight;
+    public WordItemController WordItemLeft;
+    public WordItemController WordItemRight;
 
     private ReusableCompletionSource<bool> _taskCompletion;
 
@@ -29,7 +29,7 @@ public class FeedbackController : MonoBehaviour
     public async UniTask<bool> ShowFeedback(FeedbackType feedbackType)
     {
         gameObject.SetActive(true);
-        FeedbackView.ShowFeedback(feedbackType);
+        FeedbackView.DisplayFeedbackType(feedbackType);
 
         _taskCompletion.Reset();
 
@@ -43,8 +43,16 @@ public class FeedbackController : MonoBehaviour
 
     private void UpdateFrames(in BasketResponses.BasketActivity activity)
     {
-        FrameLeft.UpdateFrame(activity.LeftImage, activity.LeftWord);
-        FrameRight.UpdateFrame(activity.RightImage, activity.RightWord);
+        WordItemLeft.UpdateItem(
+            activity.LeftImage,
+            activity.LeftWord,
+            activity.LeftSyllabifiedWord
+        );
+        WordItemRight.UpdateItem(
+            activity.RightImage,
+            activity.RightWord,
+            activity.RightSyllabifiedWord
+        );
     }
 
     private void OnContinueButtonClicked()
