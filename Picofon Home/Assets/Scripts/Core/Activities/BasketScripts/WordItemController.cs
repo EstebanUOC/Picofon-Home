@@ -3,8 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// <color=green>mun</color>do
-
 public class WordItemController : MonoBehaviour
 {
     [Space(15)]
@@ -14,6 +12,9 @@ public class WordItemController : MonoBehaviour
     private Image _imageComponent;
     private string _syllabifiedWord;
     private readonly StringBuilder _stringBuilder = new();
+
+    private readonly Color32 _positiveColor = new(255, 255, 255, 255);
+    private readonly Color32 _negativeColor = new(22, 20, 65, 255);
 
     public void Awake()
     {
@@ -38,10 +39,12 @@ public class WordItemController : MonoBehaviour
 
         if (feedbackType == FeedbackType.Positive)
         {
+            Text.color = _positiveColor;
             _stringBuilder.Append("green>");
         }
         else
         {
+            Text.color = _negativeColor;
             _stringBuilder.Append("orange>");
         }
 
