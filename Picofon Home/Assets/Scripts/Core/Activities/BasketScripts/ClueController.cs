@@ -21,6 +21,7 @@ public class ClueController : MonoBehaviour
     private void Reset(in BasketResponses.BasketActivity _)
     {
         _buttonComponent.interactable = true;
+        _isClueActive = false;
     }
 
     private void HandleButtonClick()

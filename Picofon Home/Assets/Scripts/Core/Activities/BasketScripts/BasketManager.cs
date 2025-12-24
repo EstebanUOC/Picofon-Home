@@ -61,6 +61,9 @@ public class BasketManager : MonoBehaviour
 
         ApiResult<ActivitiesData> result = await basketService.GetActivities<ActivitiesData>();
 
+        // NOTE: Wait a frame to ensure all initializations are done, Do not delete, 100% necessary
+        await UniTask.Yield();
+
         if (!result.Success)
         {
             Debug.LogError($"Error loading activities: {result.Message}");
@@ -122,6 +125,7 @@ public class BasketManager : MonoBehaviour
             _currentActivity.Answer
         );
 
+        Debug.Log($"[BasketManager] ChangeActivity called.");
         OnActivityChange?.Invoke(activity);
 
         _currentActivityIndex++;
