@@ -125,7 +125,6 @@ public class BasketManager : MonoBehaviour
             _currentActivity.Answer
         );
 
-        Debug.Log($"[BasketManager] ChangeActivity called.");
         OnActivityChange?.Invoke(activity);
 
         _currentActivityIndex++;
