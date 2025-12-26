@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: NetSwapMat
+  m_Name: ColorSwapMat
   m_Shader: {fileID: 4800000, guid: 07eb2d621d864fb6dbbca93178bdbba7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -31,6 +31,6 @@ Material:
     m_Floats:
     - _Tolerance: 0.01
     m_Colors:
-    - _OriginalColor: {r: 0.09411765, g: 0.26666668, b: 0.41568628, a: 1}
-    - _TargetColor: {r: 0.57254905, g: 0.14117648, b: 0.15686275, a: 1}
+    - _OriginalColor: {r: 0.1882353, g: 0.4745098, b: 0.77254903, a: 1}
+    - _TargetColor: {r: 0.8745098, g: 0.3137255, b: 0.3372549, a: 0}
   m_BuildTextureStacks: []
