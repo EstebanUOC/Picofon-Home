@@ -1,13 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using System; // 🔥 ADD THIS for Exception class
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+using System.Collections;
+using System.Collections.Generic;
 using Picofon.Games.Judge;
 using Picofon.Games.Relate;
 using Picofon.Games.Select;
-
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 // ✅ Alias para evitar ambigüedad entre modelos
 using JudgeWord = Picofon.Games.Judge.WordData;
 using RelateWord = Picofon.Games.Relate.WordData;
@@ -15,14 +14,29 @@ using RelateWord = Picofon.Games.Relate.WordData;
 public class BalloonPopPartyManager : MonoBehaviour
 {
     [Header("🔗 Referencias principales")]
-    [SerializeField] private GameAPIService apiService;
-    [SerializeField] private FeedbackPanelController feedbackPanel;
-    [SerializeField] private GameObject balloonPrefab;
-    [SerializeField] private RectTransform container;
-    [SerializeField] private Button buttonYes;
-    [SerializeField] private Button buttonNo;
-    [SerializeField] private Image imageMain; // 🔹 Referencia en el Canvas (asignar en Inspector)
-    [SerializeField] private Image imageMainBack; // imagen cupcake
+    [SerializeField]
+    private GameAPIService apiService;
+
+    [SerializeField]
+    private FeedbackPanelController feedbackPanel;
+
+    [SerializeField]
+    private GameObject balloonPrefab;
+
+    [SerializeField]
+    private RectTransform container;
+
+    [SerializeField]
+    private Button buttonYes;
+
+    [SerializeField]
+    private Button buttonNo;
+
+    [SerializeField]
+    private Image imageMain; // 🔹 Referencia en el Canvas (asignar en Inspector)
+
+    [SerializeField]
+    private Image imageMainBack; // imagen cupcake
 
     private ActivityJudge currentJudgeActivity;
     private int currentTaskType = 1; // 🔥 1=Judge, 2=Select, 3=Relate (from TherapyPlan)
@@ -64,7 +78,8 @@ public class BalloonPopPartyManager : MonoBehaviour
 
         yield return apiService.LoadActivity(
             json => ProcessActivityResponse(json),
-            err => Debug.LogError(err));
+            err => Debug.LogError(err)
+        );
     }
 
     // ============================================================
@@ -83,26 +98,26 @@ public class BalloonPopPartyManager : MonoBehaviour
             Debug.Log($"📄 Processing JSON: {json}");
 
             ClearBalloons();
-            
+
             // Ocultar imagen background principal fuera del modo Relate
             if (imageMainBack != null)
                 imageMainBack.gameObject.SetActive(currentTaskType == 3); // 🔥 3 = Relate
-            
+
             // Ocultar imagen principal fuera del modo Relate
             if (imageMain != null)
                 imageMain.gameObject.SetActive(currentTaskType == 3); // 🔥 3 = Relate
-            
+
             // 🔹 Ocultar botones Yes/No por defecto
             buttonYes.gameObject.SetActive(false);
             buttonNo.gameObject.SetActive(false);
-            
+
             // Ajustar el espaciado del contenedor según el modo
             var layout = container.GetComponent<HorizontalLayoutGroup>();
             if (layout != null)
             {
                 if (currentTaskType == 1) // 🔥 1 = Judge
                 {
-                    layout.spacing = JudgeContainerSpacing;                  
+                    layout.spacing = JudgeContainerSpacing;
                     layout.childAlignment = TextAnchor.MiddleCenter;
                     layout.childForceExpandWidth = false;
                     layout.childForceExpandHeight = true;
@@ -120,11 +135,13 @@ public class BalloonPopPartyManager : MonoBehaviour
             switch (currentTaskType)
             {
                 case 1: // Judge
-                    var judgeData = JsonUtility.FromJson<Picofon.Games.Judge.ApiResponseJudge>(json);
+                    var judgeData = JsonUtility.FromJson<ApiResponseJudge>(json);
                     if (judgeData?.data?.activity1 != null)
                     {
                         LoadJudgeMode(judgeData.data.activity1);
-                        Debug.Log($"✅ Successfully loaded Judge activity: {judgeData.data.activity1.word1.word} vs {judgeData.data.activity1.word2.word}");
+                        Debug.Log(
+                            $"✅ Successfully loaded Judge activity: {judgeData.data.activity1.word1.word} vs {judgeData.data.activity1.word2.word}"
+                        );
                     }
                     else
                     {
@@ -219,8 +236,8 @@ public class BalloonPopPartyManager : MonoBehaviour
         // =========================
         buttonYes.gameObject.SetActive(true);
         buttonNo.gameObject.SetActive(true);
-        buttonYes.interactable = true; 
-        buttonNo.interactable = true;   
+        buttonYes.interactable = true;
+        buttonNo.interactable = true;
 
         buttonYes.onClick.RemoveAllListeners();
         buttonNo.onClick.RemoveAllListeners();
@@ -230,7 +247,8 @@ public class BalloonPopPartyManager : MonoBehaviour
             foreach (var b in spawnedBalloons)
             {
                 var controller = b.GetComponent<BalloonController>();
-                if (controller == null) continue;
+                if (controller == null)
+                    continue;
 
                 controller.OnExplosionFinished = (_) =>
                 {
@@ -267,7 +285,8 @@ public class BalloonPopPartyManager : MonoBehaviour
             foreach (var b in spawnedBalloons)
             {
                 var controller = b.GetComponent<BalloonController>();
-                if (controller == null) continue;
+                if (controller == null)
+                    continue;
 
                 controller.OnExplosionFinished = (_) =>
                 {
@@ -299,7 +318,8 @@ public class BalloonPopPartyManager : MonoBehaviour
 
     private void ShowJudgeFeedback(bool correct)
     {
-        if (currentJudgeActivity == null) return;
+        if (currentJudgeActivity == null)
+            return;
 
         Sprite sprite1 = LoadLocalSprite(currentJudgeActivity.word1.PATH);
         Sprite sprite2 = LoadLocalSprite(currentJudgeActivity.word2.PATH);
@@ -316,11 +336,16 @@ public class BalloonPopPartyManager : MonoBehaviour
     // ============================================================
     // 🎬 Secuencia Judge: animación → feedback → reinicio
     // ============================================================
-    private IEnumerator PlayJudgeBalloonSequence(GameObject balloon, ActivityJudge activity, bool correct)
+    private IEnumerator PlayJudgeBalloonSequence(
+        GameObject balloon,
+        ActivityJudge activity,
+        bool correct
+    )
     {
         // 1️⃣ Ocultar overlay del globo presionado
         var img = balloon.transform.Find("Image")?.gameObject;
-        if (img != null) img.SetActive(false);
+        if (img != null)
+            img.SetActive(false);
 
         // 2️⃣ Ejecutar animación
         var controller = balloon.GetComponent<BalloonController>();
@@ -338,7 +363,8 @@ public class BalloonPopPartyManager : MonoBehaviour
 
         // 4️⃣ Ocultar todos los globos mientras se muestra el feedback
         foreach (var b in spawnedBalloons)
-            if (b != null) b.SetActive(false);
+            if (b != null)
+                b.SetActive(false);
 
         // 5️⃣ Esperar unos segundos mientras se muestra el panel
         yield return new WaitForSeconds(3f);
@@ -346,7 +372,8 @@ public class BalloonPopPartyManager : MonoBehaviour
         // 6️⃣ Reiniciar todos los globos a su estado inicial
         foreach (var b in spawnedBalloons)
         {
-            if (b == null) continue;
+            if (b == null)
+                continue;
 
             var bc = b.GetComponent<BalloonController>();
             if (bc != null)
@@ -381,10 +408,10 @@ public class BalloonPopPartyManager : MonoBehaviour
         // ✅ Crear lista de opciones
         var options = new List<(Sprite sprite, string syll, bool correct)>
         {
-            (spriteMain,   activity.main_word.syllabified_word,   false),
-            (spriteCorrect,activity.correct_option.syllabified_word, true),
+            (spriteMain, activity.main_word.syllabified_word, false),
+            (spriteCorrect, activity.correct_option.syllabified_word, true),
             (spriteWrong1, activity.wrong_option1.syllabified_word, false),
-            (spriteWrong2, activity.wrong_option2.syllabified_word, false)
+            (spriteWrong2, activity.wrong_option2.syllabified_word, false),
         };
 
         // ✅ Aleatorizar el orden
@@ -393,8 +420,10 @@ public class BalloonPopPartyManager : MonoBehaviour
         // ✅ Posiciones fijas (cuatro globos)
         Vector2[] pos =
         {
-            new Vector2(-300, 150), new Vector2(300, 150),
-            new Vector2(-300, -150), new Vector2(300, -150)
+            new Vector2(-300, 150),
+            new Vector2(300, 150),
+            new Vector2(-300, -150),
+            new Vector2(300, -150),
         };
 
         // ✅ Crear cada globo
@@ -427,9 +456,10 @@ public class BalloonPopPartyManager : MonoBehaviour
     }
 
     private void ConfigureSelectBalloonClick(
-    BalloonController controller,
-    (Sprite sprite, string syll, bool correct) option,
-    ActivitySelect activity)
+        BalloonController controller,
+        (Sprite sprite, string syll, bool correct) option,
+        ActivitySelect activity
+    )
     {
         controller.buttonOp.onClick.RemoveAllListeners();
 
@@ -437,7 +467,8 @@ public class BalloonPopPartyManager : MonoBehaviour
         {
             // Ocultar todos los globos durante feedback
             foreach (var b in spawnedBalloons)
-                if (b != null) b.SetActive(false);
+                if (b != null)
+                    b.SetActive(false);
 
             if (option.correct)
             {
@@ -456,11 +487,17 @@ public class BalloonPopPartyManager : MonoBehaviour
             {
                 // ⚪ Neutral: seleccionada + otra incorrecta aleatoria
                 var neutralList = new List<(Sprite sprite, string syll)>
-            {
-                (LoadLocalSprite(activity.main_word.PATH), activity.main_word.syllabified_word),
-                (LoadLocalSprite(activity.wrong_option1.PATH), activity.wrong_option1.syllabified_word),
-                (LoadLocalSprite(activity.wrong_option2.PATH), activity.wrong_option2.syllabified_word)
-            };
+                {
+                    (LoadLocalSprite(activity.main_word.PATH), activity.main_word.syllabified_word),
+                    (
+                        LoadLocalSprite(activity.wrong_option1.PATH),
+                        activity.wrong_option1.syllabified_word
+                    ),
+                    (
+                        LoadLocalSprite(activity.wrong_option2.PATH),
+                        activity.wrong_option2.syllabified_word
+                    ),
+                };
 
                 // Eliminar la seleccionada y la correcta
                 neutralList.RemoveAll(o => o.sprite == option.sprite);
@@ -483,9 +520,11 @@ public class BalloonPopPartyManager : MonoBehaviour
             {
                 foreach (var b in spawnedBalloons)
                 {
-                    if (b == null) continue;
+                    if (b == null)
+                        continue;
                     var bc = b.GetComponent<BalloonController>();
-                    if (bc != null) bc.ResetAnimation();
+                    if (bc != null)
+                        bc.ResetAnimation();
                     b.SetActive(true);
                 }
             };
@@ -536,7 +575,7 @@ public class BalloonPopPartyManager : MonoBehaviour
             (spriteCorrect, activity.correct_option.syllabified_word, true),
             (spriteWrong1, activity.wrong_option1.syllabified_word, false),
             (spriteWrong2, activity.wrong_option2.syllabified_word, false),
-            (spriteWrong3, activity.wrong_option3.syllabified_word, false)
+            (spriteWrong3, activity.wrong_option3.syllabified_word, false),
         };
 
         // ✅ Posiciones fijas de globos
@@ -545,7 +584,7 @@ public class BalloonPopPartyManager : MonoBehaviour
             new Vector2(-350, 100),
             new Vector2(350, 100),
             new Vector2(-350, -150),
-            new Vector2(350, -150)
+            new Vector2(350, -150),
         };
 
         // ✅ Crear los globos
@@ -579,9 +618,10 @@ public class BalloonPopPartyManager : MonoBehaviour
     }
 
     private void ConfigureRelateBalloonClick(
-    BalloonController controller,
-    (Sprite sprite, string syll, bool correct) option,
-    ActivityRelate activity)
+        BalloonController controller,
+        (Sprite sprite, string syll, bool correct) option,
+        ActivityRelate activity
+    )
     {
         controller.buttonOp.onClick.RemoveAllListeners();
 
@@ -589,7 +629,8 @@ public class BalloonPopPartyManager : MonoBehaviour
         {
             // 🔹 Ocultar todos los globos mientras se muestra el feedback
             foreach (var b in spawnedBalloons)
-                if (b != null) b.SetActive(false);
+                if (b != null)
+                    b.SetActive(false);
 
             // 🔹 Mostrar feedback (correcto o neutral)
             bool isCorrect = option.correct;
@@ -607,9 +648,11 @@ public class BalloonPopPartyManager : MonoBehaviour
             {
                 foreach (var b in spawnedBalloons)
                 {
-                    if (b == null) continue;
+                    if (b == null)
+                        continue;
                     var bc = b.GetComponent<BalloonController>();
-                    if (bc != null) bc.ResetAnimation();
+                    if (bc != null)
+                        bc.ResetAnimation();
                     b.SetActive(true);
                 }
 
@@ -649,7 +692,8 @@ public class BalloonPopPartyManager : MonoBehaviour
     private void ClearBalloons()
     {
         foreach (var b in spawnedBalloons)
-            if (b != null) Destroy(b);
+            if (b != null)
+                Destroy(b);
         spawnedBalloons.Clear();
     }
 

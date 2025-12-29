@@ -1,27 +1,37 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using System; // 🔥 ADD THIS for Exception class
+using System.Collections;
+using System.Collections.Generic;
+using Picofon.Games.Judge;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using Picofon.Games.Judge;
 
 public class BalloonPopSeaManager : MonoBehaviour
 {
     [Header("🫧 Burbujas")]
-    [SerializeField] private Transform bubbleContainerHorizontal1;
-    [SerializeField] private Transform bubbleContainerHorizontal2;
-    [SerializeField] private GameObject bubblePrefab;
+    [SerializeField]
+    private Transform bubbleContainerHorizontal1;
+
+    [SerializeField]
+    private Transform bubbleContainerHorizontal2;
+
+    [SerializeField]
+    private GameObject bubblePrefab;
 
     [Header("✅ Botones Sí / No (solo para modo Judge)")]
-    [SerializeField] private Button buttonYes;
-    [SerializeField] private Button buttonNo;
+    [SerializeField]
+    private Button buttonYes;
+
+    [SerializeField]
+    private Button buttonNo;
 
     [Header("⭐ Feedback Panel")]
-    [SerializeField] private FeedbackPanelController feedbackController;
+    [SerializeField]
+    private FeedbackPanelController feedbackController;
 
     [Header("🌐 API Service")]
-    [SerializeField] private GameAPIService balloonPopAPI;
+    [SerializeField]
+    private GameAPIService balloonPopAPI;
 
     private ActivityJudge currentActivity;
     private readonly List<GameObject> spawnedBubbles = new();
@@ -51,10 +61,12 @@ public class BalloonPopSeaManager : MonoBehaviour
     {
         Debug.Log($"🔄 Cargando actividad para tipo de tarea: {currentTaskType}");
 
-        StartCoroutine(balloonPopAPI.LoadActivity(
-            json => ProcessActivityResponse(json),
-            err => Debug.LogError(err)
-        ));
+        StartCoroutine(
+            balloonPopAPI.LoadActivity(
+                json => ProcessActivityResponse(json),
+                err => Debug.LogError(err)
+            )
+        );
     }
 
     // ============================================================
@@ -75,22 +87,26 @@ public class BalloonPopSeaManager : MonoBehaviour
             switch (currentTaskType)
             {
                 case 1: // Judge
-                    var judgeData = JsonUtility.FromJson<Picofon.Games.Judge.ApiResponseJudge>(json); // 🔥 USE FULL NAMESPACE
+                    var judgeData = JsonUtility.FromJson<ApiResponseJudge>(json); // 🔥 USE FULL NAMESPACE
                     if (judgeData?.data?.activity1 != null)
                     {
                         LoadJudgeMode(judgeData.data.activity1);
-                        Debug.Log($"✅ Successfully loaded Judge activity: {judgeData.data.activity1.word1.word} vs {judgeData.data.activity1.word2.word}");
+                        Debug.Log(
+                            $"✅ Successfully loaded Judge activity: {judgeData.data.activity1.word1.word} vs {judgeData.data.activity1.word2.word}"
+                        );
                     }
                     else
                     {
                         Debug.LogError("❌ Datos Judge inválidos o nulos");
                         if (judgeData != null)
                         {
-                            Debug.LogError($"🔍 Judge Data Structure - Success: {judgeData.success}, Data: {judgeData.data != null}, Activity1: {judgeData.data?.activity1 != null}");
+                            Debug.LogError(
+                                $"🔍 Judge Data Structure - Success: {judgeData.success}, Data: {judgeData.data != null}, Activity1: {judgeData.data?.activity1 != null}"
+                            );
                         }
                     }
                     break;
-                    
+
                 case 2: // Select
                     var selectData = JsonUtility.FromJson<Picofon.Games.Select.ApiResponseSelect>(json);
                     if (selectData?.data?.activity1 != null)
@@ -102,7 +118,7 @@ public class BalloonPopSeaManager : MonoBehaviour
                         Debug.LogError("❌ Datos Select inválidos o nulos");
                     }
                     break;
-                    
+
                 case 3: // Relate
                     var relateData = JsonUtility.FromJson<Picofon.Games.Relate.ApiResponseRelate>(json);
                     if (relateData?.data?.activity1 != null)
@@ -114,7 +130,7 @@ public class BalloonPopSeaManager : MonoBehaviour
                         Debug.LogError("❌ Datos Relate inválidos o nulos");
                     }
                     break;
-                    
+
                 default:
                     Debug.LogError($"❌ Tipo de tarea no soportado: {currentTaskType}");
                     break;
@@ -127,7 +143,6 @@ public class BalloonPopSeaManager : MonoBehaviour
             Debug.LogError($"📄 Problematic JSON: {json}");
         }
     }
-
 
     // ======================
     // 🧠 MODO JUDGE (1)
@@ -181,12 +196,27 @@ public class BalloonPopSeaManager : MonoBehaviour
         Sprite wrong2Sprite = LoadSprite(activity.wrong_option2.PATH);
 
         var options = new List<(Sprite sprite, string word, string syll, bool correct)>
-    {
-        (mainSprite,   activity.main_word.word,   activity.main_word.syllabified_word,   false),
-        (correctSprite,activity.correct_option.word, activity.correct_option.syllabified_word, true),
-        (wrong1Sprite, activity.wrong_option1.word, activity.wrong_option1.syllabified_word, false),
-        (wrong2Sprite, activity.wrong_option2.word, activity.wrong_option2.syllabified_word, false),
-    };
+        {
+            (mainSprite, activity.main_word.word, activity.main_word.syllabified_word, false),
+            (
+                correctSprite,
+                activity.correct_option.word,
+                activity.correct_option.syllabified_word,
+                true
+            ),
+            (
+                wrong1Sprite,
+                activity.wrong_option1.word,
+                activity.wrong_option1.syllabified_word,
+                false
+            ),
+            (
+                wrong2Sprite,
+                activity.wrong_option2.word,
+                activity.wrong_option2.syllabified_word,
+                false
+            ),
+        };
 
         Shuffle(options);
 
@@ -222,18 +252,40 @@ public class BalloonPopSeaManager : MonoBehaviour
         buttonNo.interactable = false;
 
         var layout = bubbleContainerHorizontal2.GetComponent<HorizontalLayoutGroup>();
-        if (layout != null) layout.spacing = 150f;
+        if (layout != null)
+            layout.spacing = 150f;
 
         Sprite mainSprite = SafeLoadSprite(activity.main_word.PATH);
-        CreateRelateBubble(mainSprite, activity.main_word.syllabified_word, false, bubbleContainerHorizontal1);
+        CreateRelateBubble(
+            mainSprite,
+            activity.main_word.syllabified_word,
+            false,
+            bubbleContainerHorizontal1
+        );
 
         var options = new List<(Sprite sprite, string syll, bool correct)>
-    {
-        (SafeLoadSprite(activity.correct_option?.PATH), activity.correct_option?.syllabified_word, true),
-        (SafeLoadSprite(activity.wrong_option1?.PATH), activity.wrong_option1?.syllabified_word, false),
-        (SafeLoadSprite(activity.wrong_option2?.PATH), activity.wrong_option2?.syllabified_word, false),
-        (SafeLoadSprite(activity.wrong_option3?.PATH), activity.wrong_option3?.syllabified_word, false),
-    };
+        {
+            (
+                SafeLoadSprite(activity.correct_option?.PATH),
+                activity.correct_option?.syllabified_word,
+                true
+            ),
+            (
+                SafeLoadSprite(activity.wrong_option1?.PATH),
+                activity.wrong_option1?.syllabified_word,
+                false
+            ),
+            (
+                SafeLoadSprite(activity.wrong_option2?.PATH),
+                activity.wrong_option2?.syllabified_word,
+                false
+            ),
+            (
+                SafeLoadSprite(activity.wrong_option3?.PATH),
+                activity.wrong_option3?.syllabified_word,
+                false
+            ),
+        };
 
         options.RemoveAll(o => o.sprite == null);
 
@@ -280,9 +332,9 @@ public class BalloonPopSeaManager : MonoBehaviour
 
             // ✅ Siempre comparar seleccionado vs mainWord
             feedbackController.ShowFeedback(
-                sprite,      // seleccionada
-                mainSprite,  // palabra base
-                isCorrect,   // correcto o neutral
+                sprite, // seleccionada
+                mainSprite, // palabra base
+                isCorrect, // correcto o neutral
                 syll,
                 mainSyll
             );
@@ -293,9 +345,10 @@ public class BalloonPopSeaManager : MonoBehaviour
     }
 
     private void CreateSelectBubble(
-    (Sprite sprite, string word, string syll, bool correct) option,
-    Transform parent,
-    Picofon.Games.Select.ActivitySelect activity)
+        (Sprite sprite, string word, string syll, bool correct) option,
+        Transform parent,
+        Picofon.Games.Select.ActivitySelect activity
+    )
     {
         GameObject b = Instantiate(bubblePrefab, parent);
         spawnedBubbles.Add(b);
@@ -329,11 +382,17 @@ public class BalloonPopSeaManager : MonoBehaviour
             {
                 // ✅ Buscar otra opción incorrecta para el feedback
                 var neutralList = new List<(Sprite sprite, string syll)>
-            {
-                (LoadSprite(activity.main_word.PATH), activity.main_word.syllabified_word),
-                (LoadSprite(activity.wrong_option1.PATH), activity.wrong_option1.syllabified_word),
-                (LoadSprite(activity.wrong_option2.PATH), activity.wrong_option2.syllabified_word)
-            };
+                {
+                    (LoadSprite(activity.main_word.PATH), activity.main_word.syllabified_word),
+                    (
+                        LoadSprite(activity.wrong_option1.PATH),
+                        activity.wrong_option1.syllabified_word
+                    ),
+                    (
+                        LoadSprite(activity.wrong_option2.PATH),
+                        activity.wrong_option2.syllabified_word
+                    ),
+                };
 
                 // ❌ eliminar la seleccionada
                 neutralList.RemoveAll(o => o.sprite == option.sprite);
@@ -409,14 +468,16 @@ public class BalloonPopSeaManager : MonoBehaviour
         img.preserveAspect = true;
 
         Button btn = b.GetComponentInChildren<Button>();
-        if (btn) btn.interactable = false;
+        if (btn)
+            btn.interactable = false;
         b.transform.localScale = Vector3.one;
         b.transform.localRotation = Quaternion.identity;
     }
 
     private void ClearBubbles()
     {
-        foreach (var b in spawnedBubbles) Destroy(b);
+        foreach (var b in spawnedBubbles)
+            Destroy(b);
         spawnedBubbles.Clear();
     }
 
@@ -442,5 +503,3 @@ public class BalloonPopSeaManager : MonoBehaviour
         }
     }
 }
-
-

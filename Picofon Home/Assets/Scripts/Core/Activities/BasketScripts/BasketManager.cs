@@ -2,6 +2,7 @@ using System;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using ActivitiesResult = BasketResponses.ApiResult<BasketResponses.ActivitiesData<BasketResponses.JudgeActivity>>;
 
 public enum HoopType
 {
@@ -25,7 +26,7 @@ public class BasketManager : MonoBehaviour
     public HoopsControllers HoopsControllers;
     public ClueController ClueController;
 
-    public event ActionIn<BasketResponses.BasketActivity> OnActivityChange;
+    public event ActionIn<BasketActivity> OnActivityChange;
 
     public event Action<bool> OnClueActived
     {
@@ -41,8 +42,8 @@ public class BasketManager : MonoBehaviour
 
     private int _currentActivityIndex = 0;
 
-    private BasketResponses.Activity[] _activities;
-    private BasketResponses.Activity _currentActivity;
+    private JudgeActivity[] _activities;
+    private JudgeActivity _currentActivity;
 
     public void Awake()
     {
@@ -59,7 +60,9 @@ public class BasketManager : MonoBehaviour
     {
         BasketService basketService = new();
 
-        ApiResult<ActivitiesData> result = await basketService.GetActivities<ActivitiesData>();
+        ActivitiesResult result = await basketService.GetActivities<
+            ActivitiesData<JudgeActivity>
+        >();
 
         // NOTE: Wait a frame to ensure all initializations are done, Do not delete, 100% necessary
         await UniTask.Yield();
@@ -113,7 +116,7 @@ public class BasketManager : MonoBehaviour
         string leftWord = _currentActivity.Words[0].Word;
         string rightWord = _currentActivity.Words[1].Word;
 
-        BasketResponses.BasketActivity activity = new(
+        BasketActivity activity = new(
             leftSprite,
             rightSprite,
             leftWord,

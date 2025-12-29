@@ -8,3 +8,5 @@ indent_size = 4
 # IDE0130: Namespace does not match folder structure
 dotnet_style_namespace_match_folder = false
 
+# IDE0044: Add readonly modifier
+dotnet_style_readonly_field = false
