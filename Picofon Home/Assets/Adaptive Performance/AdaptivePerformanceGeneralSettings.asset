@@ -26,9 +26,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb0ece14d1f711a4fb9325ca819dee95, type: 3}
   m_Name: AdaptivePerformanceGeneralSettings
   m_EditorClassIdentifier: 
-  Keys: 07000000
+  Keys: 0700000001000000
   Values:
   - {fileID: -7788024982654875007}
+  - {fileID: 2682845338659079238}
+--- !u!114 &2565209593353625358
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 536372c49e1ca914d822849d36de938c, type: 3}
+  m_Name: Standalone Providers
+  m_EditorClassIdentifier: 
+  m_AutomaticLoading: 0
+  m_AutomaticRunning: 0
+  m_Loaders: []
+--- !u!114 &2682845338659079238
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 179fc3111e144bc4688dca4038b3265d, type: 3}
+  m_Name: Standalone Settings
+  m_EditorClassIdentifier: 
+  m_LoaderManagerInstance: {fileID: 2565209593353625358}
+  m_InitManagerOnStart: 0
 --- !u!114 &9210041384899303247
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -43,6 +73,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AutomaticLoading: 0
   m_AutomaticRunning: 0
-  m_Loaders:
-  - {fileID: 11400000, guid: 96535dce64c177247ad8aa7669caad50, type: 2}
-  - {fileID: 11400000, guid: d080c953ed707c34285bd18af5626283, type: 2}
+  m_Loaders: []

@@ -61,6 +61,9 @@ public class BasketManager : MonoBehaviour
 
         ApiResult<ActivitiesData> result = await basketService.GetActivities<ActivitiesData>();
 
+        // NOTE: Wait a frame to ensure all initializations are done, Do not delete, 100% necessary
+        await UniTask.Yield();
+
         if (!result.Success)
         {
             Debug.LogError($"Error loading activities: {result.Message}");
@@ -115,6 +118,8 @@ public class BasketManager : MonoBehaviour
             rightSprite,
             leftWord,
             rightWord,
+            _currentActivity.Words[0].SyllabifiedWord,
+            _currentActivity.Words[1].SyllabifiedWord,
             _currentActivity.Words[0].Sound,
             _currentActivity.Words[1].Sound,
             _currentActivity.Answer

@@ -58,6 +58,8 @@ namespace BasketResponses
         public readonly Sprite RightImage;
         public readonly string LeftWord;
         public readonly string RightWord;
+        public readonly string LeftSyllabifiedWord;
+        public readonly string RightSyllabifiedWord;
         public readonly string LeftSound;
         public readonly string RightSound;
         public readonly bool Answer;
@@ -67,6 +69,8 @@ namespace BasketResponses
             Sprite rightImage,
             string leftWord,
             string rightWord,
+            string leftSyllabifiedWord,
+            string rightSyllabifiedWord,
             string leftSound,
             string rightSound,
             bool answer
@@ -76,6 +80,8 @@ namespace BasketResponses
             RightImage = rightImage;
             LeftWord = leftWord;
             RightWord = rightWord;
+            LeftSyllabifiedWord = leftSyllabifiedWord;
+            RightSyllabifiedWord = rightSyllabifiedWord;
             LeftSound = leftSound;
             RightSound = rightSound;
             Answer = answer;

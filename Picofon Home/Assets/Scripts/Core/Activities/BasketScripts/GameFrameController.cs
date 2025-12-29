@@ -49,6 +49,13 @@ public class GameFrameController : MonoBehaviour
         _moveTween.Restart();
     }
 
+    public void HideClue()
+    {
+        Text.enabled = false;
+
+        _moveTween.PlayBackwards();
+    }
+
     public void OnDestroy()
     {
         _moveTween.Kill();
