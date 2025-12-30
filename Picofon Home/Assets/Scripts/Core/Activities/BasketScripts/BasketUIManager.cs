@@ -8,9 +8,12 @@ public class BasketUIManager : MonoBehaviour
     private ItemManager _itemManager;
 
     [SerializeField]
+    private ItemClueManager _itemClueManager;
+
+    [SerializeField]
     private ClueController _clueController;
 
-    public void Start()
+    public void OnEnable()
     {
         _clueController.OnClueChanged += HandleClueChanged;
     }
@@ -19,11 +22,17 @@ public class BasketUIManager : MonoBehaviour
     {
         _clueController.Reset();
 
-        _itemManager.UpdateViewContent(in content);
+        _itemManager.SetItemsContent(in content);
+    }
+
+    public void Reset()
+    {
+        _clueController.Reset();
+        _itemClueManager.SetClueVisibility(false);
     }
 
     private void HandleClueChanged(bool showClue)
     {
-        _itemManager.SetClueVisibility(showClue);
+        _itemClueManager.SetClueVisibility(showClue);
     }
 }

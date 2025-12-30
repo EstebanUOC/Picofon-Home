@@ -1,3 +1,4 @@
+using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -7,8 +8,8 @@ public class FeedbackController : MonoBehaviour
     public FeedbackView FeedbackView;
 
     [Space(15)]
-    public WordItemController WordItemLeft;
-    public WordItemController WordItemRight;
+    [SerializeField]
+    public ItemFeedbackManager _itemManager;
 
     private ReusableCompletionSource<bool> _taskCompletion;
 
@@ -17,7 +18,6 @@ public class FeedbackController : MonoBehaviour
         _taskCompletion = new ReusableCompletionSource<bool>();
 
         FeedbackView.OnContinueClicked += OnContinueButtonClicked;
-        // BasketManager.Instance.OnActivityChange += UpdateFrames;
     }
 
     public void Init()
@@ -30,6 +30,7 @@ public class FeedbackController : MonoBehaviour
     {
         gameObject.SetActive(true);
         FeedbackView.DisplayFeedbackType(feedbackType);
+        _itemManager.ConfigureItemsByType(feedbackType);
 
         _taskCompletion.Reset();
 
@@ -41,18 +42,9 @@ public class FeedbackController : MonoBehaviour
         _taskCompletion.TrySetCanceled();
     }
 
-    private void UpdateFrames(in BasketResponses.BasketActivity activity)
+    public void SetItemsContent(in ViewContentDTO content)
     {
-        WordItemLeft.UpdateItem(
-            activity.LeftImage,
-            activity.LeftWord,
-            activity.LeftSyllabifiedWord
-        );
-        WordItemRight.UpdateItem(
-            activity.RightImage,
-            activity.RightWord,
-            activity.RightSyllabifiedWord
-        );
+        _itemManager.SetItemsContent(in content);
     }
 
     private void OnContinueButtonClicked()

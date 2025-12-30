@@ -14,7 +14,7 @@ public class BallController : MonoBehaviour
         _movement.Launch(target);
     }
 
-    public void Reset(in BasketResponses.BasketActivity _)
+    public void Reset()
     {
         _movement.Reset();
     }

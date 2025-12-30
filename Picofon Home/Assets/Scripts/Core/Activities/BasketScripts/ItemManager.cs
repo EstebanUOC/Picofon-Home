@@ -7,19 +7,9 @@ public class ItemManager : MonoBehaviour
     [SerializeField]
     private GameObject[] _items;
 
-    public void SetClueVisibility(bool showClue)
-    {
-        foreach (var item in _items)
-        {
-            ItemClue clue = item.GetComponent<ItemClue>();
-            if (showClue)
-                clue.ShowClue();
-            else
-                clue.HideClue();
-        }
-    }
+    public GameObject[] Items => _items;
 
-    public void UpdateViewContent(in ViewContentDTO content)
+    public void SetItemsContent(in ViewContentDTO content)
     {
         if (content.Icons.Length != _items.Length)
             return;

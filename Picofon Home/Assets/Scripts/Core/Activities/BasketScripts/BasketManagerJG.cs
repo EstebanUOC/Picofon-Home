@@ -19,23 +19,28 @@ public enum AnswerResult
 public class BasketGameManagerJG : MonoBehaviour
 {
     [Space(15)]
-    public FeedbackController FeedbackController;
+    [SerializeField]
+    private FeedbackController _feedbackController;
     public AnswerControllerJG AnswerController;
 
     [SerializeField]
-    private HoopManager _hoopManager;
+    private BallController _ballController;
 
     [Space(15)]
     [SerializeField]
-    private BasketUIManager _uiManager;
+    private HoopManager _hoopManager;
 
     [SerializeField]
-    private BallController _ballController;
+    private BasketUIManager _uiManager;
 
     private int _currentActivityIndex = 0;
 
     private JudgeActivity[] _activities;
     private JudgeActivity _currentActivity;
+
+    private readonly Sprite[] _icons = new Sprite[2];
+    private readonly string[] _texts = new string[2];
+    private readonly string[] _syllabifiedWords = new string[2];
 
     public void Awake()
     {
@@ -43,7 +48,7 @@ public class BasketGameManagerJG : MonoBehaviour
 
         AnswerController.OnAnswerSelected += HandleAnswerSelected;
 
-        FeedbackController.Init();
+        _feedbackController.Init();
 
         LoadActivities().Forget();
     }
@@ -98,7 +103,7 @@ public class BasketGameManagerJG : MonoBehaviour
 
         await UniTask.WaitForSeconds(2f);
 
-        await FeedbackController.ShowFeedback(feedbackType);
+        await _feedbackController.ShowFeedback(feedbackType);
 
         ChangeActivity();
     }
@@ -108,27 +113,38 @@ public class BasketGameManagerJG : MonoBehaviour
         _currentActivity = _activities[_currentActivityIndex];
         _currentActivityIndex = (_currentActivityIndex + 1) % _activities.Length;
 
-        Sprite leftSprite = LoadSprite(_currentActivity.Words[0].Path);
-        Sprite rightSprite = LoadSprite(_currentActivity.Words[1].Path);
+        _texts[0] = _currentActivity.Words[0].Word;
+        _texts[1] = _currentActivity.Words[1].Word;
 
-        string leftWord = _currentActivity.Words[0].Word;
-        string rightWord = _currentActivity.Words[1].Word;
+        _icons[0] = LoadSprite(_currentActivity.Words[0].Path);
+        _icons[1] = LoadSprite(_currentActivity.Words[1].Path);
 
-        Span<Sprite> icons = new Sprite[2] { leftSprite, rightSprite };
-        Span<string> texts = new string[2] { leftWord, rightWord };
+        _syllabifiedWords[0] = _currentActivity.Words[0].SyllabifiedWord;
+        _syllabifiedWords[1] = _currentActivity.Words[1].SyllabifiedWord;
 
-        Span<bool> answers = new bool[_activities.Length];
+        bool leftAnswer = _currentActivity.Answer;
+        bool rightAnswer = !leftAnswer;
 
-        for (int i = 0; i < _activities.Length; i++)
-        {
-            answers[i] = _activities[i].Answer;
-        }
+        Span<bool> answers = stackalloc bool[2] { leftAnswer, rightAnswer };
 
         AnswerDTO answer = new(answers);
-        ViewContentDTO content = new(icons, texts);
+        _hoopManager.SetHoopStates(in answer);
+
+        ViewContentDTO content = new(_icons, _texts);
 
         _uiManager.SetViewContent(in content);
-        _hoopManager.SetHoopStates(in answer);
+
+        ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords);
+
+        _feedbackController.SetItemsContent(in feedbackContent);
+
+        ResetActivity();
+    }
+
+    private void ResetActivity()
+    {
+        _uiManager.Reset();
+        _ballController.Reset();
     }
 
     private Sprite LoadSprite(string p)

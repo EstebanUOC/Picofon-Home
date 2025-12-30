@@ -61,10 +61,10 @@ namespace BasketResponses
 
     public readonly ref struct ViewContentDTO
     {
-        public readonly Span<Sprite> Icons;
-        public readonly Span<string> Texts;
+        public readonly Sprite[] Icons;
+        public readonly string[] Texts;
 
-        public ViewContentDTO(Span<Sprite> icons, Span<string> texts)
+        public ViewContentDTO(Sprite[] icons, string[] texts)
         {
             Icons = icons;
             Texts = texts;

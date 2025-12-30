@@ -3,30 +3,29 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WordItemController : MonoBehaviour
+public class ItemFeedback : MonoBehaviour
 {
-    [Space(15)]
-    public GameObject Image;
-    public TMP_Text Text;
+    private Image _image;
+    private TMP_Text _text;
 
-    private Image _imageComponent;
-    private string _syllabifiedWord;
     private readonly StringBuilder _stringBuilder = new();
-
     private readonly Color32 _positiveColor = new(255, 255, 255, 255);
     private readonly Color32 _negativeColor = new(22, 20, 65, 255);
 
+    private string _syllabifiedWord;
+
     public void Awake()
     {
-        _imageComponent = Image.GetComponent<Image>();
+        ItemView _item = GetComponent<ItemView>();
+
+        _text = _item.Text.GetComponent<TMP_Text>();
+        _image = _item.Icon.GetComponent<Image>();
     }
 
-    public void UpdateItem(Sprite sprite, string word, string syllabifiedWord)
+    public void SetItemContent(Sprite sprite, string syllabifiedWord)
     {
         _syllabifiedWord = syllabifiedWord;
-        _imageComponent.sprite = sprite;
-
-        Text.text = word;
+        _image.sprite = sprite;
     }
 
     public void ConfigureItemByType(FeedbackType feedbackType)
@@ -39,12 +38,12 @@ public class WordItemController : MonoBehaviour
 
         if (feedbackType == FeedbackType.Positive)
         {
-            Text.color = _positiveColor;
+            _text.color = _positiveColor;
             _stringBuilder.Append("green>");
         }
         else
         {
-            Text.color = _negativeColor;
+            _text.color = _negativeColor;
             _stringBuilder.Append("orange>");
         }
 
@@ -54,6 +53,6 @@ public class WordItemController : MonoBehaviour
 
         _stringBuilder.Append(_syllabifiedWord, sep + 1, _syllabifiedWord.Length - sep - 1);
 
-        Text.SetText(_stringBuilder);
+        _text.SetText(_stringBuilder);
     }
 }
