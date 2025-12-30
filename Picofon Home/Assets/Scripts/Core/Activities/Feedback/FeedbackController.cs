@@ -17,7 +17,7 @@ public class FeedbackController : MonoBehaviour
         _taskCompletion = new ReusableCompletionSource<bool>();
 
         FeedbackView.OnContinueClicked += OnContinueButtonClicked;
-        BasketManager.Instance.OnActivityChange += UpdateFrames;
+        // BasketManager.Instance.OnActivityChange += UpdateFrames;
     }
 
     public void Init()

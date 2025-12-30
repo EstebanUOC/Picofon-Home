@@ -15,7 +15,7 @@ public sealed class ItemView : MonoBehaviour
 
     public GameObject Text => TextObject;
 
-    public void UpdateView(Sprite sprite, string word)
+    public void SetContent(Sprite sprite, string word)
     {
         Image _imageComponent = Icon.GetComponent<Image>();
         _imageComponent.sprite = sprite;

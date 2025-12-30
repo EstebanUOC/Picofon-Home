@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class AnswerController : MonoBehaviour
+public class AnswerControllerJG : MonoBehaviour
 {
     [Space(15)]
     public Answer PositiveAnswer;

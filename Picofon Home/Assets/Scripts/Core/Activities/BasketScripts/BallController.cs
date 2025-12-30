@@ -2,28 +2,20 @@ using UnityEngine;
 
 public class BallController : MonoBehaviour
 {
-    [Space(15)]
-    public Transform PositiveTarget;
-    public Transform NegativeTarget;
+    private BallMovement _movement;
 
-    private BallMovement BallMovement;
-
-    public void Start()
+    public void Awake()
     {
-        BallMovement = GetComponent<BallMovement>();
-
-        BasketManager.Instance.OnAnswerSelected += LaunchBall;
-        BasketManager.Instance.OnActivityChange += Reset;
+        _movement = GetComponent<BallMovement>();
     }
 
-    private void LaunchBall(HoopType hoopType)
+    public void LaunchBall(Transform target)
     {
-        Transform target = hoopType == HoopType.Positive ? PositiveTarget : NegativeTarget;
-        BallMovement.Launch(target);
+        _movement.Launch(target);
     }
 
-    private void Reset(in BasketResponses.BasketActivity _)
+    public void Reset(in BasketResponses.BasketActivity _)
     {
-        BallMovement.Reset();
+        _movement.Reset();
     }
 }

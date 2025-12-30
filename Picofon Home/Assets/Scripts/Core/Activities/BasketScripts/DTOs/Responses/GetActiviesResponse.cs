@@ -1,3 +1,4 @@
+using System;
 using System.Text.Json.Serialization;
 using UnityEngine;
 
@@ -56,6 +57,28 @@ namespace BasketResponses
         [JsonInclude]
         [JsonPropertyName("word_sound")]
         public string Sound { get; set; }
+    }
+
+    public readonly ref struct ViewContentDTO
+    {
+        public readonly Span<Sprite> Icons;
+        public readonly Span<string> Texts;
+
+        public ViewContentDTO(Span<Sprite> icons, Span<string> texts)
+        {
+            Icons = icons;
+            Texts = texts;
+        }
+    }
+
+    public readonly ref struct AnswerDTO
+    {
+        public readonly Span<bool> Answers;
+
+        public AnswerDTO(Span<bool> answers)
+        {
+            Answers = answers;
+        }
     }
 
     public readonly struct BasketActivity

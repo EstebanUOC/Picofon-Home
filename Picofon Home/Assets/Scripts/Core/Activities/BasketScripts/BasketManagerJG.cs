@@ -16,29 +16,21 @@ public enum AnswerResult
     Incorrect,
 }
 
-public class BasketManager : MonoBehaviour
+public class BasketGameManagerJG : MonoBehaviour
 {
-    public static BasketManager Instance;
-
     [Space(15)]
     public FeedbackController FeedbackController;
-    public AnswerController AnswerController;
-    public HoopsControllers HoopsControllers;
-    public ClueController ClueController;
+    public AnswerControllerJG AnswerController;
 
-    public event ActionIn<BasketActivity> OnActivityChange;
+    [SerializeField]
+    private HoopManager _hoopManager;
 
-    public event Action<bool> OnClueActived
-    {
-        add { ClueController.OnClueChanged += value; }
-        remove { ClueController.OnClueChanged -= value; }
-    }
+    [Space(15)]
+    [SerializeField]
+    private BasketUIManager _uiManager;
 
-    public event Action<HoopType> OnAnswerSelected
-    {
-        add { AnswerController.OnAnswerSelected += value; }
-        remove { AnswerController.OnAnswerSelected -= value; }
-    }
+    [SerializeField]
+    private BallController _ballController;
 
     private int _currentActivityIndex = 0;
 
@@ -48,9 +40,9 @@ public class BasketManager : MonoBehaviour
     public void Awake()
     {
         Application.targetFrameRate = 60;
+
         AnswerController.OnAnswerSelected += HandleAnswerSelected;
 
-        Instance = this;
         FeedbackController.Init();
 
         LoadActivities().Forget();
@@ -86,20 +78,25 @@ public class BasketManager : MonoBehaviour
 
     private void HandleAnswerSelected(HoopType hoopType)
     {
-        InitCount(hoopType).Forget();
-    }
+        int hoopIndex = hoopType == HoopType.Positive ? 0 : 1;
+        Transform hoopTransform = _hoopManager.GetHoopTransform(hoopIndex);
 
-    private async UniTaskVoid InitCount(HoopType hoopType)
-    {
+        _ballController.LaunchBall(hoopTransform);
+
         bool answer = hoopType == HoopType.Positive;
 
         AnswerResult answerResult =
             _currentActivity.Answer == answer ? AnswerResult.Correct : AnswerResult.Incorrect;
 
-        await UniTask.WaitForSeconds(2f);
+        InitCount(answerResult).Forget();
+    }
 
+    private async UniTaskVoid InitCount(AnswerResult result)
+    {
         FeedbackType feedbackType =
-            answerResult == AnswerResult.Correct ? FeedbackType.Positive : FeedbackType.Neutral;
+            result == AnswerResult.Correct ? FeedbackType.Positive : FeedbackType.Neutral;
+
+        await UniTask.WaitForSeconds(2f);
 
         await FeedbackController.ShowFeedback(feedbackType);
 
@@ -109,6 +106,7 @@ public class BasketManager : MonoBehaviour
     private void ChangeActivity()
     {
         _currentActivity = _activities[_currentActivityIndex];
+        _currentActivityIndex = (_currentActivityIndex + 1) % _activities.Length;
 
         Sprite leftSprite = LoadSprite(_currentActivity.Words[0].Path);
         Sprite rightSprite = LoadSprite(_currentActivity.Words[1].Path);
@@ -116,24 +114,21 @@ public class BasketManager : MonoBehaviour
         string leftWord = _currentActivity.Words[0].Word;
         string rightWord = _currentActivity.Words[1].Word;
 
-        BasketActivity activity = new(
-            leftSprite,
-            rightSprite,
-            leftWord,
-            rightWord,
-            _currentActivity.Words[0].SyllabifiedWord,
-            _currentActivity.Words[1].SyllabifiedWord,
-            _currentActivity.Words[0].Sound,
-            _currentActivity.Words[1].Sound,
-            _currentActivity.Answer
-        );
+        Span<Sprite> icons = new Sprite[2] { leftSprite, rightSprite };
+        Span<string> texts = new string[2] { leftWord, rightWord };
 
-        OnActivityChange?.Invoke(activity);
+        Span<bool> answers = new bool[_activities.Length];
 
-        _currentActivityIndex++;
+        for (int i = 0; i < _activities.Length; i++)
+        {
+            answers[i] = _activities[i].Answer;
+        }
 
-        if (_currentActivityIndex == _activities.Length)
-            _currentActivityIndex = 0;
+        AnswerDTO answer = new(answers);
+        ViewContentDTO content = new(icons, texts);
+
+        _uiManager.SetViewContent(in content);
+        _hoopManager.SetHoopStates(in answer);
     }
 
     private Sprite LoadSprite(string p)
