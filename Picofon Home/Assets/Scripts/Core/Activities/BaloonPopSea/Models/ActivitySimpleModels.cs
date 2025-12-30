@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 // 🔹 Modelo simplificado del JSON del modo 0
-[System.Serializable]
+[Serializable]
 public class ActivitySimple
 {
     public string pregunta;
@@ -19,7 +19,7 @@ public class ActivitySimple
     public string feedback_no_resposta;
 }
 
-[System.Serializable]
+[Serializable]
 public class AvailabilitySimple
 {
     public int words_available;
@@ -32,7 +32,7 @@ public class AvailabilitySimple
     public int activities_requested;
 }
 
-[System.Serializable]
+[Serializable]
 public class DataSimple
 {
     public ActivitySimple activity1;
@@ -41,7 +41,7 @@ public class DataSimple
     public AvailabilitySimple availability_info;
 }
 
-[System.Serializable]
+[Serializable]
 public class ApiResponseSimple
 {
     public bool success;
@@ -49,7 +49,7 @@ public class ApiResponseSimple
     public DataSimple data;
 }
 
-[System.Serializable]
+[Serializable]
 public class Message
 {
     public List<string> content;

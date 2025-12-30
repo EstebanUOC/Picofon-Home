@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class ClueController : MonoBehaviour
 {
-    public event Action<bool> OnClueActived;
+    public event Action<bool> OnClueChanged;
 
     private Button _buttonComponent;
 
@@ -14,11 +14,9 @@ public class ClueController : MonoBehaviour
     {
         _buttonComponent = GetComponent<Button>();
         _buttonComponent.onClick.AddListener(HandleButtonClick);
-
-        BasketManager.Instance.OnActivityChange += Reset;
     }
 
-    private void Reset(in BasketResponses.BasketActivity _)
+    public void Reset(in BasketResponses.BasketActivity _)
     {
         _buttonComponent.interactable = true;
         _isClueActive = false;
@@ -28,6 +26,6 @@ public class ClueController : MonoBehaviour
     {
         _isClueActive = !_isClueActive;
 
-        OnClueActived?.Invoke(_isClueActive);
+        OnClueChanged?.Invoke(_isClueActive);
     }
 }

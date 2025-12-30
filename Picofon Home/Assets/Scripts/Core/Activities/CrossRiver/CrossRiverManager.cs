@@ -1,62 +1,62 @@
-﻿using Picofon.Games.Judge;
-using Picofon.Games.Relate;
-using Picofon.Games.Select;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Picofon.Games.Judge;
+using Picofon.Games.Relate;
+using Picofon.Games.Select;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-
-
-
 public class CrossRiverManager : MonoBehaviour
 {
-    [Header(" White Bubbles (solo modo Judge)")]
-    [SerializeField] private Image whiteBubble01;
-    [SerializeField] private Image whiteBubble02;
-    [SerializeField] private Image whiteBubble03;
-
-
     [Header("🧩 Controlador de Feedback")]
-    [SerializeField] private FeedbackPanelController feedbackController;
+    [SerializeField]
+    private FeedbackPanelController feedbackController;
 
-    [SerializeField] private Image imageMain;
-
+    [SerializeField]
+    private Image imageMain;
 
     [Header("🎯 Prefabs y objetos principales")]
-    [SerializeField] private GameObject buttonPrefab;
-    [SerializeField] private RectTransform buttonContainer;
+    [SerializeField]
+    private GameObject buttonPrefab;
+
+    [SerializeField]
+    private RectTransform buttonContainer;
 
     [Header("🖼️ Imágenes (modo Judge)")]
-    [SerializeField] private Image firstImage;
-    [SerializeField] private Image secondImage;
+    [SerializeField]
+    private Image firstImage;
+
+    [SerializeField]
+    private Image secondImage;
 
     [Header("🧠 Panel de feedback y pregunta")]
-    [SerializeField] private GameObject panelFeedback;
-    [SerializeField] private TMP_Text feedbackText;
-    [SerializeField] private TMP_Text questionText;
+    [SerializeField]
+    private GameObject panelFeedback;
+
+    [SerializeField]
+    private TMP_Text feedbackText;
+
+    [SerializeField]
+    private TMP_Text questionText;
 
     [Header("📦 Botones de cambio de modo (TopButtons)")]
-    [SerializeField] private Transform topButtonsContainer;
+    [SerializeField]
+    private Transform topButtonsContainer;
 
     [Header("🧭 Botones de cambio de escena")]
-    [SerializeField] private Button buttonMapScene;
-    [SerializeField] private Button buttonNextScene;
-    [Header("EyeButton")]
-    [SerializeField] private Button eyeButton;
-    [SerializeField] private Transform canvasRoot;
+    [SerializeField]
+    private Button buttonMapScene;
 
-    private readonly float eyeDuration = 3f;
-    private Coroutine eyeRoutine = null;
-    private List<TMP_Text> activeLabels = new();
+    [SerializeField]
+    private Button buttonNextScene;
+
+    private readonly string mapSceneName = "MapPath";
+    private readonly string nextSceneName = "BalloonPopSeaScene";
     private ActivityJudge lastActivityShown;
-
-    private int currentTaskType = 1;
-
 
     // 🧍‍♂️ Personaje
     private RectTransform imageCharacter;
@@ -64,25 +64,13 @@ public class CrossRiverManager : MonoBehaviour
     private readonly float arcHeight = 150f;
     private readonly AnimationCurve moveCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
-    private Vector2 startCharacterPos = new(125, 300);
+    private Vector2 startCharacterPos = new(250, 200);
     private Vector2 finalCharacterPos = new(1700, 800);
     private bool isAnimating = false;
 
     private List<GameObject> spawnedButtons = new();
     private int currentMode = 0;
     private GameAPIService apiService;
-
-    // Judge label settings applied strictly from code
-    private const int JUDGE_FONT_SIZE = 40;
-    private const bool JUDGE_USE_BOLD = true;
-    private const float JUDGE_Y_OFFSET = 220f;
-    private const float SELECT_Y_OFFSET = 150f;
-
-    private List<ActivityJudge> judgeActivities = new();
-    private List<ActivitySelect> selectActivities = new();
-    private List<ActivityRelate> relateActivities = new();
-
-    private int currentActivityIndex = 0;
 
     // ============================================================
     // 🔹 Coordenadas configurables SOLO desde código
@@ -95,7 +83,7 @@ public class CrossRiverManager : MonoBehaviour
         new Vector2(750, 700),
         new Vector2(1200, 600),
         new Vector2(750, 300),
-        new Vector2(1200, 200)
+        new Vector2(1200, 200),
     };
 
     private Vector2[] mode2Positions =
@@ -103,13 +91,14 @@ public class CrossRiverManager : MonoBehaviour
         new Vector2(750, 700),
         new Vector2(1200, 600),
         new Vector2(750, 300),
-        new Vector2(1200, 200)
+        new Vector2(1200, 200),
     };
 
     private void Awake()
     {
         apiService = FindObjectOfType<GameAPIService>();
-        if (panelFeedback) panelFeedback.SetActive(false);
+        if (panelFeedback)
+            panelFeedback.SetActive(false);
 
         imageCharacter = GameObject.Find("ImageCharacter")?.GetComponent<RectTransform>();
         if (imageCharacter != null)
@@ -119,29 +108,25 @@ public class CrossRiverManager : MonoBehaviour
             // No detener animación al inicio porque aún no ha empezado
             if (imageCharacter.TryGetComponent(out CharacterAnimator anim))
                 anim.SetIdleFrame(); // Nueva función que pondremos
-
         }
     }
 
-
     private void Start()
     {
-        apiService = FindObjectOfType<GameAPIService>();
-        if (apiService == null)
+        AssignModeButtons();
+        if (buttonMapScene != null)
         {
-            Debug.LogError(" GameAPIService no encontrado.");
-            return;
+            buttonMapScene.onClick.RemoveAllListeners();
+            buttonMapScene.onClick.AddListener(() => ChangeScene(mapSceneName));
         }
 
-  
-        currentTaskType = apiService.GetCurrentTaskType();
-        Debug.Log($" CrossRiver Start() → task_type_id detectado = {currentTaskType}");
+        if (buttonNextScene != null)
+        {
+            buttonNextScene.onClick.RemoveAllListeners();
+            buttonNextScene.onClick.AddListener(() => ChangeScene(nextSceneName));
+        }
 
-        AssignModeButtons();
-        if (eyeButton != null)
-            eyeButton.onClick.AddListener(OnEyePressed);
-
-        StartCoroutine(LoadModeFromAPI(currentTaskType));
+        StartCoroutine(LoadModeFromAPI(0));
     }
 
     // ============================================================
@@ -149,22 +134,14 @@ public class CrossRiverManager : MonoBehaviour
     // ============================================================
     private IEnumerator LoadModeFromAPI(int mode)
     {
-        currentTaskType = mode;
-
+        currentMode = mode;
         if (apiService == null)
         {
-            Debug.LogError(" No se encontró GameAPIService.");
+            Debug.LogError("❌ No se encontró GameAPIService en la escena.");
             yield break;
         }
 
-        Debug.Log($" CrossRiver: Loading mode = {mode}");
-
-        yield return apiService.LoadActivity(
-            json => LoadMode(mode, json),
-            err => Debug.LogError($" CrossRiver API error: {err}")
-        );
-
-        // Important change because have a new format API.  
+        // Important change because have a new format API.
         //  yield return apiService.LoadActivity(mode,
         //      json => LoadMode(mode, json),
         //      err => Debug.LogError(err));
@@ -173,95 +150,84 @@ public class CrossRiverManager : MonoBehaviour
     public void LoadMode(int mode, string json)
     {
         ClearButtons();
+        currentMode = mode;
 
-        if (string.IsNullOrEmpty(json))
-        {
-            Debug.LogError(" JSON vacío en LoadMode");
-            return;
-        }
-
-        Debug.Log($" CrossRiver → procesando JSON para modo {mode}");
+        // 🔹 Controla visibilidad de imageMain
+        if (imageMain != null)
+            imageMain.gameObject.SetActive(mode == 2); // 👈 solo visible en modo Relate
 
         switch (mode)
         {
-            case 1:
+            case 0:
                 var judgeData = JsonUtility.FromJson<ApiResponseJudge>(json);
-
-                if (judgeData?.data == null)
-                {
-                    Debug.LogError(" JSON sin data (Judge)");
-                    return;
-                }
-
-                // limpiar lista
-                judgeActivities.Clear();
-                currentActivityIndex = 0;
-
-                // agregar actividades
-                if (judgeData.data.activity1 != null) judgeActivities.Add(judgeData.data.activity1);
-                if (judgeData.data.activity2 != null) judgeActivities.Add(judgeData.data.activity2);
-                if (judgeData.data.activity3 != null) judgeActivities.Add(judgeData.data.activity3);
-                if (judgeData.data.activity4 != null) judgeActivities.Add(judgeData.data.activity4);
-                if (judgeData.data.activity5 != null) judgeActivities.Add(judgeData.data.activity5);
-
-                LoadJudgeMode(judgeActivities[currentActivityIndex]);
+                if (judgeData?.data?.activity1 != null)
+                    LoadJudgeMode(judgeData.data.activity1);
+                else
+                    Debug.LogError("❌ JSON no contiene activity1 válido.");
                 break;
 
+            case 1:
+                HideWordImages();
+                Resources.UnloadUnusedAssets();
+                System.GC.Collect();
+
+                var selectData = JsonUtility.FromJson<ApiResponseSelect>(json);
+                if (selectData?.data?.activity1 != null)
+                    LoadSelectMode(selectData.data.activity1);
+                else
+                    Debug.LogError("❌ JSON no contiene activity1 válido para modo Select.");
+                break;
 
             case 2:
-                var selectData = JsonUtility.FromJson<ApiResponseSelect>(json);
+                HideWordImages();
 
-                if (selectData?.data == null)
+                // 🧹 Limpieza completa antes de deserializar
+                Resources.UnloadUnusedAssets();
+                System.GC.Collect();
+
+                var relateActivity = ParseRelateActivity(json);
+
+                if (relateActivity != null)
                 {
-                    Debug.LogError(" JSON sin data (Select)");
-                    return;
+                    Debug.Log($"🟣 RELATE cargado correctamente:");
+                    Debug.Log(
+                        $" main_word={relateActivity.main_word.word} ({relateActivity.main_word.PATH})"
+                    );
+                    Debug.Log(
+                        $" correct_option={relateActivity.correct_option.word} ({relateActivity.correct_option.PATH})"
+                    );
+                    Debug.Log(
+                        $" wrong_option1={relateActivity.wrong_option1.word} ({relateActivity.wrong_option1.PATH})"
+                    );
+                    Debug.Log(
+                        $" wrong_option2={relateActivity.wrong_option2.word} ({relateActivity.wrong_option2.PATH})"
+                    );
+                    Debug.Log(
+                        $" wrong_option3={relateActivity.wrong_option3.word} ({relateActivity.wrong_option3.PATH})"
+                    );
+
+                    LoadRelateMode(relateActivity);
                 }
-
-                selectActivities.Clear();
-                currentActivityIndex = 0;
-
-                if (selectData.data.activity1 != null) selectActivities.Add(selectData.data.activity1);
-                if (selectData.data.activity2 != null) selectActivities.Add(selectData.data.activity2);
-                if (selectData.data.activity3 != null) selectActivities.Add(selectData.data.activity3);
-
-
-                LoadSelectMode(selectActivities[currentActivityIndex]);
-                break;
-
-
-            case 3:
-                var relateData = JsonUtility.FromJson<ApiResponseRelate>(json);
-
-                if (relateData?.data == null)
+                else
                 {
-                    Debug.LogError("❌ JSON sin data (Relate)");
-                    return;
+                    Debug.LogError("❌ No se pudo parsear correctamente el modo Relate.");
                 }
-
-                relateActivities.Clear();
-                currentActivityIndex = 0;
-
-                if (relateData.data.activity1 != null) relateActivities.Add(relateData.data.activity1);
-                if (relateData.data.activity2 != null) relateActivities.Add(relateData.data.activity2);
-
-
-                LoadRelateMode(relateActivities[currentActivityIndex]);
                 break;
-
 
             default:
-                Debug.LogError($" task_type_id no soportado: {mode}");
+                HideWordImages();
+                Debug.LogWarning($"⚠️ Modo {mode} no implementado.");
                 break;
         }
     }
 
-
     // ============================================================
     // 🧩 Normaliza campos PATH del JSON (para RELATE o SELECT)
     // ============================================================
-    private void NormalizePaths_Relate(Picofon.Games.Relate.ActivityRelate activity)
+    private void NormalizePaths_Relate(ActivityRelate activity)
     {
-        if (activity == null) return;
+        if (activity == null)
+            return;
 
         void Fix(ref string path)
         {
@@ -276,34 +242,31 @@ public class CrossRiverManager : MonoBehaviour
         Fix(ref activity.wrong_option3.PATH);
 
         // Log completo
-        Debug.Log($"📂 PATHs normalizados:\n" +
-                  $" main={activity.main_word.PATH}\n" +
-                  $" correct={activity.correct_option.PATH}\n" +
-                  $" wrong1={activity.wrong_option1.PATH}\n" +
-                  $" wrong2={activity.wrong_option2.PATH}\n" +
-                  $" wrong3={activity.wrong_option3.PATH}");
+        Debug.Log(
+            $"📂 PATHs normalizados:\n"
+                + $" main={activity.main_word.PATH}\n"
+                + $" correct={activity.correct_option.PATH}\n"
+                + $" wrong1={activity.wrong_option1.PATH}\n"
+                + $" wrong2={activity.wrong_option2.PATH}\n"
+                + $" wrong3={activity.wrong_option3.PATH}"
+        );
     }
 
     // ============================================================
     // 🟣 MODO 2 – RELATE (una imagen principal + 4 opciones)
     // ============================================================
-    private void LoadRelateMode(Picofon.Games.Relate.ActivityRelate activity)
+    private void LoadRelateMode(ActivityRelate activity)
     {
         ClearButtons();
-        ShowWhiteBubblesForMode(3);
 
-        if (firstImage != null)
-            firstImage.gameObject.SetActive(false);
-        if (secondImage != null)
-            secondImage.gameObject.SetActive(false);
-
+        // 📄 Texto de la consigna
         if (questionText != null)
             questionText.text = activity.question;
 
-
+        // 🧩 Normaliza los PATH antes de cargar sprites
         NormalizePaths_Relate(activity);
 
-
+        // 🖼️ Imagen principal (main_word)
         if (imageMain != null)
         {
             imageMain.gameObject.SetActive(true);
@@ -318,22 +281,48 @@ public class CrossRiverManager : MonoBehaviour
         Sprite wrong3Sprite = LoadLocalSprite(activity.wrong_option3.PATH);
 
         // ✅ Verificación: si alguna imagen no existe
-        if (correctSprite == null) Debug.LogWarning("⚠️ No se cargó sprite del correct_option.");
-        if (wrong1Sprite == null) Debug.LogWarning("⚠️ No se cargó sprite del wrong_option1.");
-        if (wrong2Sprite == null) Debug.LogWarning("⚠️ No se cargó sprite del wrong_option2.");
-        if (wrong3Sprite == null) Debug.LogWarning("⚠️ No se cargó sprite del wrong_option3.");
+        if (correctSprite == null)
+            Debug.LogWarning("⚠️ No se cargó sprite del correct_option.");
+        if (wrong1Sprite == null)
+            Debug.LogWarning("⚠️ No se cargó sprite del wrong_option1.");
+        if (wrong2Sprite == null)
+            Debug.LogWarning("⚠️ No se cargó sprite del wrong_option2.");
+        if (wrong3Sprite == null)
+            Debug.LogWarning("⚠️ No se cargó sprite del wrong_option3.");
 
         // 🎲 Lista de opciones
         List<(Sprite sprite, bool isCorrect, string word, string syllWord)> options = new()
-    {
-        (correctSprite, true,  activity.correct_option.word,  activity.correct_option.syllabified_word),
-        (wrong1Sprite,  false, activity.wrong_option1.word,  activity.wrong_option1.syllabified_word),
-        (wrong2Sprite,  false, activity.wrong_option2.word,  activity.wrong_option2.syllabified_word),
-        (wrong3Sprite,  false, activity.wrong_option3.word,  activity.wrong_option3.syllabified_word)
-    };
+        {
+            (
+                correctSprite,
+                true,
+                activity.correct_option.word,
+                activity.correct_option.syllabified_word
+            ),
+            (
+                wrong1Sprite,
+                false,
+                activity.wrong_option1.word,
+                activity.wrong_option1.syllabified_word
+            ),
+            (
+                wrong2Sprite,
+                false,
+                activity.wrong_option2.word,
+                activity.wrong_option2.syllabified_word
+            ),
+            (
+                wrong3Sprite,
+                false,
+                activity.wrong_option3.word,
+                activity.wrong_option3.syllabified_word
+            ),
+        };
 
         // 🔀 Posiciones aleatorias
-        List<Vector2> shuffledPositions = mode2Positions.OrderBy(_ => UnityEngine.Random.value).ToList();
+        List<Vector2> shuffledPositions = mode2Positions
+            .OrderBy(_ => UnityEngine.Random.value)
+            .ToList();
 
         // 🎨 Crear prefabs
         for (int i = 0; i < options.Count; i++)
@@ -368,7 +357,9 @@ public class CrossRiverManager : MonoBehaviour
             Transform lifebelt = btnObj.transform.Find("BackgroundLifebelt");
             if (lifebelt != null && lifebelt.TryGetComponent(out Image bg))
             {
-                Sprite lifebeltSprite = Resources.Load<Sprite>("Images/Images/CrossRiver/lifebelt_violet_Lluni");
+                Sprite lifebeltSprite = Resources.Load<Sprite>(
+                    "Images/Images/CrossRiver/lifebelt_violet_Lluni"
+                );
                 if (lifebeltSprite != null)
                 {
                     bg.sprite = lifebeltSprite;
@@ -380,8 +371,6 @@ public class CrossRiverManager : MonoBehaviour
             Transform buttonOp = btnObj.transform.Find("ButtonOp");
             if (buttonOp != null && buttonOp.TryGetComponent(out Button button))
             {
-                btnObj.AddComponent<TempWordHolder>().word = opt.word;
-
                 bool isCorrect = opt.isCorrect;
                 Sprite selectedSprite = opt.sprite;
                 string selectedWord = opt.syllWord;
@@ -395,22 +384,30 @@ public class CrossRiverManager : MonoBehaviour
 
             // Ocultar texto
             TMP_Text txt = btnObj.GetComponentInChildren<TMP_Text>();
-            if (txt != null) txt.gameObject.SetActive(false);
+            if (txt != null)
+                txt.gameObject.SetActive(false);
 
             spawnedButtons.Add(btnObj);
         }
 
-        Debug.Log($"🟣 Modo Relate cargado: main={activity.main_word.word}, correct={activity.correct_option.word}");
+        Debug.Log(
+            $"🟣 Modo Relate cargado: main={activity.main_word.word}, correct={activity.correct_option.word}"
+        );
     }
-
 
     // ============================================================
     // 🎯 Evaluar respuesta modo RELATE
     // ============================================================
-    private void EvaluateRelate(Picofon.Games.Relate.ActivityRelate activity,
-                                bool isCorrect, Sprite chosenSprite, string chosenSyllWord, RectTransform pressedBtnRect)
+    private void EvaluateRelate(
+        ActivityRelate activity,
+        bool isCorrect,
+        Sprite chosenSprite,
+        string chosenSyllWord,
+        RectTransform pressedBtnRect
+    )
     {
-        if (isAnimating) return;
+        if (isAnimating)
+            return;
 
         // 🔹 Datos del main_word (para feedback)
         Sprite mainSprite = LoadLocalSprite(activity.main_word.PATH);
@@ -420,15 +417,17 @@ public class CrossRiverManager : MonoBehaviour
         string feedbackMessage = isCorrect ? activity.feedback_positive : activity.feedback_neutral;
 
         // 🔹 Inicia animación + feedback (reutiliza la del modo 1)
-        StartCoroutine(HandleFeedback_Relate_WithAnim(
-            correct: isCorrect,
-            targetRect: pressedBtnRect,
-            mainSprite: mainSprite,
-            chosenSprite: chosenSprite,
-            mainWord: mainSyllWord,
-            chosenWord: chosenSyllWord,
-            message: feedbackMessage
-        ));
+        StartCoroutine(
+            HandleFeedback_Relate_WithAnim(
+                correct: isCorrect,
+                targetRect: pressedBtnRect,
+                mainSprite: mainSprite,
+                chosenSprite: chosenSprite,
+                mainWord: mainSyllWord,
+                chosenWord: chosenSyllWord,
+                message: feedbackMessage
+            )
+        );
     }
 
     // ============================================================
@@ -441,7 +440,8 @@ public class CrossRiverManager : MonoBehaviour
         Sprite chosenSprite,
         string mainWord,
         string chosenWord,
-        string message)
+        string message
+    )
     {
         isAnimating = true;
 
@@ -460,10 +460,9 @@ public class CrossRiverManager : MonoBehaviour
         // 3️⃣ Mostrar feedback con las dos imágenes (main + elegida)
         if (feedbackController != null)
         {
-            HideAllLabels();
             feedbackController.ShowFeedback(
-                mainSprite,     // Imagen de main_word
-                chosenSprite,   // Imagen del prefab seleccionado
+                mainSprite, // Imagen de main_word
+                chosenSprite, // Imagen del prefab seleccionado
                 correct,
                 mainWord,
                 chosenWord
@@ -479,33 +478,16 @@ public class CrossRiverManager : MonoBehaviour
 
         // 6️⃣ Si fue correcto, recargar nueva actividad
         if (correct)
-        {
-            yield return StartCoroutine(NextActivity());
-        }
-
-
-
+            yield return StartCoroutine(LoadModeFromAPI(currentMode));
 
         isAnimating = false;
     }
-
-
 
     // ============================================================
     // 🔵 MODO 1 (usando modelo SELECT con 4 imágenes del JSON)
     // ============================================================
     private void LoadSelectMode(ActivitySelect activity)
     {
-        ShowWhiteBubblesForMode(2);
-
-        if (imageMain != null)
-            imageMain.gameObject.SetActive(false);
-
-        if (firstImage != null) 
-            firstImage.gameObject.SetActive(false);
-        if (secondImage != null) 
-            secondImage.gameObject.SetActive(false);
-
         if (questionText != null)
             questionText.text = activity.question;
 
@@ -547,7 +529,6 @@ public class CrossRiverManager : MonoBehaviour
             }
         }
 
-
         // 🔹 Si quieres que se muestren siempre en el orden original, comenta la siguiente línea:
         // options = options.OrderBy(x => Random.value).ToList();
 
@@ -586,7 +567,9 @@ public class CrossRiverManager : MonoBehaviour
                 Image bg = lifebelt.GetComponent<Image>();
                 if (bg != null)
                 {
-                    Sprite lifebeltSprite = Resources.Load<Sprite>("Images/Images/CrossRiver/lifebelt_violet_Lluni");
+                    Sprite lifebeltSprite = Resources.Load<Sprite>(
+                        "Images/Images/CrossRiver/lifebelt_violet_Lluni"
+                    );
                     if (lifebeltSprite != null)
                     {
                         bg.sprite = lifebeltSprite;
@@ -602,8 +585,6 @@ public class CrossRiverManager : MonoBehaviour
             Transform buttonOp = btnObj.transform.Find("ButtonOp");
             if (buttonOp != null && buttonOp.TryGetComponent(out Button button))
             {
-                btnObj.AddComponent<TempWordHolder>().word = options[i].word;
-
                 bool isCorrect = options[i].isCorrect;
                 Sprite selectedSprite = options[i].sprite;
                 RectTransform targetRect = rect; // 👈 capturamos a dónde animar
@@ -614,22 +595,21 @@ public class CrossRiverManager : MonoBehaviour
                 });
             }
 
-
             // ❌ No mostrar texto en los botones del modo Select
             TMP_Text label = btnObj.GetComponentInChildren<TMP_Text>();
             if (label != null)
             {
-                label.text = "";                     // Quita el texto
-                label.gameObject.SetActive(false);   // Oculta el componente visual
+                label.text = ""; // Quita el texto
+                label.gameObject.SetActive(false); // Oculta el componente visual
             }
-
 
             spawnedButtons.Add(btnObj);
         }
 
-        Debug.Log($"🔵 Modo Select cargado con 4 imágenes: {activity.main_word.word}, {activity.correct_option.word}, {activity.wrong_option1.word}, {activity.wrong_option2.word}");
+        Debug.Log(
+            $"🔵 Modo Select cargado con 4 imágenes: {activity.main_word.word}, {activity.correct_option.word}, {activity.wrong_option1.word}, {activity.wrong_option2.word}"
+        );
     }
-
 
     // ============================================================
     // 🎯 Evaluación de respuestas modo Select — usa syllabified_word del modelo
@@ -638,9 +618,15 @@ public class CrossRiverManager : MonoBehaviour
     // private void EvaluateSelect(ActivitySelect activity, bool isCorrect, Sprite chosenSprite)
 
     // Ahora:
-    private void EvaluateSelect(ActivitySelect activity, bool isCorrect, Sprite chosenSprite, RectTransform pressedBtnRect)
+    private void EvaluateSelect(
+        ActivitySelect activity,
+        bool isCorrect,
+        Sprite chosenSprite,
+        RectTransform pressedBtnRect
+    )
     {
-        if (isAnimating) return;
+        if (isAnimating)
+            return;
 
         string chosenSyllWord = GetSyllabifiedWordBySprite(activity, chosenSprite);
         string otherSyllWord;
@@ -649,54 +635,68 @@ public class CrossRiverManager : MonoBehaviour
         if (isCorrect)
         {
             // ✅ correcto → mostrar opción correcta + otra aleatoria
-            otherSyllWord = PickRandomWord(new[]
-            {
-            activity.main_word.syllabified_word,
-            activity.wrong_option1.syllabified_word,
-            activity.wrong_option2.syllabified_word
-        });
+            otherSyllWord = PickRandomWord(
+                new[]
+                {
+                    activity.main_word.syllabified_word,
+                    activity.wrong_option1.syllabified_word,
+                    activity.wrong_option2.syllabified_word,
+                }
+            );
 
-            otherSprite = PickRandomSprite(new[]
-            {
-            LoadLocalSprite(activity.main_word.PATH),
-            LoadLocalSprite(activity.wrong_option1.PATH),
-            LoadLocalSprite(activity.wrong_option2.PATH)
-        });
+            otherSprite = PickRandomSprite(
+                new[]
+                {
+                    LoadLocalSprite(activity.main_word.PATH),
+                    LoadLocalSprite(activity.wrong_option1.PATH),
+                    LoadLocalSprite(activity.wrong_option2.PATH),
+                }
+            );
 
-            StartCoroutine(HandleFeedback_Select_WithAnim(
-                correct: true,
-                targetRect: pressedBtnRect,
-                sprite1: LoadLocalSprite(activity.correct_option.PATH),
-                sprite2: otherSprite,
-                word1: activity.correct_option.syllabified_word,
-                word2: otherSyllWord
-            ));
+            StartCoroutine(
+                HandleFeedback_Select_WithAnim(
+                    correct: true,
+                    targetRect: pressedBtnRect,
+                    sprite1: LoadLocalSprite(activity.correct_option.PATH),
+                    sprite2: otherSprite,
+                    word1: activity.correct_option.syllabified_word,
+                    word2: otherSyllWord
+                )
+            );
         }
         else
         {
             // ❌ incorrecto → palabra elegida + otra aleatoria
-            otherSyllWord = PickRandomWord(new[]
-            {
-            activity.main_word.syllabified_word,
-            activity.wrong_option1.syllabified_word,
-            activity.wrong_option2.syllabified_word
-        }, exclude: chosenSyllWord);
+            otherSyllWord = PickRandomWord(
+                new[]
+                {
+                    activity.main_word.syllabified_word,
+                    activity.wrong_option1.syllabified_word,
+                    activity.wrong_option2.syllabified_word,
+                },
+                exclude: chosenSyllWord
+            );
 
-            otherSprite = PickRandomSprite(new[]
-            {
-            LoadLocalSprite(activity.main_word.PATH),
-            LoadLocalSprite(activity.wrong_option1.PATH),
-            LoadLocalSprite(activity.wrong_option2.PATH)
-        }, excludeSprite: chosenSprite);
+            otherSprite = PickRandomSprite(
+                new[]
+                {
+                    LoadLocalSprite(activity.main_word.PATH),
+                    LoadLocalSprite(activity.wrong_option1.PATH),
+                    LoadLocalSprite(activity.wrong_option2.PATH),
+                },
+                excludeSprite: chosenSprite
+            );
 
-            StartCoroutine(HandleFeedback_Select_WithAnim(
-                correct: false,
-                targetRect: pressedBtnRect,
-                sprite1: chosenSprite,
-                sprite2: otherSprite,
-                word1: chosenSyllWord,
-                word2: otherSyllWord
-            ));
+            StartCoroutine(
+                HandleFeedback_Select_WithAnim(
+                    correct: false,
+                    targetRect: pressedBtnRect,
+                    sprite1: chosenSprite,
+                    sprite2: otherSprite,
+                    word1: chosenSyllWord,
+                    word2: otherSyllWord
+                )
+            );
         }
     }
 
@@ -707,7 +707,8 @@ public class CrossRiverManager : MonoBehaviour
         Sprite sprite1,
         Sprite sprite2,
         string word1,
-        string word2)
+        string word2
+    )
     {
         isAnimating = true;
 
@@ -726,14 +727,7 @@ public class CrossRiverManager : MonoBehaviour
         // 3) Mostrar feedback (imágenes + palabras silábicas)
         if (feedbackController != null)
         {
-            HideAllLabels();
-            feedbackController.ShowFeedback(
-                sprite1,
-                sprite2,
-                correct,
-                word1,
-                word2
-            );
+            feedbackController.ShowFeedback(sprite1, sprite2, correct, word1, word2);
         }
 
         // 4) Esperar a que el panel de feedback se muestre
@@ -745,33 +739,28 @@ public class CrossRiverManager : MonoBehaviour
 
         // 6) Recargar la actividad del modo actual si fue correcta (igual que en modo 0)
         if (correct)
-            yield return StartCoroutine(LoadModeFromAPI(currentTaskType));
-
+            yield return StartCoroutine(LoadModeFromAPI(currentMode));
 
         isAnimating = false;
     }
 
-
-
-
     // ============================================================
     // 🎨 Feedback visual — solo imágenes (sin texto) y recarga segura del modo
     // ============================================================
-    private IEnumerator HandleFeedback_Select(bool correct, Sprite sprite1, Sprite sprite2, string word1, string word2)
+    private IEnumerator HandleFeedback_Select(
+        bool correct,
+        Sprite sprite1,
+        Sprite sprite2,
+        string word1,
+        string word2
+    )
     {
         isAnimating = true;
 
         if (feedbackController != null)
         {
             // Muestra las dos imágenes y las palabras asociadas
-            HideAllLabels();
-            feedbackController.ShowFeedback(
-                sprite1,
-                sprite2,
-                correct,
-                word1,
-                word2
-            );
+            feedbackController.ShowFeedback(sprite1, sprite2, correct, word1, word2);
         }
 
         // Espera antes de cambiar
@@ -794,14 +783,11 @@ public class CrossRiverManager : MonoBehaviour
             }
 
             // Nueva petición segura al backend
-            yield return StartCoroutine(LoadModeFromAPI(currentTaskType));
-
+            yield return StartCoroutine(LoadModeFromAPI(currentMode));
         }
 
         isAnimating = false;
     }
-
-
 
     // ============================================================
     // 🧠 Funciones auxiliares
@@ -809,38 +795,55 @@ public class CrossRiverManager : MonoBehaviour
     private string PickRandomWord(IEnumerable<string> words, string exclude = null)
     {
         var list = words.Where(w => w != exclude && !string.IsNullOrEmpty(w)).ToList();
-        if (list.Count == 0) return "";
+        if (list.Count == 0)
+            return "";
         return list[UnityEngine.Random.Range(0, list.Count)];
     }
 
     private Sprite PickRandomSprite(IEnumerable<Sprite> sprites, Sprite excludeSprite = null)
     {
         var list = sprites.Where(s => s != null && s != excludeSprite).ToList();
-        if (list.Count == 0) return null;
+        if (list.Count == 0)
+            return null;
         return list[UnityEngine.Random.Range(0, list.Count)];
     }
+
     // ============================================================
     // 🔡 Obtiene la palabra silábica (syllabified_word) según el sprite
     // ============================================================
     private string GetSyllabifiedWordBySprite(ActivitySelect activity, Sprite sprite)
     {
-        if (sprite == null) return "";
+        if (sprite == null)
+            return "";
 
         string spriteName = sprite.name.ToLower();
-        if (spriteName.Contains(System.IO.Path.GetFileNameWithoutExtension(activity.main_word.PATH).ToLower()))
+        if (
+            spriteName.Contains(
+                System.IO.Path.GetFileNameWithoutExtension(activity.main_word.PATH).ToLower()
+            )
+        )
             return activity.main_word.syllabified_word;
-        if (spriteName.Contains(System.IO.Path.GetFileNameWithoutExtension(activity.correct_option.PATH).ToLower()))
+        if (
+            spriteName.Contains(
+                System.IO.Path.GetFileNameWithoutExtension(activity.correct_option.PATH).ToLower()
+            )
+        )
             return activity.correct_option.syllabified_word;
-        if (spriteName.Contains(System.IO.Path.GetFileNameWithoutExtension(activity.wrong_option1.PATH).ToLower()))
+        if (
+            spriteName.Contains(
+                System.IO.Path.GetFileNameWithoutExtension(activity.wrong_option1.PATH).ToLower()
+            )
+        )
             return activity.wrong_option1.syllabified_word;
-        if (spriteName.Contains(System.IO.Path.GetFileNameWithoutExtension(activity.wrong_option2.PATH).ToLower()))
+        if (
+            spriteName.Contains(
+                System.IO.Path.GetFileNameWithoutExtension(activity.wrong_option2.PATH).ToLower()
+            )
+        )
             return activity.wrong_option2.syllabified_word;
 
         return "?";
     }
-
-
-
 
     // ============================================================
     // ✅ Feedback correcto (modo Select)
@@ -853,8 +856,7 @@ public class CrossRiverManager : MonoBehaviour
         yield return new WaitForSeconds(2.5f);
 
         // Recargar siguiente actividad del mismo modo
-        StartCoroutine(LoadModeFromAPI(currentTaskType));
-
+        StartCoroutine(LoadModeFromAPI(currentMode));
 
         isAnimating = false;
     }
@@ -873,14 +875,6 @@ public class CrossRiverManager : MonoBehaviour
     // ============================================================
     private void LoadJudgeMode(ActivityJudge activity)
     {
-        ShowWhiteBubblesForMode(1);
-
-        if (imageMain != null)
-            imageMain.gameObject.SetActive(false);
-        if (firstImage != null) 
-            firstImage.gameObject.SetActive(false);
-        if (secondImage != null) 
-            secondImage.gameObject.SetActive(false);
         lastActivityShown = activity;
         if (questionText != null)
             questionText.text = activity.question;
@@ -922,9 +916,9 @@ public class CrossRiverManager : MonoBehaviour
 
                     // 🔹 Solo en modo 0 y en el primer prefab → usar el rosa
                     if (currentMode == 0 && i == 0)
-                        spritePath = "Images/CrossRiver/lifebelt_pink_Lluni";
+                        spritePath = "Images/Images/CrossRiver/lifebelt_pink_Lluni";
                     else
-                        spritePath = "Images/CrossRiver/lifebelt_violet_Lluni";
+                        spritePath = "Images/Images/CrossRiver/lifebelt_violet_Lluni";
 
                     Sprite lifebeltSprite = Resources.Load<Sprite>(spritePath);
                     if (lifebeltSprite != null)
@@ -957,7 +951,8 @@ public class CrossRiverManager : MonoBehaviour
             rect.anchoredPosition = positions[i];
 
             TMP_Text text = btnObj.GetComponentInChildren<TMP_Text>();
-            if (text != null) text.text = labels[i];
+            if (text != null)
+                text.text = labels[i];
 
             // ================================
             // 🧠 ASIGNAR LÓGICA DEL BOTÓN
@@ -973,7 +968,9 @@ public class CrossRiverManager : MonoBehaviour
                     if (!isAnimating)
                     {
                         bool isCorrect = activity.answer ? isYes : !isYes;
-                        string msg = isCorrect ? activity.feedback_positive : activity.feedback_neutral;
+                        string msg = isCorrect
+                            ? activity.feedback_positive
+                            : activity.feedback_neutral;
 
                         if (isCorrect)
                             StartCoroutine(HandleCorrectFeedback(activity, msg));
@@ -988,8 +985,6 @@ public class CrossRiverManager : MonoBehaviour
 
         Debug.Log($"✅ Botones Judge configurados según answer={activity.answer}");
     }
-
-
 
     // ============================================================
     // 🔹 Crear botones genéricos (modo 1 y 2)
@@ -1016,7 +1011,8 @@ public class CrossRiverManager : MonoBehaviour
 
             // ❌ sin texto ni label
             TMP_Text text = btnObj.GetComponentInChildren<TMP_Text>();
-            if (text != null) text.text = "";
+            if (text != null)
+                text.text = "";
 
             spawnedButtons.Add(btnObj);
         }
@@ -1053,6 +1049,7 @@ public class CrossRiverManager : MonoBehaviour
             StartCoroutine(HandleIncorrectFeedback(activity, msg));
         }
     }
+
     // ============================================================
     // ⚠️ Caso especial modo 0: sin animación hacia el botón
     // ============================================================
@@ -1086,8 +1083,6 @@ public class CrossRiverManager : MonoBehaviour
         isAnimating = false;
     }
 
-
-
     // ============================================================
     // ✅ Secuencia completa de respuesta correcta
     // ============================================================
@@ -1097,7 +1092,8 @@ public class CrossRiverManager : MonoBehaviour
 
         // Mueve al botón correcto
         RectTransform target = FindClosestButton(activity.answer);
-        if (target == null) yield break;
+        if (target == null)
+            yield break;
 
         // 🔹 1. Movimiento al botón correcto
         yield return MoveToCurve(imageCharacter, target.anchoredPosition);
@@ -1117,12 +1113,10 @@ public class CrossRiverManager : MonoBehaviour
         yield return MoveToCurve(imageCharacter, startCharacterPos);
 
         // 🔹 5. Nueva petición para recargar imágenes del modo actual
-        StartCoroutine(LoadModeFromAPI(currentTaskType));
-
+        StartCoroutine(LoadModeFromAPI(currentMode));
 
         isAnimating = false;
     }
-
 
     // ============================================================
     // ❌ Secuencia de respuesta incorrecta
@@ -1130,7 +1124,8 @@ public class CrossRiverManager : MonoBehaviour
     private IEnumerator HandleIncorrectFeedback(ActivityJudge activity, string message)
     {
         RectTransform target = FindClosestButton(activity.answer);
-        if (target == null) yield break;
+        if (target == null)
+            yield break;
 
         // Movimiento hacia el botón incorrecto
         yield return MoveToCurve(imageCharacter, target.anchoredPosition);
@@ -1159,21 +1154,18 @@ public class CrossRiverManager : MonoBehaviour
         return null;
     }
 
-
     private void ShowFeedback(string message, bool correct)
     {
-        // Hide any active eye labels when feedback appears
-        HideAllLabels();
+        if (feedbackController == null)
+            return;
 
-        if (feedbackController == null) return;
-
-        var currentActivity = lastActivityShown;
+        var currentActivity = lastActivityShown; // referencia que guardaremos al mostrar el modo actual
         if (currentActivity == null)
         {
-            Debug.LogWarning("No activity loaded to show feedback.");
+            Debug.LogWarning("⚠️ No hay actividad cargada para mostrar feedback.");
             return;
         }
-        HideAllLabels();
+
         feedbackController.ShowFeedback(
             firstImage.sprite,
             secondImage.sprite,
@@ -1183,23 +1175,23 @@ public class CrossRiverManager : MonoBehaviour
         );
     }
 
-
-
-
     // ============================================================
     // 🧩 Utilidades
     // ============================================================
     private void ClearButtons()
     {
         foreach (var btn in spawnedButtons)
-            if (btn != null) Destroy(btn.gameObject);
+            if (btn != null)
+                Destroy(btn.gameObject);
         spawnedButtons.Clear();
     }
 
     private void HideWordImages()
     {
-        if (firstImage) firstImage.gameObject.SetActive(false);
-        if (secondImage) secondImage.gameObject.SetActive(false);
+        if (firstImage)
+            firstImage.gameObject.SetActive(false);
+        if (secondImage)
+            secondImage.gameObject.SetActive(false);
     }
 
     // ============================================================
@@ -1209,17 +1201,20 @@ public class CrossRiverManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(imageName))
         {
-            Debug.LogWarning($"⚠️ LoadLocalSprite: nombre vacío. PATH no recibido (modo={currentMode}).");
+            Debug.LogWarning(
+                $"⚠️ LoadLocalSprite: nombre vacío. PATH no recibido (modo={currentMode})."
+            );
             return null;
         }
-
 
         // 🧩 Limpieza del nombre y armado del path
         string fileName = System.IO.Path.GetFileNameWithoutExtension(imageName).Trim();
         string path = $"Images/ImgButtons/{fileName}";
 
         // 🔍 Mostrar el path que se intentará cargar
-        Debug.Log($"🔎 Intentando cargar sprite desde: Resources/{path} (original PATH='{imageName}')");
+        Debug.Log(
+            $"🔎 Intentando cargar sprite desde: Resources/{path} (original PATH='{imageName}')"
+        );
 
         // Cargar el sprite desde Resources
         Sprite sprite = Resources.Load<Sprite>(path);
@@ -1231,11 +1226,12 @@ public class CrossRiverManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"❌ Sprite NO encontrado. PATH original del JSON: '{imageName}' → Ruta buscada: Resources/{path}");
+            Debug.LogWarning(
+                $"❌ Sprite NO encontrado. PATH original del JSON: '{imageName}' → Ruta buscada: Resources/{path}"
+            );
             return null;
         }
     }
-
 
     private void AssignModeButtons()
     {
@@ -1244,28 +1240,22 @@ public class CrossRiverManager : MonoBehaviour
 
         if (topButtonsContainer == null)
         {
-            Debug.LogWarning(" No se encontró TopButtons.");
+            Debug.LogWarning("⚠️ No se encontró TopButtons.");
             return;
         }
 
         for (int i = 0; i < 3; i++)
         {
+            int mode = i;
             Transform button = topButtonsContainer.Find($"Button{i}");
             if (button != null && button.TryGetComponent(out Button btn))
             {
                 btn.onClick.RemoveAllListeners();
-                btn.onClick.AddListener(() =>
-                {
-                    currentTaskType = apiService.GetCurrentTaskType();
-                    Debug.Log($" Recargando modo real: {currentTaskType}");
-                    StartCoroutine(LoadModeFromAPI(currentTaskType));
-                });
-
-                Debug.Log($" Botón Button{i} asignado (recarga task_type).");
+                btn.onClick.AddListener(() => StartCoroutine(LoadModeFromAPI(mode)));
+                Debug.Log($"🎮 Asignado Button{i} → modo {mode}");
             }
         }
     }
-
 
     // ============================================================
     // 🌀 Movimiento del personaje
@@ -1278,13 +1268,16 @@ public class CrossRiverManager : MonoBehaviour
     // ============================================================
     private IEnumerator MoveCharacterToTarget(RectTransform target)
     {
-        if (isAnimating || imageCharacter == null || target == null) yield break;
+        if (isAnimating || imageCharacter == null || target == null)
+            yield break;
         isAnimating = true;
 
         // ✅ Ambos están bajo el mismo Canvas Overlay, por lo que usamos posiciones locales directamente
         Vector2 localTarget = target.anchoredPosition;
 
-        Debug.Log($"🎯 Movimiento: {imageCharacter.anchoredPosition} → {localTarget} → {finalCharacterPos}");
+        Debug.Log(
+            $"🎯 Movimiento: {imageCharacter.anchoredPosition} → {localTarget} → {finalCharacterPos}"
+        );
 
         // 🔹 Movimiento parabólico hasta el botón
         yield return MoveToCurve(imageCharacter, localTarget);
@@ -1302,8 +1295,6 @@ public class CrossRiverManager : MonoBehaviour
         isAnimating = false;
     }
 
-
-
     private IEnumerator MoveTo(RectTransform element, Vector2 targetPos)
     {
         Vector2 start = element.anchoredPosition;
@@ -1319,6 +1310,7 @@ public class CrossRiverManager : MonoBehaviour
         }
         element.anchoredPosition = targetPos;
     }
+
     // ============================================================
     // 🌀 Movimiento parabólico (trayectoria curva)
     // ============================================================
@@ -1352,8 +1344,6 @@ public class CrossRiverManager : MonoBehaviour
             animController.SetIdleFrame();
     }
 
-
-
     // ============================================================
     // 🚀 Cambiar de escena de forma genérica
     // ============================================================
@@ -1372,7 +1362,7 @@ public class CrossRiverManager : MonoBehaviour
     // ============================================================
     // 🧩 Deserialización segura para RELATE (usando JsonUtility nativo)
     // ============================================================
-    private Picofon.Games.Relate.ActivityRelate ParseRelateActivity(string json)
+    private ActivityRelate ParseRelateActivity(string json)
     {
         if (string.IsNullOrEmpty(json))
         {
@@ -1383,7 +1373,7 @@ public class CrossRiverManager : MonoBehaviour
         try
         {
             // 🔹 Usa el modelo ApiResponseRelate directamente
-            var response = JsonUtility.FromJson<Picofon.Games.Relate.ApiResponseRelate>(json);
+            var response = JsonUtility.FromJson<ApiResponseRelate>(json);
 
             if (response == null)
             {
@@ -1408,268 +1398,11 @@ public class CrossRiverManager : MonoBehaviour
 
             return activity;
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             Debug.LogError($"❌ Error al parsear modo Relate: {ex.Message}");
             return null;
         }
     }
-    private IEnumerator NextActivity()
-    {
-        yield return new WaitForSeconds(0.5f);
-
-        currentActivityIndex++;
-
-        // Judge
-        if (currentTaskType == 1)
-        {
-            if (currentActivityIndex < judgeActivities.Count)
-            {
-                LoadJudgeMode(judgeActivities[currentActivityIndex]);
-                yield break;
-            }
-        }
-
-        // Select
-        if (currentTaskType == 2)
-        {
-            if (currentActivityIndex < selectActivities.Count)
-            {
-                LoadSelectMode(selectActivities[currentActivityIndex]);
-                yield break;
-            }
-        }
-
-        // Relate
-        if (currentTaskType == 3)
-        {
-            if (currentActivityIndex < relateActivities.Count)
-            {
-                LoadRelateMode(relateActivities[currentActivityIndex]);
-                yield break;
-            }
-        }
-
-        // Si ya no quedan actividades → pedir nuevo set
-        Debug.Log(" FIN DEL GRUPO → Cargar nuevo set");
-        currentActivityIndex = 0; 
-        StartCoroutine(LoadModeFromAPI(currentTaskType));
-    }
-
-
-    private void OnEyePressed()
-    {
-        // If labels are currently displayed, hide immediately
-        if (eyeRoutine != null)
-        {
-            StopCoroutine(eyeRoutine);
-            HideAllLabels();
-            return;
-        }
-
-        // Otherwise show the labels for the active mode
-        ShowLabelsForCurrentMode();
-        eyeRoutine = StartCoroutine(AutoHideLabels());
-    }
-    private void ShowLabelsForCurrentMode()
-    {
-        HideAllLabels(); // Clean existing labels
-
-        // ----- MODE 1: JUDGE -----
-        if (currentTaskType == 1 && lastActivityShown != null)
-        {
-            CreateTextUnderImage(firstImage, lastActivityShown.word1.word);
-            CreateTextUnderImage(secondImage, lastActivityShown.word2.word);
-            return;
-        }
-
-        // ----- MODE 2: SELECT -----
-        if (currentTaskType == 2 && selectActivities.Count > 0)
-        {
-            var activity = selectActivities[currentActivityIndex];
-
-            // Obtener los 4 botones generados
-            foreach (var btn in spawnedButtons)
-            {
-                RectTransform rect = btn.GetComponent<RectTransform>();
-                if (rect == null) continue;
-
-                string word = ExtractWordFromSelectButton(activity, btn.name);
-                if (string.IsNullOrEmpty(word)) continue;
-
-                CreateTextUnderSelectButton(rect, word);
-            }
-            return;
-        }
-
-        // ----- MODE 3: RELATE -----
-        if (currentTaskType == 3 && relateActivities.Count > 0)
-        {
-            var activity = relateActivities[currentActivityIndex];
-
-            // 1) Texto bajo la imagen principal (main_word)
-            CreateTextUnderImage(imageMain, activity.main_word.word);
-
-            // 2) Texto bajo los 4 prefabs
-            foreach (var btn in spawnedButtons)
-            {
-                RectTransform rect = btn.GetComponent<RectTransform>();
-                if (rect == null) continue;
-
-                string word = ExtractWordFromRelateButton(activity, btn.name);
-                if (string.IsNullOrEmpty(word)) continue;
-
-                CreateTextUnderSelectButton(rect, word);
-            }
-
-            return;
-        }
-
-    }
-    private string ExtractWordFromSelectButton(ActivitySelect activity, string buttonName)
-    {
-        var holder = GameObject.Find(buttonName)?.GetComponent<TempWordHolder>();
-        return holder != null ? holder.word : null;
-    }
-
-
-    private void CreateTextUnderSelectButton(RectTransform buttonRT, string text)
-    {
-        if (buttonRT == null || canvasRoot == null)
-            return;
-
-        Transform bgChild = buttonRT.Find("BackgroundLifebelt");
-        if (bgChild == null)
-        {
-            Debug.LogWarning("BackgroundLifebelt not found in prefab.");
-            return;
-        }
-
-        RectTransform bgRT = bgChild.GetComponent<RectTransform>();
-        if (bgRT == null)
-        {
-            Debug.LogWarning("BackgroundLifebelt has no RectTransform.");
-            return;
-        }
-
-        // Step 1: calculate world position of the lifebelt
-        Vector3 worldPos = bgRT.TransformPoint(Vector3.zero);
-
-        // Step 2: convert world position to canvasRoot local space
-        Vector2 canvasLocalPos;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvasRoot as RectTransform,
-            RectTransformUtility.WorldToScreenPoint(null, worldPos),
-            null,
-            out canvasLocalPos
-        );
-
-        // Step 3: create the label under canvasRoot
-        GameObject go = new GameObject("DynamicSelectLabel", typeof(RectTransform));
-        go.transform.SetParent(canvasRoot, false);
-
-        TextMeshProUGUI label = go.AddComponent<TextMeshProUGUI>();
-        label.text = text.Replace("#", "").ToUpper();
-        label.fontSize = JUDGE_FONT_SIZE;
-        label.enableAutoSizing = false;
-        label.color = Color.white;
-        label.alignment = TextAlignmentOptions.Center;
-        label.fontStyle = JUDGE_USE_BOLD ? FontStyles.Bold : FontStyles.Normal;
-
-        RectTransform labelRT = go.GetComponent<RectTransform>();
-        labelRT.sizeDelta = new Vector2(600, 120);
-
-        // Step 4: apply offset correctly in canvas coordinates
-        labelRT.anchoredPosition = new Vector2(canvasLocalPos.x, canvasLocalPos.y - SELECT_Y_OFFSET);
-
-        activeLabels.Add(label);
-    }
-
-
-
-
-    private void CreateTextUnderImage(Image img, string text)
-    {
-        if (img == null || canvasRoot == null)
-            return;
-
-        RectTransform imgRT = img.GetComponent<RectTransform>();
-
-        Vector3 worldPos = imgRT.TransformPoint(Vector3.zero);
-
-        Vector2 canvasLocalPos;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvasRoot as RectTransform,
-            RectTransformUtility.WorldToScreenPoint(null, worldPos),
-            null,
-            out canvasLocalPos
-        );
-
-        GameObject go = new GameObject("DynamicJudgeLabel", typeof(RectTransform));
-        go.transform.SetParent(canvasRoot, false);
-
-        TextMeshProUGUI label = go.AddComponent<TextMeshProUGUI>();
-        label.text = text.Replace("#", "").ToUpper();
-        label.fontSize = JUDGE_FONT_SIZE;
-        label.enableAutoSizing = false;
-        label.color = Color.white;
-        label.alignment = TextAlignmentOptions.Center;
-        label.fontStyle = JUDGE_USE_BOLD ? FontStyles.Bold : FontStyles.Normal;
-
-        RectTransform labelRT = go.GetComponent<RectTransform>();
-        labelRT.sizeDelta = new Vector2(700, 140);
-
-        labelRT.anchoredPosition = new Vector2(canvasLocalPos.x, canvasLocalPos.y - JUDGE_Y_OFFSET);
-
-        activeLabels.Add(label);
-    }
-
-
-
-
-    private void HideAllLabels()
-    {
-        foreach (var label in activeLabels)
-            if (label != null) Destroy(label.gameObject);
-
-        activeLabels.Clear();
-        eyeRoutine = null;
-    }
-    private IEnumerator AutoHideLabels()
-    {
-        yield return new WaitForSeconds(eyeDuration);
-        HideAllLabels();
-    }
-    private string ExtractWordFromRelateButton(ActivityRelate activity, string buttonName)
-    {
-        var holder = GameObject.Find(buttonName)?.GetComponent<TempWordHolder>();
-        return holder != null ? holder.word : null;
-    }
-
-    private class TempWordHolder : MonoBehaviour
-    {
-        public string word;
-    }
-    private void ShowWhiteBubblesForMode(int mode)
-    {
-        if (whiteBubble01 != null) whiteBubble01.gameObject.SetActive(false);
-        if (whiteBubble02 != null) whiteBubble02.gameObject.SetActive(false);
-        if (whiteBubble03 != null) whiteBubble03.gameObject.SetActive(false);
-
-        if (mode == 3)
-        {
-            if (whiteBubble01 != null) whiteBubble01.gameObject.SetActive(true);
-            return;
-        }
-
-        if (mode == 1)
-        {
-            if (whiteBubble02 != null) whiteBubble02.gameObject.SetActive(true);
-            if (whiteBubble03 != null) whiteBubble03.gameObject.SetActive(true);
-            return;
-        }
-
-    }
-
-
 }
+

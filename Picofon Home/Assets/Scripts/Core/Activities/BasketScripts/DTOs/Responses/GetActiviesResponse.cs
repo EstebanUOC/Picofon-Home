@@ -21,19 +21,25 @@ namespace BasketResponses
         public static ApiResult<T> Fail(string message) => new(false, message, default);
     }
 
-    public class ActivitiesData
+    public class ActivitiesData<T>
     {
         [JsonInclude]
-        public Activity[] Activities { get; set; }
+        public T[] Activities { get; set; }
     }
 
-    public class Activity
+    public class JudgeActivity
     {
         [JsonInclude]
         public WordInfo[] Words { get; set; }
 
         [JsonInclude]
         public bool Answer { get; set; }
+    }
+
+    public class SelectActivity
+    {
+        [JsonInclude]
+        public WordInfo[] Words { get; set; }
     }
 
     public class WordInfo
