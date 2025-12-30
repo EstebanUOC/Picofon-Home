@@ -30,8 +30,8 @@ public class BasketManager : MonoBehaviour
 
     public event Action<bool> OnClueActived
     {
-        add { ClueController.OnClueActived += value; }
-        remove { ClueController.OnClueActived -= value; }
+        add { ClueController.OnClueChanged += value; }
+        remove { ClueController.OnClueChanged -= value; }
     }
 
     public event Action<HoopType> OnAnswerSelected

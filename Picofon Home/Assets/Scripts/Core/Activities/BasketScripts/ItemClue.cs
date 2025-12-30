@@ -18,7 +18,7 @@ public sealed class ItemClue : MonoBehaviour
 
     public void Awake()
     {
-        WordItemView _item = GetComponent<WordItemView>();
+        ItemView _item = GetComponent<ItemView>();
 
         _text = _item.Text;
         _image = _item.Icon;

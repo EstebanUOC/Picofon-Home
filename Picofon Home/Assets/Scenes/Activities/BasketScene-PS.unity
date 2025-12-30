@@ -817,6 +817,7 @@ GameObject:
   - component: {fileID: 265748518}
   - component: {fileID: 265748519}
   - component: {fileID: 265748520}
+  - component: {fileID: 265748521}
   m_Layer: 5
   m_Name: Word Item
   m_TagString: Untagged
@@ -881,6 +882,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveOffsetY: 17
   _moveDuration: 0.2
+--- !u!114 &265748521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 265748516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6078a4704b39a2985b751c3092d1ed87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &293795640
 GameObject:
   m_ObjectHideFlags: 0
@@ -2097,6 +2110,7 @@ GameObject:
   - component: {fileID: 1009580919}
   - component: {fileID: 1009580920}
   - component: {fileID: 1009580921}
+  - component: {fileID: 1009580922}
   m_Layer: 5
   m_Name: Word Item
   m_TagString: Untagged
@@ -2161,6 +2175,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveOffsetY: 17
   _moveDuration: 0.2
+--- !u!114 &1009580922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1009580917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6078a4704b39a2985b751c3092d1ed87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1032361061
 GameObject:
   m_ObjectHideFlags: 0
@@ -3537,6 +3563,7 @@ GameObject:
   - component: {fileID: 1518904661}
   - component: {fileID: 1518904660}
   - component: {fileID: 1518904659}
+  - component: {fileID: 1518904662}
   m_Layer: 5
   m_Name: Clue Button
   m_TagString: Untagged
@@ -3646,6 +3673,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1518904657}
   m_CullTransparentMesh: 1
+--- !u!114 &1518904662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518904657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a40b28c79584d9c338df26f1881600f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1545107480
 GameObject:
   m_ObjectHideFlags: 0
@@ -4953,6 +4992,7 @@ GameObject:
   - component: {fileID: 1888805663}
   - component: {fileID: 1888805664}
   - component: {fileID: 1888805665}
+  - component: {fileID: 1888805666}
   m_Layer: 5
   m_Name: Word Item
   m_TagString: Untagged
@@ -5017,6 +5057,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveOffsetY: 17
   _moveDuration: 0.2
+--- !u!114 &1888805666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888805661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6078a4704b39a2985b751c3092d1ed87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1910448107
 GameObject:
   m_ObjectHideFlags: 0
@@ -5106,6 +5158,7 @@ GameObject:
   - component: {fileID: 1947540101}
   - component: {fileID: 1947540102}
   - component: {fileID: 1947540103}
+  - component: {fileID: 1947540104}
   m_Layer: 5
   m_Name: Word Item
   m_TagString: Untagged
@@ -5170,6 +5223,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveOffsetY: 17
   _moveDuration: 0.2
+--- !u!114 &1947540104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947540098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6078a4704b39a2985b751c3092d1ed87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1981592649
 GameObject:
   m_ObjectHideFlags: 0
@@ -5518,8 +5583,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2105849199}
+  - component: {fileID: 2105849200}
   m_Layer: 5
-  m_Name: Items
+  m_Name: Item Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5548,6 +5614,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 163.6}
   m_SizeDelta: {x: 0, y: 218}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2105849200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105849198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a33bb93fa8cf90d7eb0f7c78fb18d295, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _items:
+  - {fileID: 265748520}
+  - {fileID: 1947540103}
+  - {fileID: 1888805665}
+  - {fileID: 1009580921}
+  _clueController: {fileID: 1518904662}
 --- !u!1001 &6888632176787185349
 PrefabInstance:
   m_ObjectHideFlags: 0
