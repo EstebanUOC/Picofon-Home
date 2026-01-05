@@ -16,9 +16,12 @@ public class BallMovement : MonoBehaviour
     private Rigidbody2D _body;
 
     private float _time = 0;
+
+    private float _prevRaw = 0f;
+    private float _freq = 5;
+
     private bool _isFlying = false;
     private bool _isDribling = true;
-    private bool _hasBounced = false;
 
     public void Start()
     {
@@ -43,7 +46,6 @@ public class BallMovement : MonoBehaviour
             if (t01 >= 1)
             {
                 _body.bodyType = RigidbodyType2D.Dynamic;
-                // body.velocity = new Vector2(-1, -1) * 12.5f;
                 _body.velocity = new Vector2(1, -1) * 12.5f;
                 _isFlying = false;
             }
@@ -51,11 +53,19 @@ public class BallMovement : MonoBehaviour
 
         if (_isDribling)
         {
-            float nose = Mathf.Sin(_time * 5);
             _time += Time.deltaTime;
-            Debug.Log(nose);
-            Vector3 drible = Vector3.up * Mathf.Abs(nose);
-            transform.position = _driblePosition.position + drible;
+            float raw = Mathf.Sin(_time * _freq);
+            float y = Mathf.Abs(raw);
+
+            transform.position = _driblePosition.position + Vector3.up * y;
+
+            bool bounce = _prevRaw < 0 && raw >= 0f || _prevRaw > 0f && raw <= 0f;
+            if (bounce)
+            {
+                AudioManager.Instance.PlaySFX(_bounceSfx);
+            }
+
+            _prevRaw = raw;
         }
     }
 
