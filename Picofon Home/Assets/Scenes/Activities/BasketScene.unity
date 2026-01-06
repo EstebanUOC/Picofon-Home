@@ -3105,8 +3105,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1297390235}
   - component: {fileID: 1297390236}
+  - component: {fileID: 1297390241}
+  - component: {fileID: 1297390240}
   - component: {fileID: 1297390237}
   - component: {fileID: 1297390238}
+  - component: {fileID: 1297390239}
   m_Layer: 5
   m_Name: Word Item
   m_TagString: Untagged
@@ -3189,6 +3192,57 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveOffsetY: 28
   _moveDuration: 0.2
+--- !u!114 &1297390239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297390234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6078a4704b39a2985b751c3092d1ed87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSound: {fileID: 8300000, guid: 20b32ab898ee428d0854a65eb2f93c4c, type: 3}
+--- !u!114 &1297390240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297390234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1297390241
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297390234}
+  m_CullTransparentMesh: 1
 --- !u!1 &1463158669
 GameObject:
   m_ObjectHideFlags: 0
@@ -4151,8 +4205,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1654905385}
   - component: {fileID: 1654905386}
+  - component: {fileID: 1654905391}
+  - component: {fileID: 1654905390}
   - component: {fileID: 1654905387}
   - component: {fileID: 1654905388}
+  - component: {fileID: 1654905389}
   m_Layer: 5
   m_Name: Word Item
   m_TagString: Untagged
@@ -4235,6 +4292,57 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveOffsetY: 28
   _moveDuration: 0.2
+--- !u!114 &1654905389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1654905384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6078a4704b39a2985b751c3092d1ed87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSound: {fileID: 8300000, guid: c79e9653ee16ad08e83bde0584e0af1f, type: 3}
+--- !u!114 &1654905390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1654905384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1654905391
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1654905384}
+  m_CullTransparentMesh: 1
 --- !u!1 &1696328810
 GameObject:
   m_ObjectHideFlags: 0
