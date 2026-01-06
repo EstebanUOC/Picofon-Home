@@ -62,7 +62,7 @@ public class BallMovement : MonoBehaviour
             bool bounce = _prevRaw < 0 && raw >= 0f || _prevRaw > 0f && raw <= 0f;
             if (bounce)
             {
-                AudioManager.Instance.PlaySFX(_bounceSfx);
+                AudioManager.Instance.PlaySFX(_bounceSfx, 0.15f);
             }
 
             _prevRaw = raw;

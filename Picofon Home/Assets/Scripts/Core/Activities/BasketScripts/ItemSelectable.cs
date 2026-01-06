@@ -18,7 +18,8 @@ public sealed class ItemSelectable : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        AudioManager.Instance.PlaySFX(_clickSound);
+        AudioManager.Instance.StopUI();
+        AudioManager.Instance.PlayUI(_clickSound);
         OnItemSelected?.Invoke(_itemView);
     }
 }

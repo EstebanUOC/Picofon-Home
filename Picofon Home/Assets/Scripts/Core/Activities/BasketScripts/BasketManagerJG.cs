@@ -10,7 +10,7 @@ public enum HoopType
     Negative,
 }
 
-public enum AnswerResult
+public enum AnswerEvaluation
 {
     Correct,
     Incorrect,
@@ -21,7 +21,6 @@ public class BasketGameManagerJG : MonoBehaviour
     [Space(15)]
     [SerializeField]
     private FeedbackController _feedbackController;
-    public AnswerControllerJG AnswerController;
 
     [SerializeField]
     private BallController _ballController;
@@ -31,7 +30,26 @@ public class BasketGameManagerJG : MonoBehaviour
     private HoopManager _hoopManager;
 
     [SerializeField]
+    private AnswerManagerJG _answerManager;
+
+    [SerializeField]
     private BasketUIManager _uiManager;
+
+    [Space(15)]
+    [SerializeField]
+    private AudioClip _instructionClip;
+
+    [SerializeField]
+    private AudioClip _positiveYesClip;
+
+    [SerializeField]
+    private AudioClip _positiveNoClip;
+
+    [SerializeField]
+    private AudioClip _negativeYesClip;
+
+    [SerializeField]
+    private AudioClip _negativeNoClip;
 
     private int _currentActivityIndex = 0;
 
@@ -46,7 +64,7 @@ public class BasketGameManagerJG : MonoBehaviour
     {
         Application.targetFrameRate = 60;
 
-        AnswerController.OnAnswerSelected += HandleAnswerSelected;
+        _answerManager.OnAnswerSelected += HandleAnswerSelected;
 
         _feedbackController.Init();
 
@@ -79,6 +97,14 @@ public class BasketGameManagerJG : MonoBehaviour
         }
 
         ChangeActivity();
+
+        _answerManager.DisableAnswers();
+
+        AudioManager.Instance.PlayVoice(_instructionClip);
+
+        await AudioManager.Instance.WaitVoiceToEnd();
+
+        _answerManager.EnableAnswers();
     }
 
     private void HandleAnswerSelected(HoopType hoopType)
@@ -88,18 +114,35 @@ public class BasketGameManagerJG : MonoBehaviour
 
         _ballController.LaunchBall(hoopTransform);
 
-        bool answer = hoopType == HoopType.Positive;
+        bool isPositive = hoopType == HoopType.Positive;
+        bool isCorrect = _currentActivity.Answer == isPositive;
 
-        AnswerResult answerResult =
-            _currentActivity.Answer == answer ? AnswerResult.Correct : AnswerResult.Incorrect;
+        AnswerEvaluation answerResult = isCorrect
+            ? AnswerEvaluation.Correct
+            : AnswerEvaluation.Incorrect;
+
+        if (isCorrect)
+        {
+            if (isPositive)
+                AudioManager.Instance.PlayVoice(_positiveYesClip);
+            else
+                AudioManager.Instance.PlayVoice(_positiveNoClip);
+        }
+        else
+        {
+            if (isPositive)
+                AudioManager.Instance.PlayVoice(_negativeYesClip);
+            else
+                AudioManager.Instance.PlayVoice(_negativeNoClip);
+        }
 
         InitCount(answerResult).Forget();
     }
 
-    private async UniTaskVoid InitCount(AnswerResult result)
+    private async UniTaskVoid InitCount(AnswerEvaluation result)
     {
         FeedbackType feedbackType =
-            result == AnswerResult.Correct ? FeedbackType.Positive : FeedbackType.Neutral;
+            result == AnswerEvaluation.Correct ? FeedbackType.Positive : FeedbackType.Neutral;
 
         await UniTask.WaitForSeconds(2f);
 

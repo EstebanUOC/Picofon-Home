@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class AnswerControllerJG : MonoBehaviour
+public class AnswerManagerJG : MonoBehaviour
 {
     [Space(15)]
     public Answer PositiveAnswer;
@@ -18,5 +18,17 @@ public class AnswerControllerJG : MonoBehaviour
     private void AnswerSelected(HoopType hoopType)
     {
         OnAnswerSelected?.Invoke(hoopType);
+    }
+
+    public void DisableAnswers()
+    {
+        PositiveAnswer.Enabled = false;
+        NegativeAnswer.Enabled = false;
+    }
+
+    public void EnableAnswers()
+    {
+        PositiveAnswer.Enabled = true;
+        NegativeAnswer.Enabled = true;
     }
 }

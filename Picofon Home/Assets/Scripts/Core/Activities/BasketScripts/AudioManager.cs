@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -7,6 +8,12 @@ public class AudioManager : MonoBehaviour
     [Space(15)]
     [SerializeField]
     private AudioSource _sfxSource;
+
+    [SerializeField]
+    private AudioSource _uiSource;
+
+    [SerializeField]
+    private AudioSource _voiceSource;
 
     public void Awake()
     {
@@ -18,6 +25,27 @@ public class AudioManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    public void PlayVoice(AudioClip clip, float volume = 1f)
+    {
+        _voiceSource.Stop();
+        _voiceSource.PlayOneShot(clip, volume);
+    }
+
+    public UniTask WaitVoiceToEnd()
+    {
+        return UniTask.WaitWhile(() => _voiceSource.isPlaying);
+    }
+
+    public void StopUI()
+    {
+        _uiSource.Stop();
+    }
+
+    public void PlayUI(AudioClip clip, float volume = 1f)
+    {
+        _uiSource.PlayOneShot(clip, volume);
     }
 
     public void PlaySFX(AudioClip clip, float volume = 1f)
