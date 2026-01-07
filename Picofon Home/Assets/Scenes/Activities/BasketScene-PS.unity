@@ -2694,9 +2694,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9711ae0fa82adca192b04aca3422707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hoopManager: {fileID: 487383563}
-  _answerManager: {fileID: 487383564}
   _ballController: {fileID: 1628458931}
+  _answerManager: {fileID: 487383564}
+  _hoopManager: {fileID: 487383563}
+  _uiManager: {fileID: 2128032408}
 --- !u!1 &1075156704
 GameObject:
   m_ObjectHideFlags: 0
