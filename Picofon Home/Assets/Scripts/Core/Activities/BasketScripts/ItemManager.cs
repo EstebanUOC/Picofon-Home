@@ -18,7 +18,7 @@ public class ItemManager : MonoBehaviour
         {
             ItemSelectable selectable = item.GetComponent<ItemSelectable>();
 
-            if (selectable == null)
+            if (selectable is null)
                 break;
 
             selectable.OnItemSelected += PlayItemSound;
