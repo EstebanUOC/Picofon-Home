@@ -1117,7 +1117,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _text: {fileID: 179568710}
-  _audioClip: {fileID: 8300000, guid: bd146f27d8f9a50afa793b78726cd314, type: 3}
 --- !u!114 &402061728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1253,7 +1252,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _text: {fileID: 1252143627}
-  _audioClip: {fileID: 8300000, guid: 3af61e2a6ae9b8e8bba099fe771b3cbd, type: 3}
 --- !u!114 &402176477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2175,6 +2173,10 @@ MonoBehaviour:
   _answerManager: {fileID: 1277141778}
   _uiManager: {fileID: 94296185}
   _instructionClip: {fileID: 8300000, guid: 58e526e6a94c6744897d1241e07f1196, type: 3}
+  _positiveYesClip: {fileID: 8300000, guid: bd146f27d8f9a50afa793b78726cd314, type: 3}
+  _positiveNoClip: {fileID: 8300000, guid: 3af61e2a6ae9b8e8bba099fe771b3cbd, type: 3}
+  _negativeYesClip: {fileID: 8300000, guid: c353e6cbaf379d7eab6204067b07bef6, type: 3}
+  _negativeNoClip: {fileID: 8300000, guid: 33e701996fd03834ca737aebb362596a, type: 3}
 --- !u!1 &1075156704
 GameObject:
   m_ObjectHideFlags: 0
