@@ -2,32 +2,40 @@ using UnityEngine;
 
 public class BallMovement : MonoBehaviour
 {
-    public Transform DriblePosition;
+    [SerializeField]
+    private Transform _driblePosition;
 
-    private float time = 0;
-    private readonly float duration = 1;
+    [SerializeField]
+    private AudioClip _bounceSfx;
 
-    private Vector3 initial;
-    private bool ballIsFlying = false;
-    private bool ballIsDribling = true;
+    private const float _duration = 1;
 
     private Transform TargetPosition { get; set; }
 
-    private Rigidbody2D body;
+    private Vector3 _initial;
+    private Rigidbody2D _body;
+
+    private float _time = 0;
+
+    private float _prevRaw = 0f;
+    private float _freq = 5;
+
+    private bool _isFlying = false;
+    private bool _isDribling = true;
 
     public void Start()
     {
-        body = GetComponent<Rigidbody2D>();
+        _body = GetComponent<Rigidbody2D>();
     }
 
     public void FixedUpdate()
     {
-        if (ballIsFlying)
+        if (_isFlying)
         {
-            time += Time.deltaTime;
-            float t01 = time / duration;
+            _time += Time.deltaTime;
+            float t01 = _time / _duration;
 
-            Vector3 a = initial;
+            Vector3 a = _initial;
             Vector3 b = TargetPosition.position;
 
             Vector3 pos = Vector3.Lerp(a, b, t01);
@@ -37,18 +45,27 @@ public class BallMovement : MonoBehaviour
 
             if (t01 >= 1)
             {
-                body.bodyType = RigidbodyType2D.Dynamic;
-                // body.velocity = new Vector2(-1, -1) * 12.5f;
-                body.velocity = new Vector2(1, -1) * 12.5f;
-                ballIsFlying = false;
+                _body.bodyType = RigidbodyType2D.Dynamic;
+                _body.velocity = new Vector2(1, -1) * 12.5f;
+                _isFlying = false;
             }
         }
 
-        if (ballIsDribling)
+        if (_isDribling)
         {
-            time += Time.deltaTime;
-            Vector3 drible = Vector3.up * Mathf.Abs(Mathf.Sin(time * 5));
-            transform.position = DriblePosition.position + drible;
+            _time += Time.deltaTime;
+            float raw = Mathf.Sin(_time * _freq);
+            float y = Mathf.Abs(raw);
+
+            transform.position = _driblePosition.position + Vector3.up * y;
+
+            bool bounce = _prevRaw < 0 && raw >= 0f || _prevRaw > 0f && raw <= 0f;
+            if (bounce)
+            {
+                AudioManager.Instance.PlaySFX(_bounceSfx, 0.15f);
+            }
+
+            _prevRaw = raw;
         }
     }
 
@@ -56,23 +73,23 @@ public class BallMovement : MonoBehaviour
     {
         TargetPosition = target;
 
-        body.bodyType = RigidbodyType2D.Kinematic;
-        body.angularVelocity = 200;
-        initial = transform.position;
-        time = 0;
+        _body.bodyType = RigidbodyType2D.Kinematic;
+        _body.angularVelocity = 200;
+        _initial = transform.position;
+        _time = 0;
 
-        ballIsFlying = true;
-        ballIsDribling = false;
+        _isFlying = true;
+        _isDribling = false;
     }
 
     public void Reset()
     {
-        transform.position = DriblePosition.position;
-        body.bodyType = RigidbodyType2D.Kinematic;
-        body.angularVelocity = 0;
-        body.rotation = 0;
-        body.velocity = Vector2.zero;
+        transform.position = _driblePosition.position;
+        _body.bodyType = RigidbodyType2D.Kinematic;
+        _body.angularVelocity = 0;
+        _body.rotation = 0;
+        _body.velocity = Vector2.zero;
 
-        ballIsDribling = true;
+        _isDribling = true;
     }
 }

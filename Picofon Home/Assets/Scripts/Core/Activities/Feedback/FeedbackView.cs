@@ -14,10 +14,6 @@ public class FeedbackView : MonoBehaviour
     public GameObject FeedbackPositive;
     public GameObject FeedbackNeutral;
 
-    [Space(15)]
-    public WordItemController WordItemLeft;
-    public WordItemController WordItemRight;
-
     public event Action OnContinueClicked;
 
     public void Start()
@@ -35,9 +31,6 @@ public class FeedbackView : MonoBehaviour
 
         FeedbackPositive.SetActive(isPositive);
         FeedbackNeutral.SetActive(!isPositive);
-
-        WordItemLeft.ConfigureItemByType(feedbackType);
-        WordItemRight.ConfigureItemByType(feedbackType);
     }
 
     private void HandleContinueClicked()

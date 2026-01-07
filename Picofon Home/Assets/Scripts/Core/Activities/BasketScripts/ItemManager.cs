@@ -1,27 +1,23 @@
+using BasketResponses;
 using UnityEngine;
 
 public class ItemManager : MonoBehaviour
 {
     [Space(15)]
     [SerializeField]
-    private ItemClue[] _items;
+    private GameObject[] _items;
 
-    [SerializeField]
-    private ClueController _clueController;
+    public GameObject[] Items => _items;
 
-    public void Awake()
+    public void SetItemsContent(in ViewContentDTO content)
     {
-        _clueController.OnClueChanged += OnClueChanged;
-    }
+        if (content.Icons.Length != _items.Length)
+            return;
 
-    private void OnClueChanged(bool showClue)
-    {
-        foreach (var item in _items)
+        for (int i = 0; i < _items.Length; i++)
         {
-            if (showClue)
-                item.ShowClue();
-            else
-                item.HideClue();
+            ItemView view = _items[i].GetComponent<ItemView>();
+            view.SetContent(content.Icons[i], content.Texts[i]);
         }
     }
 }
