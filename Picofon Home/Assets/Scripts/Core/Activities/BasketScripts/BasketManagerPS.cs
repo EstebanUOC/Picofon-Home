@@ -48,12 +48,5 @@ public class BasketManagerPS : MonoBehaviour
     private void ChangeActivity()
     {
         _currentActivity = _activities[0];
-
-        foreach (var word in _currentActivity.Words)
-        {
-            Debug.Log(
-                $"Word: {word.Word}, Path: {word.Path}, Syllabified: {word.SyllabifiedWord}, Sound: {word.Sound}"
-            );
-        }
     }
 }
