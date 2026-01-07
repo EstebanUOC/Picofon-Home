@@ -3251,7 +3251,6 @@ GameObject:
   - component: {fileID: 1297390240}
   - component: {fileID: 1297390237}
   - component: {fileID: 1297390238}
-  - component: {fileID: 1297390239}
   m_Layer: 5
   m_Name: Word Item
   m_TagString: Untagged
@@ -3334,19 +3333,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveOffsetY: 28
   _moveDuration: 0.2
---- !u!114 &1297390239
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1297390234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6078a4704b39a2985b751c3092d1ed87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _clickSound: {fileID: 8300000, guid: 20b32ab898ee428d0854a65eb2f93c4c, type: 3}
 --- !u!114 &1297390240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4479,7 +4465,6 @@ GameObject:
   - component: {fileID: 1654905390}
   - component: {fileID: 1654905387}
   - component: {fileID: 1654905388}
-  - component: {fileID: 1654905389}
   m_Layer: 5
   m_Name: Word Item
   m_TagString: Untagged
@@ -4562,19 +4547,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveOffsetY: 28
   _moveDuration: 0.2
---- !u!114 &1654905389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1654905384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6078a4704b39a2985b751c3092d1ed87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _clickSound: {fileID: 8300000, guid: c79e9653ee16ad08e83bde0584e0af1f, type: 3}
 --- !u!114 &1654905390
 MonoBehaviour:
   m_ObjectHideFlags: 0
