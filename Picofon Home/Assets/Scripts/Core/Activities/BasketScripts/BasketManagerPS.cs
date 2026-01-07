@@ -5,6 +5,16 @@ using ActivitiesResult = BasketResponses.ApiResult<BasketResponses.ActivitiesDat
 
 public class BasketManagerPS : MonoBehaviour
 {
+    [Space(15)]
+    [SerializeField]
+    private HoopManager _hoopManager;
+
+    [SerializeField]
+    private AnswerManagerPS _answerManager;
+
+    [SerializeField]
+    private BallController _ballController;
+
     private SelectActivity[] _activities;
     private SelectActivity _currentActivity;
 
@@ -13,6 +23,8 @@ public class BasketManagerPS : MonoBehaviour
         Application.targetFrameRate = 60;
 
         LoadActivities().Forget();
+
+        _answerManager.OnHoopSelected += HandleHoopSelected;
     }
 
     private async UniTaskVoid LoadActivities()
@@ -43,6 +55,13 @@ public class BasketManagerPS : MonoBehaviour
         }
 
         ChangeActivity();
+    }
+
+    private void HandleHoopSelected(int hoopIndex)
+    {
+        Transform hoopTransform = _hoopManager.GetHoopTransform(hoopIndex);
+
+        _ballController.LaunchBall(hoopTransform);
     }
 
     private void ChangeActivity()
