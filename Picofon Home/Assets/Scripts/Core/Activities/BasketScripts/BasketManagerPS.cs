@@ -23,6 +23,15 @@ public class BasketManagerPS : MonoBehaviour
     [SerializeField]
     private BasketUIManager _uiManager;
 
+    [SerializeField]
+    private AudioClip _instructionClip;
+
+    [SerializeField]
+    private AudioClip _positiveClip;
+
+    [SerializeField]
+    private AudioClip _negativeClip;
+
     private int _currentActivityIndex = 0;
 
     private SelectActivity[] _activities;
@@ -71,6 +80,9 @@ public class BasketManagerPS : MonoBehaviour
         }
 
         ChangeActivity();
+
+        AudioManager.Instance.PlayVoice(_instructionClip);
+        await AudioManager.Instance.WaitVoiceToEnd();
     }
 
     private void HandleHoopSelected(int hoopIndex)
@@ -80,6 +92,10 @@ public class BasketManagerPS : MonoBehaviour
         _ballController.LaunchBall(hoopTransform);
 
         bool isCorrect = _currentActivity.Words[hoopIndex].Answer;
+
+        AudioClip clip = isCorrect ? _positiveClip : _negativeClip;
+
+        AudioManager.Instance.PlayVoice(clip);
 
         InitCount(isCorrect).Forget();
     }

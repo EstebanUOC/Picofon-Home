@@ -176,20 +176,20 @@ public class BasketService
                         ""answer"": false
                     },
                     {
-                        ""word"": ""maça"",
-                        ""path"": ""IMG_0011.png"",
-                        ""id"": 2908,
-                        ""syllabified_word"": ""ma#ça"",
-                        ""word_sound"": ""sound00x.wav"",
-                        ""answer"": false
-                    },
-                    {
                         ""word"": ""nadal"",
                         ""path"": ""IMG_0311.png"",
                         ""id"": 3230,
                         ""syllabified_word"": ""na#dal"",
                         ""word_sound"": ""sound00x.wav"",
                         ""answer"": true
+                    },
+                    {
+                        ""word"": ""maça"",
+                        ""path"": ""IMG_0011.png"",
+                        ""id"": 2908,
+                        ""syllabified_word"": ""ma#ça"",
+                        ""word_sound"": ""sound00x.wav"",
+                        ""answer"": false
                     },
                     {
                         ""word"": ""matí"",
