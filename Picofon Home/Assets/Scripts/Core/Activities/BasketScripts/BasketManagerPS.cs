@@ -36,9 +36,11 @@ public class BasketManagerPS : MonoBehaviour
     {
         Application.targetFrameRate = 60;
 
-        LoadActivities().Forget();
-
         _answerManager.OnHoopSelected += HandleHoopSelected;
+
+        _feedbackController.Init();
+
+        LoadActivities().Forget();
     }
 
     private async UniTaskVoid LoadActivities()
