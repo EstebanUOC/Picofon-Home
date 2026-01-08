@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Firebase.Auth;
-using Google;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour

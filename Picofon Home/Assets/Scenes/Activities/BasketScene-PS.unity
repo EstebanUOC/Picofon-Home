@@ -7000,6 +7000,7 @@ MonoBehaviour:
   _itemManager: {fileID: 2105849200}
   _itemClueManager: {fileID: 2105849201}
   _clueController: {fileID: 1518904662}
+  _exitButton: {fileID: 956518091}
 --- !u!4 &2128032409
 Transform:
   m_ObjectHideFlags: 0
