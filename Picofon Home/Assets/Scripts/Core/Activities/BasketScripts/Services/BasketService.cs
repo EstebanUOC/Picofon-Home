@@ -168,34 +168,34 @@ public class BasketService
             {
                 ""words"": [
                     {
-                        ""word"": ""martell"",
-                        ""path"": ""IMG_0019.png"",
-                        ""id"": 1003,
-                        ""syllabified_word"": ""mar#tell"",
+                        ""word"": ""maki"",
+                        ""path"": ""IMG_0012.png"",
+                        ""id"": 2909,
+                        ""syllabified_word"": ""ma#ki"",
+                        ""word_sound"": ""sound00x.wav"",
+                        ""answer"": false
+                    },
+                    {
+                        ""word"": ""maça"",
+                        ""path"": ""IMG_0011.png"",
+                        ""id"": 2908,
+                        ""syllabified_word"": ""ma#ça"",
+                        ""word_sound"": ""sound00x.wav"",
+                        ""answer"": false
+                    },
+                    {
+                        ""word"": ""nadal"",
+                        ""path"": ""IMG_0311.png"",
+                        ""id"": 3230,
+                        ""syllabified_word"": ""na#dal"",
                         ""word_sound"": ""sound00x.wav"",
                         ""answer"": true
                     },
                     {
-                        ""word"": ""calze"",
-                        ""path"": ""IMG_0031.png"",
-                        ""id"": 1004,
-                        ""syllabified_word"": ""cal#ze"",
-                        ""word_sound"": ""sound00x.wav"",
-                        ""answer"": false
-                    },
-                    {
-                        ""word"": ""dames"",
-                        ""path"": ""img3.png"",
-                        ""id"": 1003,
-                        ""syllabified_word"": ""da#mes"",
-                        ""word_sound"": ""sound00x.wav"",
-                        ""answer"": false
-                    },
-                    {
-                        ""word"": ""mare"",
-                        ""path"": ""img2.png"",
-                        ""id"": 1002,
-                        ""syllabified_word"": ""ma#re"",
+                        ""word"": ""matí"",
+                        ""path"": ""IMG_0016.png"",
+                        ""id"": 2914,
+                        ""syllabified_word"": ""ma#tí"",
                         ""word_sound"": ""sound00x.wav"",
                         ""answer"": false
                     }

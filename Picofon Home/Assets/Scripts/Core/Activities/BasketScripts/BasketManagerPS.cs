@@ -78,6 +78,21 @@ public class BasketManagerPS : MonoBehaviour
         Transform hoopTransform = _hoopManager.GetHoopTransform(hoopIndex);
 
         _ballController.LaunchBall(hoopTransform);
+
+        bool isCorrect = _currentActivity.Words[hoopIndex].Answer;
+
+        InitCount(isCorrect).Forget();
+    }
+
+    private async UniTaskVoid InitCount(bool isCorrect)
+    {
+        FeedbackType feedbackType = isCorrect ? FeedbackType.Positive : FeedbackType.Neutral;
+
+        await UniTask.WaitForSeconds(2f);
+
+        await _feedbackController.ShowFeedback(feedbackType);
+
+        ChangeActivity();
     }
 
     private void ChangeActivity()
@@ -108,6 +123,14 @@ public class BasketManagerPS : MonoBehaviour
         ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords);
 
         _feedbackController.SetItemsContent(in feedbackContent);
+
+        ResetActivity();
+    }
+
+    private void ResetActivity()
+    {
+        _uiManager.Reset();
+        _ballController.Reset();
     }
 
     private Sprite LoadSprite(string p)
