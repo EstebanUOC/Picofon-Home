@@ -93,13 +93,7 @@ public class BasketManagerPS : MonoBehaviour
         Span<bool> answers = stackalloc bool[4];
         for (int i = 0; i < answers.Length; i++)
         {
-            if (i == 0)
-            {
-                answers[i] = false;
-                continue;
-            }
-
-            answers[i] = true;
+            answers[i] = _currentActivity.Words[i].Answer;
         }
 
         AnswerDTO answer = new(answers);

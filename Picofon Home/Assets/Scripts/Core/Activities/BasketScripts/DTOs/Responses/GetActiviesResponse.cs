@@ -40,7 +40,7 @@ namespace BasketResponses
     public class SelectActivity
     {
         [JsonInclude]
-        public WordInfo[] Words { get; set; }
+        public WordInfoPS[] Words { get; set; }
     }
 
     public class WordInfo
@@ -57,6 +57,12 @@ namespace BasketResponses
         [JsonInclude]
         [JsonPropertyName("word_sound")]
         public string Sound { get; set; }
+    }
+
+    public class WordInfoPS : WordInfo
+    {
+        [JsonInclude]
+        public bool Answer { get; set; }
     }
 
     public readonly ref struct ViewContentDTO
