@@ -39,7 +39,8 @@ public class ItemManager : MonoBehaviour
 
     public void PlayItemSound()
     {
-        AudioManager.Instance.StopUI();
-        AudioManager.Instance.PlayUI(_clip);
+        // TODO: Re-enable audio
+        // AudioManager.Instance.StopUI();
+        // AudioManager.Instance.PlayUI(_clip);
     }
 }
