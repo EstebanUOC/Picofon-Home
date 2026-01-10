@@ -655,6 +655,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveOffsetY: 17
   _transitionDuration: 0.2
+  _targetSize: 128
 --- !u!114 &265748521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -950,9 +951,29 @@ PrefabInstance:
     m_TransformParent: {fileID: 487383562}
     m_Modifications:
     - target: {fileID: 1344080594030476, guid: e2174a4aa435899cdb81524092adb5f4, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f5618a23cacf895c696acbf3d6b21a71, type: 3}
+    - target: {fileID: 1344080594030476, guid: e2174a4aa435899cdb81524092adb5f4, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: b7df76712f71c7e4cba5f92d0589f1b1, type: 2}
+    - target: {fileID: 1267268928406468357, guid: e2174a4aa435899cdb81524092adb5f4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.73
+      objectReference: {fileID: 0}
+    - target: {fileID: 1654236756840111810, guid: e2174a4aa435899cdb81524092adb5f4, type: 3}
+      propertyPath: m_Size.x
+      value: 1.68
+      objectReference: {fileID: 0}
+    - target: {fileID: 1654236756840111810, guid: e2174a4aa435899cdb81524092adb5f4, type: 3}
+      propertyPath: m_Size.y
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1654236756840111810, guid: e2174a4aa435899cdb81524092adb5f4, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 16d9d2f9db6bb3d4c843bf949b1ffdf8, type: 3}
     - target: {fileID: 1654236756840111810, guid: e2174a4aa435899cdb81524092adb5f4, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1001,6 +1022,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7561398904556754996, guid: e2174a4aa435899cdb81524092adb5f4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769504638558309780, guid: e2174a4aa435899cdb81524092adb5f4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769504638558309780, guid: e2174a4aa435899cdb81524092adb5f4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.485
+      objectReference: {fileID: 0}
+    - target: {fileID: 8784621243641683227, guid: e2174a4aa435899cdb81524092adb5f4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.73
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1040,7 +1077,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f577e79676b0f466bb62bfb670a12aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalColor: {r: 0.09019608, g: 0.2627451, b: 0.41568628, a: 1}
+  originalColor: {r: 0.95686275, g: 0.7254902, b: 0.14509805, a: 1}
   targetColor: {r: 0.5566038, g: 0.023629395, b: 0.04599186, a: 1}
 --- !u!1 &374852577
 GameObject:
@@ -2654,6 +2691,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveOffsetY: 17
   _transitionDuration: 0.2
+  _targetSize: 128
 --- !u!114 &792681082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3542,6 +3580,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveOffsetY: 17
   _transitionDuration: 0.2
+  _targetSize: 128
 --- !u!114 &1009580922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3694,7 +3733,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 8
+  m_PixelsPerUnitMultiplier: 2.33
 --- !u!222 &1032361064
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6747,6 +6786,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveOffsetY: 17
   _transitionDuration: 0.2
+  _targetSize: 128
 --- !u!114 &1888805666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7019,6 +7059,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveOffsetY: 17
   _transitionDuration: 0.2
+  _targetSize: 128
 --- !u!114 &1947540104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7129,7 +7170,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 9
+  m_PixelsPerUnitMultiplier: 2.69
 --- !u!222 &1995234624
 CanvasRenderer:
   m_ObjectHideFlags: 0
