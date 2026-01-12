@@ -1,11 +1,12 @@
-Shader "Custom/PalletSwap"
+Shader "Custom/PalleteSwap"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _OriginalColor ("Original Color", Color) = (1,1,1,1)
         _TargetColor ("Target Color", Color) = (1,1,1,1)
+        _ExcludeColor ("Exclude Color", Color) = (0,0,0,0)
         _Tolerance ("Tolerance", Range(0, 0.5)) = 0.001
+        _Weight ("Weight", Range(0, 1)) = 1.0
     }
 
     SubShader
@@ -36,7 +37,9 @@ Shader "Custom/PalletSwap"
             float4 _MainTex_ST;
             float4 _OriginalColor;
             float4 _TargetColor;
+            float4 _ExcludeColor;
             float _Tolerance;
+            float _Weight;
 
             v2f vert(appdata v)
             {
@@ -48,7 +51,6 @@ Shader "Custom/PalletSwap"
 
             half4 frag(v2f i) : SV_Target
             {
-
                 half4 col = tex2D(_MainTex, i.uv);
 
                 if (col.a == 0)
@@ -56,12 +58,22 @@ Shader "Custom/PalletSwap"
                     return half4(0, 0, 0, 0);
                 }
 
-                if (length(col - _OriginalColor) < _Tolerance)
+                if (col.r + col.g + col.b == 0)
                 {
-                    return half4(_TargetColor.rgb, col.a);
+                    return col;
                 }
 
-                return col;
+                half4 tol = col - _ExcludeColor;
+                if (all(abs(tol.rgb) < _Tolerance))
+                {
+                    return col;
+                }
+
+                float wA = _Weight;
+                float wB = 1.0 - wA;
+                half4 newColor = (_TargetColor * wA) + (col * wB);
+
+                return newColor;
             }
 
             ENDHLSL
