@@ -5,7 +5,9 @@ public class HoopManager : MonoBehaviour
 {
     [Space(15)]
     [SerializeField]
-    private Hoop[] _hoops;
+    private GameObject[] _hoops;
+
+    public GameObject[] Hoops => _hoops;
 
     public void SetHoopStates(in AnswerDTO data)
     {
@@ -17,7 +19,7 @@ public class HoopManager : MonoBehaviour
 
         for (int i = 0; i < _hoops.Length; i++)
         {
-            Hoop hoop = _hoops[i];
+            Hoop hoop = _hoops[i].GetComponent<Hoop>();
             hoop.Blocked = !data.Answers[i];
         }
     }
@@ -30,6 +32,7 @@ public class HoopManager : MonoBehaviour
             return null;
         }
 
-        return _hoops[index].TargetPosition;
+        Hoop hoop = _hoops[index].GetComponent<Hoop>();
+        return hoop.TargetPosition;
     }
 }

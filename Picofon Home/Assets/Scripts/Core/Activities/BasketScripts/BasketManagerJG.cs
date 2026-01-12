@@ -156,14 +156,12 @@ public class BasketGameManagerJG : MonoBehaviour
         _currentActivity = _activities[_currentActivityIndex];
         _currentActivityIndex = (_currentActivityIndex + 1) % _activities.Length;
 
-        _texts[0] = _currentActivity.Words[0].Word;
-        _texts[1] = _currentActivity.Words[1].Word;
-
-        _icons[0] = LoadSprite(_currentActivity.Words[0].Path);
-        _icons[1] = LoadSprite(_currentActivity.Words[1].Path);
-
-        _syllabifiedWords[0] = _currentActivity.Words[0].SyllabifiedWord;
-        _syllabifiedWords[1] = _currentActivity.Words[1].SyllabifiedWord;
+        for (int i = 0; i < _texts.Length; i++)
+        {
+            _texts[i] = _currentActivity.Words[i].Word;
+            _icons[i] = LoadSprite(_currentActivity.Words[i].Path);
+            _syllabifiedWords[i] = _currentActivity.Words[i].SyllabifiedWord;
+        }
 
         bool leftAnswer = _currentActivity.Answer;
         bool rightAnswer = !leftAnswer;
