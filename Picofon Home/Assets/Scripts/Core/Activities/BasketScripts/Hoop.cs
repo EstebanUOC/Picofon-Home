@@ -10,6 +10,9 @@ public class Hoop : MonoBehaviour
     public CapsuleCollider2D ColliderRight;
     public CapsuleCollider2D ColliderBlocker;
 
+    [SerializeField]
+    private CapsuleCollider2D _colliderSwish;
+
     public bool Blocked
     {
         get { return _blocked; }
@@ -26,4 +29,9 @@ public class Hoop : MonoBehaviour
     }
 
     private bool _blocked = false;
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log($"Hoop triggered by {collision.name} - In: {name}");
+    }
 }

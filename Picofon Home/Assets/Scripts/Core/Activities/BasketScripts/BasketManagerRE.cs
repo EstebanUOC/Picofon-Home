@@ -37,9 +37,9 @@ public class BasketManagerRE : MonoBehaviour
     private RelateActivity[] _activities;
     private RelateActivity _currentActivity;
 
-    private readonly Sprite[] _icons = new Sprite[4];
-    private readonly string[] _texts = new string[4];
-    private readonly string[] _syllabifiedWords = new string[4];
+    private readonly Sprite[] _icons = new Sprite[5];
+    private readonly string[] _texts = new string[5];
+    private readonly string[] _syllabifiedWords = new string[5];
 
     public void Awake()
     {
@@ -116,11 +116,16 @@ public class BasketManagerRE : MonoBehaviour
         _currentActivity = _activities[_currentActivityIndex];
         _currentActivityIndex = (_currentActivityIndex + 1) % _activities.Length;
 
-        for (int i = 0; i < _texts.Length; i++)
+        _texts[0] = _currentActivity.MainWord.Word;
+        _icons[0] = LoadSprite(_currentActivity.MainWord.Path);
+        _syllabifiedWords[0] = _currentActivity.MainWord.SyllabifiedWord;
+
+        for (int i = 0; i < _texts.Length - 1; i++)
         {
-            _texts[i] = _currentActivity.Words[i].Word;
-            _icons[i] = LoadSprite(_currentActivity.Words[i].Path);
-            _syllabifiedWords[i] = _currentActivity.Words[i].SyllabifiedWord;
+            int index = i + 1;
+            _texts[index] = _currentActivity.Words[i].Word;
+            _icons[index] = LoadSprite(_currentActivity.Words[i].Path);
+            _syllabifiedWords[index] = _currentActivity.Words[i].SyllabifiedWord;
         }
 
         Span<bool> answers = stackalloc bool[4];
