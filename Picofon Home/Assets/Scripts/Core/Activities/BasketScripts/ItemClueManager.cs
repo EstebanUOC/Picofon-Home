@@ -2,13 +2,11 @@ using UnityEngine;
 
 public class ItemClueManager : MonoBehaviour
 {
-    private ItemManager _itemManager;
-
     private GameObject[] _items;
 
     public void Awake()
     {
-        _itemManager = GetComponent<ItemManager>();
+        ItemManager _itemManager = GetComponent<ItemManager>();
         _items = _itemManager.Items;
     }
 
