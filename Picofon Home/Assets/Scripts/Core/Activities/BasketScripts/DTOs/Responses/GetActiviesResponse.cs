@@ -43,6 +43,15 @@ namespace BasketResponses
         public WordInfoPS[] Words { get; set; }
     }
 
+    public class RelateActivity
+    {
+        [JsonInclude]
+        public WordInfo MainWord { get; set; }
+
+        [JsonInclude]
+        public WordInfoPS[] Words { get; set; }
+    }
+
     public class WordInfo
     {
         [JsonInclude]

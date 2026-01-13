@@ -1,6 +1,5 @@
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UI;
 
 public sealed class ItemClue : MonoBehaviour
 {
@@ -9,12 +8,15 @@ public sealed class ItemClue : MonoBehaviour
     private float _moveOffsetY = 28;
 
     [SerializeField]
-    private float _moveDuration = 0.2f;
+    private float _transitionDuration = 0.2f;
+
+    [SerializeField]
+    private int _targetSize = 128;
 
     private GameObject _image;
     private GameObject _text;
 
-    private Tween _moveTween;
+    private Sequence _clueSequence;
 
     public void Awake()
     {
@@ -25,31 +27,41 @@ public sealed class ItemClue : MonoBehaviour
 
         _text.SetActive(false);
 
-        Image _imageComponent = _image.GetComponent<Image>();
         RectTransform _imageRect = _image.GetComponent<RectTransform>();
 
-        _moveTween = _imageRect
-            .DOLocalMoveY(_moveOffsetY, _moveDuration)
+        Tween _moveTween = _imageRect
+            .DOLocalMoveY(_moveOffsetY, _transitionDuration)
             .SetAutoKill(false)
             .Pause();
 
-        _moveTween.OnComplete(() => _text.SetActive(true));
+        Vector2 targetSize = Vector2.one * _targetSize;
+
+        Tween _resizeTween = _imageRect
+            .DOSizeDelta(targetSize, _transitionDuration)
+            .SetAutoKill(false)
+            .Pause();
+
+        _clueSequence = DOTween.Sequence().SetAutoKill(false).Pause();
+
+        _clueSequence.Append(_moveTween).Join(_resizeTween);
+
+        _clueSequence.OnComplete(() => _text.SetActive(true));
     }
 
     public void ShowClue()
     {
-        _moveTween.Restart();
+        _clueSequence.Restart();
     }
 
     public void HideClue()
     {
         _text.SetActive(false);
 
-        _moveTween.PlayBackwards();
+        _clueSequence.PlayBackwards();
     }
 
     public void OnDestroy()
     {
-        _moveTween.Kill();
+        _clueSequence.Kill();
     }
 }
