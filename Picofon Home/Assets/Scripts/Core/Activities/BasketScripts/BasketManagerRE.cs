@@ -56,14 +56,11 @@ public class BasketManagerRE : MonoBehaviour
     {
         BasketService basketService = new();
 
-        ActivityRequestParams @params = new() { PlanId = "36", ChildId = "98765432M" };
+        ActivityRequestParams @params = new() { PlanId = "43", ChildId = "19013454K" };
 
-        ActivitiesResult result = await basketService.GetActivitiesP<
-            ActivitiesData<RelateActivity>
-        >(@params);
-
-        // NOTE: Wait a frame to ensure all initializations are done, Do not delete, 100% necessary
-        await UniTask.Yield();
+        ActivitiesResult result = await basketService.GetActivities<ActivitiesData<RelateActivity>>(
+            @params
+        );
 
         if (!result.Success)
         {
