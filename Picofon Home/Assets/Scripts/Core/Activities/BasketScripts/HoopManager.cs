@@ -7,6 +7,9 @@ public class HoopManager : MonoBehaviour
     [SerializeField]
     private GameObject[] _hoops;
 
+    [SerializeField]
+    private GameObject _hoopCollider;
+
     public GameObject[] Hoops => _hoops;
 
     public void SetHoopStates(in AnswerDTO data)
@@ -33,6 +36,7 @@ public class HoopManager : MonoBehaviour
         }
 
         Hoop hoop = _hoops[index].GetComponent<Hoop>();
+        hoop.Collider = _hoopCollider.GetComponent<HoopCollider>();
         return hoop.TargetPosition;
     }
 }
