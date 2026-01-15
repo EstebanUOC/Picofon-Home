@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 public class ChildService
 {
-    private const string url = "https://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/children/";
+    private const string url = "https://ehc-picofon2.techlab.uoc.edu/api/children/";
 
     public IEnumerator SendChildData(ChildModel childData, Action<bool> onComplete)
     {

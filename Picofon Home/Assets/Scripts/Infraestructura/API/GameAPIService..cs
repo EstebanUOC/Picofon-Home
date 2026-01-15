@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 public class GameAPIService : MonoBehaviour
 {
     private const string BASE_URL =
-        "https://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/questions/";
+        "https://ehc-picofon2.techlab.uoc.edu/api/questions/";
 
     public IEnumerator LoadActivity(Action<string> onSuccess, Action<string> onError = null)
     {

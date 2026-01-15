@@ -8,7 +8,7 @@ public class UserChildrenCountRequest : MonoBehaviour
     public UserChildrenCountRequest(string id)
     {
         url =
-            $"https://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/children/owner/{id}?is_active=true";
+            $"https://ehc-picofon2.techlab.uoc.edu/api/children/owner/{id}?is_active=true";
     }
 
     public string ToJson()

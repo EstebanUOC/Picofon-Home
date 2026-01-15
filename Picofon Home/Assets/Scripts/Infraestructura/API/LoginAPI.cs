@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 public class LoginAPI
 {
     private const string LOGIN_URL =
-        "https://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/auth/login";
+        "https://ehc-picofon2.techlab.uoc.edu/api/auth/login";
 
     // public IEnumerator SendFirebaseToken(string idToken, System.Action<bool, UserModel> onComplete)
     // {

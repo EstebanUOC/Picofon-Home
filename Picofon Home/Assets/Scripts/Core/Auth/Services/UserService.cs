@@ -7,10 +7,10 @@ using UnityEngine;
 public class UserService
 {
     private const string ChildrenURL =
-        "https://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/children";
+        "https://ehc-picofon2.techlab.uoc.edu/api/children";
 
     private const string UserURL =
-        "https://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/auth/login";
+        "https://ehc-picofon2.techlab.uoc.edu/api/auth/login";
 
     public async UniTask<UserModel> LoginWithFirebaseToken(
         string firebaseToken,
