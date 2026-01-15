@@ -2,7 +2,7 @@ using System;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using ActivitiesResult = BasketResponses.ApiResult<BasketResponses.ActivitiesData<BasketResponses.SelectActivity>>;
+using ActivitiesResult = ApiResult<BasketResponses.ActivitiesData<BasketResponses.SelectActivity>>;
 
 public class BasketManagerPS : MonoBehaviour
 {
