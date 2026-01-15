@@ -2,7 +2,7 @@ using System;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using ActivitiesResult = BasketResponses.ApiResult<BasketResponses.ActivitiesData<BasketResponses.JudgeActivity>>;
+using ActivitiesResult = ApiResult<BasketResponses.ActivitiesData<BasketResponses.JudgeActivity>>;
 
 public enum HoopType
 {
@@ -75,12 +75,11 @@ public class BasketGameManagerJG : MonoBehaviour
     {
         BasketService basketService = new();
 
-        ActivitiesResult result = await basketService.GetActivities<
-            ActivitiesData<JudgeActivity>
-        >();
+        ActivityRequestParams @params = new() { PlanId = "41", ChildId = "19013454K" };
 
-        // NOTE: Wait a frame to ensure all initializations are done, Do not delete, 100% necessary
-        await UniTask.Yield();
+        ActivitiesResult result = await basketService.GetActivities<ActivitiesData<JudgeActivity>>(
+            @params
+        );
 
         if (!result.Success)
         {

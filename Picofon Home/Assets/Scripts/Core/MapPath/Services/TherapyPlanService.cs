@@ -3,29 +3,16 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Picofon.Core.Network;
 
-public enum ActivityType : byte
+public class TherapyPlanService
 {
-    Judge = 1,
-    Select = 2,
-    Relate = 3,
-}
+    private const string BaseURL = ApiConfig.BaseUrl + "therapy/child";
 
-public struct ActivityRequestParams
-{
-    public string PlanId;
-    public string ChildId;
-}
-
-public class BasketService
-{
-    private const string UrlBase = ApiConfig.BaseUrl + "questions";
-
-    public async UniTask<ApiResult<T>> GetActivities<T>(
-        ActivityRequestParams @params,
+    public async UniTask<ApiResult<T>> GetAllPlans<T>(
+        string childId,
         CancellationToken token = default
     )
     {
-        string url = $"{UrlBase}/{@params.PlanId}/{@params.ChildId}";
+        string url = $"{BaseURL}/{childId}";
 
         byte[] rawResponse = await HttpClientUnity.GetAsyncBytes(
             url: url,
