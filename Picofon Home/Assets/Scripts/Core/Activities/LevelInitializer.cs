@@ -6,14 +6,14 @@ public class LevelInitializer : MonoBehaviour
 
     private void Start()
     {
-        int id = LevelPayload.PlanId;
-        plan = LevelDataStore.Instance.GetLevelPlan(id);
+        int id = LevelPayload.PlanIndex;
+        plan = LevelDataStore.Instance.GetPlanByIndex(id);
 
         Debug.Log($"Initializing level with");
         Debug.Log($"TherapyTemplateId: {plan.TherapyTemplateId}");
         Debug.Log($"ChildId: {plan.ChildId}");
         Debug.Log($"TaskType: {plan.TherapyTemplate.TaskTypeId}");
 
-        LevelPayload.PlanId = -1;
+        LevelPayload.PlanIndex = -1;
     }
 }

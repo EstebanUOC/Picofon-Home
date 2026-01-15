@@ -23,7 +23,7 @@ public class LevelDataStore : MonoBehaviour
         _cachedPlans = plans;
     }
 
-    public TherapyPlan GetLevelPlan(int index)
+    public TherapyPlan GetPlanByIndex(int index)
     {
         if (index >= 0 && index < _cachedPlans.Length)
         {

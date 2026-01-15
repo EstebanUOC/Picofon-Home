@@ -12,7 +12,7 @@ public enum ActivityType : byte
 
 public struct ActivityRequestParams
 {
-    public string PlanId;
+    public int PlanId;
     public string ChildId;
 }
 

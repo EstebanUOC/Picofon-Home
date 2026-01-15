@@ -1,4 +1,4 @@
 public static class LevelPayload
 {
-    public static int PlanId;
+    public static int PlanIndex { get; set; }
 }

@@ -82,8 +82,7 @@ public class MapManager : MonoBehaviour
 
     private void HandleLevelSelected(LevelConfig config, int index)
     {
-        int planId = LevelDataStore.Instance.GetLevelPlan(index).TherapyPlanId;
-        LevelPayload.PlanId = planId;
+        LevelPayload.PlanIndex = index;
 
         UnityEngine.SceneManagement.SceneManager.LoadScene(config.SceneName);
     }

@@ -20,7 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Activities/BalloonPopSeaScene.unity
     guid: 81b1509e4f43893e6a4d489c6d3a289b
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Activities/BalloonPopParty.unity
     guid: 1cf507db96decfdeba291a62858d4b6d
   - enabled: 1

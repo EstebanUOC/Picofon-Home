@@ -1,18 +1,17 @@
-﻿using System;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public class GameAPIService : MonoBehaviour
 {
-    private const string BASE_URL =
-        "https://ehc-picofon2.techlab.uoc.edu/api/v1/unity-proxy/questions/";
+    private const string BASE_URL = "https://ehc-picofon2.techlab.uoc.edu/api/questions/";
 
     public IEnumerator LoadActivity(Action<string> onSuccess, Action<string> onError = null)
     {
         // 🔍 Obtener el TherapyPlan actual desde LevelDataStore
-        int currentPlanId = LevelPayload.PlanId;
-        TherapyPlan currentPlan = LevelDataStore.Instance.GetLevelPlan(currentPlanId);
+        int currentPlanId = LevelPayload.PlanIndex;
+        TherapyPlan currentPlan = LevelDataStore.Instance.GetPlanByIndex(currentPlanId);
 
         if (currentPlan == null)
         {
@@ -26,7 +25,7 @@ public class GameAPIService : MonoBehaviour
         string childId = currentPlan.ChildId;
         string url = BASE_URL + therapyPlanId + "/" + childId;
 
-        Debug.Log($"🌐 Solicitando datos del plan {currentPlanId} → {url}");
+        Debug.Log($"🌐 Solicitando datos del plan {therapyPlanId} → {url}");
         Debug.Log(
             $"📋 Modo de juego: {currentPlan.TherapyTemplate?.TaskTypeId} - {currentPlan.TherapyTemplate?.TaskTypeName}"
         );
@@ -67,8 +66,8 @@ public class GameAPIService : MonoBehaviour
 
     public int GetCurrentTaskType()
     {
-        int currentPlanId = LevelPayload.PlanId;
-        TherapyPlan currentPlan = LevelDataStore.Instance.GetLevelPlan(currentPlanId);
+        int currentPlanId = LevelPayload.PlanIndex;
+        TherapyPlan currentPlan = LevelDataStore.Instance.GetPlanByIndex(currentPlanId);
 
         if (currentPlan?.TherapyTemplate != null)
         {
