@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1dc199dcc632c6aa89354a974eaa762, type: 3}
-  m_Name: CrossTheRiverLevel
+  m_Name: Basket Config
   m_EditorClassIdentifier: 
-  LevelIcon: {fileID: 21300000, guid: 2c619ad144e9125f99423ae19fe839dc, type: 3}
-  SceneName: CrossTheRiverScene
+  LevelIcon: {fileID: 21300000, guid: 62763e2c478d923f2980725184df922e, type: 3}
+  SceneName: BasketScene

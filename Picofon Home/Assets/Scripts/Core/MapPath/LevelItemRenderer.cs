@@ -8,73 +8,87 @@ public enum LevelScene
     CrossRiverScene,
 }
 
+public readonly ref struct LevelData
+{
+    public readonly int id;
+    public readonly LevelConfig config;
+    public readonly LevelType type;
+    public readonly LevelState state;
+
+    public LevelData(int id, LevelConfig config, LevelType type, LevelState state)
+    {
+        this.id = id;
+        this.config = config;
+        this.type = type;
+        this.state = state;
+    }
+}
+
 public class LevelItemRenderer : MonoBehaviour
 {
-    public LevelScene scene;
+    [Space(15)]
+    [SerializeField]
+    private LevelScene _scene;
 
-    [Header("Levels")]
-    public RectTransform LevelContainer;
-    public GameObject LevelPrefab;
+    [Header("Components")]
+    public RectTransform _container;
+    public GameObject _prefab;
 
-    [Header("Level Placement")]
-    public float LeftX = 300;
-    public float RightX = 750;
-    public float StartY = -300;
-    public float StepY = -500;
+    [Header("Grid placement")]
+    [SerializeField]
+    private Vector2 _startPos = new(300f, -300f);
 
-    [Header("Button Overlays")]
-    public LevelData SeaData;
-    public LevelData PartyData;
-    public LevelData BasketData;
-    public LevelData RiverData;
+    [SerializeField]
+    private Vector2 _spacing = new(450f, -500f);
 
-    private readonly string[] scenes = new string[]
-    {
-        "BasketScene",
-        "BalloonPopSeaScene",
-        "BalloonPopParty",
-        "CrossRiverScene",
-    };
+    [Space(15)]
+    [SerializeField]
+    private LevelConfig[] _configurations;
 
-    public void RenderLevels(TherapyPlan[] plans)
+    private int _columns = 2;
+
+    public void RenderLevels(int count)
     {
         int lastCompleted = GamePrefs.LastCompletedLevel;
 
-        for (int i = 0; i < plans.Length; i++)
+        for (int i = 0; i < count; i++)
         {
-            float x = (i % 2 == 0) ? RightX : LeftX;
-            float y = StartY + (i * StepY);
+            int col = i % _columns;
+            int row = i;
+            float x = _startPos.x + (col * _spacing.x);
+            float y = _startPos.y + (row * _spacing.y);
             Vector2 position = new(x, y);
 
-            GameObject levelObject = Instantiate(LevelPrefab, LevelContainer);
-            levelObject.GetComponent<RectTransform>().anchoredPosition = position;
+            GameObject obj = Instantiate(_prefab, _container);
+            obj.GetComponent<RectTransform>().anchoredPosition = position;
 
-            LevelItemView levelComponent = levelObject.GetComponent<LevelItemView>();
+            LevelItemView comp = obj.GetComponent<LevelItemView>();
 
-            bool isLocked = i > lastCompleted;
+            bool locked = i > lastCompleted;
 
-            string sceneName = scenes[(int)scene];
+            LevelConfig config = _configurations[i % _configurations.Length];
 
-            LevelData data = sceneName switch
+#if UNITY_EDITOR
+            if (i == 0)
             {
-                "BalloonPopSeaScene" => SeaData,
-                "BalloonPopParty" => PartyData,
-                "CrossRiverScene" => RiverData,
-                _ => BasketData,
-            };
+                foreach (var cnf in _configurations)
+                {
+                    if (cnf.SceneName == _scene.ToString())
+                    {
+                        config = cnf;
+                        break;
+                    }
+                }
+            }
+#endif
 
             LevelType type = i % 2 == 0 ? LevelType.Syllable : LevelType.Phoneme;
 
-            LevelState state = isLocked ? LevelState.Locked : LevelState.Unlocked;
+            LevelState state = locked ? LevelState.Locked : LevelState.Unlocked;
 
-            levelComponent.Init(data, state, type);
+            LevelData data = new(i, config, type, state);
+
+            comp.Init(data);
         }
-    }
-
-    private void OnSelectLevel(int planId, string sceneName)
-    {
-        LevelPayload.PlanId = planId;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
-        Debug.Log($" LevelPayload.PlanId {LevelPayload.PlanId}");
     }
 }

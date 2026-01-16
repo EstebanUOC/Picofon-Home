@@ -54,9 +54,16 @@ public class BasketManagerRE : MonoBehaviour
 
     private async UniTaskVoid LoadActivities()
     {
+        int planIndex = LevelPayload.PlanIndex;
+        TherapyPlan currentPlan = LevelDataStore.Instance.GetPlanByIndex(planIndex);
+
         BasketService basketService = new();
 
-        ActivityRequestParams @params = new() { PlanId = "43", ChildId = "19013454K" };
+        ActivityRequestParams @params = new()
+        {
+            PlanId = currentPlan.TherapyPlanId,
+            ChildId = currentPlan.ChildId,
+        };
 
         ActivitiesResult result = await basketService.GetActivities<ActivitiesData<RelateActivity>>(
             @params

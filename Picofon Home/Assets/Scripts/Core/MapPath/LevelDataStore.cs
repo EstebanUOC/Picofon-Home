@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelDataStore : MonoBehaviour
 {
     public static LevelDataStore Instance { get; private set; }
 
-    private readonly Dictionary<int, TherapyPlan> _cachedPlans = new();
+    private TherapyPlan[] _cachedPlans;
 
     public void Awake()
     {
@@ -19,36 +18,33 @@ public class LevelDataStore : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void SavePlans(TherapyPlan[] plan)
+    public void SavePlans(TherapyPlan[] plans)
     {
-        foreach (var p in plan)
+        _cachedPlans = plans;
+    }
+
+    public TherapyPlan GetPlanByIndex(int index)
+    {
+        if (index >= 0 && index < _cachedPlans.Length)
         {
-            _cachedPlans.Add(p.TherapyPlanId, p);
+            return _cachedPlans[index];
         }
-    }
-
-    public void RegisterPlan(TherapyPlan plan)
-    {
-        _cachedPlans.Add(plan.TherapyPlanId, plan);
-    }
-
-    public TherapyPlan GetLevelPlan(int planId)
-    {
-        if (_cachedPlans.TryGetValue(planId, out var plan))
-            return plan;
 
         return null;
     }
 
-    public static bool HasPlans()
+    public bool HasPlans()
     {
-        return Instance != null && Instance._cachedPlans.Count > 0;
+        return _cachedPlans != null && _cachedPlans.Length > 0;
     }
 
     public TherapyPlan[] GetAllPlans()
     {
-        TherapyPlan[] plans = new TherapyPlan[_cachedPlans.Count];
-        _cachedPlans.Values.CopyTo(plans, 0);
-        return plans;
+        return _cachedPlans;
+    }
+
+    public int GetPlansCount()
+    {
+        return _cachedPlans.Length;
     }
 }

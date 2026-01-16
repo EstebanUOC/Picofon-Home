@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1dc199dcc632c6aa89354a974eaa762, type: 3}
-  m_Name: BallonSeaLevel
+  m_Name: Cross The River Config
   m_EditorClassIdentifier: 
-  LevelIcon: {fileID: 21300000, guid: e80ac93c84c1d774ba95cd4264fbc715, type: 3}
-  SceneName: BalloonPopSeaScene
+  LevelIcon: {fileID: 21300000, guid: 2c619ad144e9125f99423ae19fe839dc, type: 3}
+  SceneName: CrossTheRiverScene

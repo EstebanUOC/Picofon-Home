@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1dc199dcc632c6aa89354a974eaa762, type: 3}
-  m_Name: BallonPartyLevel
+  m_Name: Ballon Sea Config
   m_EditorClassIdentifier: 
-  LevelIcon: {fileID: 21300000, guid: 4b9684e6d90e6afb3a4cd247bf75e237, type: 3}
-  SceneName: BalloonPopParty
+  LevelIcon: {fileID: 21300000, guid: e80ac93c84c1d774ba95cd4264fbc715, type: 3}
+  SceneName: BalloonPopSeaScene

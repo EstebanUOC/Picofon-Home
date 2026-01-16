@@ -17,6 +17,9 @@ public enum LevelState : byte
 
 public class LevelItemView : MonoBehaviour, IPointerClickHandler
 {
+    [SerializeField]
+    private LevelSelectEventChannel _eventChannel;
+
     [Space(15)]
     [SerializeField]
     private Image _icon;
@@ -28,15 +31,21 @@ public class LevelItemView : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private GameObject _lockedOverlay;
 
-    private readonly Color32 _syllableColor = new(70, 153, 178, 255);
+    private LevelConfig _config;
+    private int _index;
+    private bool _isLocked;
+
+    private readonly Color32 _syllableColor = new(255, 255, 255, 255);
     private readonly Color32 _phonemeColor = new(206, 129, 225, 255);
 
-    public void Init(LevelData data, LevelState state, LevelType type = LevelType.Syllable)
+    public void Init(in LevelData data)
     {
-        SetState(state);
-        SetBackgroundColor(type);
+        SetState(data.state);
+        SetBackgroundColor(data.type);
 
-        _icon.sprite = data.LevelIcon;
+        _icon.sprite = data.config.LevelIcon;
+
+        _config = data.config;
     }
 
     private void SetState(LevelState value)
@@ -45,6 +54,7 @@ public class LevelItemView : MonoBehaviour, IPointerClickHandler
         {
             case LevelState.Locked:
                 _lockedOverlay.SetActive(true);
+                _isLocked = true;
                 break;
             case LevelState.Unlocked:
                 break;
@@ -65,6 +75,9 @@ public class LevelItemView : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("Level clicked!");
+        if (_isLocked)
+            return;
+
+        _eventChannel.Raise(_config, _index);
     }
 }

@@ -1,16 +1,12 @@
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 public class UserService
 {
-    private const string ChildrenURL =
-        "https://ehc-picofon2.techlab.uoc.edu/api/children";
+    private const string ChildrenURL = ApiConfig.BaseUrl + "children";
 
-    private const string UserURL =
-        "https://ehc-picofon2.techlab.uoc.edu/api/auth/login";
+    private const string UserURL = ApiConfig.BaseUrl + "auth/login";
 
     public async UniTask<UserModel> LoginWithFirebaseToken(
         string firebaseToken,

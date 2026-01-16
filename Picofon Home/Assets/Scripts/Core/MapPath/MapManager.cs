@@ -1,25 +1,35 @@
+using System.Text.Json.Serialization;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 public sealed class TherapyData
 {
+    [JsonInclude]
     public TherapyPlan[] Plans;
 }
 
 public class MapManager : MonoBehaviour
 {
+    [SerializeField]
+    private LevelSelectEventChannel _eventChannel;
+
+    [Space(15)]
+    [SerializeField]
     private LevelItemRenderer _renderer;
+
+    [SerializeField]
+    private Button _exitButton;
+
     private string _childId = string.Empty;
 
     public void Start()
     {
-        _renderer = GetComponent<LevelItemRenderer>();
-
-        bool existsData = LevelDataStore.HasPlans();
+        bool existsData = LevelDataStore.Instance.HasPlans();
         if (existsData)
         {
-            TherapyPlan[] plans = LevelDataStore.Instance.GetAllPlans();
-            _renderer.RenderLevels(plans);
+            int count = LevelDataStore.Instance.GetPlansCount();
+            _renderer.RenderLevels(count);
             return;
         }
 
@@ -37,6 +47,18 @@ public class MapManager : MonoBehaviour
         }
 
         LoadPlans().Forget();
+
+        _exitButton.onClick.AddListener(HandleExitButtonClicked);
+    }
+
+    public void OnEnable()
+    {
+        _eventChannel.OnEventRaised += HandleLevelSelected;
+    }
+
+    public void OnDestroy()
+    {
+        _eventChannel.OnEventRaised -= HandleLevelSelected;
     }
 
     private async UniTaskVoid LoadPlans()
@@ -56,12 +78,24 @@ public class MapManager : MonoBehaviour
 
         if (plans is null || plans.Length == 0)
         {
-            Debug.LogWarning("No hay actividades cargadas.");
+            Debug.LogError("No hay actividades cargadas.");
             return;
         }
 
         store.SavePlans(plans);
 
-        _renderer.RenderLevels(plans);
+        _renderer.RenderLevels(plans.Length);
+    }
+
+    private void HandleLevelSelected(LevelConfig config, int index)
+    {
+        LevelPayload.PlanIndex = index;
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene(config.SceneName);
+    }
+
+    private void HandleExitButtonClicked()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("AuthScene");
     }
 }
