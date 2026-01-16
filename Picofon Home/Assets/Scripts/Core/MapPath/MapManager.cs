@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
 public sealed class TherapyData
 {
@@ -19,12 +18,14 @@ public class MapManager : MonoBehaviour
     private LevelItemRenderer _renderer;
 
     [SerializeField]
-    private Button _exitButton;
+    private LevelButton _exitButton;
 
     private string _childId = string.Empty;
 
     public void Start()
     {
+        _exitButton.OnClicked += HandleExitButtonClicked;
+
         bool existsData = LevelDataStore.Instance.HasPlans();
         if (existsData)
         {
@@ -47,8 +48,6 @@ public class MapManager : MonoBehaviour
         }
 
         LoadPlans().Forget();
-
-        _exitButton.onClick.AddListener(HandleExitButtonClicked);
     }
 
     public void OnEnable()

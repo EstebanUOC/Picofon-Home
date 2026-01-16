@@ -1,6 +1,7 @@
+#nullable enable
+
 using System.Text.Json;
 using UnityEngine;
-
 
 namespace Picofon.Core.Network
 {
@@ -50,9 +51,7 @@ namespace Picofon.Core.Network
                     return null;
                 }
 
-                return content.GetArrayLength() > 0
-                    ? content[0].GetString()
-                    : null;
+                return content.GetArrayLength() > 0 ? content[0].GetString() : null;
             }
         }
 
@@ -71,4 +70,3 @@ namespace Picofon.Core.Network
         }
     }
 }
-
