@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 public sealed class TherapyData
 {
@@ -13,8 +14,12 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private LevelSelectEventChannel _eventChannel;
 
+    [Space(15)]
     [SerializeField]
     private LevelItemRenderer _renderer;
+
+    [SerializeField]
+    private Button _exitButton;
 
     private string _childId = string.Empty;
 
@@ -42,6 +47,8 @@ public class MapManager : MonoBehaviour
         }
 
         LoadPlans().Forget();
+
+        _exitButton.onClick.AddListener(HandleExitButtonClicked);
     }
 
     public void OnEnable()
@@ -85,5 +92,10 @@ public class MapManager : MonoBehaviour
         LevelPayload.PlanIndex = index;
 
         UnityEngine.SceneManagement.SceneManager.LoadScene(config.SceneName);
+    }
+
+    private void HandleExitButtonClicked()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("AuthScene");
     }
 }
