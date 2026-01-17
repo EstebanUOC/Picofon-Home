@@ -17,15 +17,10 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private LevelItemRenderer _renderer;
 
-    [SerializeField]
-    private LevelButton _exitButton;
-
     private string _childId = string.Empty;
 
     public void Start()
     {
-        _exitButton.OnClicked += HandleExitButtonClicked;
-
         bool existsData = LevelDataStore.Instance.HasPlans();
         if (existsData)
         {
@@ -91,10 +86,5 @@ public class MapManager : MonoBehaviour
         LevelPayload.PlanIndex = index;
 
         UnityEngine.SceneManagement.SceneManager.LoadScene(config.SceneName);
-    }
-
-    private void HandleExitButtonClicked()
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("AuthScene");
     }
 }
