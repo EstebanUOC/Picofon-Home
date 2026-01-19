@@ -13,6 +13,12 @@ public class LevelButton
 
     [Space(15)]
     [SerializeField]
+    private RectTransform _contentRect;
+
+    [SerializeField]
+    private RectTransform _backgroundRect;
+
+    [SerializeField]
     private float _duration = 0.1f;
 
     private Sequence _hoverSequence;
@@ -24,19 +30,42 @@ public class LevelButton
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        throw new NotImplementedException();
+        if (_hoverSequence == null)
+        {
+            CreateHoverSequence();
+        }
+
+        _hoverSequence.Restart();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        throw new NotImplementedException();
+        _hoverSequence.PlayBackwards();
     }
 
     private void CreateHoverSequence()
     {
-        const float moveY = -11f;
-        const float bgMoveY = -5.5f;
+        const float moveY = -24;
+        const float bgMoveY = -11.5f;
+        const float bgSizeDeltaY = -31;
 
-        _hoverSequence = DOTween.Sequence().SetAutoKill(false).Pause();
+        _hoverSequence = DOTween.Sequence().SetRecyclable(true).SetAutoKill(false).Pause();
+
+        Tween posTween = _contentRect
+            .DOAnchorPosY(_contentRect.anchoredPosition.y + moveY, _duration)
+            .SetAutoKill(false)
+            .SetRecyclable(true);
+
+        Tween bgAnchorTween = _backgroundRect
+            .DOSizeDelta(bgSizeDeltaY * Vector2.up, _duration)
+            .SetAutoKill(false)
+            .SetRecyclable(true);
+
+        Tween bgAnchorPosTween = _backgroundRect
+            .DOAnchorPos(bgMoveY * Vector2.up, _duration)
+            .SetAutoKill(false)
+            .SetRecyclable(true);
+
+        _hoverSequence.Append(posTween).Join(bgAnchorTween).Join(bgAnchorPosTween);
     }
 }
