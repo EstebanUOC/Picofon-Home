@@ -2236,11 +2236,11 @@ MonoBehaviour:
   _hoopManager: {fileID: 487383563}
   _answerManager: {fileID: 1277141778}
   _uiManager: {fileID: 94296185}
-  _instructionClip: {fileID: 8300000, guid: 58e526e6a94c6744897d1241e07f1196, type: 3}
-  _positiveYesClip: {fileID: 8300000, guid: bd146f27d8f9a50afa793b78726cd314, type: 3}
-  _positiveNoClip: {fileID: 8300000, guid: 3af61e2a6ae9b8e8bba099fe771b3cbd, type: 3}
-  _negativeYesClip: {fileID: 8300000, guid: c353e6cbaf379d7eab6204067b07bef6, type: 3}
-  _negativeNoClip: {fileID: 8300000, guid: 33e701996fd03834ca737aebb362596a, type: 3}
+  _instructionClip: {fileID: 8300000, guid: b08229073d4fcaa42b9d00c3114d80cf, type: 3}
+  _positiveYesClip: {fileID: 8300000, guid: ea8ac7d053be88f44960130c59d74215, type: 3}
+  _positiveNoClip: {fileID: 8300000, guid: 63a572a5f78fc264a8cf506e6e14f9dc, type: 3}
+  _negativeYesClip: {fileID: 8300000, guid: 517f5f11715adfe4e887ba7162e07f30, type: 3}
+  _negativeNoClip: {fileID: 8300000, guid: ee9bd6a55a94aa345ad30f6a637195c9, type: 3}
 --- !u!1 &1075156704
 GameObject:
   m_ObjectHideFlags: 0

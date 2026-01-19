@@ -1,0 +1,150 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|c:\\users\\user\\documents\\github\\picofon\\picofon-home\\picofon home\\assets\\scripts\\core\\activities\\crossriver\\crossrivermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\activities\\crossriver\\crossrivermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|c:\\users\\user\\documents\\github\\picofon\\picofon-home\\picofon home\\assets\\scripts\\ui\\bubblewhiteimageanimator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\ui\\bubblewhiteimageanimator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\ui\\eyebuttoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\ui\\eyebuttoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\core\\activities\\baloonpopsea\\balloonpopseamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\activities\\baloonpopsea\\balloonpopseamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\core\\mappath\\levelgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\mappath\\levelgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\infraestructura\\api\\therapyapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\infraestructura\\api\\therapyapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\core\\mappath\\leveldatastore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\mappath\\leveldatastore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\assets\\scripts\\ui\\sceneorientationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43EA6488-73C3-AB4C-A485-6C6D4EA396C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\ui\\sceneorientationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "BubbleWhiteImageAnimator.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\BubbleWhiteImageAnimator.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\BubbleWhiteImageAnimator.cs",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\BubbleWhiteImageAnimator.cs",
+              "RelativeToolTip": "Assets\\Scripts\\UI\\BubbleWhiteImageAnimator.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAIwB8AAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T10:46:23.961Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EyeButtonController.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\EyeButtonController.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\EyeButtonController.cs",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\EyeButtonController.cs",
+              "RelativeToolTip": "Assets\\Scripts\\UI\\EyeButtonController.cs",
+              "ViewState": "AgIAAHcAAAAAAAAAAAAYwNoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T09:06:08.042Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CrossRiverManager.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\CrossRiver\\CrossRiverManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Activities\\CrossRiver\\CrossRiverManager.cs",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\CrossRiver\\CrossRiverManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Core\\Activities\\CrossRiver\\CrossRiverManager.cs",
+              "ViewState": "AgIAADgAAAAAAAAAAAAAwEcAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T17:03:28.833Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BalloonPopSeaManager.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\BaloonPopSea\\BalloonPopSeaManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\Activities\\BaloonPopSea\\BalloonPopSeaManager.cs",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\Activities\\BaloonPopSea\\BalloonPopSeaManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Core\\Activities\\BaloonPopSea\\BalloonPopSeaManager.cs",
+              "ViewState": "AgIAANUCAAAAAAAAAAAUwOkCAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T16:49:53.293Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "LevelGenerator.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\MapPath\\LevelGenerator.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\MapPath\\LevelGenerator.cs",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\MapPath\\LevelGenerator.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Core\\MapPath\\LevelGenerator.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAA0AAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T16:32:47.688Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TherapyAPI.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Infraestructura\\API\\TherapyAPI.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Infraestructura\\API\\TherapyAPI.cs",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Infraestructura\\API\\TherapyAPI.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Infraestructura\\API\\TherapyAPI.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAYwBIAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T16:32:37.536Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "SceneOrientationManager.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\SceneOrientationManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\SceneOrientationManager.cs",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\UI\\SceneOrientationManager.cs",
+              "RelativeToolTip": "Assets\\Scripts\\UI\\SceneOrientationManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T16:30:36.038Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "LevelDataStore.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\MapPath\\LevelDataStore.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\MapPath\\LevelDataStore.cs",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\Picofon\\Picofon-Home\\Picofon Home\\Assets\\Scripts\\Core\\MapPath\\LevelDataStore.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Core\\MapPath\\LevelDataStore.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAowBcAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-26T16:28:13.309Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
