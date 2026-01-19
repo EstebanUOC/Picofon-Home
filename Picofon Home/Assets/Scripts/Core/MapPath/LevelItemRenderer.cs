@@ -70,8 +70,7 @@ public class LevelItemRenderer : MonoBehaviour
 
             LevelConfig config = _configurations[i % _configurations.Length];
 
-#if UNITY_EDITOR
-            // TODO: TEMP code (delete this later)
+            // TODO: TEMP code (delete this later) (add #if UNITY_EDITOR)
             if (true)
             // if (i == 0)
             {
@@ -84,7 +83,6 @@ public class LevelItemRenderer : MonoBehaviour
                     }
                 }
             }
-#endif
 
             LevelType type = i % 2 == 0 ? LevelType.Syllable : LevelType.Phoneme;
 
