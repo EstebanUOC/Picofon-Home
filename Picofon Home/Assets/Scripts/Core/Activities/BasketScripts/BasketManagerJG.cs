@@ -75,6 +75,7 @@ public class BasketGameManagerJG : MonoBehaviour
     {
         int planIndex = LevelPayload.PlanIndex;
         TherapyPlan currentPlan = LevelDataStore.Instance.GetPlanByIndex(planIndex);
+        Debug.Log($"Cargando actividades para el plan: {currentPlan.TherapyPlanId}");
 
         BasketService basketService = new();
 

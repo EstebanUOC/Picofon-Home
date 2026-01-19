@@ -25,21 +25,26 @@ public class LevelItemView : MonoBehaviour, IPointerClickHandler
     private Image _icon;
 
     [SerializeField]
-    private Image _background;
+    private Image _shadow;
+
+    [SerializeField]
+    private Image _content;
 
     [Space(15)]
     [SerializeField]
     private GameObject _lockedOverlay;
 
     private LevelConfig _config;
-    private int _index;
-    private bool _isLocked;
+    private bool _isLocked = false;
+    private int _index = 0;
 
     private readonly Color32 _syllableColor = new(255, 255, 255, 255);
     private readonly Color32 _phonemeColor = new(206, 129, 225, 255);
 
     public void Init(in LevelData data)
     {
+        _index = data.id;
+
         SetState(data.state);
         SetBackgroundColor(data.type);
 
@@ -65,12 +70,15 @@ public class LevelItemView : MonoBehaviour, IPointerClickHandler
 
     private void SetBackgroundColor(LevelType levelType)
     {
-        _background.color = levelType switch
+        Color32 newColor = levelType switch
         {
             LevelType.Syllable => _syllableColor,
             LevelType.Phoneme => _phonemeColor,
             _ => _syllableColor,
         };
+
+        _shadow.color = newColor;
+        _content.color = newColor;
     }
 
     public void OnPointerClick(PointerEventData eventData)

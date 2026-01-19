@@ -50,6 +50,8 @@ public class LevelItemRenderer : MonoBehaviour
     public void RenderLevels(int count)
     {
         int lastCompleted = GamePrefs.LastCompletedLevel;
+        // TODO: TEMP code (delete this later)
+        lastCompleted = 2;
 
         for (int i = 0; i < count; i++)
         {
@@ -69,7 +71,9 @@ public class LevelItemRenderer : MonoBehaviour
             LevelConfig config = _configurations[i % _configurations.Length];
 
 #if UNITY_EDITOR
-            if (i == 0)
+            // TODO: TEMP code (delete this later)
+            if (true)
+            // if (i == 0)
             {
                 foreach (var cnf in _configurations)
                 {

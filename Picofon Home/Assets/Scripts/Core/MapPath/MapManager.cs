@@ -84,7 +84,16 @@ public class MapManager : MonoBehaviour
     private void HandleLevelSelected(LevelConfig config, int index)
     {
         LevelPayload.PlanIndex = index;
+        // TODO: TEST code (delete this later)
+        string scene = index switch
+        {
+            0 => "BasketScene",
+            1 => "BasketScene-PS",
+            2 => "BasketScene-RE",
+            _ => config.SceneName,
+        };
+        UnityEngine.SceneManagement.SceneManager.LoadScene(scene);
 
-        UnityEngine.SceneManagement.SceneManager.LoadScene(config.SceneName);
+        // UnityEngine.SceneManagement.SceneManager.LoadScene(config.SceneName);
     }
 }
