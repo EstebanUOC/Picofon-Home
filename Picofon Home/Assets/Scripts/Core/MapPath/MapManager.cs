@@ -2,6 +2,13 @@ using System.Text.Json.Serialization;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
+public enum ActivityType : byte
+{
+    Judge = 1,
+    Select = 2,
+    Relate = 3,
+}
+
 public sealed class TherapyData
 {
     [JsonInclude]
@@ -83,17 +90,29 @@ public class MapManager : MonoBehaviour
 
     private void HandleLevelSelected(LevelConfig config, int index)
     {
-        LevelPayload.PlanIndex = index;
-        // TODO: TEST code (delete this later)
-        string scene = index switch
-        {
-            0 => "BasketScene",
-            1 => "BasketScene-PS",
-            2 => "BasketScene-RE",
-            _ => config.SceneName,
-        };
-        UnityEngine.SceneManagement.SceneManager.LoadScene(scene);
+        TherapyPlan plan = LevelDataStore.Instance.GetPlanByIndex(index);
 
-        // UnityEngine.SceneManagement.SceneManager.LoadScene(config.SceneName);
+        ActivityRequestParams @params = new()
+        {
+            PlanId = plan.TherapyPlanId,
+            ChildId = plan.ChildId,
+        };
+
+        LevelPayload.Params = @params;
+
+        TherapyTemplate template = plan.TherapyTemplate;
+        ActivityType type = (ActivityType)template.TaskType.Id;
+
+        string suffix = type switch
+        {
+            ActivityType.Judge => "J",
+            ActivityType.Select => "S",
+            ActivityType.Relate => "R",
+            _ => "",
+        };
+
+        string scene = $"{config.SceneName}_{suffix}";
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene(scene);
     }
 }

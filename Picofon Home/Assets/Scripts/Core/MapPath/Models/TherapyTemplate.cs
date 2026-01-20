@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.Json.Serialization;
 
 [Serializable]
@@ -55,17 +55,16 @@ public class TherapyTemplate
 
     // 🔥 Convenience property to get task type name
     [JsonIgnore]
-    public string TaskTypeName => TaskType?.name ?? "Unknown";
+    public string TaskTypeName => TaskType?.Name ?? "Unknown";
 }
 
 [Serializable]
 public class TaskType
 {
     [JsonInclude]
-    [JsonPropertyName("id")]
-    public int id { get; set; }
-    
+    public int Id { get; set; }
+
     [JsonInclude]
     [JsonPropertyName("name")]
-    public string name { get; set; }
+    public string Name { get; set; }
 }

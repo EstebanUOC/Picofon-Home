@@ -3,13 +3,6 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Picofon.Core.Network;
 
-public enum ActivityType : byte
-{
-    Judge = 1,
-    Select = 2,
-    Relate = 3,
-}
-
 public struct ActivityRequestParams
 {
     public int PlanId;

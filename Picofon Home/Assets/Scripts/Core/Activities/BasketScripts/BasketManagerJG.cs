@@ -73,17 +73,20 @@ public class BasketGameManagerJG : MonoBehaviour
 
     private async UniTaskVoid LoadActivities()
     {
-        int planIndex = LevelPayload.PlanIndex;
-        TherapyPlan currentPlan = LevelDataStore.Instance.GetPlanByIndex(planIndex);
-        Debug.Log($"Cargando actividades para el plan: {currentPlan.TherapyPlanId}");
-
         BasketService basketService = new();
 
-        ActivityRequestParams @params = new()
+        ActivityRequestParams @params = LevelPayload.Params;
+
+        if (@params.ChildId is null)
         {
-            PlanId = currentPlan.TherapyPlanId,
-            ChildId = currentPlan.ChildId,
-        };
+#if !UNITY_EDITOR
+            Debug.LogError("Parameters are missing in LevelPayload.");
+            return;
+# else
+            @params = new ActivityRequestParams { PlanId = 41, ChildId = "19013454K" };
+            Debug.LogWarning("Using default parameters for testing in Unity Editor.");
+# endif
+        }
 
         ActivitiesResult result = await basketService.GetActivities<ActivitiesData<JudgeActivity>>(
             @params
