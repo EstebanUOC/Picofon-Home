@@ -47,16 +47,8 @@ public class BasketManagerRE : MonoBehaviour
 
         _answerManager.OnHoopSelected += HandleHoopSelected;
 
-        _feedbackController.Init();
-
-        LoadActivities().Forget();
-    }
-
-    private async UniTaskVoid LoadActivities()
-    {
-        BasketService basketService = new();
-
         ActivityRequestParams @params = LevelPayload.Params;
+        ActivitySkill skill = LevelPayload.Skill;
 
         if (@params.ChildId is null)
         {
@@ -64,10 +56,20 @@ public class BasketManagerRE : MonoBehaviour
             Debug.LogError("Parameters are missing in LevelPayload.");
             return;
 # else
+            skill = ActivitySkill.Final;
             @params = new ActivityRequestParams { PlanId = 43, ChildId = "19013454K" };
             Debug.LogWarning("Using default parameters for testing in Unity Editor.");
 # endif
         }
+
+        _feedbackController.Init(skill);
+
+        LoadActivities(@params).Forget();
+    }
+
+    private async UniTaskVoid LoadActivities(ActivityRequestParams @params)
+    {
+        BasketService basketService = new();
 
         ActivitiesResult result = await basketService.GetActivities<ActivitiesData<RelateActivity>>(
             @params

@@ -99,6 +99,7 @@ public class MapManager : MonoBehaviour
         };
 
         LevelPayload.Params = @params;
+        LevelPayload.Skill = (ActivitySkill)plan.TherapyTemplate.Skill.Id;
 
         TherapyTemplate template = plan.TherapyTemplate;
         ActivityType type = (ActivityType)template.TaskType.Id;

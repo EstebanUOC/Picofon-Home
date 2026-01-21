@@ -21,8 +21,7 @@ public class TherapyTemplate
     public int SoundId { get; set; } = 0;
 
     [JsonInclude]
-    [JsonPropertyName("skill_id")]
-    public int SkillId { get; set; } = 0;
+    public Skill Skill { get; set; }
 
     [JsonInclude]
     [JsonPropertyName("syllables_number")]
@@ -67,4 +66,10 @@ public class TaskType
     [JsonInclude]
     [JsonPropertyName("name")]
     public string Name { get; set; }
+}
+
+public class Skill
+{
+    [JsonInclude]
+    public int Id { get; set; }
 }

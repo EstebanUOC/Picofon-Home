@@ -20,10 +20,11 @@ public class FeedbackController : MonoBehaviour
         FeedbackView.OnContinueClicked += OnContinueButtonClicked;
     }
 
-    public void Init()
+    public void Init(ActivitySkill skill)
     {
         gameObject.SetActive(true);
         gameObject.SetActive(false);
+        _itemManager.Init(skill);
     }
 
     public async UniTask<bool> ShowFeedback(FeedbackType feedbackType)
