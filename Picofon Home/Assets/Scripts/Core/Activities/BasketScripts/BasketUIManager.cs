@@ -40,6 +40,7 @@ public class BasketUIManager : MonoBehaviour
     private void BackToMap()
     {
         SceneManager.LoadScene("MapPathScene");
+        AudioManager.Instance.StopVoice();
     }
 
     private void HandleClueChanged(bool showClue)
