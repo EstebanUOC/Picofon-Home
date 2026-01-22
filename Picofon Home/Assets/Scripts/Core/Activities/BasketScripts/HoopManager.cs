@@ -5,10 +5,10 @@ public class HoopManager : MonoBehaviour
 {
     [Space(15)]
     [SerializeField]
-    private GameObject[] _hoops;
+    private GameObject _hoopCollider;
 
     [SerializeField]
-    private GameObject _hoopCollider;
+    private GameObject[] _hoops;
 
     public GameObject[] Hoops => _hoops;
 

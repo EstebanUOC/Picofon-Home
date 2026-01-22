@@ -3,7 +3,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public sealed class ItemSelectable
+public sealed class ItemHoopSelectable
     : MonoBehaviour,
         IPointerClickHandler,
         IPointerEnterHandler,
@@ -19,6 +19,7 @@ public sealed class ItemSelectable
     public void OnPointerClick(PointerEventData eventData)
     {
         OnItemSelected?.Invoke();
+        _hoverSequence.PlayBackwards();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -40,16 +41,16 @@ public sealed class ItemSelectable
     {
         const float duration = 0.2f;
         const float scaleUp = 1.05f;
-        const float translationY = 5f;
+        const float rotation = 4f;
 
         _hoverSequence = DOTween.Sequence().SetRecyclable(true).SetAutoKill(false).Pause();
 
-        Tween transformTween = _itemTransform.DOScale(scaleUp, duration);
-        Tween translateTween = _itemTransform.DOLocalMoveY(
-            _itemTransform.localPosition.y + translationY,
-            duration
-        );
+        bool randomFlip = UnityEngine.Random.value > 0.5f;
+        float rotationZ = randomFlip ? rotation : -rotation;
 
-        _hoverSequence.Append(transformTween).Join(translateTween);
+        Tween transformTween = _itemTransform.DOScale(scaleUp, duration);
+        Tween rotateTween = _itemTransform.DORotate(new Vector3(0, 0, rotationZ), duration);
+
+        _hoverSequence.Append(transformTween).Join(rotateTween);
     }
 }
