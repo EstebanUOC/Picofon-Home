@@ -12,10 +12,10 @@ public class AnswerManagerPS : MonoBehaviour
         for (int i = 0; i < manager.Hoops.Length; i++)
         {
             int index = i;
-            ItemHoopSelectable item = manager
+            ItemSelectable item = manager
                 .Hoops[i]
                 .transform.GetChild(0)
-                .GetComponent<ItemHoopSelectable>();
+                .GetComponent<ItemSelectable>();
             item.OnItemSelected += () => HoopSelected(index);
         }
     }
