@@ -391,7 +391,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemTransform: {fileID: 1010867232}
-  _animationType: 0
+  _animationType: 1
 --- !u!114 &80233016
 MonoBehaviour:
   m_ObjectHideFlags: 0
