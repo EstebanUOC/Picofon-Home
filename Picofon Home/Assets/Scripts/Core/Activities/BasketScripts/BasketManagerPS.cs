@@ -92,7 +92,14 @@ public class BasketManagerPS : MonoBehaviour
         ChangeActivity();
 
         AudioManager.Instance.PlayVoice(_instructionClip);
+
         await AudioManager.Instance.WaitVoiceToEnd();
+
+        _uiManager.Prueba();
+
+        await UniTask.WaitForSeconds(0.25f);
+
+        _answerManager.Prueba();
     }
 
     private void HandleHoopSelected(int hoopIndex)

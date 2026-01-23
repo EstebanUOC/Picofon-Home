@@ -18,6 +18,11 @@ public class BasketUIManager : MonoBehaviour
     [SerializeField]
     private Button _exitButton;
 
+    public void Prueba()
+    {
+        _itemManager.Prueba();
+    }
+
     public void OnEnable()
     {
         _clueController.OnClueChanged += HandleClueChanged;

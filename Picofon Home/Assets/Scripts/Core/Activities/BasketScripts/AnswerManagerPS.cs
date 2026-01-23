@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 
 public class AnswerManagerPS : MonoBehaviour
@@ -18,6 +19,11 @@ public class AnswerManagerPS : MonoBehaviour
                 .GetComponent<ItemSelectable>();
             item.OnItemSelected += () => HoopSelected(index);
         }
+    }
+
+    public void Prueba()
+    {
+        transform.DOLocalMoveY(-1.4f, 0.5f);
     }
 
     private void HoopSelected(int hoopIndex)

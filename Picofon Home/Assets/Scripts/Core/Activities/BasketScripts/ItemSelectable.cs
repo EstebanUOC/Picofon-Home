@@ -87,10 +87,7 @@ public sealed class ItemSelectable
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (_hoverSequence == null)
-        {
-            _hoverSequence = TweenHelper.CreateHoverSequence(_itemTransform, _animationType);
-        }
+        _hoverSequence ??= TweenHelper.CreateHoverSequence(_itemTransform, _animationType);
 
         _hoverSequence.Restart();
     }
