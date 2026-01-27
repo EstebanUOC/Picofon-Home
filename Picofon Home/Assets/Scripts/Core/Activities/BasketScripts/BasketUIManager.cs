@@ -18,6 +18,11 @@ public class BasketUIManager : MonoBehaviour
     [SerializeField]
     private Button _exitButton;
 
+    public void Prueba()
+    {
+        _itemManager.Prueba();
+    }
+
     public void OnEnable()
     {
         _clueController.OnClueChanged += HandleClueChanged;
@@ -40,6 +45,7 @@ public class BasketUIManager : MonoBehaviour
     private void BackToMap()
     {
         SceneManager.LoadScene("MapPathScene");
+        AudioManager.Instance.StopVoice();
     }
 
     private void HandleClueChanged(bool showClue)

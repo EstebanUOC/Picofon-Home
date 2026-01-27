@@ -8,11 +8,9 @@ public class ItemFeedback : MonoBehaviour
     private Image _image;
     private TMP_Text _text;
 
-    private readonly StringBuilder _stringBuilder = new();
-    private readonly Color32 _positiveColor = new(255, 255, 255, 255);
-    private readonly Color32 _negativeColor = new(22, 20, 65, 255);
-
     private string _syllabifiedWord;
+
+    public string SyllabifiedWord => _syllabifiedWord;
 
     public void Awake()
     {
@@ -28,31 +26,9 @@ public class ItemFeedback : MonoBehaviour
         _image.sprite = sprite;
     }
 
-    public void ConfigureItemByType(FeedbackType feedbackType)
+    public void ConfigureItem(StringBuilder builder, Color32 color)
     {
-        _stringBuilder.Clear();
-
-        int sep = _syllabifiedWord.IndexOf('#');
-
-        _stringBuilder.Append("<color=");
-
-        if (feedbackType == FeedbackType.Positive)
-        {
-            _text.color = _positiveColor;
-            _stringBuilder.Append("green>");
-        }
-        else
-        {
-            _text.color = _negativeColor;
-            _stringBuilder.Append("orange>");
-        }
-
-        _stringBuilder.Append(_syllabifiedWord, 0, sep);
-
-        _stringBuilder.Append("</color>");
-
-        _stringBuilder.Append(_syllabifiedWord, sep + 1, _syllabifiedWord.Length - sep - 1);
-
-        _text.SetText(_stringBuilder);
+        _text.color = color;
+        _text.SetText(builder);
     }
 }

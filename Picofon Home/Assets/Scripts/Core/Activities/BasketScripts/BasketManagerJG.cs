@@ -66,24 +66,34 @@ public class BasketGameManagerJG : MonoBehaviour
 
         _answerManager.OnAnswerSelected += HandleAnswerSelected;
 
-        _feedbackController.Init();
+        ActivityRequestParams @params = LevelPayload.Params;
+        ActivitySkill skill = LevelPayload.Skill;
 
-        LoadActivities().Forget();
+        if (@params.ChildId is null)
+        {
+#if !UNITY_EDITOR
+            Debug.LogError("Parameters are missing in LevelPayload.");
+            return;
+# else
+            skill = ActivitySkill.Initial;
+            @params = new ActivityRequestParams { PlanId = 41, ChildId = "19013454K" };
+            Debug.LogWarning("Using default parameters for testing in Unity Editor.");
+# endif
+        }
+
+        // TODO: Remove debug log
+        Debug.Log(
+            $"Loading activities with PlanId: {@params.PlanId}, ChildId: {@params.ChildId}, Skill: {skill}"
+        );
+
+        _feedbackController.Init(skill);
+
+        LoadActivities(@params).Forget();
     }
 
-    private async UniTaskVoid LoadActivities()
+    private async UniTaskVoid LoadActivities(ActivityRequestParams @params)
     {
-        int planIndex = LevelPayload.PlanIndex;
-        TherapyPlan currentPlan = LevelDataStore.Instance.GetPlanByIndex(planIndex);
-        Debug.Log($"Cargando actividades para el plan: {currentPlan.TherapyPlanId}");
-
         BasketService basketService = new();
-
-        ActivityRequestParams @params = new()
-        {
-            PlanId = currentPlan.TherapyPlanId,
-            ChildId = currentPlan.ChildId,
-        };
 
         ActivitiesResult result = await basketService.GetActivities<ActivitiesData<JudgeActivity>>(
             @params

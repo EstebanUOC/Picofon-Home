@@ -1,4 +1,5 @@
 using BasketResponses;
+using DG.Tweening;
 using UnityEngine;
 
 public class ItemManager : MonoBehaviour
@@ -23,6 +24,27 @@ public class ItemManager : MonoBehaviour
 
             selectable.OnItemSelected += PlayItemSound;
         }
+    }
+
+    public void Prueba()
+    {
+        const float duration = 0.5f;
+
+        Sequence allItemsTween = DOTween.Sequence();
+
+        Tween move = transform.DOLocalMoveY(transform.localPosition.y + 130, duration);
+
+        allItemsTween.Append(move);
+
+        foreach (GameObject item in _items)
+        {
+            RectTransform itemTransform = item.GetComponent<RectTransform>();
+            Tween itemSize = itemTransform.DOSizeDelta(240 * Vector2.one, duration);
+
+            allItemsTween.Join(itemSize);
+        }
+
+        allItemsTween.Play();
     }
 
     public void SetItemsContent(in ViewContentDTO content)

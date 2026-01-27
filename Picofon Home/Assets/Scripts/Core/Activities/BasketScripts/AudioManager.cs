@@ -38,6 +38,11 @@ public class AudioManager : MonoBehaviour
         return UniTask.WaitWhile(() => _voiceSource.isPlaying);
     }
 
+    public void StopVoice()
+    {
+        _voiceSource.Stop();
+    }
+
     public void StopUI()
     {
         _uiSource.Stop();
