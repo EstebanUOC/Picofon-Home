@@ -763,6 +763,178 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1978568617927890624, guid: efa43f099012534e9b7c52325476378b, type: 3}
   m_PrefabInstance: {fileID: 664685306}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &806772511
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 806772513}
+  - component: {fileID: 806772512}
+  m_Layer: 0
+  m_Name: Spline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &806772512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806772511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab5c7d4c32e743048dfca98e2d5914f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Spline:
+    m_EditModeType: 1
+    m_Knots: []
+    m_MetaData: []
+    m_Closed: 0
+    m_IntData:
+      m_Data: []
+    m_FloatData:
+      m_Data: []
+    m_Float4Data:
+      m_Data: []
+    m_ObjectData:
+      m_Data: []
+  m_Splines:
+  - m_EditModeType: 1
+    m_Knots:
+    - Position:
+        x: -220.9602
+        y: 257.72144
+        z: 0
+      TangentIn:
+        x: 0
+        y: 0
+        z: -737.2779
+      TangentOut:
+        x: 0
+        y: 0
+        z: 737.2779
+      Rotation:
+        value:
+          x: -0.06762361
+          y: 0.7038659
+          z: -0.70386577
+          w: 0.0676235
+    - Position:
+        x: 443.04822
+        y: -364.08923
+        z: 0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -199.81181
+      TangentOut:
+        x: 0
+        y: 0
+        z: 195.91031
+      Rotation:
+        value:
+          x: -0.008637588
+          y: -0.70705396
+          z: 0.70705396
+          w: 0.008637448
+    - Position:
+        x: -223.7174
+        y: -929.96277
+        z: 0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -193.3836
+      TangentOut:
+        x: 0
+        y: 0
+        z: 195.62257
+      Rotation:
+        value:
+          x: 0.005851366
+          y: 0.7070825
+          z: -0.70708257
+          w: -0.0058513815
+    - Position:
+        x: 439.0398
+        y: -1531.2786
+        z: 0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -202.07736
+      TangentOut:
+        x: 0
+        y: 0
+        z: 201.67989
+      Rotation:
+        value:
+          x: -0.0029525312
+          y: 0.7071006
+          z: -0.7071006
+          w: 0.0029525326
+    - Position:
+        x: -211.01746
+        y: -2141.173
+        z: 0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -89.1373
+      TangentOut:
+        x: 0
+        y: 0
+        z: 89.1373
+      Rotation:
+        value:
+          x: -0.28097197
+          y: -0.64888734
+          z: 0.6488874
+          w: 0.2809718
+    m_MetaData:
+    - Mode: 2
+      Tension: 0.5
+    - Mode: 0
+      Tension: 0.5
+    - Mode: 0
+      Tension: 0.5
+    - Mode: 0
+      Tension: 0.5
+    - Mode: 0
+      Tension: 0.5
+    m_Closed: 0
+    m_IntData:
+      m_Data: []
+    m_FloatData:
+      m_Data: []
+    m_Float4Data:
+      m_Data: []
+    m_ObjectData:
+      m_Data: []
+  m_Knots:
+    m_KnotsLink: []
+--- !u!4 &806772513
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806772511}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 684.9602, y: 1730.2786, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &818321084
 GameObject:
   m_ObjectHideFlags: 0
@@ -2124,3 +2296,4 @@ SceneRoots:
   - {fileID: 1419606582}
   - {fileID: 1403762332}
   - {fileID: 1805974928}
+  - {fileID: 806772513}
