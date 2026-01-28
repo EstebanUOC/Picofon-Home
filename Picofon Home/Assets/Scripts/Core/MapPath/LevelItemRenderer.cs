@@ -37,7 +37,7 @@ public class LevelItemRenderer : MonoBehaviour
 
     [Header("Grid placement")]
     [SerializeField]
-    private Vector2 _startPos = new(300f, -300f);
+    private int _startPos = -400;
 
     [SerializeField]
     private Vector2 _spacing = new(450f, -500f);
@@ -71,12 +71,15 @@ public class LevelItemRenderer : MonoBehaviour
         // TODO: TEMP code (delete this later)
         lastCompleted = 2;
 
+        float containerMiddle = _container.rect.width / 2;
+        float spacingMiddle = _spacing.x / 2;
+
         for (int i = 0; i < count; i++)
         {
             int col = i % _columns;
             int row = i;
-            float x = _startPos.x + (col * _spacing.x);
-            float y = _startPos.y + (row * _spacing.y);
+            float x = containerMiddle - spacingMiddle + (col * _spacing.x);
+            float y = _startPos + (row * _spacing.y);
             Vector2 position = new(x, y);
 
             Transform child = _container.GetChild(i);
@@ -126,12 +129,16 @@ public class LevelItemRenderer : MonoBehaviour
         int childCount = _container.childCount;
         Vector2 offset = new(0f, -240f);
 
+        float containerMiddle = _container.rect.width / 2;
+        float spacingMiddle = _spacing.x / 2;
+
         for (int i = 0; i < childCount; i++)
         {
             int col = i % _columns;
             int row = i;
-            float x = _startPos.x + (col * _spacing.x);
-            float y = _startPos.y + (row * _spacing.y);
+            float x = containerMiddle - spacingMiddle + (col * _spacing.x);
+            float y = _startPos + (row * _spacing.y);
+
             Vector2 position = new(x, y);
 
             RectTransform child = _container.GetChild(i) as RectTransform;
