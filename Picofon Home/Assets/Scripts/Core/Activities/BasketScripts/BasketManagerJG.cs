@@ -81,11 +81,6 @@ public class BasketGameManagerJG : MonoBehaviour
 # endif
         }
 
-        // TODO: Remove debug log
-        Debug.Log(
-            $"Loading activities with PlanId: {@params.PlanId}, ChildId: {@params.ChildId}, Skill: {skill}"
-        );
-
         _feedbackController.Init(skill);
 
         LoadActivities(@params).Forget();

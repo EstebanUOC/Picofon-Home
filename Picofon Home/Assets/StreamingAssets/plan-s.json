@@ -1,0 +1,99 @@
+{
+    "success": true,
+    "message": {
+        "content": ["Activities generated"],
+        "displayable": true
+    },
+    "data": {
+        "general_data": {
+            "audio_Intro": "CA-MO-SY-ISI-S-GE-T-I.wav",
+            "feedback_positive": "CA-MO-SY-ISI-S-GE-T-P.wav",
+            "feedback_neutral": "CA-MO-SY-ISI-S-GE-T-N.wav",
+            "feedback_no_answer": "audio_FNA.wav"
+        },
+        "activities": [
+            {
+                "words": [
+                    {
+                        "word": "mare",
+                        "path": "IMG_0015.png",
+                        "id": 2912,
+                        "syllabified_word": "ma#re",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    },
+                    {
+                        "word": "maça",
+                        "path": "IMG_0011.png",
+                        "id": 2908,
+                        "syllabified_word": "ma#ça",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    },
+                    {
+                        "word": "ramat",
+                        "path": "IMG_0608.png",
+                        "id": 3597,
+                        "syllabified_word": "ra#mat",
+                        "word_sound": "sound00x.wav",
+                        "answer": true
+                    },
+                    {
+                        "word": "mamà",
+                        "path": "IMG_0105.png",
+                        "id": 2910,
+                        "syllabified_word": "ma#mà",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    }
+                ]
+            },
+            {
+                "words": [
+                    {
+                        "word": "maki",
+                        "path": "IMG_0012.png",
+                        "id": 2909,
+                        "syllabified_word": "ma#ki",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    },
+                    {
+                        "word": "maça",
+                        "path": "IMG_0011.png",
+                        "id": 2908,
+                        "syllabified_word": "ma#ça",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    },
+                    {
+                        "word": "nadal",
+                        "path": "IMG_0311.png",
+                        "id": 3230,
+                        "syllabified_word": "na#dal",
+                        "word_sound": "sound00x.wav",
+                        "answer": true
+                    },
+                    {
+                        "word": "matí",
+                        "path": "IMG_0016.png",
+                        "id": 2914,
+                        "syllabified_word": "ma#tí",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    }
+                ]
+            }
+        ],
+        "availability_info": {
+            "words_available": 10,
+            "questions_possible": 10,
+            "therapy_plan_requested": 2,
+            "words_per_question": 4,
+            "sufficient_words": true,
+            "activity_number": 1,
+            "activities_created": 2,
+            "activities_requested": 2
+        }
+    }
+}

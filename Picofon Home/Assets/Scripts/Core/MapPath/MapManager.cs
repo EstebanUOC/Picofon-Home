@@ -51,13 +51,7 @@ public class MapManager : MonoBehaviour
 # endif
         }
 
-        if (!GamePrefs.DebugMode)
-        {
-            LoadPlans().Forget();
-            return;
-        }
-
-        _renderer.RenderLevels(5);
+        LoadPlans().Forget();
     }
 
     public void OnEnable()

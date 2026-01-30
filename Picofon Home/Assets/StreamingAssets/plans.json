@@ -1,0 +1,236 @@
+{
+    "success": true,
+    "message": {
+        "content": ["Planes de terapia del niño obtenidos exitosamente"],
+        "displayable": true
+    },
+    "data": {
+        "plans": [
+            {
+                "therapy_template_id": 10,
+                "assigned_by_id": "AwgdI1xsu5RoU6zgLvTfAZeklbn2",
+                "plan_number": "PLAN-1763915460884",
+                "name": "Plan for Joaquin Coba",
+                "target_sessions": 5,
+                "notes": "",
+                "status": "ACTIVE",
+                "start_date": "2025-11-23T16:31:00",
+                "child_id": "19013454K",
+                "vowel": "a",
+                "therapy_plan_id": 41,
+                "created_at": "2025-11-23T16:31:02",
+                "updated_at": "2025-11-23T16:31:02",
+                "therapy_template": {
+                    "name": "I-2-D-Nasal sono",
+                    "description": "Plantilla para posición initial, 2 sílabas, estructura D, sonido Nasal sono",
+                    "task_type_id": 1,
+                    "sound_id": 1,
+                    "skill_id": 1,
+                    "syllables_number": 2,
+                    "syllable_structure": "D",
+                    "syllable_position": "INITIAL",
+                    "difficulty_level": "BEGINNER",
+                    "id": 10,
+                    "created_at": "2025-10-05T19:42:45",
+                    "is_active": true,
+                    "task_type": {
+                        "id": 1,
+                        "name": "Judge"
+                    },
+                    "sound": {
+                        "id": 1,
+                        "name": "Nasal sonora M",
+                        "nomenclature": "NSM",
+                        "phoneme": "m"
+                    },
+                    "skill": {
+                        "id": 1,
+                        "name": "Identificar síl•labes inicials",
+                        "nomenclature": "ISI",
+                        "unit_id": 1
+                    }
+                }
+            },
+            {
+                "therapy_template_id": 577,
+                "assigned_by_id": "AwgdI1xsu5RoU6zgLvTfAZeklbn2",
+                "plan_number": "PLAN-1763915504534",
+                "name": "Plan for Joaquin Coba",
+                "target_sessions": 2,
+                "notes": "",
+                "status": "ACTIVE",
+                "start_date": "2025-11-23T16:31:44",
+                "child_id": "19013454K",
+                "vowel": "a",
+                "therapy_plan_id": 42,
+                "created_at": "2025-11-23T16:31:45",
+                "updated_at": "2025-11-23T16:31:45",
+                "therapy_template": {
+                    "name": "I-2-D-Nasal sono",
+                    "description": "Plantilla para posición initial, 2 sílabas, estructura D, sonido Nasal sono",
+                    "task_type_id": 2,
+                    "sound_id": 1,
+                    "skill_id": 1,
+                    "syllables_number": 2,
+                    "syllable_structure": "D",
+                    "syllable_position": "INITIAL",
+                    "difficulty_level": "BEGINNER",
+                    "id": 577,
+                    "created_at": "2025-10-05T19:44:30",
+                    "is_active": true,
+                    "task_type": {
+                        "id": 2,
+                        "name": "Select"
+                    },
+                    "sound": {
+                        "id": 1,
+                        "name": "Nasal sonora M",
+                        "nomenclature": "NSM",
+                        "phoneme": "m"
+                    },
+                    "skill": {
+                        "id": 1,
+                        "name": "Identificar síl•labes inicials",
+                        "nomenclature": "ISI",
+                        "unit_id": 1
+                    }
+                }
+            },
+            {
+                "therapy_template_id": 1144,
+                "assigned_by_id": "AwgdI1xsu5RoU6zgLvTfAZeklbn2",
+                "plan_number": "PLAN-1763915531092",
+                "name": "Plan for Joaquin Coba",
+                "target_sessions": 5,
+                "notes": "",
+                "status": "ACTIVE",
+                "start_date": "2025-11-23T16:32:11",
+                "child_id": "19013454K",
+                "vowel": "a",
+                "therapy_plan_id": 43,
+                "created_at": "2025-11-23T16:32:12",
+                "updated_at": "2025-11-23T16:32:12",
+                "therapy_template": {
+                    "name": "I-2-D-Nasal sono",
+                    "description": "Plantilla para posición initial, 2 sílabas, estructura D, sonido Nasal sono",
+                    "task_type_id": 3,
+                    "sound_id": 1,
+                    "skill_id": 1,
+                    "syllables_number": 2,
+                    "syllable_structure": "D",
+                    "syllable_position": "INITIAL",
+                    "difficulty_level": "BEGINNER",
+                    "id": 1144,
+                    "created_at": "2025-10-05T19:46:13",
+                    "is_active": true,
+                    "task_type": {
+                        "id": 3,
+                        "name": "Relate"
+                    },
+                    "sound": {
+                        "id": 1,
+                        "name": "Nasal sonora M",
+                        "nomenclature": "NSM",
+                        "phoneme": "m"
+                    },
+                    "skill": {
+                        "id": 1,
+                        "name": "Identificar síl•labes inicials",
+                        "nomenclature": "ISI",
+                        "unit_id": 1
+                    }
+                }
+            },
+            {
+                "therapy_template_id": 2001,
+                "assigned_by_id": "AwgdI1xsu5RoU6zgLvTfAZeklbn2",
+                "plan_number": "PLAN-1763915600001",
+                "name": "Plan for Lucia Perez",
+                "target_sessions": 3,
+                "notes": "Enfocado en sílabas finales",
+                "status": "ACTIVE",
+                "start_date": "2025-12-01T10:00:00",
+                "child_id": "19013454L",
+                "vowel": "e",
+                "therapy_plan_id": 44,
+                "created_at": "2025-12-01T10:00:01",
+                "updated_at": "2025-12-01T10:00:01",
+                "therapy_template": {
+                    "name": "F-1-F-Nasal sorda",
+                    "description": "Plantilla para posición final, 1 sílaba, estructura F, sonido Nasal sorda",
+                    "task_type_id": 4,
+                    "sound_id": 2,
+                    "skill_id": 2,
+                    "syllables_number": 1,
+                    "syllable_structure": "F",
+                    "syllable_position": "FINAL",
+                    "difficulty_level": "INTERMEDIATE",
+                    "id": 2001,
+                    "created_at": "2025-11-30T18:00:00",
+                    "is_active": true,
+                    "task_type": {
+                        "id": 1,
+                        "name": "Judge"
+                    },
+                    "sound": {
+                        "id": 2,
+                        "name": "Nasal sorda N",
+                        "nomenclature": "NSN",
+                        "phoneme": "n"
+                    },
+                    "skill": {
+                        "id": 2,
+                        "name": "Reconocer sílabas finales",
+                        "nomenclature": "RSF",
+                        "unit_id": 2
+                    }
+                }
+            },
+            {
+                "therapy_template_id": 2002,
+                "assigned_by_id": "AwgdI1xsu5RoU6zgLvTfAZeklbn2",
+                "plan_number": "PLAN-1763915600002",
+                "name": "Plan for Mateo Ruiz",
+                "target_sessions": 4,
+                "notes": "Dificultad avanzada",
+                "status": "ACTIVE",
+                "start_date": "2025-12-02T11:30:00",
+                "child_id": "19013454M",
+                "vowel": "o",
+                "therapy_plan_id": 45,
+                "created_at": "2025-12-02T11:30:01",
+                "updated_at": "2025-12-02T11:30:01",
+                "therapy_template": {
+                    "name": "M-3-M-Lateral",
+                    "description": "Plantilla para posición media, 3 sílabas, estructura M, sonido Lateral",
+                    "task_type_id": 5,
+                    "sound_id": 3,
+                    "skill_id": 3,
+                    "syllables_number": 3,
+                    "syllable_structure": "M",
+                    "syllable_position": "MEDIAL",
+                    "difficulty_level": "ADVANCED",
+                    "id": 2002,
+                    "created_at": "2025-12-01T19:00:00",
+                    "is_active": true,
+                    "task_type": {
+                        "id": 1,
+                        "name": "Judge"
+                    },
+                    "sound": {
+                        "id": 3,
+                        "name": "Lateral L",
+                        "nomenclature": "LATL",
+                        "phoneme": "l"
+                    },
+                    "skill": {
+                        "id": 3,
+                        "name": "Ordenar sílabas medias",
+                        "nomenclature": "OSM",
+                        "unit_id": 3
+                    }
+                }
+            }
+        ]
+    }
+}

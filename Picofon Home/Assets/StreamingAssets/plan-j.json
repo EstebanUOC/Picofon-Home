@@ -1,0 +1,127 @@
+{
+    "success": true,
+    "message": {
+        "content": ["Activities generated"],
+        "displayable": true
+    },
+    "data": {
+        "general_data": {
+            "audio_Intro_Basket": "CA-MO-SY-ISI-J-BA-T-I.wav",
+            "audio_Intro_PopSea": "CA-MO-SY-ISI-J-PS-T-I.wav",
+            "audio_Intro_PopParty": "CA-MO-SY-ISI-J-PP-T-I.wav",
+            "audio_Intro_CrossRiver": "CA-MO-SY-ISI-J-CR-T-I.wav",
+            "feedback_positive_yes": "CA-MO-SY-ISI-J-GE-T-PS.wav",
+            "feedback_positive_no": "CA-MO-SY-ISI-J-GE-T-PN.wav",
+            "feedback_neutral_yes": "CA-MO-SY-ISI-J-GE-T-NS.wav",
+            "feedback_neutral_no": "CA-MO-SY-ISI-J-GE-T-NN.wav",
+            "feedback_no_answer": "audio_AN.wav"
+        },
+        "activities": [
+            {
+                "words": [
+                    {
+                        "word": "maça",
+                        "path": "IMG_0011.png",
+                        "id": 2908,
+                        "syllabified_word": "ma#ça",
+                        "word_sound": "sound001.wav"
+                    },
+                    {
+                        "word": "mamà",
+                        "path": "IMG_0105.png",
+                        "id": 2910,
+                        "syllabified_word": "ma#mà",
+                        "word_sound": "sound001.wav"
+                    }
+                ],
+                "answer": true
+            },
+            {
+                "words": [
+                    {
+                        "word": "mapa",
+                        "path": "IMG_0014.png",
+                        "id": 2911,
+                        "syllabified_word": "ma#pa",
+                        "word_sound": "sound001.wav"
+                    },
+                    {
+                        "word": "bambú",
+                        "path": "IMG_1942.png",
+                        "id": 4537,
+                        "syllabified_word": "bam#bú",
+                        "word_sound": "sound001.wav"
+                    }
+                ],
+                "answer": false
+            },
+            {
+                "words": [
+                    {
+                        "word": "mare",
+                        "path": "IMG_0015.png",
+                        "id": 2912,
+                        "syllabified_word": "ma#re",
+                        "word_sound": "sound001.wav"
+                    },
+                    {
+                        "word": "mareig",
+                        "path": "IMG_1420.png",
+                        "id": 2913,
+                        "syllabified_word": "ma#reig",
+                        "word_sound": "sound001.wav"
+                    }
+                ],
+                "answer": true
+            },
+            {
+                "words": [
+                    {
+                        "word": "martell",
+                        "path": "IMG_0980.png",
+                        "id": 2917,
+                        "syllabified_word": "mar#tell",
+                        "word_sound": "sound001.wav"
+                    },
+                    {
+                        "word": "garra",
+                        "path": "IMG_0702.png",
+                        "id": 5411,
+                        "syllabified_word": "ga#rra",
+                        "word_sound": "sound001.wav"
+                    }
+                ],
+                "answer": false
+            },
+            {
+                "words": [
+                    {
+                        "word": "mareig",
+                        "path": "IMG_1420.png",
+                        "id": 2913,
+                        "syllabified_word": "ma#reig",
+                        "word_sound": "sound001.wav"
+                    },
+                    {
+                        "word": "mamà",
+                        "path": "IMG_0105.png",
+                        "id": 2910,
+                        "syllabified_word": "ma#mà",
+                        "word_sound": "sound001.wav"
+                    }
+                ],
+                "answer": true
+            }
+        ],
+        "availability_info": {
+            "words_available": 10,
+            "questions_possible": 10,
+            "therapy_plan_requested": 5,
+            "words_per_question": 2,
+            "sufficient_words": true,
+            "activity_number": 1,
+            "activities_created": 5,
+            "activities_requested": 5
+        }
+    }
+}

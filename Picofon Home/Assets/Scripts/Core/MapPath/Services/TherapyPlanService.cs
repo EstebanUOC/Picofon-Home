@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Picofon.Core.Network;
+using UnityEngine;
 
 public class TherapyPlanService
 {
@@ -26,7 +27,24 @@ public class TherapyPlanService
         }
         catch (System.Exception)
         {
-            return ApiResult<T>.Fail("Network error occurred while fetching therapy plans.");
+            if (!GamePrefs.DebugMode)
+            {
+                return ApiResult<T>.Fail("Network error occurred while fetching therapy plans.");
+            }
+
+            Debug.LogWarning("Network request failed. Falling back to local data in Debug Mode.");
+
+            string streamingPath = System.IO.Path.Combine(
+                Application.streamingAssetsPath,
+                "plans.json"
+            );
+            string uri = new System.Uri(streamingPath).AbsoluteUri;
+
+            rawResponse = await HttpClientUnity.GetAsyncBytes(
+                url: uri,
+                timeoutSeconds: 5,
+                cancellationToken: token
+            );
         }
 
         using JsonDocument doc = JsonDocument.Parse(rawResponse);
