@@ -14,10 +14,20 @@ public class TherapyPlanService
     {
         string url = $"{BaseURL}/{childId}";
 
-        byte[] rawResponse = await HttpClientUnity.GetAsyncBytes(
-            url: url,
-            cancellationToken: token
-        );
+        byte[] rawResponse;
+
+        try
+        {
+            rawResponse = await HttpClientUnity.GetAsyncBytes(
+                url: url,
+                timeoutSeconds: 5,
+                cancellationToken: token
+            );
+        }
+        catch (System.Exception)
+        {
+            return ApiResult<T>.Fail("Network error occurred while fetching therapy plans.");
+        }
 
         using JsonDocument doc = JsonDocument.Parse(rawResponse);
         JsonElement root = doc.RootElement;

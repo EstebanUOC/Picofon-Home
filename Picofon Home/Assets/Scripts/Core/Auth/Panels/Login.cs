@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using Firebase.Auth;
 using Google;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Login : Panel
 {
@@ -14,6 +15,9 @@ public class Login : Panel
 
     [Space(15)]
     public TMPro.TMP_Text VersionText;
+
+    [SerializeField]
+    private Modal _modal;
 
     private readonly string googleAPI =
         "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
@@ -33,6 +37,11 @@ public class Login : Panel
         OnHide += () => gameObject.SetActive(false);
 
         VersionText.text = UIManager.VersionNumber.ToString("0.0");
+    }
+
+    private void OnDebugLogin()
+    {
+        ShowDebugMenu().Forget();
     }
 
     private async UniTask AuthenticateWithGoogle()
@@ -109,16 +118,29 @@ public class Login : Panel
         UIManager.ShowDisclaimer();
     }
 
-    private void OnDebugLogin()
+    private async UniTaskVoid ShowDebugMenu()
     {
-        UserDataDTO debugUser = new()
-        {
-            Id = "AwgdI1xsu5RoU6zgLvTfAZeklbn2",
-            Email = "test@gmail.com",
-            Username = "Debug User",
-        };
+        DebugMenuResult result = await _modal.ShowDebugMenu();
 
-        UIManager.CurrentUser = debugUser;
-        UIManager.ShowDisclaimer();
+        GamePrefs.DebugMode = true;
+        switch (result)
+        {
+            case DebugMenuResult.Children:
+                UserDataDTO debugUser = new()
+                {
+                    Id = "AwgdI1xsu5RoU6zgLvTfAZeklbn2",
+                    Email = "test@gmail.com",
+                    Username = "Debug User",
+                };
+
+                UIManager.CurrentUser = debugUser;
+                UIManager.ShowUserChildren();
+                break;
+            case DebugMenuResult.Map:
+                SceneManager.LoadScene("MapPathScene");
+                break;
+            default:
+                break;
+        }
     }
 }
