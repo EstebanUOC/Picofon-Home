@@ -24,22 +24,10 @@ public class UIManager : MonoBehaviour
 
     public FirebaseAuth FirebaseAuthInstance { get; private set; }
 
-    private static bool algo = false;
-
     public void Start()
     {
         LoadingPanel.Show();
         BootstrapApplicacion().Forget();
-
-        if (!algo)
-        {
-            Debug.Log("No esta: " + VersionNumber);
-            algo = true;
-        }
-        else
-        {
-            Debug.Log("Ya esta: " + VersionNumber);
-        }
     }
 
     private async UniTaskVoid BootstrapApplicacion()
