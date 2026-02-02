@@ -22,6 +22,8 @@ public static class GamePrefs
         }
     }
 
+    public static bool DebugMode;
+
     public static void ClearAll()
     {
         PlayerPrefs.DeleteAll();

@@ -57,12 +57,11 @@ public class LevelItemRenderer : MonoBehaviour
 
     public void Start()
     {
-        const float moveAmount = 20f;
+        const float moveAmount = 30f;
 
-        _continue
-            .DOAnchorPosY(_continue.anchoredPosition.y + moveAmount, 1f)
-            .SetLoops(-1, LoopType.Yoyo)
-            .SetEase(Ease.InOutSine);
+        Transform child = _continue.GetChild(0);
+
+        child.DOLocalMoveY(moveAmount, 0.8f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
     }
 
     public void RenderLevels(int count)
@@ -73,6 +72,8 @@ public class LevelItemRenderer : MonoBehaviour
 
         float containerMiddle = _container.rect.width / 2;
         float spacingMiddle = _spacing.x / 2;
+
+        Vector2 offset = new(0f, -240f);
 
         for (int i = 0; i < count; i++)
         {
@@ -89,11 +90,18 @@ public class LevelItemRenderer : MonoBehaviour
                 child = obj.transform;
             }
 
-            child.GetComponent<RectTransform>().anchoredPosition = position;
+            RectTransform childRect = child.GetComponent<RectTransform>();
+            childRect.anchoredPosition = position;
 
             LevelItemView comp = child.GetComponent<LevelItemView>();
 
             bool locked = i > lastCompleted;
+
+            if (i == lastCompleted)
+            {
+                Debug.Log("Setting continue position to level index: " + i);
+                _continue.anchoredPosition = childRect.anchoredPosition - offset;
+            }
 
             LevelConfig config = _configurations[i % _configurations.Length];
 

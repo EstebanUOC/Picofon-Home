@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -12,28 +13,75 @@ public struct ModalData
 public class Modal : MonoBehaviour
 {
     [Space(15)]
-    public TextMeshProUGUI Title;
-    public TextMeshProUGUI Message;
-    public CustomButtonBase ConfirmButton;
+    [SerializeField]
+    private TMP_Text _title;
 
-    public void Show(ModalData data)
+    [SerializeField]
+    private TMP_Text _message;
+
+    [SerializeField]
+    private CustomButtonBase _button;
+
+    [SerializeField]
+    private GameObject _content;
+
+    [SerializeField]
+    private GameObject _menu;
+
+    private ReusableCompletionSource<bool> _taskCompletion;
+    private ReusableCompletionSource<DebugMenuResult> _taskDebug;
+
+    public void Awake()
+    {
+        _taskCompletion = new ReusableCompletionSource<bool>();
+        _taskDebug = new ReusableCompletionSource<DebugMenuResult>();
+
+        _button.OnClick += OnConfirmButtonClicked;
+    }
+
+    public async UniTask<DebugMenuResult> ShowDebugMenu()
     {
         gameObject.SetActive(true);
-        Title.text = data.Title;
-        Message.text = data.Message;
 
-        ConfirmButton.RemoveAllListeners();
-        ConfirmButton.OnClick += () => data.OnClose?.Invoke();
-        ConfirmButton.OnClick += () => Hide();
+        _content.SetActive(false);
+        _menu.SetActive(true);
+
+        DebugMenu debugMenu = _menu.GetComponent<DebugMenu>();
+        debugMenu.OnClose -= OnMenuClose;
+        debugMenu.OnClose += OnMenuClose;
+
+        _taskDebug.Reset();
+
+        return await _taskDebug.Task;
     }
 
-    public void Start()
+    public async UniTask<bool> Show(ModalData data)
     {
-        ConfirmButton.OnClick += () => Hide();
+        gameObject.SetActive(true);
+        _title.text = data.Title;
+        _message.text = data.Message;
+
+        return await _taskCompletion.Task;
     }
 
-    public void Hide()
+    public void OnDestroy()
     {
+        _taskCompletion.TrySetCanceled();
+    }
+
+    private void OnConfirmButtonClicked()
+    {
+        _taskCompletion.TrySetResult(true);
+
+        gameObject.SetActive(false);
+    }
+
+    private void OnMenuClose(DebugMenuResult result)
+    {
+        _taskDebug.TrySetResult(result);
+
+        _content.SetActive(true);
+        _menu.SetActive(false);
         gameObject.SetActive(false);
     }
 }

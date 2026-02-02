@@ -1,4 +1,6 @@
+using System;
 using System.Text.Json.Serialization;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -65,7 +67,8 @@ public class MapManager : MonoBehaviour
     private async UniTaskVoid LoadPlans()
     {
         TherapyPlanService service = new();
-        LevelDataStore store = LevelDataStore.Instance;
+        CancellationTokenSource token = new();
+        token.CancelAfterSlim(TimeSpan.FromSeconds(5));
 
         ApiResult<TherapyData> result = await service.GetAllPlans<TherapyData>(_childId);
 
@@ -83,6 +86,7 @@ public class MapManager : MonoBehaviour
             return;
         }
 
+        LevelDataStore store = LevelDataStore.Instance;
         store.SavePlans(plans);
 
         _renderer.RenderLevels(plans.Length);

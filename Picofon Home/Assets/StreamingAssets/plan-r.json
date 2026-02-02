@@ -1,0 +1,240 @@
+{
+    "success": true,
+    "message": {
+        "content": ["Activities generated"],
+        "displayable": true
+    },
+    "data": {
+        "general_data": {
+            "audio_Intro_Basket": "CA-MO-SY-ISI-R-BA-T-I.wav",
+            "audio_Intro_PopSea": "CA-MO-SY-ISI-R-PS-T-I.wav",
+            "audio_Intro_PopParty": "CA-MO-SY-ISI-R-PP-T-I.wav",
+            "audio_Intro_CrossRiver": "CA-MO-SY-ISI-R-CR-T-I.wav",
+            "feedback_positive": "CA-MO-SY-ISI-R-GE-T-P.wav",
+            "feedback_neutral": "CA-MO-SY-ISI-R-GE-T-N.wav",
+            "feedback_no_answer": "audio_AN.wav"
+        },
+        "activities": [
+            {
+                "main_word": {
+                    "word": "maça",
+                    "PATH": "IMG_0011.png",
+                    "id": 2908,
+                    "syllabified_word": "ma#ça"
+                },
+                "words": [
+                    {
+                        "word": "mamà",
+                        "path": "IMG_0105.png",
+                        "id": 2910,
+                        "syllabified_word": "ma#mà",
+                        "word_sound": "sound00x.wav",
+                        "answer": true
+                    },
+                    {
+                        "word": "xarop",
+                        "path": "IMG_2113.png",
+                        "id": 4393,
+                        "syllabified_word": "xa#rop",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    },
+                    {
+                        "word": "galta",
+                        "path": "IMG_2412.png",
+                        "id": 5412,
+                        "syllabified_word": "gal#ta",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    },
+                    {
+                        "word": "ballet",
+                        "path": "IMG_2435.png",
+                        "id": 4525,
+                        "syllabified_word": "ba#llet",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    }
+                ]
+            },
+            {
+                "main_word": {
+                    "word": "matí",
+                    "PATH": "IMG_0016.png",
+                    "id": 2914,
+                    "syllabified_word": "ma#tí"
+                },
+                "words": [
+                    {
+                        "word": "mare",
+                        "path": "IMG_0015.png",
+                        "id": 2912,
+                        "syllabified_word": "ma#re",
+                        "word_sound": "sound00x.wav",
+                        "answer": true
+                    },
+                    {
+                        "word": "saltar",
+                        "path": "IMG_1164.png",
+                        "id": 4064,
+                        "syllabified_word": "sal#tar",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    },
+                    {
+                        "word": "natja",
+                        "path": "IMG_1609.png",
+                        "id": 3232,
+                        "syllabified_word": "nat#ja",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    },
+                    {
+                        "word": "capa",
+                        "path": "IMG_2099.png",
+                        "id": 5533,
+                        "syllabified_word": "ca#pa",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    }
+                ]
+            },
+            {
+                "main_word": {
+                    "word": "matí",
+                    "PATH": "IMG_0016.png",
+                    "id": 2914,
+                    "syllabified_word": "ma#tí"
+                },
+                "words": [
+                    {
+                        "word": "maça",
+                        "path": "IMG_0011.png",
+                        "id": 2908,
+                        "syllabified_word": "ma#ça",
+                        "word_sound": "sound00x.wav",
+                        "answer": true
+                    },
+                    {
+                        "word": "vaca",
+                        "path": "IMG_2702.png",
+                        "id": 4577,
+                        "syllabified_word": "va#ca",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    },
+                    {
+                        "word": "rampa",
+                        "path": "IMG_0611.png",
+                        "id": 3602,
+                        "syllabified_word": "ram#pa",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    },
+                    {
+                        "word": "Japó",
+                        "path": "IMG_1412.png",
+                        "id": 4337,
+                        "syllabified_word": "Ja#pó",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    }
+                ]
+            },
+            {
+                "main_word": {
+                    "word": "maki",
+                    "PATH": "IMG_0012.png",
+                    "id": 2909,
+                    "syllabified_word": "ma#ki"
+                },
+                "words": [
+                    {
+                        "word": "mapa",
+                        "path": "IMG_0014.png",
+                        "id": 2911,
+                        "syllabified_word": "ma#pa",
+                        "word_sound": "sound00x.wav",
+                        "answer": true
+                    },
+                    {
+                        "word": "carta",
+                        "path": "IMG_2629.png",
+                        "id": 5553,
+                        "syllabified_word": "car#ta",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    },
+                    {
+                        "word": "camí",
+                        "path": "IMG_0112.png",
+                        "id": 5529,
+                        "syllabified_word": "ca#mí",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    },
+                    {
+                        "word": "bagul",
+                        "path": "IMG_0540.png",
+                        "id": 4523,
+                        "syllabified_word": "ba#gul",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    }
+                ]
+            },
+            {
+                "main_word": {
+                    "word": "mare",
+                    "PATH": "IMG_0015.png",
+                    "id": 2912,
+                    "syllabified_word": "ma#re"
+                },
+                "words": [
+                    {
+                        "word": "maça",
+                        "path": "IMG_0011.png",
+                        "id": 2908,
+                        "syllabified_word": "ma#ça",
+                        "word_sound": "sound00x.wav",
+                        "answer": true
+                    },
+                    {
+                        "word": "cafè",
+                        "path": "IMG_0224.png",
+                        "id": 5524,
+                        "syllabified_word": "ca#fè",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    },
+                    {
+                        "word": "nansa",
+                        "path": "IMG_0313.png",
+                        "id": 3239,
+                        "syllabified_word": "nan#sa",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    },
+                    {
+                        "word": "calze",
+                        "path": "IMG_1368.png",
+                        "id": 5544,
+                        "syllabified_word": "cal#ze",
+                        "word_sound": "sound00x.wav",
+                        "answer": false
+                    }
+                ]
+            }
+        ],
+        "availability_info": {
+            "words_available": 10,
+            "questions_possible": 10,
+            "therapy_plan_requested": 5,
+            "words_per_question": 5,
+            "sufficient_words": true,
+            "activity_number": 1,
+            "activities_created": 5,
+            "activities_requested": 5
+        }
+    }
+}
