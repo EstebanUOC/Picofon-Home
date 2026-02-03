@@ -42,7 +42,7 @@ public class MapManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(_childId))
         {
-#if !UNITY_EDITOR
+#if !DEBUG
             Debug.LogError("ChildId is null or empty in MapPathPayload.");
             return;
 # else
