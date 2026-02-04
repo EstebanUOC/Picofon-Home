@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -35,10 +37,10 @@ public class UserChildren : Panel
     public override void Show()
     {
         base.Show();
-        LoadChildren();
+        LoadChildren().Forget();
     }
 
-    private async void LoadChildren()
+    private async UniTaskVoid LoadChildren()
     {
         UserService userService = UIManager.UserService;
         cts = new CancellationTokenSource();
@@ -56,16 +58,24 @@ public class UserChildren : Panel
             {
                 Title = "Error",
                 Message = "Could not load children. Please try again later.",
-                OnClose = () => { },
             };
-            UIManager.ShowModal(modalData);
+            await UIManager.ShowModal(modalData);
             return;
         }
 
         childrenDropdown.ClearOptions();
+
+        StringBuilder sb = new();
+
         foreach (var child in children)
         {
-            string fullName = child.FirstName + " " + child.LastName;
+            sb.Clear();
+            sb.Append(child.FirstName);
+            sb.Append(" ");
+            sb.Append(child.LastName);
+
+            string fullName = sb.ToString();
+
             TMP_Dropdown.OptionData option = new(fullName);
             childrenDropdown.options.Add(option);
 

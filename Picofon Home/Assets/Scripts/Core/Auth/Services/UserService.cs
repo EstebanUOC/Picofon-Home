@@ -1,19 +1,21 @@
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Picofon.Core.Network;
 
 public class UserService
 {
-    private const string ChildrenURL = ApiConfig.BaseUrl + "children";
+    private readonly string ChildrenURL = ApiConfig.BaseUrl + "children";
 
-    private const string UserURL = ApiConfig.BaseUrl + "auth/login";
+    private readonly string UserURL = ApiConfig.BaseUrl + "auth/login";
 
     public async UniTask<UserModel> LoginWithFirebaseToken(
         string firebaseToken,
         CancellationTokenSource cancellationTokenSource = default
     )
     {
-        const string URL = UserURL;
+        string URL = UserURL;
 
         LoginRequest loginRequest = new() { FirebaseIdToken = firebaseToken };
         string loginRequestJson = JsonHelper.ToJson(loginRequest);
@@ -58,28 +60,41 @@ public class UserService
         return response.Data;
     }
 
-    public async UniTask<UserRegisterChildResponse> RegisterChild(
+    public async UniTask<ApiResult> RegisterChild(
         ChildCreateDTO childCreateDTO,
-        CancellationTokenSource cancellationTokenSource = default
+        CancellationToken token = default
     )
     {
-        string url = $"{ChildrenURL}/";
+        string url = ChildrenURL;
 
-        string jsonRequest = JsonHelper.ToJson(childCreateDTO);
-        string rawResponse = await HttpClientUnity.PostAsync(
-            url: url,
-            data: jsonRequest,
-            cancellationToken: cancellationTokenSource?.Token ?? CancellationToken.None
-        );
+        byte[] rawResponse;
 
-        var response = JsonHelper.FromJson<UserRegisterChildResponse>(rawResponse);
+        byte[] jsonRequest = JsonHelper.ToBytes(childCreateDTO);
 
-        // TODO: Handle errors properly
-        // if (!response.Success)
-        // {
-        //     Debug.LogError("Register child failed: " + string.Join(", ", response.Message.Content));
-        // }
+        try
+        {
+            rawResponse = await HttpClientUnity.PostAsyncBytes(
+                url: url,
+                data: jsonRequest,
+                timeoutSeconds: 5,
+                cancellationToken: token
+            );
+        }
+        catch (System.Exception)
+        {
+            return ApiResult.Fail("Network error occurred while fetching activities.");
+        }
 
-        return response;
+        using JsonDocument doc = JsonDocument.Parse(rawResponse);
+        JsonElement root = doc.RootElement;
+
+        ApiResponseView responseView = new(root);
+
+        if (!responseView.Success)
+        {
+            return ApiResult.Fail(responseView.ErrorMessage);
+        }
+
+        return ApiResult.Ok();
     }
 }

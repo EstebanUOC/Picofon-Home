@@ -12,7 +12,7 @@ public struct ActivityRequestParams
 
 public class BasketService
 {
-    private const string UrlBase = ApiConfig.BaseUrl + "questions";
+    private readonly string UrlBase = ApiConfig.BaseUrl + "questions";
 
     public async UniTask<ApiResult<T>> GetActivities<T>(
         ActivityRequestParams @params,

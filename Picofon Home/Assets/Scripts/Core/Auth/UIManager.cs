@@ -32,54 +32,65 @@ public class UIManager : MonoBehaviour
 
     private async UniTaskVoid BootstrapApplicacion()
     {
+        await ApiConfig.Ping();
+
+        if (Application.isEditor)
+        {
+            LoadingPanel.Hide();
+            return;
+        }
+
         CancellationToken ct = this.GetCancellationTokenOnDestroy();
 
         TimeoutController timeoutController = new();
         CancellationToken timeoutCt = timeoutController.Timeout(TimeSpan.FromSeconds(30));
 
-        FirebaseService firebaseService = new();
+        CancellationTokenSource linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(
+            ct,
+            timeoutCt
+        );
 
-        bool success = await firebaseService.RunAsync(ct, timeoutCt);
+        bool success = await CheckFirebaseDependencies(linkedTokenSource.Token);
 
         if (!success)
         {
-            Debug.LogError("Firebase failed to initialize.");
-            return;
+            ModalData modalData = new()
+            {
+                Title = "Error",
+                Message = "Failed to initialize Firebase services. Please try again later.",
+            };
+            await ModalPanel.Show(modalData);
+            Application.Quit();
         }
 
         await UniTask.WaitForSeconds(2, cancellationToken: ct);
 
-        timeoutController.Reset();
-        timeoutController.Dispose();
         FirebaseAuthInstance = FirebaseAuth.DefaultInstance;
 
-        if (FirebaseAuthInstance.CurrentUser is null)
+        if (FirebaseAuthInstance.CurrentUser != null)
         {
-            ShowLogin();
-            LoadingPanel.Hide();
-            return;
+            string firebaseIdToken = await FirebaseAuthInstance
+                .CurrentUser.TokenAsync(false)
+                .AsUniTask()
+                .AttachExternalCancellation(ct);
+
+            UserModel user = await UserService.LoginWithFirebaseToken(firebaseIdToken);
+
+            CurrentUser = new UserDataDTO
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Username = user.FirstName,
+            };
         }
 
-#if !UNITY_EDITOR
-        Debug.Log(
-            "User is already logged in, DisplayName: "
-                + FirebaseAuthInstance.CurrentUser.DisplayName
-        );
-#endif
+        LoadingPanel.Hide();
 
-        string firebaseIdToken = await FirebaseAuthInstance
-            .CurrentUser.TokenAsync(false)
-            .AsUniTask()
-            .AttachExternalCancellation(ct);
-
-        UserModel user = await UserService.LoginWithFirebaseToken(firebaseIdToken);
-
-        CurrentUser = new UserDataDTO
+        if (CurrentUser is null)
         {
-            Id = user.Id,
-            Email = user.Email,
-            Username = user.FirstName,
-        };
+            ShowLogin();
+            return;
+        }
 
         if (GamePrefs.HasAcceptedTerms)
         {
@@ -89,8 +100,6 @@ public class UIManager : MonoBehaviour
         {
             ShowDisclaimer();
         }
-
-        LoadingPanel.Hide();
     }
 
     public void ShowLogin()
@@ -117,14 +126,14 @@ public class UIManager : MonoBehaviour
         UserChildrenPanel.Show();
     }
 
-    public void ShowModal(ModalData data)
+    public async UniTask ShowModal(ModalData data)
     {
-        ModalPanel.Show(data);
+        await ModalPanel.Show(data);
     }
 
     public void Logout()
     {
-        FirebaseAuthInstance.SignOut();
+        // FirebaseAuthInstance.SignOut();
 
         CurrentUser = null;
 
@@ -138,5 +147,20 @@ public class UIManager : MonoBehaviour
         RegisterChildPanel.Hide();
         UserChildrenPanel.Hide();
         DisclaimerPanel.Hide();
+    }
+
+    private async UniTask<bool> CheckFirebaseDependencies(CancellationToken ct)
+    {
+        FirebaseService firebaseService = new();
+
+        bool success = await firebaseService.RunAsync(ct);
+
+        if (!success)
+        {
+            Debug.LogError("Firebase failed to initialize.");
+            return false;
+        }
+
+        return true;
     }
 }

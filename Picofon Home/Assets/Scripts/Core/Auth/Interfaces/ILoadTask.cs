@@ -22,5 +22,5 @@ public interface ILoadTaskGeneric<T> : ILoadTask
 
 public interface ILoadTaskSimple : ILoadTask
 {
-    public UniTask<bool> RunAsync(CancellationToken ct, CancellationToken timeoutCt = default);
+    public UniTask<bool> RunAsync(CancellationToken ct);
 }
