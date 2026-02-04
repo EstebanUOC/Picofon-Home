@@ -65,4 +65,26 @@ public static class HttpClientUnity
 
         return request.downloadHandler.text;
     }
+
+    public static async UniTask<byte[]> PostAsyncBytes(
+        string url,
+        byte[] data,
+        int timeoutSeconds = 10,
+        CancellationToken cancellationToken = default
+    )
+    {
+        using var request = new UnityWebRequest(url, "POST");
+        request.uploadHandler = new UploadHandlerRaw(data);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        request.timeout = timeoutSeconds;
+
+        await request.SendWebRequest().WithCancellation(cancellationToken);
+
+        if (request.result != UnityWebRequest.Result.Success)
+            throw new Exception($"HTTP GET Error: {request.error} | URL: {url}");
+
+        return request.downloadHandler.data;
+    }
 }

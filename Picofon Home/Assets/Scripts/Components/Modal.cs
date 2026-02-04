@@ -1,4 +1,3 @@
-using System;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -7,7 +6,6 @@ public struct ModalData
 {
     public string Title;
     public string Message;
-    public Action OnClose;
 }
 
 public class Modal : MonoBehaviour

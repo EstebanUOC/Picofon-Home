@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public enum ChildFields
@@ -13,6 +15,7 @@ public enum ChildFields
     Center,
 }
 
+//TODO: Refactor to use a more generic form system
 public class Form : MonoBehaviour
 {
     public CustomButtonLoading ContinueButton;
@@ -20,6 +23,8 @@ public class Form : MonoBehaviour
     public string ParentId { get; set; } = string.Empty;
 
     private readonly Dictionary<ChildFields, FormInput> _fields = new();
+
+    public event Func<ChildCreateDTO, UniTask> OnSubmit;
 
     public void Awake()
     {
@@ -35,6 +40,33 @@ public class Form : MonoBehaviour
             }
         }
         ContinueButton.Interactable = false;
+        ContinueButton.OnClickAsync += HandleSubmit;
+    }
+
+    public ChildCreateDTO GatherChildData()
+    {
+        ChildCreateDTO child = new()
+        {
+            OwnerId = ParentId,
+            Id = _fields[ChildFields.ID].GetData(),
+            FirstName = _fields[ChildFields.FirstName].GetData(),
+            LastName = _fields[ChildFields.LastName].GetData(),
+            BirthDate = _fields[ChildFields.BirthDate].GetData(),
+            Disorder = _fields[ChildFields.Disorder].GetData(),
+            School = _fields[ChildFields.School].GetData(),
+            Grade = int.Parse(_fields[ChildFields.Grade].GetData()),
+            CenterId = int.Parse(_fields[ChildFields.Center].GetData()),
+        };
+
+        return child;
+    }
+
+    private async UniTask HandleSubmit()
+    {
+        ChildCreateDTO data = GatherChildData();
+
+        if (OnSubmit != null)
+            await OnSubmit.Invoke(data);
     }
 
     private void DisableButton()
@@ -55,23 +87,5 @@ public class Form : MonoBehaviour
         }
 
         ContinueButton.Interactable = allValid;
-    }
-
-    public ChildCreateDTO GatherChildData()
-    {
-        ChildCreateDTO child = new()
-        {
-            OwnerId = ParentId,
-            Id = _fields[ChildFields.ID].GetData(),
-            FirstName = _fields[ChildFields.FirstName].GetData(),
-            LastName = _fields[ChildFields.LastName].GetData(),
-            BirthDate = _fields[ChildFields.BirthDate].GetData(),
-            Disorder = _fields[ChildFields.Disorder].GetData(),
-            School = _fields[ChildFields.School].GetData(),
-            Grade = int.Parse(_fields[ChildFields.Grade].GetData()),
-            CenterId = int.Parse(_fields[ChildFields.Center].GetData()),
-        };
-
-        return child;
     }
 }

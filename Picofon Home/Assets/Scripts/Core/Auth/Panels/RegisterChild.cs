@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using TMPro;
@@ -15,16 +14,12 @@ public class RegisterChild : Panel
 
     [Space(15)]
     public Form ChildRegistrationForm;
-    public CustomButtonLoading ContinueButton;
-
-    private CancellationTokenSource cts;
 
     public void Start()
     {
         OnHide += () => gameObject.SetActive(false);
 
-        ContinueButton.OnClickAsync += OnContinue;
-        ContinueButton.Interactable = false;
+        ChildRegistrationForm.OnSubmit += OnContinue;
     }
 
     public override void Show()
@@ -36,43 +31,31 @@ public class RegisterChild : Panel
         ChildRegistrationForm.ParentId = UIManager.CurrentUser.Id;
     }
 
-    private async UniTask OnContinue()
+    private async UniTask OnContinue(ChildCreateDTO data)
     {
-        ChildCreateDTO childData = ChildRegistrationForm.GatherChildData();
-
         UserService userService = UIManager.UserService;
-        cts = new CancellationTokenSource();
+        CancellationToken token = this.GetCancellationTokenOnDestroy();
 
-        UserRegisterChildResponse response;
+        ApiResult result = await userService.RegisterChild(data, token);
 
-        response = await userService.RegisterChild(childData, cts);
+        string message;
 
-        string message = string.Empty;
-
-        if (response.Success)
+        if (result.Success)
         {
             message = "Les dades del nen s'han enviat correctament.";
         }
         else
         {
-            foreach (var error in response.Message.Content)
-            {
-                Debug.LogError($"Error registering child: {error}");
-                message += error + "\n";
-            }
+            message = result.Message;
         }
 
-        Action callback = response.Success
-            ? () => SceneManager.LoadScene("MapPathScene")
-            : () => { };
+        ModalData modalData = new() { Title = "Registre de nen", Message = message };
 
-        ModalData modalData = new()
+        await UIManager.ShowModal(modalData);
+
+        if (result.Success)
         {
-            Title = "Registre de nen",
-            Message = message,
-            OnClose = callback,
-        };
-
-        UIManager.ShowModal(modalData);
+            SceneManager.LoadScene("MapPathScene");
+        }
     }
 }

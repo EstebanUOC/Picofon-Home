@@ -7,14 +7,12 @@ public class FirebaseService : ILoadTaskSimple
 {
     public bool IsCritical => true;
 
-    public async UniTask<bool> RunAsync(CancellationToken ct, CancellationToken timeoutCt = default)
+    public async UniTask<bool> RunAsync(CancellationToken ct = default)
     {
-        var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(ct, timeoutCt);
-
         var (isCancelled, dependencyStatus) = await FirebaseApp
             .CheckAndFixDependenciesAsync()
             .AsUniTask()
-            .AttachExternalCancellation(linkedTokenSource.Token)
+            .AttachExternalCancellation(ct)
             .SuppressCancellationThrow();
 
         if (isCancelled)

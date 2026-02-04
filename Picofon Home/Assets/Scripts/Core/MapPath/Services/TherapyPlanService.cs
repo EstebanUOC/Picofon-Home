@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class TherapyPlanService
 {
-    private const string BaseURL = ApiConfig.BaseUrl + "therapy/child";
+    private readonly string BaseURL = ApiConfig.BaseUrl + "therapy/child";
 
     public async UniTask<ApiResult<T>> GetAllPlans<T>(
         string childId,
