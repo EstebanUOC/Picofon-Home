@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -12,25 +11,31 @@ public class UserChildren : Panel
     public UIManager UIManager;
 
     [Space(15)]
-    public TMP_Dropdown childrenDropdown;
+    [SerializeField]
+    private TMP_Dropdown _childrenDropdown;
 
     [Space(15)]
-    public CustomButtonBase SelectChildButton;
-    public CustomButtonBase RegisterChildButton;
+    [SerializeField]
+    private GameObject _selectButton;
+
+    [SerializeField]
+    private GameObject _registerButton;
 
     [Space(15)]
     public Button LogoutButton;
 
-    private readonly Dictionary<string, string> childrenDict = new();
-
-    private CancellationTokenSource cts;
+    private string[] _childrenIds;
 
     public void Start()
     {
         OnHide += () => gameObject.SetActive(false);
 
-        SelectChildButton.OnClick += OnSelectChild;
-        RegisterChildButton.OnClick += OnRegisterChild;
+        CustomButtonBase selectButton = _selectButton.GetComponent<CustomButtonBase>();
+        CustomButtonBase registerButton = _registerButton.GetComponent<CustomButtonBase>();
+
+        selectButton.OnClick += OnSelectChild;
+        registerButton.OnClick += OnRegisterChild;
+
         LogoutButton.onClick.AddListener(OnLogout);
     }
 
@@ -43,16 +48,13 @@ public class UserChildren : Panel
     private async UniTaskVoid LoadChildren()
     {
         UserService userService = UIManager.UserService;
-        cts = new CancellationTokenSource();
+        CancellationToken token = this.GetCancellationTokenOnDestroy();
 
         string userId = UIManager.CurrentUser.Id;
 
-        List<ChildListItemDTO> children;
-        try
-        {
-            children = await userService.GetUserChildren(userId, cts);
-        }
-        catch (System.Exception)
+        ApiResult<ChildListItemDTO[]> result = await userService.GetUserChildren(userId, token);
+
+        if (!result.Success)
         {
             ModalData modalData = new()
             {
@@ -63,12 +65,22 @@ public class UserChildren : Panel
             return;
         }
 
-        childrenDropdown.ClearOptions();
+        if (result.Data.Length == 0)
+        {
+            _childrenDropdown.gameObject.SetActive(false);
+            _selectButton.gameObject.SetActive(false);
+            return;
+        }
+
+        _childrenIds = new string[result.Data.Length];
+        _childrenDropdown.ClearOptions();
 
         StringBuilder sb = new();
 
-        foreach (var child in children)
+        for (int i = 0; i < result.Data.Length; i++)
         {
+            ChildListItemDTO child = result.Data[i];
+
             sb.Clear();
             sb.Append(child.FirstName);
             sb.Append(" ");
@@ -77,17 +89,17 @@ public class UserChildren : Panel
             string fullName = sb.ToString();
 
             TMP_Dropdown.OptionData option = new(fullName);
-            childrenDropdown.options.Add(option);
+            _childrenDropdown.options.Add(option);
 
-            childrenDict[fullName] = child.Id;
+            _childrenIds[i] = child.Id;
         }
-        childrenDropdown.RefreshShownValue();
+        _childrenDropdown.RefreshShownValue();
     }
 
     private void OnSelectChild()
     {
-        string childName = childrenDropdown.options[childrenDropdown.value].text;
-        string childId = childrenDict[childName];
+        int selectedIndex = _childrenDropdown.value;
+        string childId = _childrenIds[selectedIndex];
 
         MapPathPayload.ChildId = childId;
 
@@ -97,12 +109,10 @@ public class UserChildren : Panel
     private void OnRegisterChild()
     {
         UIManager.ShowRegisterChild();
-        cts.Cancel();
     }
 
     private void OnLogout()
     {
         UIManager.Logout();
-        cts.Cancel();
     }
 }

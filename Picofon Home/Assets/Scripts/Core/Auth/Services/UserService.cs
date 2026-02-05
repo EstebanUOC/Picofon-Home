@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -10,54 +9,80 @@ public class UserService
 
     private readonly string UserURL = ApiConfig.BaseUrl + "auth/login";
 
-    public async UniTask<UserModel> LoginWithFirebaseToken(
+    public async UniTask<ApiResult<UserModel>> LoginWithFirebaseToken(
         string firebaseToken,
-        CancellationTokenSource cancellationTokenSource = default
+        CancellationToken token = default
     )
     {
-        string URL = UserURL;
+        string url = UserURL;
+
+        byte[] rawResponse;
 
         LoginRequest loginRequest = new() { FirebaseIdToken = firebaseToken };
-        string loginRequestJson = JsonHelper.ToJson(loginRequest);
+        byte[] jsonRequest = JsonHelper.ToBytes(in loginRequest);
 
-        string rawResponse = await HttpClientUnity.PostAsync(
-            url: URL,
-            data: loginRequestJson,
-            cancellationToken: cancellationTokenSource?.Token ?? CancellationToken.None
-        );
-
-        LoginResponse response = JsonHelper.FromJson<LoginResponse>(rawResponse);
-
-        if (!response.Success)
+        try
         {
-            throw new System.Exception(
-                "Login failed: " + string.Join(", ", response.Message.Content)
+            rawResponse = await HttpClientUnity.PostAsyncBytes(
+                url: url,
+                data: jsonRequest,
+                timeoutSeconds: 5,
+                cancellationToken: token
             );
         }
+        catch (System.Exception)
+        {
+            return ApiResult<UserModel>.Fail("Network error occurred while fetching activities.");
+        }
 
-        return response.Data.User;
+        using JsonDocument doc = JsonDocument.Parse(rawResponse);
+        JsonElement root = doc.RootElement;
+
+        ApiResponseView<UserModel> responseView = new(root);
+
+        if (!responseView.Success)
+        {
+            return ApiResult<UserModel>.Fail(responseView.ErrorMessage);
+        }
+
+        return ApiResult<UserModel>.Ok(responseView.Data);
     }
 
-    public async UniTask<List<ChildListItemDTO>> GetUserChildren(
+    public async UniTask<ApiResult<ChildListItemDTO[]>> GetUserChildren(
         string userId,
-        CancellationTokenSource cancellationTokenSource = default
+        CancellationToken token = default
     )
     {
         string url = $"{ChildrenURL}/owner/{userId}?is_active=true";
 
-        string rawResponse = await HttpClientUnity.GetAsync(
-            url: url,
-            cancellationToken: cancellationTokenSource?.Token ?? CancellationToken.None
-        );
+        byte[] rawResponse;
 
-        UserChildrenResponse response = JsonHelper.FromJson<UserChildrenResponse>(rawResponse);
-
-        if (!response.Success)
+        try
         {
-            throw new System.Exception("Get children failed");
+            rawResponse = await HttpClientUnity.GetAsyncBytes(
+                url: url,
+                timeoutSeconds: 5,
+                cancellationToken: token
+            );
+        }
+        catch (System.Exception)
+        {
+            return ApiResult<ChildListItemDTO[]>.Fail(
+                "Network error occurred while fetching activities."
+            );
         }
 
-        return response.Data;
+        using JsonDocument doc = JsonDocument.Parse(rawResponse);
+        JsonElement root = doc.RootElement;
+
+        ApiResponseView<ChildListItemDTO[]> responseView = new(root);
+
+        if (!responseView.Success)
+        {
+            return ApiResult<ChildListItemDTO[]>.Fail(responseView.ErrorMessage);
+        }
+
+        return ApiResult<ChildListItemDTO[]>.Ok(responseView.Data);
     }
 
     public async UniTask<ApiResult> RegisterChild(

@@ -449,9 +449,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Duration: 0.15
   BackgroundRect: {fileID: 3688606483324423090}
-  ContentRect: {fileID: 1706210055312147193}
-  ContentCanvasGroup: {fileID: 574055683493165412}
-  ContentImage: {fileID: 5747089923526464413}
+  Content: {fileID: 1904925477226219749}
   HoverColor: {r: 0.92156863, g: 0.8901961, b: 1, a: 1}
   LoadingRect: {fileID: 382223037407617253}
   InfoCanvasGroup: {fileID: 3036433083153560962}

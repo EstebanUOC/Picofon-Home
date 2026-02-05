@@ -74,13 +74,13 @@ public class UIManager : MonoBehaviour
                 .AsUniTask()
                 .AttachExternalCancellation(ct);
 
-            UserModel user = await UserService.LoginWithFirebaseToken(firebaseIdToken);
+            ApiResult<UserModel> result = await UserService.LoginWithFirebaseToken(firebaseIdToken);
 
             CurrentUser = new UserDataDTO
             {
-                Id = user.Id,
-                Email = user.Email,
-                Username = user.FirstName,
+                Id = result.Data.Id,
+                Email = result.Data.Email,
+                Username = result.Data.FirstName,
             };
         }
 
@@ -129,6 +129,12 @@ public class UIManager : MonoBehaviour
     public async UniTask ShowModal(ModalData data)
     {
         await ModalPanel.Show(data);
+    }
+
+    public async UniTask<DebugMenuResult> ShowDebugMenu()
+    {
+        DebugMenuResult result = await ModalPanel.ShowDebugMenu();
+        return result;
     }
 
     public void Logout()

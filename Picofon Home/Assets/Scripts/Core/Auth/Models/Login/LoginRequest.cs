@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 
-public class LoginRequest
+public struct LoginRequest
 {
     [JsonInclude]
-    public string FirebaseIdToken { get; set; } = string.Empty;
+    public string FirebaseIdToken { get; set; }
 }

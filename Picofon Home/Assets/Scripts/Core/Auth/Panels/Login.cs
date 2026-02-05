@@ -10,16 +10,17 @@ public class Login : Panel
     public UIManager UIManager;
 
     [Space(15)]
-    public CustomButtonLoading LoginButton;
-    public CustomButtonBase DebugLoginButton;
-
-    [Space(15)]
-    public TMPro.TMP_Text VersionText;
+    [SerializeField]
+    private GameObject _loginButton;
 
     [SerializeField]
-    private Modal _modal;
+    private GameObject _debugButton;
 
-    private readonly string googleAPI =
+    [Space(15)]
+    [SerializeField]
+    private TMPro.TMP_Text _versionText;
+
+    private readonly string _googleAPI =
         "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
 
     public void Start()
@@ -27,16 +28,19 @@ public class Login : Panel
         GoogleSignIn.Configuration = new GoogleSignInConfiguration
         {
             RequestIdToken = true,
-            WebClientId = googleAPI,
+            WebClientId = _googleAPI,
             RequestEmail = true,
         };
 
-        LoginButton.OnClickAsync += AuthenticateWithGoogle;
-        DebugLoginButton.OnClick += OnDebugLogin;
+        CustomButtonLoading loginButton = _loginButton.GetComponent<CustomButtonLoading>();
+        CustomButtonBase debugLoginButton = _debugButton.GetComponent<CustomButtonBase>();
+
+        loginButton.OnClickAsync += AuthenticateWithGoogle;
+        debugLoginButton.OnClick += OnDebugLogin;
 
         OnHide += () => gameObject.SetActive(false);
 
-        VersionText.text = UIManager.VersionNumber.ToString("0.0");
+        _versionText.text = UIManager.VersionNumber.ToString("0.0");
     }
 
     private void OnDebugLogin()
@@ -89,20 +93,22 @@ public class Login : Panel
             return;
         }
 
-        UserModel user;
+        ApiResult<UserModel> result = await UIManager.UserService.LoginWithFirebaseToken(
+            firebaseIdToken
+        );
 
-        try
+        if (!result.Success)
         {
-            user = await UIManager.UserService.LoginWithFirebaseToken(firebaseIdToken);
-        }
-        catch (Exception e)
-        {
-            // TODO: Show error with modal (Ej. "Usuari no trobat")
-            Debug.LogError("<DEBUG> User service login failed, Error: " + e.Message);
+            ModalData modalData = new()
+            {
+                Title = "Error",
+                Message = "Could not log in. Please try again later.",
+            };
+            await UIManager.ShowModal(modalData);
             return;
         }
 
-        OnLoginSuccess(user);
+        OnLoginSuccess(result.Data);
     }
 
     private void OnLoginSuccess(UserModel user)
@@ -120,7 +126,7 @@ public class Login : Panel
 
     private async UniTaskVoid ShowDebugMenu()
     {
-        DebugMenuResult result = await _modal.ShowDebugMenu();
+        DebugMenuResult result = await UIManager.ShowDebugMenu();
 
         GamePrefs.DebugMode = true;
         switch (result)

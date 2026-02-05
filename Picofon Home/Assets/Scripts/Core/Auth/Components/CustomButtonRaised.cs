@@ -10,9 +10,11 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
 
     [Space(15)]
     public RectTransform BackgroundRect;
-    public RectTransform ContentRect;
-    public CanvasGroup ContentCanvasGroup;
-    public Image ContentImage;
+    public GameObject Content;
+
+    private RectTransform _contentRect;
+    private Image _contentImage;
+    protected CanvasGroup _contentCanvasGroup;
 
     [Space(15)]
     public Color HoverColor = Color.blue;
@@ -27,7 +29,7 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
 
             _interactable = value;
             float fade = _interactable ? 1f : 0.6f;
-            ContentCanvasGroup.DOFade(fade, Duration);
+            _contentCanvasGroup.DOFade(fade, Duration);
 
             if (_interactable)
             {
@@ -47,18 +49,22 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
 
     public void Awake()
     {
+        _contentRect = Content.GetComponent<RectTransform>();
+        _contentCanvasGroup = Content.GetComponent<CanvasGroup>();
+        _contentImage = Content.GetComponent<Image>();
+
         const float HoverMoveY = -11f;
         const float BackgroundMoveY = -5.5f;
 
         _hoverSequence = DOTween.Sequence().SetRecyclable(true).SetAutoKill(false).Pause();
 
-        Tween colorTween = ContentImage
+        Tween colorTween = _contentImage
             .DOColor(HoverColor, Duration)
             .SetAutoKill(false)
             .SetRecyclable(true);
 
-        Tween posTween = ContentRect
-            .DOAnchorPosY(ContentRect.anchoredPosition.y + HoverMoveY, Duration)
+        Tween posTween = _contentRect
+            .DOAnchorPosY(_contentRect.anchoredPosition.y + HoverMoveY, Duration)
             .SetAutoKill(false)
             .SetRecyclable(true);
 

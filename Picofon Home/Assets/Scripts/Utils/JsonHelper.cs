@@ -32,6 +32,12 @@ public static class JsonHelper
         byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(data, jsonOptions);
         return bytes;
     }
+
+    public static byte[] ToBytes<T>(in T data)
+    {
+        byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(data, jsonOptions);
+        return bytes;
+    }
 }
 
 public class SnakeCaseNamingPolicy : JsonNamingPolicy

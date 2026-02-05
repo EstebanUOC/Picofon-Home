@@ -50,7 +50,7 @@ public class CustomButtonLoading : CustomButtonRaised
         fadeSequence = DOTween.Sequence().SetAutoKill(false).Pause();
 
         fadeSequence
-            .Append(ContentCanvasGroup.DOFade(0.6f, Duration))
+            .Append(_contentCanvasGroup.DOFade(0.6f, Duration))
             .Append(LoadingCanvasGroup.DOFade(1, Duration));
 
         loadingTween = LoadingRect

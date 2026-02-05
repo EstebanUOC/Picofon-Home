@@ -3,14 +3,14 @@ using System.Text.Json.Serialization;
 public class TherapyPlan
 {
     [JsonInclude]
-    public int TherapyTemplateId { get; set; } = 0;
+    public int TherapyTemplateId { get; private set; }
 
     [JsonInclude]
-    public string ChildId { get; set; } = string.Empty;
+    public string ChildId { get; private set; }
 
     [JsonInclude]
-    public int TherapyPlanId { get; set; } = 0;
+    public int TherapyPlanId { get; private set; }
 
     [JsonInclude]
-    public TherapyTemplate TherapyTemplate { get; set; }
+    public TherapyTemplate TherapyTemplate { get; private set; }
 }

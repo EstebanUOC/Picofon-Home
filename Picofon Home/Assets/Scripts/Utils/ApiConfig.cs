@@ -5,25 +5,24 @@ public static class ApiConfig
 {
     public static string BaseUrl = string.Empty;
 
-    public const string PrimeUrl = "https://ehc-picofon.techlab.uoc.edu/api/";
-    public const string FallbackUrl = "https://picofon-api.fly.dev/api/";
+    public const string PrimeUrl = "https://ehc-picofon.techlab.uoc.edu/";
+    public const string FallbackUrl = "https://picofonlab.com/";
 
     public static async UniTask Ping()
     {
-        string url = $"{PrimeUrl}auth";
+        string url = $"{PrimeUrl}health";
 
         try
         {
             await HttpClientUnity.GetAsyncBytes(url: url, timeoutSeconds: 5);
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
             Debug.LogWarning("Primary API URL is unreachable. Switching to fallback URL.");
-            Debug.LogWarning(e.Message);
-            BaseUrl = FallbackUrl;
+            BaseUrl = $"{FallbackUrl}api/";
             return;
         }
 
-        BaseUrl = PrimeUrl;
+        BaseUrl = $"{PrimeUrl}api/";
     }
 }
