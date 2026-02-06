@@ -75,6 +75,8 @@ public class LevelItemRenderer : MonoBehaviour
 
         Vector2 offset = new(0f, -240f);
 
+        int childCount = _container.childCount;
+
         for (int i = 0; i < count; i++)
         {
             int col = i % _columns;
@@ -83,8 +85,13 @@ public class LevelItemRenderer : MonoBehaviour
             float y = _startPos + (row * _spacing.y);
             Vector2 position = new(x, y);
 
-            Transform child = _container.GetChild(i);
-            if (child is null)
+            Transform child;
+
+            if (i < childCount)
+            {
+                child = _container.GetChild(i);
+            }
+            else
             {
                 GameObject obj = Instantiate(_prefab, _container);
                 child = obj.transform;
@@ -99,7 +106,6 @@ public class LevelItemRenderer : MonoBehaviour
 
             if (i == lastCompleted)
             {
-                Debug.Log("Setting continue position to level index: " + i);
                 _continue.anchoredPosition = childRect.anchoredPosition - offset;
             }
 

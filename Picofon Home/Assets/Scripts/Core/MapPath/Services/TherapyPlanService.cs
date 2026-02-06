@@ -14,6 +14,7 @@ public class TherapyPlanService
     )
     {
         string url = $"{BaseURL}/{childId}";
+        Debug.Log($"Fetching therapy plans from URL: {url}");
 
         byte[] rawResponse;
 

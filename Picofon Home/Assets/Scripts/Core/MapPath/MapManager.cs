@@ -67,10 +67,9 @@ public class MapManager : MonoBehaviour
     private async UniTaskVoid LoadPlans()
     {
         TherapyPlanService service = new();
-        CancellationTokenSource token = new();
-        token.CancelAfterSlim(TimeSpan.FromSeconds(5));
+        CancellationToken token = this.GetCancellationTokenOnDestroy();
 
-        ApiResult<TherapyData> result = await service.GetAllPlans<TherapyData>(_childId);
+        ApiResult<TherapyData> result = await service.GetAllPlans<TherapyData>(_childId, token);
 
         if (!result.Success)
         {

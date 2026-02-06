@@ -20,7 +20,7 @@ public class UIManager : MonoBehaviour
     public float VersionNumber = 0.2f;
 
     public UserDataDTO CurrentUser { get; set; }
-    public UserService UserService = new();
+    public UserService UserService;
 
     public FirebaseAuth FirebaseAuthInstance { get; private set; }
 
@@ -33,6 +33,8 @@ public class UIManager : MonoBehaviour
     private async UniTaskVoid BootstrapApplicacion()
     {
         await ApiConfig.Ping();
+
+        UserService = new UserService();
 
         if (Application.isEditor)
         {

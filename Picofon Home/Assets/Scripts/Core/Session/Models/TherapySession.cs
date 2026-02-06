@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-public class TherapySession
+public struct TherapySessionDTO
 {
     [JsonInclude]
     public int Id { get; private set; }

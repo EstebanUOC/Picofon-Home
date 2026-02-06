@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Picofon.Core.Network;
+using UnityEngine;
 
 public class UserService
 {
@@ -32,7 +33,7 @@ public class UserService
         }
         catch (System.Exception)
         {
-            return ApiResult<UserModel>.Fail("Network error occurred while fetching activities.");
+            return ApiResult<UserModel>.Fail("Network error occurred while logging in.");
         }
 
         using JsonDocument doc = JsonDocument.Parse(rawResponse);
