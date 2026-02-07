@@ -1,12 +1,12 @@
-public class ChildCreateDTO
+public readonly struct ChildCreateDTO
 {
-    public string Id { get; set; } = string.Empty;
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
-    public string BirthDate { get; set; } = string.Empty;
-    public string Disorder { get; set; } = string.Empty;
-    public string School { get; set; } = string.Empty;
-    public int Grade { get; set; } = 0;
-    public int CenterId { get; set; } = 0;
-    public string OwnerId { get; set; } = string.Empty;
+    public readonly string Id { get; init; }
+    public readonly string FirstName { get; init; }
+    public readonly string LastName { get; init; }
+    public readonly string BirthDate { get; init; }
+    public readonly string Disorder { get; init; }
+    public readonly string School { get; init; }
+    public readonly int Grade { get; init; }
+    public readonly int CenterId { get; init; }
+    public readonly string OwnerId { get; init; }
 }

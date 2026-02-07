@@ -1,13 +1,8 @@
-using System.Text.Json.Serialization;
-
-public struct TherapySessionDTO
+public readonly struct TherapySessionDTO
 {
-    [JsonInclude]
-    public int Id { get; private set; }
+    public readonly int Id { get; init; }
 
-    [JsonInclude]
-    public int TherapyPlanId { get; private set; }
+    public readonly int TherapyPlanId { get; init; }
 
-    [JsonInclude]
-    public string ChildId { get; private set; }
+    public readonly string ChildId { get; init; }
 }

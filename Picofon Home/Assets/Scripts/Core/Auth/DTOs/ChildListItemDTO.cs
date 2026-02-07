@@ -1,13 +1,8 @@
-using System.Text.Json.Serialization;
-
-public class ChildListItemDTO
+public readonly struct ChildListItemDTO
 {
-    [JsonInclude]
-    public string Id { get; private set; } = string.Empty;
+    public readonly string Id { get; init; }
 
-    [JsonInclude]
-    public string FirstName { get; private set; } = string.Empty;
+    public readonly string FirstName { get; init; }
 
-    [JsonInclude]
-    public string LastName { get; private set; } = string.Empty;
+    public readonly string LastName { get; init; }
 }
