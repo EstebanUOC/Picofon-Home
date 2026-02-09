@@ -1284,10 +1284,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56825ffef9d44204baaee90d31fe3d5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hoopCollider: {fileID: 581763615}
   _hoops:
   - {fileID: 6888632176787185350}
   - {fileID: 793012683}
-  _hoopCollider: {fileID: 581763615}
 --- !u!1001 &581763613
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2074,8 +2074,8 @@ MonoBehaviour:
   _instructionClip: {fileID: 8300000, guid: b08229073d4fcaa42b9d00c3114d80cf, type: 3}
   _positiveYesClip: {fileID: 8300000, guid: ea8ac7d053be88f44960130c59d74215, type: 3}
   _positiveNoClip: {fileID: 8300000, guid: 63a572a5f78fc264a8cf506e6e14f9dc, type: 3}
-  _negativeYesClip: {fileID: 8300000, guid: 0e0542233a61efd43aee263c85ba49f3, type: 3}
-  _negativeNoClip: {fileID: 8300000, guid: ce354be655933fe4e8545f7a0967720f, type: 3}
+  _negativeYesClip: {fileID: 8300000, guid: ce354be655933fe4e8545f7a0967720f, type: 3}
+  _negativeNoClip: {fileID: 8300000, guid: 0e0542233a61efd43aee263c85ba49f3, type: 3}
 --- !u!1 &1075156704
 GameObject:
   m_ObjectHideFlags: 0

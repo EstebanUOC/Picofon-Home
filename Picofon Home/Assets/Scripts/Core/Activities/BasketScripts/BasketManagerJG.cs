@@ -51,14 +51,20 @@ public class BasketGameManagerJG : MonoBehaviour
     [SerializeField]
     private AudioClip _negativeNoClip;
 
+    private readonly Sprite[] _icons = new Sprite[2];
+    private readonly string[] _texts = new string[2];
+    private readonly string[] _syllabifiedWords = new string[2];
+
     private int _currentActivityIndex = 0;
 
     private JudgeActivity[] _activities;
     private JudgeActivity _currentActivity;
 
-    private readonly Sprite[] _icons = new Sprite[2];
-    private readonly string[] _texts = new string[2];
-    private readonly string[] _syllabifiedWords = new string[2];
+    // TODO: tratar de manejarlo con otra clase
+    private GeneralSessionDTO _sessionInfo;
+    private TherapySessionDTO[] _sessionResults;
+
+    private DateTime _activityStartTime;
 
     public void Awake()
     {
@@ -108,6 +114,14 @@ public class BasketGameManagerJG : MonoBehaviour
             return;
         }
 
+        _sessionResults = new TherapySessionDTO[_activities.Length];
+        _sessionInfo = new GeneralSessionDTO
+        {
+            TherapyPlanId = @params.PlanId,
+            ChildId = @params.ChildId,
+            SessionNumber = 1,
+        };
+
         ChangeActivity();
 
         _answerManager.DisableAnswers();
@@ -115,6 +129,8 @@ public class BasketGameManagerJG : MonoBehaviour
         AudioManager.Instance.PlayVoice(_instructionClip);
 
         await AudioManager.Instance.WaitVoiceToEnd();
+
+        _activityStartTime = DateTime.UtcNow;
 
         _answerManager.EnableAnswers();
     }
@@ -148,6 +164,19 @@ public class BasketGameManagerJG : MonoBehaviour
                 AudioManager.Instance.PlayVoice(_negativeNoClip);
         }
 
+        DateTime now = DateTime.UtcNow;
+        TimeSpan activityDuration = now - _activityStartTime;
+
+        _sessionResults[_currentActivityIndex] = new()
+        {
+            IsCorrect = isCorrect,
+            StartedAt = _activityStartTime,
+            DurationSeconds = (float)activityDuration.TotalSeconds,
+            CompletedAt = now,
+        };
+
+        _currentActivityIndex++;
+
         InitCount(answerResult).Forget();
     }
 
@@ -160,13 +189,21 @@ public class BasketGameManagerJG : MonoBehaviour
 
         await _feedbackController.ShowFeedback(feedbackType);
 
+        _activityStartTime = DateTime.UtcNow;
+
         ChangeActivity();
     }
 
     private void ChangeActivity()
     {
+        if (_currentActivityIndex >= _activities.Length)
+        {
+            SessionService sessionService = new();
+            sessionService.CreateTherapySession(_sessionInfo, _sessionResults).Forget();
+            return;
+        }
+
         _currentActivity = _activities[_currentActivityIndex];
-        _currentActivityIndex = (_currentActivityIndex + 1) % _activities.Length;
 
         for (int i = 0; i < _texts.Length; i++)
         {

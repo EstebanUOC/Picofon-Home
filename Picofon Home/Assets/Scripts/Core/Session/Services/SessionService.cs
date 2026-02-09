@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -6,28 +7,25 @@ public class SessionService
 {
     private readonly string url = ApiConfig.BaseUrl + "therapy-sessions";
 
-    public async UniTask<ApiResult> CreateTherapySession(CancellationToken token = default)
+    public async UniTask<ApiResult> CreateTherapySession(
+        GeneralSessionDTO sessionInfo,
+        TherapySessionDTO[] sessions,
+        CancellationToken token = default
+    )
     {
         string url = this.url;
 
         byte[] rawResponse;
 
-        TherapySessionDTO requestData = new()
+        TherapySessionCreateRequest sessionRequest = new()
         {
-            Id = 10,
-            TherapyPlanId = 99,
-            ChildId = "19013454K",
+            General = sessionInfo,
+            Sessions = sessions,
         };
 
-        string json = JsonHelper.ToJson(requestData);
+        string json = JsonHelper.ToJson(sessionRequest);
 
         Debug.Log($"Request JSON: {json}");
-
-        string json1 = "{\"id\":10,\"therapy_plan_id\":99,\"child_id\":\"19013454K\"}";
-
-        // Struct: setter privado, no se asigna therapy_plan_id
-        var structResult = JsonHelper.FromJson<TherapySessionDTO>(json1);
-        Debug.Log($"Struct: TherapyPlanId = {structResult.TherapyPlanId}");
 
         // TherapySessionCreateRequest requestData = new()
         // {

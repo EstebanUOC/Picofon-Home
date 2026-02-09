@@ -3,10 +3,14 @@ using UnityEngine;
 
 public static class ApiConfig
 {
-    public static string BaseUrl = string.Empty;
+    public static string BaseUrl = PrimeUrl + "api/";
 
-    public const string PrimeUrl = "https://ehc-picofon.techlab.uoc.edu/";
-    public const string FallbackUrl = "https://picofonlab.com/";
+    // TODO: Switch URLs before building for production
+    // public const string PrimeUrl = "https://ehc-picofon.techlab.uoc.edu/";
+    // public const string FallbackUrl = "https://picofonlab.com/";
+
+    public const string FallbackUrl = "https://ehc-picofon.techlab.uoc.edu/";
+    public const string PrimeUrl = "https://picofonlab.com/";
 
     public static async UniTask Ping()
     {
