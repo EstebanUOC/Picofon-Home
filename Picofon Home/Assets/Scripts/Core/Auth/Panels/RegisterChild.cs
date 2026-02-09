@@ -19,7 +19,7 @@ public class RegisterChild : Panel
     {
         OnHide += () => gameObject.SetActive(false);
 
-        ChildRegistrationForm.OnSubmit += OnContinue;
+        ChildRegistrationForm.OnSubmit += HandleSubmit;
     }
 
     public override void Show()
@@ -31,7 +31,7 @@ public class RegisterChild : Panel
         ChildRegistrationForm.ParentId = UIManager.CurrentUser.Id;
     }
 
-    private async UniTask OnContinue(ChildCreateDTO data)
+    private async UniTask HandleSubmit(ChildCreateDTO data)
     {
         UserService userService = UIManager.UserService;
         CancellationToken token = this.GetCancellationTokenOnDestroy();

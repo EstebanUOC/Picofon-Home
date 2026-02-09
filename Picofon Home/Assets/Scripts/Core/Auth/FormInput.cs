@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public abstract class FormInput : MonoBehaviour
@@ -10,11 +9,10 @@ public abstract class FormInput : MonoBehaviour
     [Space(15)]
     public ChildFields Key;
 
+    private InputChangedEventChannel _inputChangedEventChannel;
+
     private bool _valid = false;
     private bool _error = false;
-
-    public Action OnValidated;
-    public Action OnInvalidated;
 
     public bool Valid
     {
@@ -30,12 +28,12 @@ public abstract class FormInput : MonoBehaviour
             if (_valid)
             {
                 OnValid();
-                OnValidated?.Invoke();
+                _inputChangedEventChannel.Raise(true);
             }
             else
             {
                 OnReset();
-                OnInvalidated?.Invoke();
+                _inputChangedEventChannel.Raise(false);
             }
         }
     }
@@ -56,6 +54,11 @@ public abstract class FormInput : MonoBehaviour
             else
                 OnReset();
         }
+    }
+
+    public void SetInputChangedEventChannel(InputChangedEventChannel channel)
+    {
+        _inputChangedEventChannel = channel;
     }
 
     public abstract string GetData();

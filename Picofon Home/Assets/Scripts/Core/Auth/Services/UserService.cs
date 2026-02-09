@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Picofon.Core.Network;
+using UnityEngine;
 
 public class UserService
 {

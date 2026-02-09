@@ -15,32 +15,35 @@ public enum ChildFields
     Center,
 }
 
-//TODO: Refactor to use a more generic form system
 public class Form : MonoBehaviour
 {
-    public CustomButtonLoading ContinueButton;
+    [SerializeField]
+    private CustomButtonLoading _submitButton;
 
     public string ParentId { get; set; } = string.Empty;
 
+    public event Func<ChildCreateDTO, UniTask> OnSubmit;
+
     private readonly Dictionary<ChildFields, FormInput> _fields = new();
 
-    public event Func<ChildCreateDTO, UniTask> OnSubmit;
+    private readonly InputChangedEventChannel _inputChangedEventChannel = new();
 
     public void Awake()
     {
-        Transform parent = transform;
-        foreach (Transform child in parent)
+        _inputChangedEventChannel.OnInputChanged += HandleInputChanged;
+
+        foreach (Transform child in transform)
         {
             FormInput input = child.GetComponent<FormInput>();
             if (input != null)
             {
-                input.OnValidated += UpdateContinueButton;
-                input.OnInvalidated += DisableButton;
+                input.SetInputChangedEventChannel(_inputChangedEventChannel);
                 _fields.Add(input.Key, input);
             }
         }
-        ContinueButton.Interactable = false;
-        ContinueButton.OnClickAsync += HandleSubmit;
+
+        _submitButton.Interactable = false;
+        _submitButton.OnClickAsync += HandleSubmit;
     }
 
     public ChildCreateDTO GatherChildData()
@@ -69,9 +72,12 @@ public class Form : MonoBehaviour
             await OnSubmit.Invoke(data);
     }
 
-    private void DisableButton()
+    private void HandleInputChanged(bool valid)
     {
-        ContinueButton.Interactable = false;
+        if (valid)
+            UpdateContinueButton();
+        else
+            _submitButton.Interactable = false;
     }
 
     private void UpdateContinueButton()
@@ -86,6 +92,6 @@ public class Form : MonoBehaviour
             }
         }
 
-        ContinueButton.Interactable = allValid;
+        _submitButton.Interactable = allValid;
     }
 }

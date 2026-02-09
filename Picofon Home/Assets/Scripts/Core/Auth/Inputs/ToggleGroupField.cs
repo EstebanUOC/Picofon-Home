@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,23 +11,19 @@ public class ToggleGroupField : FormInput
     public Toggle OtherToggle;
     public FormInput OtherInput;
 
-    private Action onValidatedHandler;
-    private Action onInvalidatedHandler;
+    private readonly InputChangedEventChannel _inputChangedEventChannel = new();
 
     public void Start()
     {
         OtherInput.gameObject.SetActive(false);
+        OtherInput.SetInputChangedEventChannel(_inputChangedEventChannel);
 
         foreach (Toggle toggle in ToggleGroup.GetComponentsInChildren<Toggle>())
         {
             toggle.onValueChanged.AddListener(OnToggleChanged);
         }
 
-        OtherToggle.onValueChanged.RemoveAllListeners();
         OtherToggle.onValueChanged.AddListener(OnOtherToggleChanged);
-
-        onValidatedHandler = () => Valid = true;
-        onInvalidatedHandler = () => Valid = false;
     }
 
     public override string GetData()
@@ -50,18 +45,22 @@ public class ToggleGroupField : FormInput
     private void OnOtherToggleChanged(bool isOn)
     {
         OtherInput.gameObject.SetActive(isOn);
+
         if (isOn)
         {
-            OtherInput.OnValidated += onValidatedHandler;
-            OtherInput.OnInvalidated += onInvalidatedHandler;
+            _inputChangedEventChannel.OnInputChanged += HandleOtherInputValidated;
             Valid = OtherInput.Valid;
         }
         else
         {
-            OtherInput.OnValidated -= onValidatedHandler;
-            OtherInput.OnInvalidated -= onInvalidatedHandler;
+            _inputChangedEventChannel.OnInputChanged -= HandleOtherInputValidated;
             Valid = false;
         }
+    }
+
+    private void HandleOtherInputValidated(bool isValid)
+    {
+        Valid = isValid;
     }
 
     private void OnToggleChanged(bool value)
