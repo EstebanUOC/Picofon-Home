@@ -24,6 +24,9 @@ public class BasketManagerPS : MonoBehaviour
     private BasketUIManager _uiManager;
 
     [SerializeField]
+    private SessionManager _sessionManager;
+
+    [SerializeField]
     private AudioClip _instructionClip;
 
     [SerializeField]
@@ -89,6 +92,16 @@ public class BasketManagerPS : MonoBehaviour
             return;
         }
 
+        TherapySessionDTO[] sessions = new TherapySessionDTO[_activities.Length];
+        GeneralSessionDTO sessionInfo = new()
+        {
+            TherapyPlanId = @params.PlanId,
+            ChildId = @params.ChildId,
+            SessionNumber = 1,
+        };
+
+        _sessionManager.InitializeSession(sessionInfo, sessions);
+
         ChangeActivity();
 
         AudioManager.Instance.PlayVoice(_instructionClip);
@@ -100,6 +113,8 @@ public class BasketManagerPS : MonoBehaviour
         await UniTask.WaitForSeconds(0.25f);
 
         _answerManager.Prueba();
+
+        _sessionManager.StartTime();
     }
 
     private void HandleHoopSelected(int hoopIndex)
@@ -114,6 +129,10 @@ public class BasketManagerPS : MonoBehaviour
 
         AudioManager.Instance.PlayVoice(clip);
 
+        _sessionManager.RecordActivityResult(_currentActivityIndex, isCorrect);
+
+        _currentActivityIndex++;
+
         InitCount(isCorrect).Forget();
     }
 
@@ -126,12 +145,19 @@ public class BasketManagerPS : MonoBehaviour
         await _feedbackController.ShowFeedback(feedbackType);
 
         ChangeActivity();
+
+        _sessionManager.StartTime();
     }
 
     private void ChangeActivity()
     {
+        if (_currentActivityIndex >= _activities.Length)
+        {
+            _sessionManager.EndSession();
+            return;
+        }
+
         _currentActivity = _activities[_currentActivityIndex];
-        _currentActivityIndex = (_currentActivityIndex + 1) % _activities.Length;
 
         for (int i = 0; i < _texts.Length; i++)
         {

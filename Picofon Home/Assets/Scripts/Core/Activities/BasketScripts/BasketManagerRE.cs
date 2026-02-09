@@ -24,6 +24,10 @@ public class BasketManagerRE : MonoBehaviour
     private BasketUIManager _uiManager;
 
     [SerializeField]
+    private SessionManager _sessionManager;
+
+    [Space(10)]
+    [SerializeField]
     private AudioClip _instructionClip;
 
     [SerializeField]
@@ -89,10 +93,22 @@ public class BasketManagerRE : MonoBehaviour
             return;
         }
 
+        TherapySessionDTO[] sessions = new TherapySessionDTO[_activities.Length];
+        GeneralSessionDTO sessionInfo = new()
+        {
+            TherapyPlanId = @params.PlanId,
+            ChildId = @params.ChildId,
+            SessionNumber = 1,
+        };
+
+        _sessionManager.InitializeSession(sessionInfo, sessions);
+
         ChangeActivity();
 
         AudioManager.Instance.PlayVoice(_instructionClip);
         await AudioManager.Instance.WaitVoiceToEnd();
+
+        _sessionManager.StartTime();
     }
 
     private void HandleHoopSelected(int hoopIndex)
@@ -107,6 +123,10 @@ public class BasketManagerRE : MonoBehaviour
 
         AudioManager.Instance.PlayVoice(clip);
 
+        _sessionManager.RecordActivityResult(_currentActivityIndex, isCorrect);
+
+        _currentActivityIndex++;
+
         InitCount(isCorrect).Forget();
     }
 
@@ -119,12 +139,18 @@ public class BasketManagerRE : MonoBehaviour
         await _feedbackController.ShowFeedback(feedbackType);
 
         ChangeActivity();
+
+        _sessionManager.StartTime();
     }
 
     private void ChangeActivity()
     {
+        if (_currentActivityIndex >= _activities.Length)
+        {
+            _sessionManager.EndSession();
+            return;
+        }
         _currentActivity = _activities[_currentActivityIndex];
-        _currentActivityIndex = (_currentActivityIndex + 1) % _activities.Length;
 
         _texts[0] = _currentActivity.MainWord.Word;
         _icons[0] = LoadSprite(_currentActivity.MainWord.Path);

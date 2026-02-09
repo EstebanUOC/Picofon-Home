@@ -23,7 +23,7 @@ public class BallMovement : MonoBehaviour
     private bool _isFlying = false;
     private bool _isDribling = true;
 
-    public void Start()
+    public void Awake()
     {
         _body = GetComponent<Rigidbody2D>();
     }

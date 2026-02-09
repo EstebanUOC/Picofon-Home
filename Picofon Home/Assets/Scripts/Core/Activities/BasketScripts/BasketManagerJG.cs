@@ -35,6 +35,9 @@ public class BasketGameManagerJG : MonoBehaviour
     [SerializeField]
     private BasketUIManager _uiManager;
 
+    [SerializeField]
+    private SessionManager _sessionManager;
+
     [Space(15)]
     [SerializeField]
     private AudioClip _instructionClip;
@@ -59,12 +62,6 @@ public class BasketGameManagerJG : MonoBehaviour
 
     private JudgeActivity[] _activities;
     private JudgeActivity _currentActivity;
-
-    // TODO: tratar de manejarlo con otra clase
-    private GeneralSessionDTO _sessionInfo;
-    private TherapySessionDTO[] _sessionResults;
-
-    private DateTime _activityStartTime;
 
     public void Awake()
     {
@@ -114,13 +111,15 @@ public class BasketGameManagerJG : MonoBehaviour
             return;
         }
 
-        _sessionResults = new TherapySessionDTO[_activities.Length];
-        _sessionInfo = new GeneralSessionDTO
+        TherapySessionDTO[] sessions = new TherapySessionDTO[_activities.Length];
+        GeneralSessionDTO sessionInfo = new()
         {
             TherapyPlanId = @params.PlanId,
             ChildId = @params.ChildId,
             SessionNumber = 1,
         };
+
+        _sessionManager.InitializeSession(sessionInfo, sessions);
 
         ChangeActivity();
 
@@ -130,7 +129,7 @@ public class BasketGameManagerJG : MonoBehaviour
 
         await AudioManager.Instance.WaitVoiceToEnd();
 
-        _activityStartTime = DateTime.UtcNow;
+        _sessionManager.StartTime();
 
         _answerManager.EnableAnswers();
     }
@@ -164,16 +163,7 @@ public class BasketGameManagerJG : MonoBehaviour
                 AudioManager.Instance.PlayVoice(_negativeNoClip);
         }
 
-        DateTime now = DateTime.UtcNow;
-        TimeSpan activityDuration = now - _activityStartTime;
-
-        _sessionResults[_currentActivityIndex] = new()
-        {
-            IsCorrect = isCorrect,
-            StartedAt = _activityStartTime,
-            DurationSeconds = (float)activityDuration.TotalSeconds,
-            CompletedAt = now,
-        };
+        _sessionManager.RecordActivityResult(_currentActivityIndex, isCorrect);
 
         _currentActivityIndex++;
 
@@ -189,17 +179,16 @@ public class BasketGameManagerJG : MonoBehaviour
 
         await _feedbackController.ShowFeedback(feedbackType);
 
-        _activityStartTime = DateTime.UtcNow;
-
         ChangeActivity();
+
+        _sessionManager.StartTime();
     }
 
     private void ChangeActivity()
     {
         if (_currentActivityIndex >= _activities.Length)
         {
-            SessionService sessionService = new();
-            sessionService.CreateTherapySession(_sessionInfo, _sessionResults).Forget();
+            _sessionManager.EndSession();
             return;
         }
 
