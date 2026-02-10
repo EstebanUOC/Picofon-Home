@@ -13,7 +13,7 @@ public sealed class ItemClue : MonoBehaviour
     [SerializeField]
     private int _targetSize = 128;
 
-    private GameObject _image;
+    private GameObject _icon;
     private GameObject _text;
 
     private Sequence _clueSequence;
@@ -23,11 +23,11 @@ public sealed class ItemClue : MonoBehaviour
         ItemView _item = GetComponent<ItemView>();
 
         _text = _item.Text;
-        _image = _item.Icon;
+        _icon = _item.Icon;
 
         _text.SetActive(false);
 
-        RectTransform _imageRect = _image.GetComponent<RectTransform>();
+        RectTransform _imageRect = _icon.GetComponent<RectTransform>();
 
         Tween _moveTween = _imageRect
             .DOLocalMoveY(_moveOffsetY, _transitionDuration)
