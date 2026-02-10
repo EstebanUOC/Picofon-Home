@@ -23,6 +23,11 @@ public class BasketUIManager : MonoBehaviour
         _itemManager.Prueba();
     }
 
+    public void EnableClueButton(bool enable)
+    {
+        _clueController.EnableClue(enable);
+    }
+
     public void OnEnable()
     {
         _clueController.OnClueChanged += HandleClueChanged;

@@ -116,7 +116,6 @@ public class BasketGameManagerJG : MonoBehaviour
         {
             TherapyPlanId = @params.PlanId,
             ChildId = @params.ChildId,
-            SessionNumber = 1,
         };
 
         _sessionManager.InitializeSession(sessionInfo, sessions);
@@ -163,7 +162,14 @@ public class BasketGameManagerJG : MonoBehaviour
                 AudioManager.Instance.PlayVoice(_negativeNoClip);
         }
 
-        _sessionManager.RecordActivityResult(_currentActivityIndex, isCorrect);
+        TaskInfo taskInfo = new()
+        {
+            IsCorrect = isCorrect,
+            TaskIndex = _currentActivityIndex,
+            SelectedButton = isPositive,
+        };
+
+        _sessionManager.RecordActivityResult(in taskInfo);
 
         _currentActivityIndex++;
 

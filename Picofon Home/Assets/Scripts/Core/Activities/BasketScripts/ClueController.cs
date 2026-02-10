@@ -16,6 +16,11 @@ public class ClueController : MonoBehaviour
         _buttonComponent.onClick.AddListener(HandleButtonClick);
     }
 
+    public void EnableClue(bool enable)
+    {
+        _buttonComponent.interactable = enable;
+    }
+
     public void Reset()
     {
         _buttonComponent.interactable = true;

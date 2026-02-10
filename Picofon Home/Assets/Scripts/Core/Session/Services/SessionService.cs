@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -20,7 +19,7 @@ public class SessionService
         TherapySessionCreateRequest sessionRequest = new()
         {
             General = sessionInfo,
-            Sessions = sessions,
+            Tasks = sessions,
         };
 
         string json = JsonHelper.ToJson(sessionRequest);

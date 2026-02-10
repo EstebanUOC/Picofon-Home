@@ -97,12 +97,12 @@ public class BasketManagerPS : MonoBehaviour
         {
             TherapyPlanId = @params.PlanId,
             ChildId = @params.ChildId,
-            SessionNumber = 1,
         };
 
         _sessionManager.InitializeSession(sessionInfo, sessions);
 
         ChangeActivity();
+        _uiManager.EnableClueButton(false);
 
         AudioManager.Instance.PlayVoice(_instructionClip);
 
@@ -115,21 +115,50 @@ public class BasketManagerPS : MonoBehaviour
         _answerManager.Prueba();
 
         _sessionManager.StartTime();
+        _uiManager.EnableClueButton(true);
     }
 
     private void HandleHoopSelected(int hoopIndex)
     {
         Transform hoopTransform = _hoopManager.GetHoopTransform(hoopIndex);
 
+        WordInfoPS currentWord = _currentActivity.Words[hoopIndex];
+
         _ballController.LaunchBall(hoopTransform);
 
-        bool isCorrect = _currentActivity.Words[hoopIndex].Answer;
+        bool isCorrect = currentWord.Answer;
 
         AudioClip clip = isCorrect ? _positiveClip : _negativeClip;
 
         AudioManager.Instance.PlayVoice(clip);
 
-        _sessionManager.RecordActivityResult(_currentActivityIndex, isCorrect);
+        int correctWordId = 0;
+
+        if (isCorrect)
+        {
+            correctWordId = currentWord.Id;
+        }
+        else
+        {
+            foreach (var word in _currentActivity.Words)
+            {
+                if (word.Answer)
+                {
+                    correctWordId = word.Id;
+                    break;
+                }
+            }
+        }
+
+        TaskInfo taskInfo = new()
+        {
+            IsCorrect = isCorrect,
+            TaskIndex = _currentActivityIndex,
+            SelectedAttributeWs = currentWord.Id,
+            CorrectAttributeWs = correctWordId,
+        };
+
+        _sessionManager.RecordActivityResult(in taskInfo);
 
         _currentActivityIndex++;
 

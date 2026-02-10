@@ -36,6 +36,8 @@ namespace BasketResponses
 
     public class WordInfo
     {
+        public int Id { get; set; }
+
         [JsonInclude]
         public string Word { get; set; }
 
