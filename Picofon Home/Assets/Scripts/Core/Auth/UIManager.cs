@@ -76,13 +76,14 @@ public class UIManager : MonoBehaviour
                 .AsUniTask()
                 .AttachExternalCancellation(ct);
 
-            ApiResult<UserModel> result = await UserService.LoginWithFirebaseToken(firebaseIdToken);
+            ApiResult<LoginData> result = await UserService.LoginWithFirebaseToken(firebaseIdToken);
+            UserModel user = result.Data.User;
 
             CurrentUser = new UserDataDTO
             {
-                Id = result.Data.Id,
-                Email = result.Data.Email,
-                Username = result.Data.FirstName,
+                Id = user.Id,
+                Email = user.Email,
+                Username = user.FirstName,
             };
         }
 
