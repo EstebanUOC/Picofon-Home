@@ -31,13 +31,15 @@ public class UserService
                 cancellationToken: token
             );
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
+            Debug.LogError("Network error during login: " + e.Message);
             return ApiResult<UserModel>.Fail("Network error occurred while logging in.");
         }
 
         using JsonDocument doc = JsonDocument.Parse(rawResponse);
         JsonElement root = doc.RootElement;
+        Debug.Log("Login response: " + root.ToString());
 
         ApiResponseView<UserModel> responseView = new(root);
 
