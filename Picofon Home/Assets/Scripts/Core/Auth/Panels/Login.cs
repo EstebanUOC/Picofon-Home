@@ -93,7 +93,7 @@ public class Login : Panel
             return;
         }
 
-        ApiResult<UserModel> result = await UIManager.UserService.LoginWithFirebaseToken(
+        ApiResult<LoginData> result = await UIManager.UserService.LoginWithFirebaseToken(
             firebaseIdToken
         );
 
@@ -108,7 +108,7 @@ public class Login : Panel
             return;
         }
 
-        OnLoginSuccess(result.Data);
+        OnLoginSuccess(result.Data.User);
     }
 
     private void OnLoginSuccess(UserModel user)

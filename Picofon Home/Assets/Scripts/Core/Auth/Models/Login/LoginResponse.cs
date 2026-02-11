@@ -18,9 +18,3 @@ public class MessageData
     [JsonInclude]
     public List<string> Content { get; set; }
 }
-
-public class LoginData
-{
-    [JsonInclude]
-    public UserModel User { get; set; }
-}

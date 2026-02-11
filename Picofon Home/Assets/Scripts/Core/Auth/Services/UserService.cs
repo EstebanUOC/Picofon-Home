@@ -2,7 +2,11 @@ using System.Text.Json;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Picofon.Core.Network;
-using UnityEngine;
+
+public readonly struct LoginData
+{
+    public readonly UserModel User;
+}
 
 public class UserService
 {
@@ -10,7 +14,7 @@ public class UserService
 
     private readonly string UserURL = ApiConfig.BaseUrl + "auth/login";
 
-    public async UniTask<ApiResult<UserModel>> LoginWithFirebaseToken(
+    public async UniTask<ApiResult<LoginData>> LoginWithFirebaseToken(
         string firebaseToken,
         CancellationToken token = default
     )
@@ -31,24 +35,22 @@ public class UserService
                 cancellationToken: token
             );
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
-            Debug.LogError("Network error during login: " + e.Message);
-            return ApiResult<UserModel>.Fail("Network error occurred while logging in.");
+            return ApiResult<LoginData>.Fail("Network error occurred while logging in.");
         }
 
         using JsonDocument doc = JsonDocument.Parse(rawResponse);
         JsonElement root = doc.RootElement;
-        Debug.Log("Login response: " + root.ToString());
 
-        ApiResponseView<UserModel> responseView = new(root);
+        ApiResponseView<LoginData> responseView = new(root);
 
         if (!responseView.Success)
         {
-            return ApiResult<UserModel>.Fail(responseView.ErrorMessage);
+            return ApiResult<LoginData>.Fail(responseView.ErrorMessage);
         }
 
-        return ApiResult<UserModel>.Ok(responseView.Data);
+        return ApiResult<LoginData>.Ok(responseView.Data);
     }
 
     public async UniTask<ApiResult<ChildListItemDTO[]>> GetUserChildren(
