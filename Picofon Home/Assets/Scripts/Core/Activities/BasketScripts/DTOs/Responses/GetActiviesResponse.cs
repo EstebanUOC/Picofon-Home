@@ -4,12 +4,6 @@ using UnityEngine;
 
 namespace BasketResponses
 {
-    public class ActivitiesData<T>
-    {
-        [JsonInclude]
-        public T[] Activities { get; set; }
-    }
-
     public class JudgeActivity
     {
         [JsonInclude]

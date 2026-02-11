@@ -10,6 +10,11 @@ public struct ActivityRequestParams
     public string ChildId;
 }
 
+public readonly struct ActivitiesData<T>
+{
+    public readonly T[] Activities { get; init; }
+}
+
 public class BasketService
 {
     private readonly string UrlBase = ApiConfig.BaseUrl + "questions";

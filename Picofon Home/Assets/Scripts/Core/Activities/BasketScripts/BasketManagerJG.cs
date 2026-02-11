@@ -2,7 +2,7 @@ using System;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using ActivitiesResult = ApiResult<BasketResponses.ActivitiesData<BasketResponses.JudgeActivity>>;
+using ActivitiesResult = ApiResult<ActivitiesData<BasketResponses.JudgeActivity>>;
 
 public enum HoopType
 {

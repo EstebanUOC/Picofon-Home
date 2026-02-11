@@ -4,7 +4,12 @@ using Cysharp.Threading.Tasks;
 using Picofon.Core.Network;
 using UnityEngine;
 
-public class TherapyPlanService
+public readonly struct TherapyData
+{
+    public readonly TherapyPlan[] Plans { get; init; }
+}
+
+public sealed class TherapyPlanService
 {
     private readonly string BaseURL = ApiConfig.BaseUrl + "therapy/child";
 
@@ -14,7 +19,6 @@ public class TherapyPlanService
     )
     {
         string url = $"{BaseURL}/{childId}";
-        Debug.Log($"Fetching therapy plans from URL: {url}");
 
         byte[] rawResponse;
 

@@ -2,10 +2,11 @@ using System.Text.Json;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Picofon.Core.Network;
+using UnityEngine;
 
 public readonly struct LoginData
 {
-    public readonly UserModel User;
+    public readonly UserModel User { get; init; }
 }
 
 public class UserService

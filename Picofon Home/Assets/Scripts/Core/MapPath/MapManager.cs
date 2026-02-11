@@ -1,5 +1,3 @@
-using System;
-using System.Text.Json.Serialization;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -9,12 +7,6 @@ public enum ActivityType : byte
     Judge = 1,
     Select = 2,
     Relate = 3,
-}
-
-public sealed class TherapyData
-{
-    [JsonInclude]
-    public TherapyPlan[] Plans;
 }
 
 public class MapManager : MonoBehaviour
