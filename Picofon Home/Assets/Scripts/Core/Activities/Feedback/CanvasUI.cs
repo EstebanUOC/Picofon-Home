@@ -16,6 +16,7 @@ public class CanvasUI : MonoBehaviour
     public void Awake()
     {
         _feedbackController = _feedback.GetComponent<FeedbackController>();
+        Debug.Log("CanvasUI Awake: FeedbackController found: " + (_feedbackController != null));
     }
 
     public void Init(ActivitySkill skill)
