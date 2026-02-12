@@ -20,7 +20,7 @@ public class BasketGameManagerJG : MonoBehaviour
 {
     [Space(15)]
     [SerializeField]
-    private FeedbackController _feedbackController;
+    private CanvasUI _canvasUI;
 
     [SerializeField]
     private BallController _ballController;
@@ -84,7 +84,7 @@ public class BasketGameManagerJG : MonoBehaviour
 # endif
         }
 
-        _feedbackController.Init(skill);
+        _canvasUI.Init(skill);
 
         LoadActivities(@params).Forget();
     }
@@ -183,7 +183,7 @@ public class BasketGameManagerJG : MonoBehaviour
 
         await UniTask.WaitForSeconds(2f);
 
-        await _feedbackController.ShowFeedback(feedbackType);
+        await _canvasUI.ShowFeedback(feedbackType);
 
         ChangeActivity();
 
@@ -195,6 +195,7 @@ public class BasketGameManagerJG : MonoBehaviour
         if (_currentActivityIndex >= _activities.Length)
         {
             _sessionManager.EndSession();
+            _canvasUI.ShowSummary();
             return;
         }
 
@@ -221,7 +222,7 @@ public class BasketGameManagerJG : MonoBehaviour
 
         ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords);
 
-        _feedbackController.SetItemsContent(in feedbackContent);
+        _canvasUI.SetFeedbackContent(in feedbackContent);
 
         ResetActivity();
     }

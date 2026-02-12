@@ -11,7 +11,7 @@ public class BasketManagerPS : MonoBehaviour
     private BallController _ballController;
 
     [SerializeField]
-    private FeedbackController _feedbackController;
+    private CanvasUI _feedbackController;
 
     [Space(15)]
     [SerializeField]
@@ -210,7 +210,7 @@ public class BasketManagerPS : MonoBehaviour
 
         ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords);
 
-        _feedbackController.SetItemsContent(in feedbackContent);
+        _feedbackController.SetFeedbackContent(in feedbackContent);
 
         ResetActivity();
     }

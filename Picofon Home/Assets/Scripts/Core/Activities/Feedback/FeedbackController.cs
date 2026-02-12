@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class FeedbackController : MonoBehaviour
 {
-    [Space(15)]
-    public FeedbackView FeedbackView;
-
-    [Space(15)]
+    [Space(10)]
     [SerializeField]
-    public ItemFeedbackManager _itemManager;
+    private FeedbackView _feedbackView;
+
+    [SerializeField]
+    private ItemFeedbackManager _itemManager;
 
     private ReusableCompletionSource<bool> _taskCompletion;
 
@@ -17,7 +17,12 @@ public class FeedbackController : MonoBehaviour
     {
         _taskCompletion = new ReusableCompletionSource<bool>();
 
-        FeedbackView.OnContinueClicked += OnContinueButtonClicked;
+        _feedbackView.OnContinueClicked += OnContinueButtonClicked;
+    }
+
+    public void OnDestroy()
+    {
+        _taskCompletion.TrySetCanceled();
     }
 
     public void Init(ActivitySkill skill)
@@ -27,20 +32,15 @@ public class FeedbackController : MonoBehaviour
         _itemManager.Init(skill);
     }
 
-    public async UniTask<bool> ShowFeedback(FeedbackType feedbackType)
+    public async UniTask<bool> Show(FeedbackType feedbackType)
     {
         gameObject.SetActive(true);
-        FeedbackView.DisplayFeedbackType(feedbackType);
+        _feedbackView.DisplayFeedbackType(feedbackType);
         _itemManager.ConfigureItemsByType(feedbackType);
 
         _taskCompletion.Reset();
 
         return await _taskCompletion.Task;
-    }
-
-    public void OnDestroy()
-    {
-        _taskCompletion.TrySetCanceled();
     }
 
     public void SetItemsContent(in ViewContentDTO content)
