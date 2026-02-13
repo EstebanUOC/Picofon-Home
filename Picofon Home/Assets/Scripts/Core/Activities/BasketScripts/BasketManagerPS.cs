@@ -182,6 +182,7 @@ public class BasketManagerPS : MonoBehaviour
     {
         if (_currentActivityIndex >= _activities.Length)
         {
+            _canvasUI.ShowSummary();
             _sessionManager.EndSession();
             return;
         }

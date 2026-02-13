@@ -11,7 +11,7 @@ public class BasketManagerRE : MonoBehaviour
     private BallController _ballController;
 
     [SerializeField]
-    private CanvasUI _feedbackController;
+    private CanvasUI _canvasUI;
 
     [Space(15)]
     [SerializeField]
@@ -66,7 +66,7 @@ public class BasketManagerRE : MonoBehaviour
 # endif
         }
 
-        _feedbackController.Init(skill);
+        _canvasUI.Init(skill);
 
         LoadActivities(@params).Forget();
     }
@@ -164,7 +164,7 @@ public class BasketManagerRE : MonoBehaviour
 
         await UniTask.WaitForSeconds(2f);
 
-        await _feedbackController.ShowFeedback(feedbackType);
+        await _canvasUI.ShowFeedback(feedbackType);
 
         ChangeActivity();
 
@@ -175,6 +175,7 @@ public class BasketManagerRE : MonoBehaviour
     {
         if (_currentActivityIndex >= _activities.Length)
         {
+            _canvasUI.ShowSummary();
             _sessionManager.EndSession();
             return;
         }
@@ -207,7 +208,7 @@ public class BasketManagerRE : MonoBehaviour
 
         ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords);
 
-        _feedbackController.SetFeedbackContent(in feedbackContent);
+        _canvasUI.SetFeedbackContent(in feedbackContent);
 
         ResetActivity();
     }
