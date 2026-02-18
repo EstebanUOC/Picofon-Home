@@ -20,7 +20,7 @@ public class LevelItemView : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private LevelSelectEventChannel _eventChannel;
 
-    [Space(15)]
+    [Space]
     [SerializeField]
     private Image _icon;
 
@@ -30,7 +30,7 @@ public class LevelItemView : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private Image _content;
 
-    [Space(15)]
+    [Space]
     [SerializeField]
     private GameObject _lockedOverlay;
 

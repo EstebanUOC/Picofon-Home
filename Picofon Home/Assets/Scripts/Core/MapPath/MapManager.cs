@@ -14,9 +14,9 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private LevelSelectEventChannel _eventChannel;
 
-    [Space(15)]
+    [Space]
     [SerializeField]
-    private LevelItemRenderer _renderer;
+    private LevelItemManager _itemManager;
 
     private string _childId = string.Empty;
 
@@ -26,7 +26,7 @@ public class MapManager : MonoBehaviour
         if (existsData)
         {
             int count = LevelDataStore.Instance.GetPlansCount();
-            _renderer.RenderLevels(count);
+            _itemManager.RenderLevels(count);
             return;
         }
 
@@ -80,7 +80,7 @@ public class MapManager : MonoBehaviour
         LevelDataStore store = LevelDataStore.Instance;
         store.SavePlans(plans);
 
-        _renderer.RenderLevels(plans.Length);
+        _itemManager.RenderLevels(plans.Length);
     }
 
     private void HandleLevelSelected(LevelConfig config, int index)

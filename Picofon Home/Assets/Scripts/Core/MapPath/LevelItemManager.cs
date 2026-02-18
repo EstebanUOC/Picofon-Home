@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 
@@ -25,15 +26,27 @@ public readonly ref struct LevelData
     }
 }
 
-public class LevelItemRenderer : MonoBehaviour
+public class LevelItemManager : MonoBehaviour
 {
-    [Space(15)]
+    [Space]
     [SerializeField]
     private LevelScene _scene;
 
-    [Header("Components")]
-    public RectTransform _container;
-    public GameObject _prefab;
+    [SerializeField]
+    private LevelConfig[] _configurations;
+
+    [Header("References")]
+    [SerializeField]
+    private GameObject _levelPrefab;
+
+    [SerializeField]
+    private GameObject _marker;
+
+    [SerializeField]
+    private LevelPath _path;
+
+    [SerializeField]
+    private RectTransform _contentRect;
 
     [Header("Grid placement")]
     [SerializeField]
@@ -42,40 +55,38 @@ public class LevelItemRenderer : MonoBehaviour
     [SerializeField]
     private Vector2 _spacing = new(450f, -500f);
 
-    [Space(15)]
-    [SerializeField]
-    private LevelConfig[] _configurations;
-
-    [Space(15)]
-    [SerializeField]
-    private int _num;
-
-    [SerializeField]
-    private RectTransform _continue;
-
     private int _columns = 2;
+    private RectTransform _container;
 
-    public void Start()
+    public void Awake()
     {
         const float moveAmount = 30f;
 
-        Transform child = _continue.GetChild(0);
-
+        Transform child = _marker.transform.GetChild(0);
         child.DOLocalMoveY(moveAmount, 0.8f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+
+        _container = GetComponent<RectTransform>();
     }
 
     public void RenderLevels(int count)
     {
         int lastCompleted = GamePrefs.LastCompletedLevel;
-        // TODO: TEMP code (delete this later)
-        lastCompleted = 2;
 
         float containerMiddle = _container.rect.width / 2;
         float spacingMiddle = _spacing.x / 2;
 
-        Vector2 offset = new(0f, -240f);
-
         int childCount = _container.childCount;
+
+        Span<Vector2> positions = stackalloc Vector2[count];
+
+        if (count < childCount)
+        {
+            for (int i = count; i < childCount; i++)
+            {
+                Transform child = _container.GetChild(i);
+                child.gameObject.SetActive(false);
+            }
+        }
 
         for (int i = 0; i < count; i++)
         {
@@ -93,21 +104,17 @@ public class LevelItemRenderer : MonoBehaviour
             }
             else
             {
-                GameObject obj = Instantiate(_prefab, _container);
+                GameObject obj = Instantiate(_levelPrefab, _container);
                 child = obj.transform;
             }
 
             RectTransform childRect = child.GetComponent<RectTransform>();
             childRect.anchoredPosition = position;
+            positions[i] = childRect.position;
 
             LevelItemView comp = child.GetComponent<LevelItemView>();
 
             bool locked = i > lastCompleted;
-
-            if (i == lastCompleted)
-            {
-                _continue.anchoredPosition = childRect.anchoredPosition - offset;
-            }
 
             LevelConfig config = _configurations[i % _configurations.Length];
 
@@ -131,8 +138,26 @@ public class LevelItemRenderer : MonoBehaviour
 
             LevelData data = new(i, config, type, state);
 
-            comp.Init(data);
+            comp.Init(in data);
+
+            if (i == lastCompleted)
+            {
+                Vector2 offset = new(0f, -240f);
+
+                RectTransform markerRect = _marker.GetComponent<RectTransform>();
+                markerRect.anchoredPosition = childRect.anchoredPosition - offset;
+            }
+
+            if (i == count - 1)
+            {
+                _contentRect.sizeDelta = new Vector2(
+                    _contentRect.sizeDelta.x,
+                    -childRect.anchoredPosition.y + 300f
+                );
+            }
         }
+
+        _path.ChangePath(positions);
     }
 
     public void OnValidate()
@@ -141,7 +166,6 @@ public class LevelItemRenderer : MonoBehaviour
             return;
 
         int childCount = _container.childCount;
-        Vector2 offset = new(0f, -240f);
 
         float containerMiddle = _container.rect.width / 2;
         float spacingMiddle = _spacing.x / 2;
@@ -159,16 +183,6 @@ public class LevelItemRenderer : MonoBehaviour
             if (child != null)
             {
                 child.anchoredPosition = position;
-            }
-
-            if (i != _num)
-            {
-                continue;
-            }
-
-            if (child != null)
-            {
-                _continue.anchoredPosition = child.anchoredPosition - offset;
             }
         }
     }

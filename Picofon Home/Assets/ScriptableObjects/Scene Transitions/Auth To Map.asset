@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c43aad619cd9911639a6f6bd9536231c, type: 3}
   m_Name: Auth To Map
   m_EditorClassIdentifier: 
-  Scene1: AuthScene
-  Scene2: MapPathScene
+  _sourceScene: AuthScene
+  _targetScene: MapPathScene

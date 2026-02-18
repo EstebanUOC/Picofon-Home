@@ -3,7 +3,7 @@ using UnityEngine;
 public class MapUIManager : MonoBehaviour
 {
     [SerializeField]
-    private TransitionScene _transition;
+    private TransitionData _transition;
 
     [SerializeField]
     private LevelButton _exitButton;
@@ -15,6 +15,6 @@ public class MapUIManager : MonoBehaviour
 
     private void HandleExitButtonClicked()
     {
-        _transition.Back();
+        _transition.LoadSourceScene();
     }
 }
