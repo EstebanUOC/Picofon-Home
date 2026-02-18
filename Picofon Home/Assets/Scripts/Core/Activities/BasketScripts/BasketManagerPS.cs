@@ -88,7 +88,7 @@ public class BasketManagerPS : MonoBehaviour
 
         if (_activities is null || _activities.Length == 0)
         {
-            Debug.LogWarning("No hay actividades cargadas.");
+            _canvasUI.ShowWarning();
             return;
         }
 

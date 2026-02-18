@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Summary : MonoBehaviour
 {
+    public event Action OnSummaryCompleted;
+
     [SerializeField]
     private Button _continueButton;
 
@@ -14,6 +16,6 @@ public class Summary : MonoBehaviour
 
     private void OnContinueClicked()
     {
-        SceneManager.LoadScene("MapPathScene");
+        OnSummaryCompleted?.Invoke();
     }
 }
