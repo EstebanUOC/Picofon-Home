@@ -40,7 +40,7 @@ public class Login : Panel
 
         OnHide += () => gameObject.SetActive(false);
 
-        _versionText.text = UIManager.VersionNumber.ToString("0.0");
+        _versionText.text = UIManager.VersionNumber.ToString("0.00");
     }
 
     private void OnDebugLogin()
