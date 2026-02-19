@@ -6,8 +6,17 @@ public class LevelDataStore : MonoBehaviour
 
     private TherapyPlan[] _cachedPlans;
 
+    private int _currentLevel = 0;
+    private int _lastLevel = -1;
+
+    public int CurrentLevel => _currentLevel;
+
+    public int LastLevel => _lastLevel;
+
     public void Awake()
     {
+        _currentLevel = GamePrefs.LastCompletedLevel;
+
         if (Instance == null)
         {
             Instance = this;
@@ -46,5 +55,11 @@ public class LevelDataStore : MonoBehaviour
     public int GetPlansCount()
     {
         return _cachedPlans.Length;
+    }
+
+    public void LevelCompleted()
+    {
+        _lastLevel = _currentLevel;
+        _currentLevel++;
     }
 }

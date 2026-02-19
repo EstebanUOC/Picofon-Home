@@ -18,32 +18,22 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private LevelItemManager _itemManager;
 
-    private string _childId = string.Empty;
-
     public void Start()
     {
-        bool existsData = LevelDataStore.Instance.HasPlans();
-        if (existsData)
-        {
-            int count = LevelDataStore.Instance.GetPlansCount();
-            _itemManager.RenderLevels(count);
-            return;
-        }
+        string childId = MapPathPayload.ChildId;
 
-        _childId = MapPathPayload.ChildId;
-
-        if (string.IsNullOrEmpty(_childId))
+        if (string.IsNullOrEmpty(childId))
         {
 #if !DEBUG
             Debug.LogError("ChildId is null or empty in MapPathPayload.");
             return;
 # else
-            _childId = "19013454K";
+            childId = "19013454K";
             Debug.LogWarning("Using default ChildId for testing in Unity Editor.");
 # endif
         }
 
-        LoadPlans().Forget();
+        LoadPlans(childId).Forget();
     }
 
     public void OnEnable()
@@ -56,12 +46,38 @@ public class MapManager : MonoBehaviour
         _eventChannel.OnEventRaised -= HandleLevelSelected;
     }
 
-    private async UniTaskVoid LoadPlans()
+    private async UniTaskVoid LoadPlans(string childId)
+    {
+        LevelDataStore instance = LevelDataStore.Instance;
+
+        bool existsData = instance.HasPlans();
+
+        int levelCount;
+
+        if (existsData)
+        {
+            levelCount = instance.GetPlansCount();
+        }
+        else
+        {
+            await GetPlans(childId);
+
+            levelCount = instance.GetPlansCount();
+        }
+
+        _itemManager.RenderLevels(
+            count: levelCount,
+            last: instance.LastLevel,
+            current: instance.CurrentLevel
+        );
+    }
+
+    private async UniTask GetPlans(string childId)
     {
         TherapyPlanService service = new();
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 
-        ApiResult<TherapyData> result = await service.GetAllPlans<TherapyData>(_childId, token);
+        ApiResult<TherapyData> result = await service.GetAllPlans<TherapyData>(childId, token);
 
         if (!result.Success)
         {
@@ -73,14 +89,11 @@ public class MapManager : MonoBehaviour
 
         if (plans is null || plans.Length == 0)
         {
-            Debug.LogError("No hay actividades cargadas.");
+            Debug.LogError("No therapy plans found for the child.");
             return;
         }
 
-        LevelDataStore store = LevelDataStore.Instance;
-        store.SavePlans(plans);
-
-        _itemManager.RenderLevels(plans.Length);
+        LevelDataStore.Instance.SavePlans(plans);
     }
 
     private void HandleLevelSelected(LevelConfig config, int index)
@@ -93,10 +106,11 @@ public class MapManager : MonoBehaviour
             ChildId = plan.ChildId,
         };
 
-        LevelPayload.Params = @params;
-        LevelPayload.Skill = (ActivitySkill)plan.TherapyTemplate.Skill.Id;
-
         TherapyTemplate template = plan.TherapyTemplate;
+
+        LevelPayload.Params = @params;
+        LevelPayload.Skill = (ActivitySkill)template.Skill.Id;
+
         ActivityType type = (ActivityType)template.TaskType.Id;
 
         string suffix = type switch

@@ -196,6 +196,10 @@ public class BasketGameManagerJG : MonoBehaviour
         {
             _sessionManager.EndSession();
             _canvasUI.ShowSummary();
+
+            LevelDataStore instance = LevelDataStore.Instance;
+
+            instance?.LevelCompleted();
             return;
         }
 

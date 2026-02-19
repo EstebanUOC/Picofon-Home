@@ -1,5 +1,5 @@
 using System;
-using DG.Tweening;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public enum LevelScene
@@ -26,7 +26,7 @@ public readonly ref struct LevelData
     }
 }
 
-public class LevelItemManager : MonoBehaviour
+public sealed class LevelItemManager : MonoBehaviour
 {
     [Space]
     [SerializeField]
@@ -40,7 +40,7 @@ public class LevelItemManager : MonoBehaviour
     private GameObject _levelPrefab;
 
     [SerializeField]
-    private GameObject _marker;
+    private Marker _marker;
 
     [SerializeField]
     private LevelPath _path;
@@ -60,33 +60,17 @@ public class LevelItemManager : MonoBehaviour
 
     public void Awake()
     {
-        const float moveAmount = 30f;
-
-        Transform child = _marker.transform.GetChild(0);
-        child.DOLocalMoveY(moveAmount, 0.8f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
-
         _container = GetComponent<RectTransform>();
     }
 
-    public void RenderLevels(int count)
+    public void RenderLevels(int count, int last, int current)
     {
-        int lastCompleted = GamePrefs.LastCompletedLevel;
-
         float containerMiddle = _container.rect.width / 2;
         float spacingMiddle = _spacing.x / 2;
 
         int childCount = _container.childCount;
 
         Span<Vector2> positions = stackalloc Vector2[count];
-
-        if (count < childCount)
-        {
-            for (int i = count; i < childCount; i++)
-            {
-                Transform child = _container.GetChild(i);
-                child.gameObject.SetActive(false);
-            }
-        }
 
         for (int i = 0; i < count; i++)
         {
@@ -96,25 +80,24 @@ public class LevelItemManager : MonoBehaviour
             float y = _startPos + (row * _spacing.y);
             Vector2 position = new(x, y);
 
-            Transform child;
+            RectTransform child;
 
             if (i < childCount)
             {
-                child = _container.GetChild(i);
+                child = _container.GetChild(i).GetComponent<RectTransform>();
             }
             else
             {
                 GameObject obj = Instantiate(_levelPrefab, _container);
-                child = obj.transform;
+                child = obj.transform.GetComponent<RectTransform>();
             }
 
-            RectTransform childRect = child.GetComponent<RectTransform>();
-            childRect.anchoredPosition = position;
-            positions[i] = childRect.position;
+            child.anchoredPosition = position;
+            positions[i] = child.position;
 
             LevelItemView comp = child.GetComponent<LevelItemView>();
 
-            bool locked = i > lastCompleted;
+            bool locked = i > current;
 
             LevelConfig config = _configurations[i % _configurations.Length];
 
@@ -139,25 +122,37 @@ public class LevelItemManager : MonoBehaviour
             LevelData data = new(i, config, type, state);
 
             comp.Init(in data);
+        }
 
-            if (i == lastCompleted)
+        if (count < childCount)
+        {
+            for (int i = count; i < childCount; i++)
             {
-                Vector2 offset = new(0f, -240f);
-
-                RectTransform markerRect = _marker.GetComponent<RectTransform>();
-                markerRect.anchoredPosition = childRect.anchoredPosition - offset;
-            }
-
-            if (i == count - 1)
-            {
-                _contentRect.sizeDelta = new Vector2(
-                    _contentRect.sizeDelta.x,
-                    -childRect.anchoredPosition.y + 300f
-                );
+                Transform child = _container.GetChild(i);
+                child.gameObject.SetActive(false);
             }
         }
 
         _path.ChangePath(positions);
+
+        const float offset = 300f;
+
+        RectTransform bottomLevel = _container
+            .GetChild(childCount - 1)
+            .GetComponent<RectTransform>();
+
+        _contentRect.sizeDelta = new Vector2(
+            _contentRect.sizeDelta.x,
+            -bottomLevel.anchoredPosition.y + offset
+        );
+
+        int markerIndex = last >= 0 ? last : current;
+
+        RectTransform markerLevel = _container.GetChild(markerIndex).GetComponent<RectTransform>();
+        _marker.PositionMarker(markerLevel.anchoredPosition);
+
+        if (last >= 0)
+            MoveMarkerToLevel(current).Forget();
     }
 
     public void OnValidate()
@@ -185,5 +180,13 @@ public class LevelItemManager : MonoBehaviour
                 child.anchoredPosition = position;
             }
         }
+    }
+
+    private async UniTaskVoid MoveMarkerToLevel(int levelIndex)
+    {
+        await UniTask.WaitForSeconds(1f);
+
+        RectTransform targetLevel = _container.GetChild(levelIndex) as RectTransform;
+        _marker.MoveMarker(targetLevel.anchoredPosition);
     }
 }
