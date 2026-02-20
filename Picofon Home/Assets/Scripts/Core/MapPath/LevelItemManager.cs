@@ -137,9 +137,7 @@ public sealed class LevelItemManager : MonoBehaviour
 
         const float offset = 300f;
 
-        RectTransform bottomLevel = _container
-            .GetChild(childCount - 1)
-            .GetComponent<RectTransform>();
+        RectTransform bottomLevel = _container.GetChild(count - 1).GetComponent<RectTransform>();
 
         _contentRect.sizeDelta = new Vector2(
             _contentRect.sizeDelta.x,

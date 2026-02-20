@@ -4,12 +4,33 @@ using UnityEngine;
 
 namespace BasketResponses
 {
+    public enum JudgeAudioID
+    {
+        Intro,
+        PositiveAndCorrect,
+        PositiveAndIncorrect,
+        NegativeAndCorrect,
+        NegativeAndIncorrect,
+    }
+
+    public enum OthersAudioID
+    {
+        Intro,
+        Positive,
+        Negative,
+    }
+
+    [Serializable]
+    public struct AudioEntry<T>
+    {
+        public T Id;
+        public AudioClip Clip;
+    }
+
     public class JudgeActivity
     {
-        [JsonInclude]
         public WordInfo[] Words { get; set; }
 
-        [JsonInclude]
         public bool Answer { get; set; }
     }
 
@@ -71,42 +92,6 @@ namespace BasketResponses
         public AnswerDTO(Span<bool> answers)
         {
             Answers = answers;
-        }
-    }
-
-    public readonly struct BasketActivity
-    {
-        public readonly Sprite LeftImage;
-        public readonly Sprite RightImage;
-        public readonly string LeftWord;
-        public readonly string RightWord;
-        public readonly string LeftSyllabifiedWord;
-        public readonly string RightSyllabifiedWord;
-        public readonly string LeftSound;
-        public readonly string RightSound;
-        public readonly bool Answer;
-
-        public BasketActivity(
-            Sprite leftImage,
-            Sprite rightImage,
-            string leftWord,
-            string rightWord,
-            string leftSyllabifiedWord,
-            string rightSyllabifiedWord,
-            string leftSound,
-            string rightSound,
-            bool answer
-        )
-        {
-            LeftImage = leftImage;
-            RightImage = rightImage;
-            LeftWord = leftWord;
-            RightWord = rightWord;
-            LeftSyllabifiedWord = leftSyllabifiedWord;
-            RightSyllabifiedWord = rightSyllabifiedWord;
-            LeftSound = leftSound;
-            RightSound = rightSound;
-            Answer = answer;
         }
     }
 }

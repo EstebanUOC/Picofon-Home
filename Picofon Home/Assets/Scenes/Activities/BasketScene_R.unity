@@ -4695,9 +4695,7 @@ MonoBehaviour:
   _hoopManager: {fileID: 487383563}
   _uiManager: {fileID: 2128032408}
   _sessionManager: {fileID: 2138202808}
-  _instructionClip: {fileID: 8300000, guid: 343185b0daa3e15c9843a445f07dafa2, type: 3}
-  _positiveClip: {fileID: 8300000, guid: 05a4976e7fdae800d9d5daca0a084642, type: 3}
-  _negativeClip: {fileID: 8300000, guid: 1c1f3a5028af5c9c48f517621e18e4cf, type: 3}
+  audioEntries: []
 --- !u!1 &1075156704
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,14 +18,14 @@ public enum AnswerEvaluation
 
 public class BasketGameManagerJG : MonoBehaviour
 {
-    [Space(15)]
+    [Space]
     [SerializeField]
     private CanvasUI _canvasUI;
 
     [SerializeField]
     private BallController _ballController;
 
-    [Space(15)]
+    [Space]
     [SerializeField]
     private HoopManager _hoopManager;
 
@@ -38,21 +38,8 @@ public class BasketGameManagerJG : MonoBehaviour
     [SerializeField]
     private SessionManager _sessionManager;
 
-    [Space(15)]
     [SerializeField]
-    private AudioClip _instructionClip;
-
-    [SerializeField]
-    private AudioClip _positiveYesClip;
-
-    [SerializeField]
-    private AudioClip _positiveNoClip;
-
-    [SerializeField]
-    private AudioClip _negativeYesClip;
-
-    [SerializeField]
-    private AudioClip _negativeNoClip;
+    private AudioEntry<JudgeAudioID>[] audioEntries;
 
     private readonly Sprite[] _icons = new Sprite[2];
     private readonly string[] _texts = new string[2];
@@ -124,7 +111,7 @@ public class BasketGameManagerJG : MonoBehaviour
 
         _answerManager.DisableAnswers();
 
-        AudioManager.Instance.PlayVoice(_instructionClip);
+        // AudioManager.Instance.PlayVoice(_instructionClip);
 
         await AudioManager.Instance.WaitVoiceToEnd();
 
@@ -149,17 +136,17 @@ public class BasketGameManagerJG : MonoBehaviour
 
         if (isCorrect)
         {
-            if (isPositive)
-                AudioManager.Instance.PlayVoice(_positiveYesClip);
-            else
-                AudioManager.Instance.PlayVoice(_positiveNoClip);
+            // if (isPositive)
+            //     AudioManager.Instance.PlayVoice(_positiveYesClip);
+            // else
+            //     AudioManager.Instance.PlayVoice(_positiveNoClip);
         }
         else
         {
-            if (isPositive)
-                AudioManager.Instance.PlayVoice(_negativeYesClip);
-            else
-                AudioManager.Instance.PlayVoice(_negativeNoClip);
+            // if (isPositive)
+            //     AudioManager.Instance.PlayVoice(_negativeYesClip);
+            // else
+            //     AudioManager.Instance.PlayVoice(_negativeNoClip);
         }
 
         TaskInfo taskInfo = new()

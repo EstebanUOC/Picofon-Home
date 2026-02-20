@@ -26,15 +26,9 @@ public class BasketManagerRE : MonoBehaviour
     [SerializeField]
     private SessionManager _sessionManager;
 
-    [Space(10)]
+    [Space]
     [SerializeField]
-    private AudioClip _instructionClip;
-
-    [SerializeField]
-    private AudioClip _positiveClip;
-
-    [SerializeField]
-    private AudioClip _negativeClip;
+    private AudioEntry<OthersAudioID>[] audioEntries;
 
     private int _currentActivityIndex = 0;
 
@@ -104,7 +98,8 @@ public class BasketManagerRE : MonoBehaviour
 
         ChangeActivity();
 
-        AudioManager.Instance.PlayVoice(_instructionClip);
+        // AudioManager.Instance.PlayVoice(_instructionClip);
+
         await AudioManager.Instance.WaitVoiceToEnd();
 
         _sessionManager.StartTime();
@@ -120,9 +115,9 @@ public class BasketManagerRE : MonoBehaviour
 
         bool isCorrect = currentWord.Answer;
 
-        AudioClip clip = isCorrect ? _positiveClip : _negativeClip;
+        // AudioClip clip = isCorrect ? _positiveClip : _negativeClip;
 
-        AudioManager.Instance.PlayVoice(clip);
+        // AudioManager.Instance.PlayVoice(clip);
 
         int correctWordId = 0;
 
@@ -177,6 +172,10 @@ public class BasketManagerRE : MonoBehaviour
         {
             _canvasUI.ShowSummary();
             _sessionManager.EndSession();
+
+            LevelDataStore instance = LevelDataStore.Instance;
+
+            instance?.LevelCompleted();
             return;
         }
         _currentActivity = _activities[_currentActivityIndex];
