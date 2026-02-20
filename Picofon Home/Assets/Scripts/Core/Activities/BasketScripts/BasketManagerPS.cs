@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -39,7 +40,9 @@ public class BasketManagerPS : MonoBehaviour
     private readonly string[] _texts = new string[4];
     private readonly string[] _syllabifiedWords = new string[4];
 
-    public void Awake()
+    private readonly Dictionary<OthersAudioID, AudioClip> _audioClips = new(3);
+
+    public void Start()
     {
         Application.targetFrameRate = 60;
 
@@ -61,6 +64,11 @@ public class BasketManagerPS : MonoBehaviour
         }
 
         _canvasUI.Init(skill);
+
+        foreach (AudioEntry<OthersAudioID> entry in audioEntries)
+        {
+            _audioClips[entry.Id] = entry.Clip;
+        }
 
         LoadActivities(@params).Forget();
     }
@@ -99,7 +107,7 @@ public class BasketManagerPS : MonoBehaviour
         ChangeActivity();
         _uiManager.EnableClueButton(false);
 
-        // AudioManager.Instance.PlayVoice(_instructionClip);
+        AudioManager.Instance.PlayVoice(_audioClips[OthersAudioID.Intro]);
 
         await AudioManager.Instance.WaitVoiceToEnd();
 
@@ -123,9 +131,9 @@ public class BasketManagerPS : MonoBehaviour
 
         bool isCorrect = currentWord.Answer;
 
-        // AudioClip clip = isCorrect ? _positiveClip : _negativeClip;
+        OthersAudioID id = isCorrect ? OthersAudioID.Positive : OthersAudioID.Negative;
 
-        // AudioManager.Instance.PlayVoice(clip);
+        AudioManager.Instance.PlayVoice(_audioClips[id]);
 
         int correctWordId = 0;
 

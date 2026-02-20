@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -38,6 +39,7 @@ public class BasketGameManagerJG : MonoBehaviour
     [SerializeField]
     private SessionManager _sessionManager;
 
+    [Space]
     [SerializeField]
     private AudioEntry<JudgeAudioID>[] audioEntries;
 
@@ -50,7 +52,9 @@ public class BasketGameManagerJG : MonoBehaviour
     private JudgeActivity[] _activities;
     private JudgeActivity _currentActivity;
 
-    public void Awake()
+    private readonly Dictionary<JudgeAudioID, AudioClip> _audioClips = new(5);
+
+    public void Start()
     {
         Application.targetFrameRate = 60;
 
@@ -72,6 +76,11 @@ public class BasketGameManagerJG : MonoBehaviour
         }
 
         _canvasUI.Init(skill);
+
+        foreach (AudioEntry<JudgeAudioID> entry in audioEntries)
+        {
+            _audioClips[entry.Id] = entry.Clip;
+        }
 
         LoadActivities(@params).Forget();
     }
@@ -111,7 +120,7 @@ public class BasketGameManagerJG : MonoBehaviour
 
         _answerManager.DisableAnswers();
 
-        // AudioManager.Instance.PlayVoice(_instructionClip);
+        AudioManager.Instance.PlayVoice(_audioClips[JudgeAudioID.Intro]);
 
         await AudioManager.Instance.WaitVoiceToEnd();
 
@@ -134,20 +143,11 @@ public class BasketGameManagerJG : MonoBehaviour
             ? AnswerEvaluation.Correct
             : AnswerEvaluation.Incorrect;
 
-        if (isCorrect)
-        {
-            // if (isPositive)
-            //     AudioManager.Instance.PlayVoice(_positiveYesClip);
-            // else
-            //     AudioManager.Instance.PlayVoice(_positiveNoClip);
-        }
-        else
-        {
-            // if (isPositive)
-            //     AudioManager.Instance.PlayVoice(_negativeYesClip);
-            // else
-            //     AudioManager.Instance.PlayVoice(_negativeNoClip);
-        }
+        JudgeAudioID id = isCorrect
+            ? (isPositive ? JudgeAudioID.PositiveAndCorrect : JudgeAudioID.NegativeAndCorrect)
+            : (isPositive ? JudgeAudioID.PositiveAndIncorrect : JudgeAudioID.NegativeAndIncorrect);
+
+        AudioManager.Instance.PlayVoice(_audioClips[id]);
 
         TaskInfo taskInfo = new()
         {
