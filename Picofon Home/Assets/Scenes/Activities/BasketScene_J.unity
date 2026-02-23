@@ -3418,15 +3418,15 @@ MonoBehaviour:
   _sessionManager: {fileID: 699825655}
   audioEntries:
   - Id: 0
-    Clip: {fileID: 8300000, guid: fcef78b6cb447ac0bb7bef24dda9c54d, type: 3}
+    Clip: {fileID: 8300000, guid: 238a516ce6ebd1120aeb9da0fbff573c, type: 3}
   - Id: 1
-    Clip: {fileID: 8300000, guid: ea8ac7d053be88f44960130c59d74215, type: 3}
+    Clip: {fileID: 8300000, guid: 01d4baddcb270e391bce565a3b674197, type: 3}
   - Id: 2
-    Clip: {fileID: 8300000, guid: ce354be655933fe4e8545f7a0967720f, type: 3}
+    Clip: {fileID: 8300000, guid: cf45cbb152fb92d83b86ccb50e65d023, type: 3}
   - Id: 3
-    Clip: {fileID: 8300000, guid: 63a572a5f78fc264a8cf506e6e14f9dc, type: 3}
+    Clip: {fileID: 8300000, guid: e6d9c0fd831ec092e8f4fcc4d4b47f66, type: 3}
   - Id: 4
-    Clip: {fileID: 8300000, guid: 0e0542233a61efd43aee263c85ba49f3, type: 3}
+    Clip: {fileID: 8300000, guid: 9efffebc621affb0a9dda43354738ab6, type: 3}
 --- !u!1 &1075156704
 GameObject:
   m_ObjectHideFlags: 0

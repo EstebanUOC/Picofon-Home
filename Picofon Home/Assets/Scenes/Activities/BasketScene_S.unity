@@ -3970,9 +3970,9 @@ MonoBehaviour:
   _sessionManager: {fileID: 1507024532}
   audioEntries:
   - Id: 0
-    Clip: {fileID: 8300000, guid: 63a4fb5827fccdf43b64b72fd41f939d, type: 3}
+    Clip: {fileID: 8300000, guid: a4102c3b07940780bb44d5cdb43c1a6d, type: 3}
   - Id: 1
-    Clip: {fileID: 8300000, guid: 42064f886e4578852be94d0c6f70dbc1, type: 3}
+    Clip: {fileID: 8300000, guid: 6263907b7fab112248fc0f736c6ffb13, type: 3}
   - Id: 2
     Clip: {fileID: 8300000, guid: 03c04e7ca56511a5e8a79135a64669f6, type: 3}
 --- !u!1 &1075156704
