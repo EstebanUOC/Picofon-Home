@@ -29,7 +29,7 @@ public class BasketManagerRE : MonoBehaviour
 
     [Space]
     [SerializeField]
-    private AudioEntry<OthersAudioID>[] audioEntries;
+    private AudioCategory<OthersAudioID>[] audioCategories;
 
     private int _currentActivityIndex = 0;
 
@@ -64,6 +64,17 @@ public class BasketManagerRE : MonoBehaviour
         }
 
         _canvasUI.Init(skill);
+
+        AudioEntry<OthersAudioID>[] audioEntries = Array.Empty<AudioEntry<OthersAudioID>>();
+
+        foreach (AudioCategory<OthersAudioID> category in audioCategories)
+        {
+            if (category.Id == skill)
+            {
+                audioEntries = category.Entries;
+                break;
+            }
+        }
 
         foreach (AudioEntry<OthersAudioID> entry in audioEntries)
         {

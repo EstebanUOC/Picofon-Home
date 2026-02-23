@@ -41,7 +41,7 @@ public class BasketGameManagerJG : MonoBehaviour
 
     [Space]
     [SerializeField]
-    private AudioEntry<JudgeAudioID>[] audioEntries;
+    private AudioCategory<JudgeAudioID>[] audioCategories;
 
     private readonly Sprite[] _icons = new Sprite[2];
     private readonly string[] _texts = new string[2];
@@ -76,6 +76,17 @@ public class BasketGameManagerJG : MonoBehaviour
         }
 
         _canvasUI.Init(skill);
+
+        AudioEntry<JudgeAudioID>[] audioEntries = Array.Empty<AudioEntry<JudgeAudioID>>();
+
+        foreach (AudioCategory<JudgeAudioID> category in audioCategories)
+        {
+            if (category.Id == skill)
+            {
+                audioEntries = category.Entries;
+                break;
+            }
+        }
 
         foreach (AudioEntry<JudgeAudioID> entry in audioEntries)
         {

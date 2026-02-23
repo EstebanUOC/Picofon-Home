@@ -4695,13 +4695,31 @@ MonoBehaviour:
   _hoopManager: {fileID: 487383563}
   _uiManager: {fileID: 2128032408}
   _sessionManager: {fileID: 2138202808}
-  audioEntries:
-  - Id: 0
-    Clip: {fileID: 8300000, guid: daef9abd92a62046fb8065f1cd9fd412, type: 3}
+  audioCategories:
   - Id: 1
-    Clip: {fileID: 8300000, guid: 9f8dac5cad0442ff3a195a5c03393ddc, type: 3}
+    Entries:
+    - Id: 0
+      Clip: {fileID: 8300000, guid: daef9abd92a62046fb8065f1cd9fd412, type: 3}
+    - Id: 1
+      Clip: {fileID: 8300000, guid: 9f8dac5cad0442ff3a195a5c03393ddc, type: 3}
+    - Id: 2
+      Clip: {fileID: 8300000, guid: 85110ee3ec422fba8a5361b830c7e9bf, type: 3}
   - Id: 2
-    Clip: {fileID: 8300000, guid: 85110ee3ec422fba8a5361b830c7e9bf, type: 3}
+    Entries:
+    - Id: 0
+      Clip: {fileID: 8300000, guid: 4562ba0ed246074e2b3f422ca37fc56b, type: 3}
+    - Id: 1
+      Clip: {fileID: 8300000, guid: 3679006048f8fb460b0d2d2ea592cc66, type: 3}
+    - Id: 2
+      Clip: {fileID: 8300000, guid: a42e22582e5d274fb906dedef0702a49, type: 3}
+  - Id: 3
+    Entries:
+    - Id: 0
+      Clip: {fileID: 8300000, guid: dc81755a24de9f9519e22257b4065e30, type: 3}
+    - Id: 1
+      Clip: {fileID: 8300000, guid: e6f722cfd5230c3a7b56b511804245f3, type: 3}
+    - Id: 2
+      Clip: {fileID: 8300000, guid: 03ef73be85f27c668baa8777632d0b8a, type: 3}
 --- !u!1 &1075156704
 GameObject:
   m_ObjectHideFlags: 0

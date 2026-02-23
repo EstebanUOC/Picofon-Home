@@ -27,6 +27,13 @@ namespace BasketResponses
         public AudioClip Clip;
     }
 
+    [Serializable]
+    public struct AudioCategory<T>
+    {
+        public ActivitySkill Id;
+        public AudioEntry<T>[] Entries;
+    }
+
     public class JudgeActivity
     {
         public WordInfo[] Words { get; set; }
