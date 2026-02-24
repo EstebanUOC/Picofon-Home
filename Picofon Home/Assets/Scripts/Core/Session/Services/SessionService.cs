@@ -1,6 +1,7 @@
+using System.Text.Json;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
+using Picofon.Core.Network;
 
 public class SessionService
 {
@@ -22,41 +23,31 @@ public class SessionService
             Tasks = sessions,
         };
 
-        string json = JsonHelper.ToJson(sessionRequest);
-
-        Debug.Log($"Request JSON: {json}");
-
-        // TherapySessionCreateRequest requestData = new()
-        // {
-        //     TherapyPlanId = therapyPlanId,
-        //     ChildId = childId,
-        // };
-
-        // byte[] jsonRequest = JsonHelper.ToBytes(in requestData);
+        byte[] jsonRequest = JsonHelper.ToBytes(in sessionRequest);
 
         try
         {
-            // rawResponse = await HttpClientUnity.PostAsyncBytes(
-            //     url: url,
-            //     data: jsonRequest,
-            //     timeoutSeconds: 5,
-            //     cancellationToken: token
-            // );
+            rawResponse = await HttpClientUnity.PostAsyncBytes(
+                url: url,
+                data: jsonRequest,
+                timeoutSeconds: 5,
+                cancellationToken: token
+            );
         }
         catch (System.Exception)
         {
             return ApiResult.Fail("Network error occurred while creating therapy session.");
         }
 
-        // using JsonDocument doc = JsonDocument.Parse(rawResponse);
-        // JsonElement root = doc.RootElement;
-        //
-        // ApiResponseView<TherapySessionDTO> responseView = new(root);
-        //
-        // if (!responseView.Success)
-        // {
-        //     return ApiResult.Fail(responseView.ErrorMessage);
-        // }
+        using JsonDocument doc = JsonDocument.Parse(rawResponse);
+        JsonElement root = doc.RootElement;
+
+        ApiResponseView responseView = new(root);
+
+        if (!responseView.Success)
+        {
+            return ApiResult.Fail(responseView.ErrorMessage);
+        }
 
         return ApiResult.Ok();
     }

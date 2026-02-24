@@ -55,6 +55,9 @@ public class SessionManager : MonoBehaviour
 
     public void EndSession()
     {
+        if (Application.isEditor)
+            return;
+
         SessionService sessionService = new();
         sessionService.CreateTherapySession(_sessionInfo, _sessionResults).Forget();
     }
