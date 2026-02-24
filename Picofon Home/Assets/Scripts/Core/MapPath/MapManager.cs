@@ -18,6 +18,8 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private LevelItemManager _itemManager;
 
+    private string _lastChildId;
+
     public void Start()
     {
         string childId = MapPathPayload.ChildId;
@@ -54,12 +56,14 @@ public class MapManager : MonoBehaviour
 
         int levelCount;
 
-        if (existsData)
+        if (existsData && _lastChildId == childId)
         {
             levelCount = instance.GetPlansCount();
         }
         else
         {
+            _lastChildId = childId;
+
             await GetPlans(childId);
 
             levelCount = instance.GetPlansCount();
