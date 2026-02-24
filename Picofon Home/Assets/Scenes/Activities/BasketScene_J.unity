@@ -876,10 +876,10 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 719699677}
   - {fileID: 1650781393}
   - {fileID: 1162359876}
   - {fileID: 477835440}
-  - {fileID: 719699677}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3464,6 +3464,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvasUI: {fileID: 127598250}
   _ballController: {fileID: 1628458931}
+  _progressBar: {fileID: 719699678}
   _hoopManager: {fileID: 487383563}
   _answerManager: {fileID: 1932736848}
   _uiManager: {fileID: 94296185}
@@ -4108,7 +4109,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 721, y: -315}
+  m_AnchoredPosition: {x: 1027, y: -315}
   m_SizeDelta: {x: 364, y: 338}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1188468138
@@ -4312,7 +4313,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 307, y: -315}
+  m_AnchoredPosition: {x: 613, y: -315}
   m_SizeDelta: {x: 364, y: 338}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1215397326

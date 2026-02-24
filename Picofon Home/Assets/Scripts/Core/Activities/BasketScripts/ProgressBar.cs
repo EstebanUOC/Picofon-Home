@@ -1,5 +1,4 @@
-using Cysharp.Threading.Tasks;
-using DG.Tweening;
+using PrimeTween;
 using UnityEngine;
 
 public class ProgressBar : MonoBehaviour
@@ -7,20 +6,24 @@ public class ProgressBar : MonoBehaviour
     [SerializeField]
     private RectTransform fillRect;
 
-    private float _progress;
     private float _maxWidth;
+    private float _partWidth;
+
+    private Vector2 _size = Vector2.zero;
 
     public void Awake()
     {
         _maxWidth = transform.GetComponent<RectTransform>().rect.width;
-
-        Prueba().Forget();
     }
 
-    private async UniTaskVoid Prueba()
+    public void Initialize(int parts)
     {
-        await UniTask.WaitForSeconds(1);
+        _partWidth = _maxWidth / parts;
+    }
 
-        fillRect.DOSizeDelta(new Vector2(400, fillRect.sizeDelta.y), 2f).SetEase(Ease.Linear);
+    public void SetProgress(int progress)
+    {
+        _size.x = _partWidth * progress;
+        Tween.UISizeDelta(fillRect, endValue: _size, duration: 0.5f);
     }
 }
