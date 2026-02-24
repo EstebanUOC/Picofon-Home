@@ -63,9 +63,10 @@ public class ItemFeedbackManager : MonoBehaviour
                 {
                     int firstSep = word.IndexOf('#');
                     int lastSep = word.LastIndexOf('#');
-                    _builder.Append(word, 0, firstSep + 1);
+
+                    _builder.Append(word, 0, firstSep);
                     ColorWord(word, firstSep + 1, lastSep - firstSep - 1, feedbackType);
-                    _builder.Append(word, lastSep, word.Length - lastSep);
+                    _builder.Append(word, lastSep + 1, word.Length - lastSep - 1);
                     break;
                 }
                 case ActivitySkill.Final:

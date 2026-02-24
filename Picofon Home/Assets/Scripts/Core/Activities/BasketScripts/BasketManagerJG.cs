@@ -69,8 +69,8 @@ public class BasketGameManagerJG : MonoBehaviour
             Debug.LogError("Parameters are missing in LevelPayload.");
             return;
 # else
-            skill = ActivitySkill.Initial;
-            @params = new ActivityRequestParams { PlanId = 41, ChildId = "19013454K" };
+            skill = ActivitySkill.Medial;
+            @params = new ActivityRequestParams { PlanId = 64, ChildId = "19013454K" };
             Debug.LogWarning("Using default parameters for testing in Unity Editor.");
 # endif
         }
