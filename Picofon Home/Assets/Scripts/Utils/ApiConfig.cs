@@ -12,7 +12,7 @@ public static class ApiConfig
     public const string FallbackUrl = "https://ehc-picofon.techlab.uoc.edu/";
     public const string PrimeUrl = "https://picofonlab.com/";
 
-    public static async UniTask Ping()
+    public static async UniTask<bool> Ping()
     {
         string url = $"{PrimeUrl}health";
 
@@ -24,9 +24,10 @@ public static class ApiConfig
         {
             Debug.LogWarning("Primary API URL is unreachable. Switching to fallback URL.");
             BaseUrl = $"{FallbackUrl}api/";
-            return;
+            return true;
         }
 
         BaseUrl = $"{PrimeUrl}api/";
+        return true;
     }
 }
