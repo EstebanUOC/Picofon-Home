@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 public static class ApiConfig
 {
@@ -16,18 +15,32 @@ public static class ApiConfig
     {
         string url = $"{PrimeUrl}health";
 
+        bool primaryUrlReachable = false;
+
         try
         {
             await HttpClientUnity.GetAsyncBytes(url: url, timeoutSeconds: 5);
+            primaryUrlReachable = true;
         }
-        catch (System.Exception)
+        catch (System.Exception) { }
+
+        if (primaryUrlReachable)
         {
-            Debug.LogWarning("Primary API URL is unreachable. Switching to fallback URL.");
-            BaseUrl = $"{FallbackUrl}api/";
+            BaseUrl = $"{PrimeUrl}api/";
             return true;
         }
 
-        BaseUrl = $"{PrimeUrl}api/";
-        return true;
+        url = $"{PrimeUrl}health";
+
+        try
+        {
+            await HttpClientUnity.GetAsyncBytes(url: url, timeoutSeconds: 5);
+            BaseUrl = $"{FallbackUrl}api/";
+            return true;
+        }
+        catch (System.Exception)
+        {
+            return false;
+        }
     }
 }

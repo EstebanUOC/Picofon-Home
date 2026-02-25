@@ -32,7 +32,19 @@ public class UIManager : MonoBehaviour
 
     private async UniTaskVoid BootstrapApplicacion()
     {
-        await ApiConfig.Ping();
+        bool existsConnection = await ApiConfig.Ping();
+
+        if (!existsConnection)
+        {
+            ModalData modalData = new()
+            {
+                Title = "Error",
+                Message =
+                    "No internet connection detected. Please check your connection and try again.",
+            };
+            await ModalPanel.Show(modalData);
+            Application.Quit();
+        }
 
         UserService = new UserService();
 
