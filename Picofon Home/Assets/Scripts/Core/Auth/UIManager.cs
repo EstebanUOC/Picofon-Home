@@ -40,10 +40,10 @@ public class UIManager : MonoBehaviour
             {
                 Title = "Error",
                 Message =
-                    "No internet connection detected. Please check your connection and try again.",
+                    "No es va detectar cap connexió a internet. Comprova la teva connexió i torna a intentar-ho, o pots fer servir l'aplicació en mode de prova",
             };
             await ModalPanel.Show(modalData);
-            Application.Quit();
+            return;
         }
 
         UserService = new UserService();
