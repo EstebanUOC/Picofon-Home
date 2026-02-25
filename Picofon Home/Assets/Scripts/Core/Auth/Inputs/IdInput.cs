@@ -90,8 +90,8 @@ public class IdInput : BasicInput
             return;
         }
 
-        bool isDNI = char.IsDigit(input[0]);
-        bool isValid = isDNI ? ValidateDNI(input) : ValidateNIE(input);
+        bool isDigit = char.IsDigit(input[0]);
+        bool isValid = isDigit ? ValidateDNI(input) : ValidateNIE(input);
 
         if (isValid)
         {
@@ -99,7 +99,7 @@ public class IdInput : BasicInput
             return;
         }
 
-        errorMessage = isDNI ? "DNI invàlid." : "NIE invàlid.";
+        errorMessage = isDigit ? "DNI invàlid." : "NIE invàlid.";
         Error = true;
     }
 
@@ -124,28 +124,26 @@ public class IdInput : BasicInput
         if (string.IsNullOrEmpty(nie) || nie.Length != 9)
             return false;
 
-        char firstChar = nie.ToUpper()[0];
+        bool endsWithLetter = char.IsLetter(nie[^1]);
 
-        if (firstChar != 'X' && firstChar != 'Y' && firstChar != 'Z')
+        if (!endsWithLetter)
+        {
+            Debug.Log("NIE debe terminar con una letra.");
             return false;
+        }
 
-        int firstDigit =
-            firstChar == 'X' ? 0
-            : firstChar == 'Y' ? 1
-            : 2;
+        bool someChar = false;
 
-        string middleNumbers = nie.Substring(1, 7);
+        for (int i = 1; i < nie.Length - 1; i++)
+        {
+            if (char.IsLetter(nie[i]))
+            {
+                someChar = true;
+                break;
+            }
+        }
 
-        if (!int.TryParse(middleNumbers, out int nieNumbers))
-            return false;
-
-        string fullNumber = firstDigit.ToString() + middleNumbers;
-        int nieNumber = int.Parse(fullNumber);
-
-        char letter = nie.ToUpper()[8];
-        char calculatedLetter = CalculateControlLetter(nieNumber);
-
-        return letter == calculatedLetter;
+        return !someChar;
     }
 
     private char CalculateControlLetter(int number)

@@ -550,7 +550,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4294654306693697599, guid: 3b9b18fa23e77889caad4c9b0d929e8b, type: 3}
       propertyPath: m_text
-      value: Debug Menu
+      value: 'Mode Test
+
+'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
