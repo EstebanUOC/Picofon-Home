@@ -6,34 +6,43 @@ using UnityEngine.SceneManagement;
 
 public class RegisterChild : Panel
 {
-    public UIManager UIManager;
+    [SerializeField]
+    private UIManager _uiManager;
 
-    [Space(15)]
-    public TMP_Text EmailText;
-    public TMP_Text UsernameText;
+    [Space]
+    [SerializeField]
+    private TMP_Text _emailText;
 
-    [Space(15)]
-    public Form ChildRegistrationForm;
+    [SerializeField]
+    private TMP_Text _usernameText;
+
+    [Space]
+    [SerializeField]
+    private Form _registerForm;
+
+    [SerializeField]
+    private SimpleButton _returnButton;
 
     public void Start()
     {
         OnHide += () => gameObject.SetActive(false);
 
-        ChildRegistrationForm.OnSubmit += HandleSubmit;
+        _registerForm.OnSubmit += HandleSubmit;
+        _returnButton.OnClick += HandleReturn;
     }
 
     public override void Show()
     {
         base.Show();
 
-        EmailText.text = UIManager.CurrentUser.Email;
-        UsernameText.text = UIManager.CurrentUser.Username;
-        ChildRegistrationForm.ParentId = UIManager.CurrentUser.Id;
+        _emailText.text = _uiManager.CurrentUser.Email;
+        _usernameText.text = _uiManager.CurrentUser.Username;
+        _registerForm.ParentId = _uiManager.CurrentUser.Id;
     }
 
     private async UniTask HandleSubmit(ChildCreateDTO data)
     {
-        UserService userService = UIManager.UserService;
+        UserService userService = _uiManager.UserService;
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 
         ApiResult result = await userService.RegisterChild(data, token);
@@ -51,11 +60,16 @@ public class RegisterChild : Panel
 
         ModalData modalData = new() { Title = "Registre de nen", Message = message };
 
-        await UIManager.ShowModal(modalData);
+        await _uiManager.ShowModal(modalData);
 
         if (result.Success)
         {
             SceneManager.LoadScene("MapPathScene");
         }
+    }
+
+    private void HandleReturn()
+    {
+        _uiManager.ShowUserChildren();
     }
 }

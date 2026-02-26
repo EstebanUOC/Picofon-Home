@@ -4,25 +4,24 @@ using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class UserChildren : Panel
 {
     public UIManager UIManager;
 
-    [Space(15)]
+    [Space]
     [SerializeField]
     private TMP_Dropdown _childrenDropdown;
 
-    [Space(15)]
+    [Space]
     [SerializeField]
     private GameObject _selectButton;
 
     [SerializeField]
     private GameObject _registerButton;
 
-    [Space(15)]
-    public Button LogoutButton;
+    [Space]
+    public SimpleButton LogoutButton;
 
     private string[] _childrenIds;
 
@@ -36,7 +35,7 @@ public class UserChildren : Panel
         selectButton.OnClick += OnSelectChild;
         registerButton.OnClick += OnRegisterChild;
 
-        LogoutButton.onClick.AddListener(OnLogout);
+        LogoutButton.OnClick += OnLogout;
     }
 
     public override void Show()

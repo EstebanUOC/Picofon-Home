@@ -102,6 +102,8 @@ public class UserService
 
         byte[] jsonRequest = JsonHelper.ToBytes(childCreateDTO);
 
+        Debug.Log($"Child: {JsonHelper.ToJson(childCreateDTO)}");
+
         try
         {
             rawResponse = await HttpClientUnity.PostAsyncBytes(
@@ -113,7 +115,7 @@ public class UserService
         }
         catch (System.Exception)
         {
-            return ApiResult.Fail("Network error occurred while fetching activities.");
+            return ApiResult.Fail("Network error occurred while registering child.");
         }
 
         using JsonDocument doc = JsonDocument.Parse(rawResponse);
