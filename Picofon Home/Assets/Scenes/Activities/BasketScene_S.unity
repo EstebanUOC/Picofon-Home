@@ -3992,7 +3992,7 @@ MonoBehaviour:
     - Id: 1
       Clip: {fileID: 8300000, guid: d669d7de3f392aeb891eb0b3f1cf2ffe, type: 3}
     - Id: 2
-      Clip: {fileID: 8300000, guid: c0a6e7775acb96e16b9f7eab15fb7d96, type: 3}
+      Clip: {fileID: 8300000, guid: e8cd39214e5b9038b9bf26b12dfaf2a2, type: 3}
 --- !u!1 &1075156704
 GameObject:
   m_ObjectHideFlags: 0
