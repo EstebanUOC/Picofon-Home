@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class ItemManager : MonoBehaviour
 {
-    [Space(15)]
-    [SerializeField]
-    private AudioClip _clip;
-
     [SerializeField]
     private GameObject[] _items;
 
     public GameObject[] Items => _items;
 
-    public void Start()
+    private ItemSelectedEventChannel _itemSelectedEventChannel;
+
+    public void Awake()
     {
+        _itemSelectedEventChannel = new ItemSelectedEventChannel();
+
         foreach (GameObject item in _items)
         {
             ItemSelectable selectable = item.GetComponent<ItemSelectable>();
@@ -22,8 +22,10 @@ public class ItemManager : MonoBehaviour
             if (selectable is null)
                 break;
 
-            selectable.OnItemSelected += PlayItemSound;
+            selectable.ItemSelectedEventChannel = _itemSelectedEventChannel;
         }
+
+        _itemSelectedEventChannel.OnItemSelected += PlayItemSound;
     }
 
     public void Prueba()
@@ -59,8 +61,9 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    public void PlayItemSound()
+    public void PlayItemSound(int index)
     {
+        Debug.Log($"Playing sound for item {index}");
         // TODO: Re-enable audio
         // AudioManager.Instance.StopUI();
         // AudioManager.Instance.PlayUI(_clip);

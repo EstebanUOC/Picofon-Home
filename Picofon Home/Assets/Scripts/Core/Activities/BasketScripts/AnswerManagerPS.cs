@@ -6,19 +6,24 @@ public class AnswerManagerPS : MonoBehaviour
 {
     public event Action<int> OnHoopSelected;
 
+    private ItemSelectedEventChannel _itemSelectedEventChannel;
+
     public void Start()
     {
+        _itemSelectedEventChannel = new ItemSelectedEventChannel();
+
         HoopManager manager = GetComponent<HoopManager>();
 
         for (int i = 0; i < manager.Hoops.Length; i++)
         {
-            int index = i;
             ItemSelectable item = manager
                 .Hoops[i]
                 .transform.GetChild(0)
                 .GetComponent<ItemSelectable>();
-            item.OnItemSelected += () => HoopSelected(index);
+            item.ItemSelectedEventChannel = _itemSelectedEventChannel;
         }
+
+        _itemSelectedEventChannel.OnItemSelected += HoopSelected;
     }
 
     public void Prueba()

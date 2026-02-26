@@ -1,4 +1,3 @@
-using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -26,7 +25,7 @@ public sealed class TweenHelper
 
         Sequence sequence = DOTween.Sequence().SetRecyclable(true).SetAutoKill(false).Pause();
 
-        bool randomFlip = UnityEngine.Random.value > 0.5f;
+        bool randomFlip = Random.value > 0.5f;
         float rotationZ = randomFlip ? rotation : -rotation;
 
         Tween transformTween = itemTransform.DOScale(scaleUp, duration);
@@ -61,6 +60,7 @@ public enum AnimationType : byte
 {
     RotateAndScale,
     TranslateAndScale,
+    None,
 }
 
 public sealed class ItemSelectable
@@ -75,18 +75,25 @@ public sealed class ItemSelectable
     [SerializeField]
     private AnimationType _animationType;
 
-    public event Action OnItemSelected;
-
     private Sequence _hoverSequence;
+
+    public ItemSelectedEventChannel ItemSelectedEventChannel { get; set; }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        OnItemSelected?.Invoke();
+        ItemSelectedEventChannel?.Raise(0);
+
+        if (_animationType == AnimationType.None)
+            return;
+
         _hoverSequence.PlayBackwards();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (_animationType == AnimationType.None)
+            return;
+
         _hoverSequence ??= TweenHelper.CreateHoverSequence(_itemTransform, _animationType);
 
         _hoverSequence.Restart();
@@ -94,6 +101,9 @@ public sealed class ItemSelectable
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (_animationType == AnimationType.None)
+            return;
+
         _hoverSequence.PlayBackwards();
     }
 }
