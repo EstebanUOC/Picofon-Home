@@ -75,13 +75,15 @@ public sealed class ItemSelectable
     [SerializeField]
     private AnimationType _animationType;
 
-    private Sequence _hoverSequence;
-
     public ItemSelectedEventChannel ItemSelectedEventChannel { get; set; }
+
+    public int ItemIndex { get; set; }
+
+    private Sequence _hoverSequence;
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        ItemSelectedEventChannel?.Raise(0);
+        ItemSelectedEventChannel?.Raise(ItemIndex);
 
         if (_animationType == AnimationType.None)
             return;

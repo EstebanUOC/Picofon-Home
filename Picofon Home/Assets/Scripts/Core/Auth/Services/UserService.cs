@@ -102,8 +102,6 @@ public class UserService
 
         byte[] jsonRequest = JsonHelper.ToBytes(childCreateDTO);
 
-        Debug.Log($"Child: {JsonHelper.ToJson(childCreateDTO)}");
-
         try
         {
             rawResponse = await HttpClientUnity.PostAsyncBytes(

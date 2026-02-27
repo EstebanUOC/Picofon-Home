@@ -57,6 +57,10 @@ public class BasketGameManagerJG : MonoBehaviour
 
     private readonly Dictionary<JudgeAudioID, AudioClip> _audioClips = new(5);
 
+    private readonly AudioClip[] _audioItems = new AudioClip[2];
+
+    private AudioLoader _audioLoader;
+
     public void Start()
     {
         Application.targetFrameRate = 60;
@@ -99,6 +103,13 @@ public class BasketGameManagerJG : MonoBehaviour
         LoadActivities(@params).Forget();
     }
 
+    public void OnDestroy()
+    {
+        _answerManager.OnAnswerSelected -= HandleAnswerSelected;
+
+        _audioLoader?.UnloadAudios();
+    }
+
     private async UniTaskVoid LoadActivities(ActivityRequestParams @params)
     {
         BasketService basketService = new();
@@ -121,7 +132,25 @@ public class BasketGameManagerJG : MonoBehaviour
             return;
         }
 
+        _audioLoader = new();
+
+        string[] audioPaths = new string[_activities.Length * 2];
+
+        for (int i = 0; i < _activities.Length; i++)
+        {
+            JudgeActivity activity = _activities[i];
+
+            for (int j = 0; j < activity.Words.Length; j++)
+            {
+                string word = activity.Words[j].Word;
+                audioPaths[i * 2 + j] = word;
+            }
+        }
+
+        await _audioLoader.LoadAudios(audioPaths);
+
         TherapySessionDTO[] sessions = new TherapySessionDTO[_activities.Length];
+
         GeneralSessionDTO sessionInfo = new()
         {
             TherapyPlanId = @params.PlanId,
@@ -227,6 +256,10 @@ public class BasketGameManagerJG : MonoBehaviour
         ViewContentDTO content = new(_icons, _texts);
 
         _uiManager.SetViewContent(in content);
+
+        _audioLoader.GetAudios(_currentActivityIndex, 2, _audioItems);
+
+        _uiManager.SetAudioClips(_audioItems);
 
         ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords);
 

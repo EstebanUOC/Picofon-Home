@@ -11,10 +11,13 @@ public class ItemManager : MonoBehaviour
 
     private ItemSelectedEventChannel _itemSelectedEventChannel;
 
+    private AudioClip[] _audioClips;
+
     public void Awake()
     {
         _itemSelectedEventChannel = new ItemSelectedEventChannel();
 
+        int index = 0;
         foreach (GameObject item in _items)
         {
             ItemSelectable selectable = item.GetComponent<ItemSelectable>();
@@ -23,6 +26,8 @@ public class ItemManager : MonoBehaviour
                 break;
 
             selectable.ItemSelectedEventChannel = _itemSelectedEventChannel;
+            selectable.ItemIndex = index;
+            index++;
         }
 
         _itemSelectedEventChannel.OnItemSelected += PlayItemSound;
@@ -49,6 +54,11 @@ public class ItemManager : MonoBehaviour
         allItemsTween.Play();
     }
 
+    public void SetItemsAudio(AudioClip[] clips)
+    {
+        _audioClips = clips;
+    }
+
     public void SetItemsContent(in ViewContentDTO content)
     {
         if (content.Icons.Length != _items.Length)
@@ -64,8 +74,7 @@ public class ItemManager : MonoBehaviour
     public void PlayItemSound(int index)
     {
         Debug.Log($"Playing sound for item {index}");
-        // TODO: Re-enable audio
-        // AudioManager.Instance.StopUI();
-        // AudioManager.Instance.PlayUI(_clip);
+        AudioManager.Instance.StopUI();
+        AudioManager.Instance.PlayUI(_audioClips[index]);
     }
 }

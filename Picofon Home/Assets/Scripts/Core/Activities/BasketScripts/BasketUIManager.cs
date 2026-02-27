@@ -41,6 +41,11 @@ public class BasketUIManager : MonoBehaviour
         _itemManager.SetItemsContent(in content);
     }
 
+    public void SetAudioClips(AudioClip[] clips)
+    {
+        _itemManager.SetItemsAudio(clips);
+    }
+
     public void Reset()
     {
         _clueController.Reset();
