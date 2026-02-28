@@ -1,10 +1,18 @@
 using UnityEditor;
+using UnityEditor.AddressableAssets.Settings;
 
 public class BuildScript
 {
     public static void BuildAndroid()
     {
         PlayerSettings.Android.useCustomKeystore = false;
+
+        EditorUserBuildSettings.SwitchActiveBuildTarget(
+            BuildTargetGroup.Android,
+            BuildTarget.Android
+        );
+
+        AddressableAssetSettings.BuildPlayerContent();
 
         BuildPlayerOptions options = new()
         {
