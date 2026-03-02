@@ -1,4 +1,3 @@
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -11,13 +10,12 @@ public class PruebaScroll : MonoBehaviour, IDragHandler, IEndDragHandler
     private float maxStretch = 0.35f;
     private float stretchMultiplier = 0.5f;
 
-    private Tween _tween;
     private bool _scaledUp = false;
     private float _difference;
 
     public void Start()
     {
-        _tween = content.DOScale(Vector3.one, 0.1f).SetAutoKill(false).Pause();
+        // _tween = content.DOScale(Vector3.one, 0.1f).SetAutoKill(false).Pause();
 
         float size = GetComponent<RectTransform>().rect.height;
         float contentSize = content.rect.height;
@@ -68,7 +66,7 @@ public class PruebaScroll : MonoBehaviour, IDragHandler, IEndDragHandler
         {
             Debug.Log("Restarting tween");
             _scaledUp = false;
-            _tween.Restart();
+            // _tween.Restart();
         }
     }
 }

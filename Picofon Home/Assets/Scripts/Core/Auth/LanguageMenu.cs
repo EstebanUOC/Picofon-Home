@@ -1,4 +1,4 @@
-using DG.Tweening;
+using PrimeTween;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -11,18 +11,17 @@ public class LanguageMenu : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private GameObject _selector;
 
-    [Space(10)]
+    [Space]
     [SerializeField]
     private LanguageData _data;
 
-    private Tween _tween;
     private bool _isOpen = false;
+
+    private RectTransform _rectTransform;
 
     public void Start()
     {
-        RectTransform rectTransform = _selector.GetComponent<RectTransform>();
-
-        _tween = rectTransform.DOScaleY(1, 0.25f).SetAutoKill(false).Pause().SetEase(Ease.InCubic);
+        _rectTransform = _selector.GetComponent<RectTransform>();
 
         LanguageSelector selector = _selector.GetComponent<LanguageSelector>();
 
@@ -33,14 +32,7 @@ public class LanguageMenu : MonoBehaviour, IPointerClickHandler
     {
         _isOpen = !_isOpen;
 
-        if (_isOpen)
-        {
-            _tween.PlayForward();
-        }
-        else
-        {
-            _tween.PlayBackwards();
-        }
+        AnimateMenuOpened(_isOpen);
     }
 
     public void OnValidate()
@@ -52,5 +44,19 @@ public class LanguageMenu : MonoBehaviour, IPointerClickHandler
     {
         _data = data;
         _icon.sprite = _data.Flag;
+    }
+
+    private void AnimateMenuOpened(bool isOpen)
+    {
+        _isOpen = isOpen;
+
+        const float duration = 0.25f;
+
+        int scale = 0;
+
+        if (_isOpen)
+            scale = 1;
+
+        Tween.ScaleY(_rectTransform, scale, duration, Ease.InCubic);
     }
 }

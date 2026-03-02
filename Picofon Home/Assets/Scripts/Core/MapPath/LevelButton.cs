@@ -1,5 +1,5 @@
 using System;
-using DG.Tweening;
+using PrimeTween;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -21,7 +21,14 @@ public class LevelButton
     [SerializeField]
     private float _duration = 0.1f;
 
-    private Sequence _hoverSequence;
+    private float _defaultContentY;
+    private Vector2 _defaultBackgroundSizeDelta;
+
+    public void Awake()
+    {
+        _defaultContentY = _contentRect.anchoredPosition.y;
+        _defaultBackgroundSizeDelta = _backgroundRect.sizeDelta;
+    }
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -30,42 +37,33 @@ public class LevelButton
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (_hoverSequence == null)
-        {
-            CreateHoverSequence();
-        }
-
-        _hoverSequence.Restart();
+        AnimateHover(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        _hoverSequence.PlayBackwards();
+        AnimateHover(false);
     }
 
-    private void CreateHoverSequence()
+    private void AnimateHover(bool isHovered)
     {
-        const float moveY = -24;
-        const float bgMoveY = -11.5f;
-        const float bgSizeDeltaY = -31;
+        float moveY = _defaultContentY;
+        Vector2 bgSizeDeltaY = _defaultBackgroundSizeDelta;
+        Vector2 bgMoveY = Vector2.zero;
 
-        _hoverSequence = DOTween.Sequence().SetRecyclable(true).SetAutoKill(false).Pause();
+        if (isHovered)
+        {
+            moveY = _defaultContentY - 24f;
+            bgSizeDeltaY = -31 * Vector2.up;
+            bgMoveY = -11.5f * Vector2.up;
+        }
 
-        Tween posTween = _contentRect
-            .DOAnchorPosY(_contentRect.anchoredPosition.y + moveY, _duration)
-            .SetAutoKill(false)
-            .SetRecyclable(true);
+        Tween posTween = Tween.UIAnchoredPositionY(_contentRect, moveY, _duration);
 
-        Tween bgAnchorTween = _backgroundRect
-            .DOSizeDelta(bgSizeDeltaY * Vector2.up, _duration)
-            .SetAutoKill(false)
-            .SetRecyclable(true);
+        Tween bgAnchorTween = Tween.UISizeDelta(_backgroundRect, bgSizeDeltaY, _duration);
 
-        Tween bgAnchorPosTween = _backgroundRect
-            .DOAnchorPos(bgMoveY * Vector2.up, _duration)
-            .SetAutoKill(false)
-            .SetRecyclable(true);
+        Tween bgAnchorPosTween = Tween.UIAnchoredPosition(_backgroundRect, bgMoveY, _duration);
 
-        _hoverSequence.Append(posTween).Join(bgAnchorTween).Join(bgAnchorPosTween);
+        Sequence.Create().Group(posTween).Group(bgAnchorTween).Group(bgAnchorPosTween);
     }
 }

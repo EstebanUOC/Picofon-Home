@@ -1,58 +1,65 @@
-using DG.Tweening;
+using PrimeTween;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public sealed class TweenHelper
 {
-    public static Sequence CreateHoverSequence(
+    public static void AnimateHover(
+        bool isHovering,
         Transform itemTransform,
         AnimationType animationType = AnimationType.RotateAndScale
     )
     {
-        return animationType switch
+        switch (animationType)
         {
-            AnimationType.RotateAndScale => CreateRotateAndScaleSequence(itemTransform),
-            AnimationType.TranslateAndScale => CreateTranslateAndScaleSequence(itemTransform),
-            _ => CreateRotateAndScaleSequence(itemTransform),
-        };
+            case AnimationType.RotateAndScale:
+                AnimateHoverRotation(isHovering, itemTransform);
+                break;
+            case AnimationType.TranslateAndScale:
+                AnimateHoverTranslate(isHovering, itemTransform);
+                break;
+        }
     }
 
-    private static Sequence CreateRotateAndScaleSequence(Transform itemTransform)
+    private static void AnimateHoverRotation(bool isHovering, Transform itemTransform)
     {
         const float duration = 0.2f;
-        const float scaleUp = 1.05f;
-        const float rotation = 4f;
 
-        Sequence sequence = DOTween.Sequence().SetRecyclable(true).SetAutoKill(false).Pause();
+        float scaleUp = 1f;
+        float rotation = 0f;
 
-        bool randomFlip = Random.value > 0.5f;
-        float rotationZ = randomFlip ? rotation : -rotation;
+        if (isHovering)
+        {
+            scaleUp = 1.05f;
+            rotation = 4f;
+        }
 
-        Tween transformTween = itemTransform.DOScale(scaleUp, duration);
-        Tween rotateTween = itemTransform.DORotate(new Vector3(0, 0, rotationZ), duration);
+        Tween transformTween = Tween.Scale(itemTransform, scaleUp, duration);
 
-        sequence.Append(transformTween).Join(rotateTween);
+        Tween rotateTween = Tween.Rotation(itemTransform, new Vector3(0, 0, rotation), duration);
 
-        return sequence;
+        Sequence.Create().Group(transformTween).Group(rotateTween);
     }
 
-    private static Sequence CreateTranslateAndScaleSequence(Transform _itemTransform)
+    private static void AnimateHoverTranslate(bool isHovering, Transform _itemTransform)
     {
         const float duration = 0.2f;
-        const float scaleUp = 1.05f;
-        float translationY = _itemTransform is RectTransform ? 5f : 0.1f;
 
-        Sequence sequence = DOTween.Sequence().SetRecyclable(true).SetAutoKill(false).Pause();
+        float scaleUp = 1f;
+        float translationY = 0f;
 
-        Tween transformTween = _itemTransform.DOScale(scaleUp, duration);
-        Tween translateTween = _itemTransform.DOLocalMoveY(
-            _itemTransform.localPosition.y + translationY,
-            duration
-        );
+        if (isHovering)
+        {
+            float traslation = _itemTransform is RectTransform ? 5f : 0.1f;
+            translationY = _itemTransform.localPosition.y + traslation;
+            scaleUp = 1.05f;
+        }
 
-        sequence.Append(transformTween).Join(translateTween);
+        Tween transformTween = Tween.Scale(_itemTransform, scaleUp, duration);
 
-        return sequence;
+        Tween translateTween = Tween.LocalPositionY(_itemTransform, translationY, duration);
+
+        Sequence.Create().Group(transformTween).Group(translateTween);
     }
 }
 
@@ -79,7 +86,12 @@ public sealed class ItemSelectable
 
     public int ItemIndex { get; set; }
 
-    private Sequence _hoverSequence;
+    public void Start()
+    {
+        Debug.Log(
+            $"ItemSelectable Start: ItemIndex={_itemTransform.localPosition}, Name={_itemTransform.name}"
+        );
+    }
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -88,7 +100,7 @@ public sealed class ItemSelectable
         if (_animationType == AnimationType.None)
             return;
 
-        _hoverSequence.PlayBackwards();
+        TweenHelper.AnimateHover(false, _itemTransform, _animationType);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -96,9 +108,7 @@ public sealed class ItemSelectable
         if (_animationType == AnimationType.None)
             return;
 
-        _hoverSequence ??= TweenHelper.CreateHoverSequence(_itemTransform, _animationType);
-
-        _hoverSequence.Restart();
+        TweenHelper.AnimateHover(true, _itemTransform, _animationType);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -106,6 +116,6 @@ public sealed class ItemSelectable
         if (_animationType == AnimationType.None)
             return;
 
-        _hoverSequence.PlayBackwards();
+        TweenHelper.AnimateHover(false, _itemTransform, _animationType);
     }
 }

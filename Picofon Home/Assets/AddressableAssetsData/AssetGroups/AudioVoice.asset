@@ -4988,7 +4988,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: baf8aa590c78612428d5e10a4921630c
-    m_Address: "CA-bra\xE7"
+    m_Address: CA-brac
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -6583,7 +6583,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eea00210d85aef7fdb40e55a0300c85d
-    m_Address: "CA-bra\xE7alet"
+    m_Address: CA-bracalet
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

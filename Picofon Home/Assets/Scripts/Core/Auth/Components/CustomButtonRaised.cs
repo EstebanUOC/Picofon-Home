@@ -1,14 +1,14 @@
-using DG.Tweening;
+using PrimeTween;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class CustomButtonRaised : CustomButtonBase, IInteractableButton
 {
-    [Space(15)]
+    [Space]
     public float Duration = 0.1f;
 
-    [Space(15)]
+    [Space]
     public RectTransform BackgroundRect;
     public GameObject Content;
 
@@ -16,7 +16,7 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
     private Image _contentImage;
     protected CanvasGroup _contentCanvasGroup;
 
-    [Space(15)]
+    [Space]
     public Color HoverColor = Color.blue;
 
     public bool Interactable
@@ -28,24 +28,30 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
                 return;
 
             _interactable = value;
-            float fade = _interactable ? 1f : 0.6f;
-            _contentCanvasGroup.DOFade(fade, Duration);
+
+            float fade = 0.6f;
+
+            if (_interactable)
+                fade = 1f;
+
+            Tween.Alpha(_contentCanvasGroup, fade, Duration);
 
             if (_interactable)
             {
-                _hoverSequence.PlayBackwards();
+                AnimateHover(false);
                 return;
             }
 
             if (!_isHovered)
-                _hoverSequence.Restart();
+                AnimateHover(true);
         }
     }
 
     private bool _interactable = true;
     private bool _isHovered = false;
 
-    private Sequence _hoverSequence;
+    private Color _defaultColor;
+    private float _defaultContentY;
 
     public void Awake()
     {
@@ -53,32 +59,8 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
         _contentCanvasGroup = Content.GetComponent<CanvasGroup>();
         _contentImage = Content.GetComponent<Image>();
 
-        const float HoverMoveY = -11f;
-        const float BackgroundMoveY = -5.5f;
-
-        _hoverSequence = DOTween.Sequence().SetRecyclable(true).SetAutoKill(false).Pause();
-
-        Tween colorTween = _contentImage
-            .DOColor(HoverColor, Duration)
-            .SetAutoKill(false)
-            .SetRecyclable(true);
-
-        Tween posTween = _contentRect
-            .DOAnchorPosY(_contentRect.anchoredPosition.y + HoverMoveY, Duration)
-            .SetAutoKill(false)
-            .SetRecyclable(true);
-
-        Tween bgAnchorTween = BackgroundRect
-            .DOSizeDelta(HoverMoveY * Vector2.up, Duration)
-            .SetAutoKill(false)
-            .SetRecyclable(true);
-
-        Tween bgAnchorPosTween = BackgroundRect
-            .DOAnchorPos(BackgroundMoveY * Vector2.up, Duration)
-            .SetAutoKill(false)
-            .SetRecyclable(true);
-
-        _hoverSequence.Append(colorTween).Join(posTween).Join(bgAnchorTween).Join(bgAnchorPosTween);
+        _defaultColor = _contentImage.color;
+        _defaultContentY = _contentRect.anchoredPosition.y;
     }
 
     public override void OnPointerClick(PointerEventData eventData)
@@ -95,7 +77,7 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
             return;
 
         _isHovered = true;
-        _hoverSequence.Restart();
+        AnimateHover(true);
     }
 
     public override void OnPointerExit(PointerEventData eventData)
@@ -104,11 +86,38 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
             return;
 
         _isHovered = false;
-        _hoverSequence.PlayBackwards();
+        AnimateHover(false);
     }
 
-    public void OnDestroy()
+    private void AnimateHover(bool isHovering)
     {
-        _hoverSequence.Kill();
+        float moveY = _defaultContentY;
+        Color targetColor = _defaultColor;
+
+        Vector2 bgSize = Vector2.zero;
+        Vector2 bgMoveY = Vector2.zero;
+
+        if (isHovering)
+        {
+            moveY = _defaultContentY - 11f;
+            targetColor = HoverColor;
+            bgSize = -11f * Vector2.up;
+            bgMoveY = -5.5f * Vector2.up;
+        }
+
+        Tween colorTween = Tween.Color(_contentImage, targetColor, Duration);
+
+        Tween contentPositionTween = Tween.UIAnchoredPositionY(_contentRect, moveY, Duration);
+
+        Tween backgroundSizeTween = Tween.UISizeDelta(BackgroundRect, bgSize, Duration);
+
+        Tween backgroundPositionTween = Tween.UIAnchoredPosition(BackgroundRect, bgMoveY, Duration);
+
+        Sequence
+            .Create()
+            .Group(colorTween)
+            .Group(contentPositionTween)
+            .Group(backgroundSizeTween)
+            .Group(backgroundPositionTween);
     }
 }

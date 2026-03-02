@@ -1,4 +1,4 @@
-using DG.Tweening;
+using PrimeTween;
 using UnityEngine;
 
 public class LoadingPanel : MonoBehaviour
@@ -23,22 +23,22 @@ public class LoadingPanel : MonoBehaviour
         CanvasContent.alpha = 0f;
         RectContent.localScale = Vector3.zero;
 
-        Sequence seq = DOTween.Sequence();
-        Tween fadeIn = CanvasContent.DOFade(1, 0.5f);
-        Tween scaleUp = RectContent.DOScale(1, 0.6f).SetEase(Ease.OutBack);
+        Sequence seq = Sequence.Create();
+
+        Tween fadeIn = Tween.Alpha(CanvasContent, 1, 0.5f);
+        Tween scaleUp = Tween.Scale(RectContent, 1f, 0.6f, Ease.OutBack);
 
 #if UNITY_ANDROID
-        seq.AppendInterval(1f);
+        seq.ChainDelay(1f);
 #endif
 
-        seq.Append(fadeIn).Join(scaleUp).Play();
+        seq.Group(fadeIn).Group(scaleUp);
     }
 
     private void OnHide()
     {
-        Tween fadeOut = _canvasGroup.DOFade(0, 0.5f).SetDelay(0.3f);
-
-        fadeOut.onComplete += () => gameObject.SetActive(false);
-        fadeOut.Play();
+        Tween
+            .Alpha(_canvasGroup, 0, 0.5f, startDelay: 0.3f)
+            .OnComplete(() => gameObject.SetActive(false));
     }
 }

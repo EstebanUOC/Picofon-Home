@@ -1,6 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
+using PrimeTween;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -27,39 +27,24 @@ public class CustomButtonLoading : CustomButtonRaised
             {
                 Interactable = false;
                 InfoCanvasGroup.alpha = 0;
-                fadeSequence.Restart();
-                loadingTween.Restart();
+
+                AnimateFade(true);
+                AnimateLoading(true);
             }
             else
             {
                 Interactable = true;
                 InfoCanvasGroup.alpha = 1;
-                fadeSequence.PlayBackwards();
-                loadingTween.Pause();
+
+                AnimateFade(false);
+                AnimateLoading(false);
             }
         }
     }
 
     private bool _loading = false;
 
-    private Sequence fadeSequence;
-    private Tween loadingTween;
-
-    public void Start()
-    {
-        fadeSequence = DOTween.Sequence().SetAutoKill(false).Pause();
-
-        fadeSequence
-            .Append(_contentCanvasGroup.DOFade(0.6f, Duration))
-            .Append(LoadingCanvasGroup.DOFade(1, Duration));
-
-        loadingTween = LoadingRect
-            .DORotate(new Vector3(0, 0, -360), 1f, RotateMode.FastBeyond360)
-            .SetLoops(-1, LoopType.Restart)
-            .SetEase(Ease.Linear)
-            .SetAutoKill(false)
-            .Pause();
-    }
+    private Tween _loadingTween;
 
     public override void OnPointerClick(PointerEventData eventData)
     {
@@ -90,5 +75,38 @@ public class CustomButtonLoading : CustomButtonRaised
         Loading = true;
         await (OnClickAsync?.Invoke() ?? UniTask.CompletedTask);
         Loading = false;
+    }
+
+    private void AnimateFade(bool isHovering)
+    {
+        if (Loading)
+            return;
+
+        float contentAlpha = 1f;
+        float loadingAlpha = 0f;
+
+        if (isHovering)
+        {
+            contentAlpha = 0.6f;
+            loadingAlpha = 1f;
+        }
+
+        Sequence
+            .Create()
+            .Group(Tween.Alpha(_contentCanvasGroup, contentAlpha, Duration))
+            .Group(Tween.Alpha(LoadingCanvasGroup, loadingAlpha, Duration));
+    }
+
+    private void AnimateLoading(bool isLoading)
+    {
+        if (!isLoading)
+        {
+            _loadingTween.Complete();
+            return;
+        }
+
+        Vector3 targetRotation = new(0, 0, -360);
+
+        _loadingTween = Tween.Rotation(LoadingRect, targetRotation, 1f, cycles: -1);
     }
 }

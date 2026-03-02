@@ -28,7 +28,7 @@ public class Form : MonoBehaviour
 
     private readonly InputChangedEventChannel _inputChangedEventChannel = new();
 
-    public void Awake()
+    public void Start()
     {
         _inputChangedEventChannel.OnInputChanged += HandleInputChanged;
 

@@ -1,5 +1,5 @@
 using System;
-using DG.Tweening;
+using PrimeTween;
 using UnityEngine;
 
 public class AnswerManagerPS : MonoBehaviour
@@ -28,7 +28,7 @@ public class AnswerManagerPS : MonoBehaviour
 
     public void Prueba()
     {
-        transform.DOLocalMoveY(-1.4f, 0.5f);
+        Tween.LocalPositionY(transform, -1.4f, 0.5f);
     }
 
     private void HoopSelected(int hoopIndex)

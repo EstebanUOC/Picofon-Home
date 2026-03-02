@@ -1,4 +1,4 @@
-using DG.Tweening;
+using PrimeTween;
 using UnityEngine;
 
 public class Marker : MonoBehaviour
@@ -12,7 +12,15 @@ public class Marker : MonoBehaviour
         const float moveAmount = 30f;
 
         Transform content = transform.GetChild(0);
-        content.DOLocalMoveY(moveAmount, 0.8f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+
+        Tween.LocalPositionY(
+            content,
+            moveAmount,
+            0.8f,
+            cycles: -1,
+            cycleMode: CycleMode.Yoyo,
+            ease: Ease.InOutSine
+        );
 
         _rectTransform = transform.GetComponent<RectTransform>();
     }
@@ -24,6 +32,6 @@ public class Marker : MonoBehaviour
 
     public void MoveMarker(Vector2 position)
     {
-        _rectTransform.DOAnchorPos(position + offset, 1f).SetEase(Ease.InOutBack);
+        Tween.UIAnchoredPosition(_rectTransform, position + offset, 1f, Ease.InOutBack);
     }
 }

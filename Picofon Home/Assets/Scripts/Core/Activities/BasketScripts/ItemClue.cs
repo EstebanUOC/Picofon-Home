@@ -1,4 +1,5 @@
-using DG.Tweening;
+using System;
+using PrimeTween;
 using UnityEngine;
 
 public sealed class ItemClue : MonoBehaviour
@@ -13,55 +14,59 @@ public sealed class ItemClue : MonoBehaviour
     [SerializeField]
     private int _targetSize = 128;
 
-    private GameObject _icon;
     private GameObject _text;
 
-    private Sequence _clueSequence;
+    private RectTransform _imageRect;
+
+    private Action _onComplete;
+
+    private bool _isClueShown = false;
+    private float _originalSize;
 
     public void Awake()
     {
-        ItemView _item = GetComponent<ItemView>();
+        ItemView item = GetComponent<ItemView>();
 
-        _text = _item.Text;
-        _icon = _item.Icon;
+        GameObject icon = item.Icon;
+        _imageRect = icon.GetComponent<RectTransform>();
+        _originalSize = _imageRect.sizeDelta.x;
 
+        _text = item.Text;
         _text.SetActive(false);
 
-        RectTransform _imageRect = _icon.GetComponent<RectTransform>();
-
-        Tween _moveTween = _imageRect
-            .DOLocalMoveY(_moveOffsetY, _transitionDuration)
-            .SetAutoKill(false)
-            .Pause();
-
-        Vector2 targetSize = Vector2.one * _targetSize;
-
-        Tween _resizeTween = _imageRect
-            .DOSizeDelta(targetSize, _transitionDuration)
-            .SetAutoKill(false)
-            .Pause();
-
-        _clueSequence = DOTween.Sequence().SetAutoKill(false).Pause();
-
-        _clueSequence.Append(_moveTween).Join(_resizeTween);
-
-        _clueSequence.OnComplete(() => _text.SetActive(true));
+        _onComplete = () => _text.SetActive(true);
     }
 
     public void ShowClue()
     {
-        _clueSequence.Restart();
+        SetClueShown(true);
+
+        _isClueShown = true;
     }
 
     public void HideClue()
     {
-        _text.SetActive(false);
+        SetClueShown(false);
 
-        _clueSequence.PlayBackwards();
+        _isClueShown = false;
+        _text.SetActive(false);
     }
 
-    public void OnDestroy()
+    private void SetClueShown(bool shown)
     {
-        _clueSequence.Kill();
+        if (shown == _isClueShown)
+            return;
+
+        float moveY = shown ? _moveOffsetY : 0;
+        Vector2 targetSize = Vector2.one * (shown ? _targetSize : _originalSize);
+
+        Tween moveTween = Tween.LocalPositionY(_imageRect, moveY, _transitionDuration);
+
+        Tween resizeTween = Tween.UISizeDelta(_imageRect, targetSize, _transitionDuration);
+
+        Sequence seq = Sequence.Create().Group(moveTween).Group(resizeTween);
+
+        if (shown)
+            seq.OnComplete(_onComplete);
     }
 }

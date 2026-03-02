@@ -1,5 +1,5 @@
 using BasketResponses;
-using DG.Tweening;
+using PrimeTween;
 using UnityEngine;
 
 public class ItemManager : MonoBehaviour
@@ -37,21 +37,20 @@ public class ItemManager : MonoBehaviour
     {
         const float duration = 0.5f;
 
-        Sequence allItemsTween = DOTween.Sequence();
+        Sequence allItemsTween = Sequence.Create();
 
-        Tween move = transform.DOLocalMoveY(transform.localPosition.y + 130, duration);
+        Tween move = Tween.LocalPositionY(transform, transform.localPosition.y + 130, duration);
 
-        allItemsTween.Append(move);
+        allItemsTween.Group(move);
 
         foreach (GameObject item in _items)
         {
             RectTransform itemTransform = item.GetComponent<RectTransform>();
-            Tween itemSize = itemTransform.DOSizeDelta(240 * Vector2.one, duration);
 
-            allItemsTween.Join(itemSize);
+            Tween itemSize = Tween.UISizeDelta(itemTransform, 240 * Vector2.one, duration);
+
+            allItemsTween.Group(itemSize);
         }
-
-        allItemsTween.Play();
     }
 
     public void SetItemsAudio(AudioClip[] clips)
