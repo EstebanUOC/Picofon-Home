@@ -21,6 +21,7 @@ public class AnswerManagerPS : MonoBehaviour
                 .transform.GetChild(0)
                 .GetComponent<ItemSelectable>();
             item.ItemSelectedEventChannel = _itemSelectedEventChannel;
+            item.ItemIndex = i;
         }
 
         _itemSelectedEventChannel.OnItemSelected += HoopSelected;
