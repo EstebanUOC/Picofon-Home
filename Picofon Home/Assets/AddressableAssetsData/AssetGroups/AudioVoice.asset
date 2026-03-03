@@ -442,11 +442,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 125bef969035dbb4192b05895c40d74c
-    m_Address: CA-xampu2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1287494d2c56b9c4ba02ab333718ccaf
     m_Address: CA-xarop1
     m_ReadOnly: 0
@@ -3814,11 +3809,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8e312460d4be2a79587548654472f58d
     m_Address: CA-alarma
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8e41177278f623846875675e09d998fd
-    m_Address: CA-xandall2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
