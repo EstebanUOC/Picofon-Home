@@ -1,7 +1,6 @@
 using BasketResponses;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class BasketUIManager : MonoBehaviour
 {
@@ -16,7 +15,7 @@ public class BasketUIManager : MonoBehaviour
     private ClueController _clueController;
 
     [SerializeField]
-    private Button _exitButton;
+    private GameMenu _gameMenu;
 
     public void Prueba()
     {
@@ -31,7 +30,7 @@ public class BasketUIManager : MonoBehaviour
     public void OnEnable()
     {
         _clueController.OnClueChanged += HandleClueChanged;
-        _exitButton.onClick.AddListener(BackToMap);
+        _gameMenu.OnMenuOptionSelected += HandleMenuOptionSelected;
     }
 
     public void SetViewContent(in ViewContentDTO content)
@@ -61,5 +60,15 @@ public class BasketUIManager : MonoBehaviour
     private void HandleClueChanged(bool showClue)
     {
         _itemClueManager.SetClueVisibility(showClue);
+    }
+
+    private void HandleMenuOptionSelected(GameMenuEvent menuEvent)
+    {
+        switch (menuEvent)
+        {
+            case GameMenuEvent.Exit:
+                BackToMap();
+                break;
+        }
     }
 }
