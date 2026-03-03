@@ -15,6 +15,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField]
     private AudioSource _voiceSource;
 
+    private AudioLoader _audioLoader;
+
     public void Awake()
     {
         if (Instance != null && Instance != this)
@@ -25,6 +27,32 @@ public class AudioManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    public async UniTask LoadAudios(string[] audioPaths)
+    {
+        _audioLoader ??= new AudioLoader();
+
+        await _audioLoader.LoadAudios(audioPaths);
+    }
+
+    public void UnloadAudios()
+    {
+        if (_voiceSource.isPlaying)
+            _voiceSource.Stop();
+
+        if (_uiSource.isPlaying)
+            _uiSource.Stop();
+
+        if (_sfxSource.isPlaying)
+            _sfxSource.Stop();
+
+        _audioLoader.UnloadAudios();
+    }
+
+    public void GetAudios(int index, int quantity, AudioClip[] clips)
+    {
+        _audioLoader.GetAudios(index, quantity, clips);
     }
 
     public void PlayVoice(AudioClip clip, float volume = 1f)

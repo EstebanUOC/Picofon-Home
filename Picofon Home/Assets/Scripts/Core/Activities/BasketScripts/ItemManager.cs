@@ -72,7 +72,6 @@ public class ItemManager : MonoBehaviour
 
     public void PlayItemSound(int index)
     {
-        Debug.Log($"Playing sound for item {index}");
         AudioManager.Instance.StopUI();
         AudioManager.Instance.PlayUI(_audioClips[index]);
     }

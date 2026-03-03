@@ -42,6 +42,8 @@ public class BasketManagerPS : MonoBehaviour
 
     private readonly Dictionary<OthersAudioID, AudioClip> _audioClips = new(3);
 
+    private readonly AudioClip[] _audioItems = new AudioClip[4];
+
     public void Start()
     {
         Application.targetFrameRate = 60;
@@ -84,6 +86,11 @@ public class BasketManagerPS : MonoBehaviour
         LoadActivities(@params).Forget();
     }
 
+    public void OnDestroy()
+    {
+        AudioManager.Instance.UnloadAudios();
+    }
+
     private async UniTaskVoid LoadActivities(ActivityRequestParams @params)
     {
         BasketService basketService = new();
@@ -105,6 +112,22 @@ public class BasketManagerPS : MonoBehaviour
             _canvasUI.ShowWarning();
             return;
         }
+
+        string[] audioPaths = new string[_activities.Length * 4];
+
+        for (int i = 0; i < _activities.Length; i++)
+        {
+            SelectActivity activity = _activities[i];
+            int wordCount = activity.Words.Length;
+
+            for (int j = 0; j < wordCount; j++)
+            {
+                string word = activity.Words[j].Word;
+                audioPaths[i * wordCount + j] = word;
+            }
+        }
+
+        await AudioManager.Instance.LoadAudios(audioPaths);
 
         TherapySessionDTO[] sessions = new TherapySessionDTO[_activities.Length];
         GeneralSessionDTO sessionInfo = new()
@@ -226,6 +249,8 @@ public class BasketManagerPS : MonoBehaviour
         ViewContentDTO content = new(_icons, _texts);
 
         _uiManager.SetViewContent(in content);
+
+        AudioManager.Instance.GetAudios(_currentActivityIndex, 2, _audioItems);
 
         ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords);
 

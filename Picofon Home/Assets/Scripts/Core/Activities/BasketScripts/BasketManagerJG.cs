@@ -59,8 +59,6 @@ public class BasketGameManagerJG : MonoBehaviour
 
     private readonly AudioClip[] _audioItems = new AudioClip[2];
 
-    private AudioLoader _audioLoader;
-
     public void Start()
     {
         Application.targetFrameRate = 60;
@@ -107,7 +105,7 @@ public class BasketGameManagerJG : MonoBehaviour
     {
         _answerManager.OnAnswerSelected -= HandleAnswerSelected;
 
-        _audioLoader?.UnloadAudios();
+        AudioManager.Instance.UnloadAudios();
     }
 
     private async UniTaskVoid LoadActivities(ActivityRequestParams @params)
@@ -132,8 +130,6 @@ public class BasketGameManagerJG : MonoBehaviour
             return;
         }
 
-        _audioLoader = new();
-
         string[] audioPaths = new string[_activities.Length * 2];
 
         for (int i = 0; i < _activities.Length; i++)
@@ -147,7 +143,7 @@ public class BasketGameManagerJG : MonoBehaviour
             }
         }
 
-        await _audioLoader.LoadAudios(audioPaths);
+        await AudioManager.Instance.LoadAudios(audioPaths);
 
         TherapySessionDTO[] sessions = new TherapySessionDTO[_activities.Length];
 
@@ -257,7 +253,7 @@ public class BasketGameManagerJG : MonoBehaviour
 
         _uiManager.SetViewContent(in content);
 
-        _audioLoader.GetAudios(_currentActivityIndex, 2, _audioItems);
+        AudioManager.Instance.GetAudios(_currentActivityIndex, 2, _audioItems);
 
         _uiManager.SetAudioClips(_audioItems);
 

@@ -1,42 +1,47 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class AudioLoader
 {
-    private AudioClip[] _audioClips;
+    private AsyncOperationHandle<AudioClip>[] _audioHandles;
     private AudioClip _clip;
 
     public async UniTask LoadAudios(string[] audioPaths)
     {
-        _audioClips = new AudioClip[audioPaths.Length];
+        _audioHandles = new AsyncOperationHandle<AudioClip>[audioPaths.Length];
 
         for (int i = 0; i < audioPaths.Length; i++)
         {
             // TODO: Use localized paths when localization is implemented
             string path = TextUtils.RemoveAccentsAndPrepend(audioPaths[i], "CA-");
 
-            UniTask<AudioClip> handle = Addressables.LoadAssetAsync<AudioClip>(path).ToUniTask();
+            AsyncOperationHandle<AudioClip> handle = Addressables.LoadAssetAsync<AudioClip>(path);
 
-            AudioClip audio = await handle;
+            AudioClip audio = await handle.Task.AsUniTask();
 
             audio.LoadAudioData();
 
             await LoadAudio(audio);
 
-            _audioClips[i] = audio;
+            _audioHandles[i] = handle;
         }
     }
 
     public void UnloadAudios()
     {
-        if (_audioClips == null)
+        if (_audioHandles == null)
             return;
 
-        foreach (AudioClip clip in _audioClips)
+        for (int i = 0; i < _audioHandles.Length; i++)
         {
-            if (clip != null)
-                Addressables.Release(clip);
+            _audioHandles[i].Result.UnloadAudioData();
+
+            if (_audioHandles[i].IsValid())
+            {
+                Addressables.Release(_audioHandles[i]);
+            }
         }
     }
 
@@ -44,7 +49,7 @@ public class AudioLoader
     {
         for (int i = 0; i < quantity; i++)
         {
-            clips[i] = _audioClips[index * quantity + i];
+            clips[i] = _audioHandles[index * quantity + i].Result;
         }
     }
 
