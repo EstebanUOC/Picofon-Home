@@ -43,6 +43,7 @@ public class UIManager : MonoBehaviour
                     "No es va detectar cap connexió a internet. Comprova la teva connexió i torna a intentar-ho, o pots fer servir l'aplicació en mode de prova",
             };
             await ModalPanel.Show(modalData);
+            LoadingPanel.Hide();
             return;
         }
 
