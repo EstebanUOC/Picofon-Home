@@ -50,7 +50,7 @@ public class Form : MonoBehaviour
     {
         ChildCreateDTO child = new()
         {
-            OwnerId = ParentId,
+            UserId = ParentId,
             Id = _fields[ChildFields.ID].GetData(),
             FirstName = _fields[ChildFields.FirstName].GetData(),
             LastName = _fields[ChildFields.LastName].GetData(),

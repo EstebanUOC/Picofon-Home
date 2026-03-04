@@ -50,7 +50,6 @@ public class Login : Panel
 
     private async UniTask AuthenticateWithGoogle()
     {
-        // Prune any previous sessions
         GoogleSignIn.DefaultInstance.SignOut();
 
         GoogleSignInUser googleUser;
@@ -109,6 +108,7 @@ public class Login : Panel
         }
 
         OnLoginSuccess(result.Data.User);
+        Debug.Log("<DEBUG> User role: " + result.Data.User.Role);
     }
 
     private void OnLoginSuccess(UserModel user)
@@ -118,6 +118,7 @@ public class Login : Panel
             Id = user.Id,
             Email = user.Email,
             Username = user.FirstName,
+            Role = user.Role,
         };
 
         UIManager.CurrentUser = userData;

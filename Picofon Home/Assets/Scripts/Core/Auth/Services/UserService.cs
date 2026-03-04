@@ -2,7 +2,6 @@ using System.Text.Json;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Picofon.Core.Network;
-using UnityEngine;
 
 public readonly struct LoginData
 {
@@ -11,7 +10,7 @@ public readonly struct LoginData
 
 public class UserService
 {
-    private readonly string ChildrenURL = ApiConfig.BaseUrl + "children";
+    private readonly string ChildrenURL = ApiConfig.BaseUrl + "children/";
 
     private readonly string UserURL = ApiConfig.BaseUrl + "auth/login";
 
@@ -59,7 +58,7 @@ public class UserService
         CancellationToken token = default
     )
     {
-        string url = $"{ChildrenURL}/owner/{userId}?is_active=true";
+        string url = $"{ChildrenURL}/user/{userId}";
 
         byte[] rawResponse;
 

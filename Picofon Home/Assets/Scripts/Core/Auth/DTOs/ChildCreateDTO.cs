@@ -8,5 +8,5 @@ public readonly struct ChildCreateDTO
     public readonly string School { get; init; }
     public readonly int Grade { get; init; }
     public readonly int CenterId { get; init; }
-    public readonly string OwnerId { get; init; }
+    public readonly string UserId { get; init; }
 }
