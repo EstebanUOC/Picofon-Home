@@ -13491,7 +13491,7 @@ MonoBehaviour:
   RegisterChildPanel: {fileID: 831723212}
   LoadingPanel: {fileID: 93977538}
   ModalPanel: {fileID: 444273589}
-  VersionNumber: 0.65
+  VersionNumber: 0.7
 --- !u!1 &1624233688
 GameObject:
   m_ObjectHideFlags: 0
