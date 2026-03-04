@@ -423,7 +423,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1110d00bc7de39c5bae832b0875eb913
-    m_Address: "CA-can\xE7o"
+    m_Address: CA-canco
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -443,7 +443,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1287494d2c56b9c4ba02ab333718ccaf
-    m_Address: CA-xarop1
+    m_Address: CA-xarop
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -4909,11 +4909,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b74569a943b3f9ec0a3ef0037ecefc13
     m_Address: CA-peluix
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b7bbeed817a6cca1bbaa598f30b6cc66
-    m_Address: CA-xarop2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

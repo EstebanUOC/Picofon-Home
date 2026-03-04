@@ -7,14 +7,14 @@ using ActivitiesResult = ApiResult<ActivitiesData<BasketResponses.SelectActivity
 
 public class BasketManagerPS : MonoBehaviour
 {
-    [Space(15)]
+    [Space]
     [SerializeField]
     private CanvasUI _canvasUI;
 
     [SerializeField]
     private BallController _ballController;
 
-    [Space(15)]
+    [Space]
     [SerializeField]
     private AnswerManagerPS _answerManager;
 
@@ -139,9 +139,11 @@ public class BasketManagerPS : MonoBehaviour
         _sessionManager.InitializeSession(sessionInfo, sessions);
 
         ChangeActivity();
-        _uiManager.EnableClueButton(false);
 
-        AudioManager.Instance.PlayVoice(_audioClips[OthersAudioID.Intro]);
+        AudioClip introClip = _audioClips[OthersAudioID.Intro];
+
+        _uiManager.SetIntroAudio(introClip);
+        AudioManager.Instance.PlayVoice(introClip);
 
         await AudioManager.Instance.WaitVoiceToEnd();
 
@@ -152,7 +154,6 @@ public class BasketManagerPS : MonoBehaviour
         _answerManager.Prueba();
 
         _sessionManager.StartTime();
-        _uiManager.EnableClueButton(true);
     }
 
     private void HandleHoopSelected(int hoopIndex)

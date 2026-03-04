@@ -8,8 +8,6 @@ public class ClueController : MonoBehaviour
 
     private Button _buttonComponent;
 
-    private bool _isClueActive = false;
-
     public void Awake()
     {
         _buttonComponent = GetComponent<Button>();
@@ -24,13 +22,10 @@ public class ClueController : MonoBehaviour
     public void Reset()
     {
         _buttonComponent.interactable = true;
-        _isClueActive = false;
     }
 
     private void HandleButtonClick()
     {
-        _isClueActive = !_isClueActive;
-
-        OnClueChanged?.Invoke(_isClueActive);
+        OnClueChanged?.Invoke(false);
     }
 }

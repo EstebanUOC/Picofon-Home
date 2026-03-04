@@ -160,7 +160,10 @@ public class BasketGameManagerJG : MonoBehaviour
 
         _answerManager.DisableAnswers();
 
-        AudioManager.Instance.PlayVoice(_audioClips[JudgeAudioID.Intro]);
+        AudioClip introClip = _audioClips[JudgeAudioID.Intro];
+
+        _uiManager.SetIntroAudio(introClip);
+        AudioManager.Instance.PlayVoice(introClip);
 
         await AudioManager.Instance.WaitVoiceToEnd();
 

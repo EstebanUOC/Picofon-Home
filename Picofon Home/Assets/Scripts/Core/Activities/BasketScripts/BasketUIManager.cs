@@ -12,31 +12,22 @@ public class BasketUIManager : MonoBehaviour
     private ItemClueManager _itemClueManager;
 
     [SerializeField]
-    private ClueController _clueController;
-
-    [SerializeField]
     private GameMenu _gameMenu;
+
+    private AudioClip _introAudio;
+
+    public void Awake()
+    {
+        _gameMenu.OnMenuOptionSelected += HandleMenuOptionSelected;
+    }
 
     public void Prueba()
     {
         _itemManager.Prueba();
     }
 
-    public void EnableClueButton(bool enable)
-    {
-        _clueController.EnableClue(enable);
-    }
-
-    public void OnEnable()
-    {
-        _clueController.OnClueChanged += HandleClueChanged;
-        _gameMenu.OnMenuOptionSelected += HandleMenuOptionSelected;
-    }
-
     public void SetViewContent(in ViewContentDTO content)
     {
-        _clueController.Reset();
-
         _itemManager.SetItemsContent(in content);
     }
 
@@ -47,28 +38,33 @@ public class BasketUIManager : MonoBehaviour
 
     public void Reset()
     {
-        _clueController.Reset();
         _itemClueManager.SetClueVisibility(false);
     }
 
-    private void BackToMap()
+    public void SetIntroAudio(AudioClip clip)
     {
-        SceneManager.LoadScene("MapPathScene");
-        AudioManager.Instance.StopVoice();
-    }
-
-    private void HandleClueChanged(bool showClue)
-    {
-        _itemClueManager.SetClueVisibility(showClue);
+        _introAudio = clip;
     }
 
     private void HandleMenuOptionSelected(GameMenuEvent menuEvent)
     {
         switch (menuEvent)
         {
+            case GameMenuEvent.Clue:
+                _itemClueManager.ToggleClueVisibility();
+                break;
             case GameMenuEvent.Exit:
                 BackToMap();
                 break;
+            case GameMenuEvent.Replay:
+                AudioManager.Instance.PlayVoice(_introAudio);
+                break;
         }
+    }
+
+    private void BackToMap()
+    {
+        SceneManager.LoadScene("MapPathScene");
+        AudioManager.Instance.StopVoice();
     }
 }

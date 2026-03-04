@@ -140,7 +140,10 @@ public class BasketManagerRE : MonoBehaviour
 
         ChangeActivity();
 
-        AudioManager.Instance.PlayVoice(_audioClips[OthersAudioID.Intro]);
+        AudioClip introClip = _audioClips[OthersAudioID.Intro];
+
+        _uiManager.SetIntroAudio(introClip);
+        AudioManager.Instance.PlayVoice(introClip);
 
         await AudioManager.Instance.WaitVoiceToEnd();
 
