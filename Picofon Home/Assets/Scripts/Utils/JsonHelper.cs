@@ -1,5 +1,7 @@
+using System;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 public static class JsonHelper
 {
@@ -7,6 +9,7 @@ public static class JsonHelper
     {
         PropertyNamingPolicy = new SnakeCaseNamingPolicy(),
         PropertyNameCaseInsensitive = true,
+        Converters = { new CaseInsensitiveEnumConverter<UserRole>() },
     };
 
     public static T FromJson<T>(string json)
@@ -63,5 +66,26 @@ public class SnakeCaseNamingPolicy : JsonNamingPolicy
             }
         }
         return sb.ToString();
+    }
+}
+
+public class CaseInsensitiveEnumConverter<T> : JsonConverter<T>
+    where T : struct, Enum
+{
+    public override T Read(
+        ref Utf8JsonReader reader,
+        Type typeToConvert,
+        JsonSerializerOptions options
+    )
+    {
+        var value = reader.GetString();
+        if (Enum.TryParse<T>(value, true, out var result))
+            return result;
+        throw new JsonException($"Unable to convert \"{value}\" to Enum \"{typeof(T)}\"");
+    }
+
+    public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
+    {
+        writer.WriteStringValue(value.ToString());
     }
 }

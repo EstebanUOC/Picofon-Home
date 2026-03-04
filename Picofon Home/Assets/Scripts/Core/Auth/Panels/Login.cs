@@ -108,7 +108,6 @@ public class Login : Panel
         }
 
         OnLoginSuccess(result.Data.User);
-        Debug.Log("<DEBUG> User role: " + result.Data.User.Role);
     }
 
     private void OnLoginSuccess(UserModel user)
@@ -120,6 +119,8 @@ public class Login : Panel
             Username = user.FirstName,
             Role = user.Role,
         };
+
+        Debug.Log("<DEBUG> User data: " + userData.Username + ", Role: " + userData.Role);
 
         UIManager.CurrentUser = userData;
         UIManager.ShowDisclaimer();

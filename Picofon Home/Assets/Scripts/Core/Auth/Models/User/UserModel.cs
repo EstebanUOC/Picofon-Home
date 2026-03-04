@@ -1,16 +1,18 @@
-using System.Text.Json.Serialization;
-
-public class UserModel
+public enum UserRole
 {
-    [JsonInclude]
-    public string Id { get; set; } = string.Empty;
+    Invited,
+    Therapist,
+    Parent,
+    Admin,
+}
 
-    [JsonInclude]
-    public string FirstName { get; set; } = string.Empty;
+public readonly struct UserModel
+{
+    public readonly string Id { get; init; }
 
-    [JsonInclude]
-    public string Email { get; set; } = string.Empty;
+    public readonly string FirstName { get; init; }
 
-    [JsonInclude]
-    public string Role { get; set; } = string.Empty;
+    public readonly string Email { get; init; }
+
+    public readonly UserRole Role { get; init; }
 }
