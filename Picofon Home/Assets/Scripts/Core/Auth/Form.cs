@@ -11,6 +11,7 @@ public enum ChildFields
     BirthDate,
     Disorder,
     School,
+    Language,
     Grade,
     Center,
 }
@@ -24,7 +25,7 @@ public class Form : MonoBehaviour
 
     public event Func<ChildCreateDTO, UniTask> OnSubmit;
 
-    private readonly Dictionary<ChildFields, FormInput> _fields = new();
+    private readonly Dictionary<ChildFields, FormInput> _fields = new(9);
 
     private readonly InputChangedEventChannel _inputChangedEventChannel = new();
 
