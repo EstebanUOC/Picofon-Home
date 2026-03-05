@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DropdownField : FormInput
 {
-    [Space(15)]
+    [Space]
     public TMP_Dropdown Dropdown;
 
     public void Start()

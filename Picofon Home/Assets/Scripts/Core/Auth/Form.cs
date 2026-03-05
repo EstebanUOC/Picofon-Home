@@ -29,7 +29,7 @@ public class Form : MonoBehaviour
 
     private readonly InputChangedEventChannel _inputChangedEventChannel = new();
 
-    public void Start()
+    public void Awake()
     {
         _inputChangedEventChannel.OnInputChanged += HandleInputChanged;
 
@@ -58,6 +58,7 @@ public class Form : MonoBehaviour
             BirthDate = _fields[ChildFields.BirthDate].GetData(),
             Disorder = _fields[ChildFields.Disorder].GetData(),
             School = _fields[ChildFields.School].GetData(),
+            LanguagePreference = int.Parse(_fields[ChildFields.Language].GetData()),
             Grade = int.Parse(_fields[ChildFields.Grade].GetData()),
             CenterId = int.Parse(_fields[ChildFields.Center].GetData()),
         };

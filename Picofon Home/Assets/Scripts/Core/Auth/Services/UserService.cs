@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Picofon.Core.Network;
+using UnityEngine;
 
 public readonly struct LoginData
 {
@@ -110,8 +111,10 @@ public class UserService
                 cancellationToken: token
             );
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
+            Debug.LogException(e);
+            Debug.Log($"Failed to register child with data: {JsonHelper.ToJson(childCreateDTO)}");
             return ApiResult.Fail("Network error occurred while registering child.");
         }
 
