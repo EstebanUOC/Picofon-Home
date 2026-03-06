@@ -87,4 +87,26 @@ public static class HttpClientUnity
 
         return request.downloadHandler.data;
     }
+
+    public static async UniTask<byte[]> PatchAsyncBytes(
+        string url,
+        byte[] data,
+        int timeoutSeconds = 10,
+        CancellationToken cancellationToken = default
+    )
+    {
+        using var request = new UnityWebRequest(url, "PATCH");
+        request.uploadHandler = new UploadHandlerRaw(data);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        request.timeout = timeoutSeconds;
+
+        await request.SendWebRequest().WithCancellation(cancellationToken);
+
+        if (request.result != UnityWebRequest.Result.Success)
+            throw new Exception($"HTTP GET Error: {request.error} | URL: {url}");
+
+        return request.downloadHandler.data;
+    }
 }

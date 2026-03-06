@@ -5,6 +5,7 @@ public enum DebugMenuResult : byte
 {
     Map,
     Children,
+    Role,
     Close,
 }
 
@@ -21,10 +22,14 @@ public class DebugMenu : MonoBehaviour
     [SerializeField]
     private CustomButtonBase _closeButton;
 
+    [SerializeField]
+    private CustomButtonBase _roleButton;
+
     public void Awake()
     {
         _mapButton.OnClick += () => OnClose.Invoke(DebugMenuResult.Map);
         _childrenButton.OnClick += () => OnClose.Invoke(DebugMenuResult.Children);
         _closeButton.OnClick += () => OnClose.Invoke(DebugMenuResult.Close);
+        _roleButton.OnClick += () => OnClose.Invoke(DebugMenuResult.Role);
     }
 }

@@ -9,18 +9,21 @@ public readonly struct LoginData
     public readonly UserModel User { get; init; }
 }
 
+public readonly struct UpdateUserRoleRequest
+{
+    public readonly UserRole Role { get; init; }
+}
+
 public class UserService
 {
     private readonly string ChildrenURL = ApiConfig.BaseUrl + "children/";
-
-    private readonly string UserURL = ApiConfig.BaseUrl + "auth/login";
 
     public async UniTask<ApiResult<LoginData>> LoginWithFirebaseToken(
         string firebaseToken,
         CancellationToken token = default
     )
     {
-        string url = UserURL;
+        string url = $"{ApiConfig.BaseUrl}auth/login";
 
         byte[] rawResponse;
 
@@ -52,6 +55,54 @@ public class UserService
         }
 
         return ApiResult<LoginData>.Ok(responseView.Data);
+    }
+
+    public async UniTask<ApiResult> UpdateUserRole(
+        string userId,
+        UserRole newRole,
+        CancellationToken token = default
+    )
+    {
+        if (newRole == UserRole.Admin)
+        {
+            return ApiResult.Fail("Cannot assign Admin role through this method.");
+        }
+
+        string url = $"{ApiConfig.BaseUrl}/users/{userId}/role";
+
+        byte[] rawResponse;
+
+        UpdateUserRoleRequest requestData = new() { Role = newRole };
+
+        byte[] jsonRequest = JsonHelper.ToBytes(requestData);
+
+        try
+        {
+            rawResponse = await HttpClientUnity.PatchAsyncBytes(
+                url: url,
+                data: jsonRequest,
+                timeoutSeconds: 5,
+                cancellationToken: token
+            );
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("<DEBUG> Failed to update user role, Error: " + e.Message);
+            Debug.Log($"<DEBUG> Request data: {JsonHelper.ToJson(requestData)}");
+            return ApiResult.Fail("Network error occurred while updating user role.");
+        }
+
+        using JsonDocument doc = JsonDocument.Parse(rawResponse);
+        JsonElement root = doc.RootElement;
+
+        ApiResponseView responseView = new(root);
+
+        if (!responseView.Success)
+        {
+            return ApiResult.Fail(responseView.ErrorMessage);
+        }
+
+        return ApiResult.Ok();
     }
 
     public async UniTask<ApiResult<ChildListItemDTO[]>> GetUserChildren(

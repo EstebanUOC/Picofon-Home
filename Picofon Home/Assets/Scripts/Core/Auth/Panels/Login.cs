@@ -9,14 +9,14 @@ public class Login : Panel
 {
     public UIManager UIManager;
 
-    [Space(15)]
+    [Space]
     [SerializeField]
     private GameObject _loginButton;
 
     [SerializeField]
     private GameObject _debugButton;
 
-    [Space(15)]
+    [Space]
     [SerializeField]
     private TMPro.TMP_Text _versionText;
 
@@ -120,9 +120,8 @@ public class Login : Panel
             Role = user.Role,
         };
 
-        Debug.Log("<DEBUG> User data: " + userData.Username + ", Role: " + userData.Role);
-
         UIManager.CurrentUser = userData;
+
         UIManager.ShowDisclaimer();
     }
 
@@ -131,14 +130,18 @@ public class Login : Panel
         DebugMenuResult result = await UIManager.ShowDebugMenu();
 
         GamePrefs.DebugMode = true;
+
+        UserDataDTO debugUser;
+
         switch (result)
         {
             case DebugMenuResult.Children:
-                UserDataDTO debugUser = new()
+                debugUser = new()
                 {
                     Id = "AwgdI1xsu5RoU6zgLvTfAZeklbn2",
                     Email = "test@gmail.com",
                     Username = "Debug User",
+                    Role = UserRole.Parent,
                 };
 
                 UIManager.CurrentUser = debugUser;
@@ -146,6 +149,18 @@ public class Login : Panel
                 break;
             case DebugMenuResult.Map:
                 SceneManager.LoadScene("MapPathScene");
+                break;
+            case DebugMenuResult.Role:
+                debugUser = new()
+                {
+                    Id = "STrmT4YxH2PiAObWJh9l0USKVZ53",
+                    Email = "test@gmail.com",
+                    Username = "Debug User",
+                    Role = UserRole.Invited,
+                };
+
+                UIManager.CurrentUser = debugUser;
+                UIManager.ShowRolePanel();
                 break;
             default:
                 break;

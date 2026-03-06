@@ -22,6 +22,12 @@ public class Disclaimer : Panel
         GamePrefs.HasAcceptedTerms = true;
 #endif
 
+        if (UIManager.CurrentUser.Role == UserRole.Invited)
+        {
+            UIManager.ShowRolePanel();
+            return;
+        }
+
         UIManager.ShowUserChildren();
     }
 

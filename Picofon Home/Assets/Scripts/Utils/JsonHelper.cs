@@ -86,6 +86,14 @@ public class CaseInsensitiveEnumConverter<T> : JsonConverter<T>
 
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value.ToString());
+        var stringValue = value switch
+        {
+            UserRole.Invited => "INVITED",
+            UserRole.Therapist => "THERAPIST",
+            UserRole.Parent => "PARENT",
+            UserRole.Admin => "ADMIN",
+            _ => throw new JsonException($"Unknown UserRole: {value}"),
+        };
+        writer.WriteStringValue(stringValue);
     }
 }

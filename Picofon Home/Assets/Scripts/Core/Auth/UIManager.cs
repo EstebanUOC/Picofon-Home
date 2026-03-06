@@ -6,17 +6,18 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    [Space(15)]
+    [Space]
     public Panel LoginPanel;
     public Panel DisclaimerPanel;
+    public Panel RoleSelectionPanel;
     public Panel UserChildrenPanel;
     public Panel RegisterChildPanel;
 
-    [Space(15)]
+    [Space]
     public Panel LoadingPanel;
     public Modal ModalPanel;
 
-    [Space(15)]
+    [Space]
     public float VersionNumber = 0.2f;
 
     public UserDataDTO CurrentUser { get; set; }
@@ -136,6 +137,12 @@ public class UIManager : MonoBehaviour
         DisclaimerPanel.Show();
     }
 
+    public void ShowRolePanel()
+    {
+        HideAllPanels();
+        RoleSelectionPanel.Show();
+    }
+
     public void ShowUserChildren()
     {
         HideAllPanels();
@@ -169,6 +176,7 @@ public class UIManager : MonoBehaviour
         RegisterChildPanel.Hide();
         UserChildrenPanel.Hide();
         DisclaimerPanel.Hide();
+        RoleSelectionPanel.Hide();
     }
 
     private async UniTask<bool> CheckFirebaseDependencies(CancellationToken ct)
