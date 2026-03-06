@@ -5,7 +5,7 @@ using Picofon.Core.Network;
 
 public class SessionService
 {
-    private readonly string url = ApiConfig.BaseUrl + "therapy-sessions";
+    private readonly string url = ApiConfig.BaseUrl + "therapy-task-result/bulk";
 
     public async UniTask<ApiResult> CreateTherapySession(
         GeneralSessionDTO sessionInfo,
