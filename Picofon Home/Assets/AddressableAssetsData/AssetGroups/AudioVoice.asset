@@ -1583,7 +1583,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3c0777b2d55c858ffa80f600769df806
-    m_Address: CA-xampany1
+    m_Address: CA-xampany
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -4142,11 +4142,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 99f3413286012cb6daf83fea68c75207
-    m_Address: CA-xampinyo2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9a00bf3e5a9c657feb5f99911c6eac6c
     m_Address: CA-enciam
     m_ReadOnly: 0
@@ -6087,11 +6082,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ddc4ee0f0bd02aecbb846f6b32bfca8a
-    m_Address: CA-xampany2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: de04e7c2794b2242c94037ce083297b6
     m_Address: CA-fill
     m_ReadOnly: 0
@@ -6688,7 +6678,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f42c6aa262587b4fb9eb600fb963cbf3
-    m_Address: CA-xampinyo1
+    m_Address: CA-xampinyo
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
