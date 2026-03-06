@@ -1549,12 +1549,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1531208591}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7482f46d7a75666debcd642bcd119b19, type: 3}
+  m_Script: {fileID: 11500000, guid: bc7d3ded57e72fbefbecefce311486b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _contentRect: {fileID: 112254195}
-  _backgroundRect: {fileID: 1680328267}
-  _duration: 0.1
+  _interactable: 1
 --- !u!1001 &1589980448
 PrefabInstance:
   m_ObjectHideFlags: 0

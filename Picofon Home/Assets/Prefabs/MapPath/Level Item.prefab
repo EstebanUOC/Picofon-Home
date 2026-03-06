@@ -465,7 +465,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc501f848fb6b3a3faf400a38d76992a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _eventChannel: {fileID: 11400000, guid: 651f388b6844f9c44b21881f0195349e, type: 2}
   _icon: {fileID: 5495187143461384949}
   _shadow: {fileID: 1362769568152723603}
   _content: {fileID: 7447318253375993555}
@@ -482,6 +481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7482f46d7a75666debcd642bcd119b19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _eventChannel: {fileID: 11400000, guid: 651f388b6844f9c44b21881f0195349e, type: 2}
   _contentRect: {fileID: 1779260446722783310}
   _backgroundRect: {fileID: 1985457412840918066}
   _duration: 0.1

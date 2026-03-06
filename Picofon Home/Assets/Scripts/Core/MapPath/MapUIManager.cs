@@ -6,7 +6,7 @@ public class MapUIManager : MonoBehaviour
     private TransitionData _transition;
 
     [SerializeField]
-    private LevelButton _exitButton;
+    private SimpleButton _exitButton;
 
     public void Start()
     {

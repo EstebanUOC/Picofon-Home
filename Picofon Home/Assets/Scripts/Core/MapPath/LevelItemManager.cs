@@ -12,18 +12,10 @@ public enum LevelScene
 
 public readonly ref struct LevelData
 {
-    public readonly int id;
-    public readonly LevelConfig config;
-    public readonly LevelType type;
-    public readonly LevelState state;
-
-    public LevelData(int id, LevelConfig config, LevelType type, LevelState state)
-    {
-        this.id = id;
-        this.config = config;
-        this.type = type;
-        this.state = state;
-    }
+    public readonly int Id { get; init; }
+    public readonly LevelConfig Config { get; init; }
+    public readonly LevelType Type { get; init; }
+    public readonly LevelState State { get; init; }
 }
 
 public sealed class LevelItemManager : MonoBehaviour
@@ -119,7 +111,13 @@ public sealed class LevelItemManager : MonoBehaviour
 
             LevelState state = locked ? LevelState.Locked : LevelState.Unlocked;
 
-            LevelData data = new(i, config, type, state);
+            LevelData data = new()
+            {
+                Id = i,
+                Config = config,
+                Type = type,
+                State = state,
+            };
 
             comp.Init(in data);
         }

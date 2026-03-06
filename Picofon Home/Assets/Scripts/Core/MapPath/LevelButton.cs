@@ -1,17 +1,13 @@
-using System;
 using PrimeTween;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class LevelButton
-    : MonoBehaviour,
-        IPointerClickHandler,
-        IPointerEnterHandler,
-        IPointerExitHandler
+public class LevelButton : MonoBehaviour, IPointerClickHandler
 {
-    public event Action OnClick;
+    [SerializeField]
+    private LevelSelectEventChannel _eventChannel;
 
-    [Space(15)]
+    [Space]
     [SerializeField]
     private RectTransform _contentRect;
 
@@ -32,38 +28,40 @@ public class LevelButton
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        OnClick?.Invoke();
+        LevelItemView itemView = GetComponent<LevelItemView>();
+
+        AnimateClick(itemView);
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    private void AnimateClick(LevelItemView itemView)
     {
-        AnimateHover(true);
-    }
+        float moveY;
+        Vector2 bgSizeDeltaY;
+        Vector2 bgMoveY;
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        AnimateHover(false);
-    }
+        moveY = _defaultContentY - 24f;
+        bgSizeDeltaY = -31 * Vector2.up;
+        bgMoveY = -11.5f * Vector2.up;
 
-    private void AnimateHover(bool isHovered)
-    {
-        float moveY = _defaultContentY;
-        Vector2 bgSizeDeltaY = _defaultBackgroundSizeDelta;
-        Vector2 bgMoveY = Vector2.zero;
+        Sequence sequence = Sequence.Create();
 
-        if (isHovered)
+        sequence
+            .Group(Tween.UIAnchoredPositionY(_contentRect, moveY, _duration))
+            .Group(Tween.UISizeDelta(_backgroundRect, bgSizeDeltaY, _duration))
+            .Group(Tween.UIAnchoredPosition(_backgroundRect, bgMoveY, _duration));
+
+        moveY = _defaultContentY;
+        bgSizeDeltaY = _defaultBackgroundSizeDelta;
+        bgMoveY = Vector2.zero;
+
+        sequence
+            .Chain(Tween.UIAnchoredPositionY(_contentRect, moveY, _duration))
+            .Group(Tween.UISizeDelta(_backgroundRect, bgSizeDeltaY, _duration))
+            .Group(Tween.UIAnchoredPosition(_backgroundRect, bgMoveY, _duration));
+
+        sequence.OnComplete(() =>
         {
-            moveY = _defaultContentY - 24f;
-            bgSizeDeltaY = -31 * Vector2.up;
-            bgMoveY = -11.5f * Vector2.up;
-        }
-
-        Tween posTween = Tween.UIAnchoredPositionY(_contentRect, moveY, _duration);
-
-        Tween bgAnchorTween = Tween.UISizeDelta(_backgroundRect, bgSizeDeltaY, _duration);
-
-        Tween bgAnchorPosTween = Tween.UIAnchoredPosition(_backgroundRect, bgMoveY, _duration);
-
-        Sequence.Create().Group(posTween).Group(bgAnchorTween).Group(bgAnchorPosTween);
+            _eventChannel.Raise(itemView.Config, itemView.Index);
+        });
     }
 }
