@@ -8,65 +8,69 @@ public readonly struct TweenHelper
     public readonly Transform Transform { get; init; }
     public readonly RectTransform RectTransform { get; init; }
 
+    const float duration = 0.2f;
+
     public void AnimateHoverRotation()
     {
-        const float duration = 0.2f;
+        float scaleUp;
+        float rotation;
 
-        float scaleUp = 1f;
-        float rotation = 0f;
-        //
-        // if (isHovering)
-        // {
-        //     scaleUp = 1.05f;
-        //     rotation = 4f;
-        // }
+        scaleUp = 1.05f;
+        rotation = 4f;
 
-        Tween transformTween = Tween.Scale(Transform, scaleUp, duration);
+        Sequence sequence = Sequence
+            .Create()
+            .Group(Tween.Scale(Transform, scaleUp, duration))
+            .Group(Tween.Rotation(Transform, new Vector3(0, 0, rotation), duration));
 
-        Tween rotateTween = Tween.Rotation(Transform, new Vector3(0, 0, rotation), duration);
+        scaleUp = 1f;
+        rotation = 0f;
 
-        Sequence.Create().Group(transformTween).Group(rotateTween);
+        sequence
+            .Chain(Tween.Scale(Transform, scaleUp, duration))
+            .Group(Tween.Rotation(Transform, new Vector3(0, 0, rotation), duration));
     }
 
     public void AnimateHoverTranslate()
     {
-        const float duration = 0.2f;
+        float scaleUp;
+        float translationY;
 
-        float scaleUp = 1f;
-        float translationY = 0f;
+        scaleUp = 1.05f;
+        translationY = Transform.localPosition.y + 0.1f;
 
-        // if (isHovering)
-        // {
-        //     translationY = Transform.localPosition.y + 0.1f;
-        //     scaleUp = 1.05f;
-        // }
+        Sequence sequence = Sequence
+            .Create()
+            .Group(Tween.Scale(Transform, scaleUp, duration))
+            .Group(Tween.LocalPositionY(Transform, translationY, duration));
 
-        Tween transformTween = Tween.Scale(Transform, scaleUp, duration);
+        scaleUp = 1f;
+        translationY = 0f;
 
-        Tween translateTween = Tween.LocalPositionY(Transform, translationY, duration);
-
-        Sequence.Create().Group(transformTween).Group(translateTween);
+        sequence
+            .Chain(Tween.Scale(Transform, scaleUp, duration))
+            .Group(Tween.LocalPositionY(Transform, translationY, duration));
     }
 
     public void UIAnimateHoverTranslate()
     {
-        const float duration = 0.2f;
+        float scaleUp;
+        float translationY;
 
-        float scaleUp = 1f;
-        float translationY = 0f;
+        scaleUp = 1.05f;
+        translationY = RectTransform.anchoredPosition.y + 5f;
 
-        // if (isHovering)
-        // {
-        //     float traslation = 5f;
-        //     translationY = RectTransform.anchoredPosition.y + traslation;
-        //     scaleUp = 1.05f;
-        // }
+        Sequence sequence = Sequence
+            .Create()
+            .Group(Tween.Scale(Transform, scaleUp, duration))
+            .Group(Tween.UIAnchoredPositionY(RectTransform, translationY, duration));
 
-        Tween transformTween = Tween.Scale(Transform, scaleUp, duration);
+        scaleUp = 1f;
+        translationY = 0f;
 
-        Tween translateTween = Tween.UIAnchoredPositionY(RectTransform, translationY, duration);
-
-        Sequence.Create().Group(transformTween).Group(translateTween);
+        sequence
+            .Chain(Tween.Scale(Transform, scaleUp, duration))
+            .Group(Tween.UIAnchoredPositionY(RectTransform, translationY, duration));
     }
 }
 

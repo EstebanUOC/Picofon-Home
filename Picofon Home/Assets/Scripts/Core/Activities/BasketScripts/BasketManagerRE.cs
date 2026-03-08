@@ -42,7 +42,7 @@ public class BasketManagerRE : MonoBehaviour
 
     private readonly Dictionary<OthersAudioID, AudioClip> _audioClips = new(3);
 
-    private readonly AudioClip[] _audioItems = new AudioClip[4];
+    private readonly AudioClip[] _audioItems = new AudioClip[5];
 
     public void Start()
     {
@@ -113,17 +113,17 @@ public class BasketManagerRE : MonoBehaviour
             return;
         }
 
-        string[] audioPaths = new string[_activities.Length * 4];
+        string[] audioPaths = new string[_activities.Length * 5];
 
         for (int i = 0; i < _activities.Length; i++)
         {
             RelateActivity activity = _activities[i];
             int wordCount = activity.Words.Length;
+            audioPaths[i * 5] = activity.MainWord.Word;
 
             for (int j = 0; j < wordCount; j++)
             {
-                string word = activity.Words[j].Word;
-                audioPaths[i * wordCount + j] = word;
+                audioPaths[i * 5 + j + 1] = activity.Words[j].Word;
             }
         }
 
@@ -250,7 +250,9 @@ public class BasketManagerRE : MonoBehaviour
 
         _uiManager.SetViewContent(in content);
 
-        AudioManager.Instance.GetAudios(_currentActivityIndex, 2, _audioItems);
+        AudioManager.Instance.GetAudios(_currentActivityIndex, 5, _audioItems);
+
+        _uiManager.SetAudioClips(_audioItems);
 
         ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords);
 
