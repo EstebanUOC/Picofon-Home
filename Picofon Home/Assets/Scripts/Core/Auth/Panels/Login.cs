@@ -141,7 +141,7 @@ public class Login : Panel
                     Id = "AwgdI1xsu5RoU6zgLvTfAZeklbn2",
                     Email = "test@gmail.com",
                     Username = "Debug User",
-                    Role = UserRole.Parent,
+                    Role = UserRole.Therapist,
                 };
 
                 UIManager.CurrentUser = debugUser;

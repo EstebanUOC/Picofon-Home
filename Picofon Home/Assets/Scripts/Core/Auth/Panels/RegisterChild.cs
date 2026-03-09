@@ -38,6 +38,7 @@ public class RegisterChild : Panel
         _emailText.text = _uiManager.CurrentUser.Email;
         _usernameText.text = _uiManager.CurrentUser.Username;
         _registerForm.ParentId = _uiManager.CurrentUser.Id;
+        _registerForm.Relationship = _uiManager.CurrentUser.Role;
     }
 
     private async UniTask HandleSubmit(ChildCreateDTO data)
