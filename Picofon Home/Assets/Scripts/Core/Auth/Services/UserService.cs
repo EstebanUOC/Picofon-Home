@@ -85,10 +85,8 @@ public class UserService
                 cancellationToken: token
             );
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
-            Debug.LogError("<DEBUG> Failed to update user role, Error: " + e.Message);
-            Debug.Log($"<DEBUG> Request data: {JsonHelper.ToJson(requestData)}");
             return ApiResult.Fail("Network error occurred while updating user role.");
         }
 
@@ -162,10 +160,8 @@ public class UserService
                 cancellationToken: token
             );
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
-            Debug.LogException(e);
-            Debug.Log($"Failed to register child with data: {JsonHelper.ToJson(childCreateDTO)}");
             return ApiResult.Fail("Network error occurred while registering child.");
         }
 

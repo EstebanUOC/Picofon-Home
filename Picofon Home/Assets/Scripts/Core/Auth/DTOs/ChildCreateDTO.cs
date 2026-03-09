@@ -10,4 +10,5 @@ public readonly struct ChildCreateDTO
     public readonly int Grade { get; init; }
     public readonly int CenterId { get; init; }
     public readonly string UserId { get; init; }
+    public readonly UserRole Relationship { get; init; }
 }
