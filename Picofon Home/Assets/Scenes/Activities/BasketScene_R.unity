@@ -402,7 +402,6 @@ GameObject:
   - component: {fileID: 80233014}
   - component: {fileID: 80233017}
   - component: {fileID: 80233016}
-  - component: {fileID: 80233015}
   m_Layer: 5
   m_Name: Selectable
   m_TagString: Untagged
@@ -429,20 +428,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &80233015
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 80233013}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6078a4704b39a2985b751c3092d1ed87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _itemTransform: {fileID: 1548372202}
-  _animationType: 1
 --- !u!114 &80233016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1160,6 +1145,7 @@ GameObject:
   - component: {fileID: 265748517}
   - component: {fileID: 265748519}
   - component: {fileID: 265748520}
+  - component: {fileID: 265748521}
   m_Layer: 5
   m_Name: Word Item
   m_TagString: Untagged
@@ -1218,6 +1204,20 @@ MonoBehaviour:
   _moveOffsetY: 17
   _transitionDuration: 0.2
   _targetSize: 128
+--- !u!114 &265748521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 265748516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6078a4704b39a2985b751c3092d1ed87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemTransform: {fileID: 265748517}
+  _animationType: 0
 --- !u!1 &266184834
 GameObject:
   m_ObjectHideFlags: 0
@@ -3782,7 +3782,6 @@ GameObject:
   - component: {fileID: 830242940}
   - component: {fileID: 830242943}
   - component: {fileID: 830242942}
-  - component: {fileID: 830242941}
   m_Layer: 5
   m_Name: Selectable
   m_TagString: Untagged
@@ -3809,20 +3808,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &830242941
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 830242939}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6078a4704b39a2985b751c3092d1ed87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _itemTransform: {fileID: 1888805662}
-  _animationType: 0
 --- !u!114 &830242942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4156,7 +4141,6 @@ GameObject:
   - component: {fileID: 879975670}
   - component: {fileID: 879975673}
   - component: {fileID: 879975672}
-  - component: {fileID: 879975671}
   m_Layer: 5
   m_Name: Selectable
   m_TagString: Untagged
@@ -4183,20 +4167,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &879975671
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 879975669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6078a4704b39a2985b751c3092d1ed87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _itemTransform: {fileID: 1947540099}
-  _animationType: 0
 --- !u!114 &879975672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4721,6 +4691,7 @@ GameObject:
   - component: {fileID: 1010867232}
   - component: {fileID: 1010867235}
   - component: {fileID: 1010867234}
+  - component: {fileID: 1010867236}
   m_Layer: 5
   m_Name: Main Word Item
   m_TagString: Untagged
@@ -4778,6 +4749,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IconObject: {fileID: 898858014}
   TextObject: {fileID: 378077396}
+--- !u!114 &1010867236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1010867231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6078a4704b39a2985b751c3092d1ed87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemTransform: {fileID: 1010867232}
+  _animationType: 0
 --- !u!1 &1032361061
 GameObject:
   m_ObjectHideFlags: 0
@@ -6411,7 +6396,6 @@ GameObject:
   - component: {fileID: 1316999924}
   - component: {fileID: 1316999927}
   - component: {fileID: 1316999926}
-  - component: {fileID: 1316999925}
   m_Layer: 5
   m_Name: Selectable
   m_TagString: Untagged
@@ -6438,20 +6422,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1316999925
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1316999923}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6078a4704b39a2985b751c3092d1ed87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _itemTransform: {fileID: 265748517}
-  _animationType: 0
 --- !u!114 &1316999926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9030,6 +9000,7 @@ GameObject:
   - component: {fileID: 1888805662}
   - component: {fileID: 1888805664}
   - component: {fileID: 1888805665}
+  - component: {fileID: 1888805666}
   m_Layer: 5
   m_Name: Word Item
   m_TagString: Untagged
@@ -9088,6 +9059,20 @@ MonoBehaviour:
   _moveOffsetY: 17
   _transitionDuration: 0.2
   _targetSize: 128
+--- !u!114 &1888805666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888805661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6078a4704b39a2985b751c3092d1ed87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemTransform: {fileID: 1888805662}
+  _animationType: 0
 --- !u!1 &1910448107
 GameObject:
   m_ObjectHideFlags: 0
@@ -9399,6 +9384,7 @@ GameObject:
   - component: {fileID: 1947540099}
   - component: {fileID: 1947540102}
   - component: {fileID: 1947540103}
+  - component: {fileID: 1947540104}
   m_Layer: 5
   m_Name: Word Item
   m_TagString: Untagged
@@ -9457,6 +9443,20 @@ MonoBehaviour:
   _moveOffsetY: 17
   _transitionDuration: 0.2
   _targetSize: 128
+--- !u!114 &1947540104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947540098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6078a4704b39a2985b751c3092d1ed87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemTransform: {fileID: 1947540099}
+  _animationType: 0
 --- !u!1 &1961437904
 GameObject:
   m_ObjectHideFlags: 0

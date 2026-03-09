@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class CustomButtonLoading : CustomButtonRaised
 {
-    [Space(15)]
+    [Space]
     public RectTransform LoadingRect;
     public CanvasGroup InfoCanvasGroup;
     public CanvasGroup LoadingCanvasGroup;
@@ -52,22 +52,6 @@ public class CustomButtonLoading : CustomButtonRaised
             return;
 
         HandleClickAsync().Forget();
-    }
-
-    public override void OnPointerEnter(PointerEventData eventData)
-    {
-        if (Loading)
-            return;
-
-        base.OnPointerEnter(eventData);
-    }
-
-    public override void OnPointerExit(PointerEventData eventData)
-    {
-        if (Loading)
-            return;
-
-        base.OnPointerExit(eventData);
     }
 
     private async UniTaskVoid HandleClickAsync()

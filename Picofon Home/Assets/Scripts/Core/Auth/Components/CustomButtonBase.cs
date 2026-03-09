@@ -2,19 +2,11 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public abstract class CustomButtonBase
-    : MonoBehaviour,
-        IPointerClickHandler,
-        IPointerEnterHandler,
-        IPointerExitHandler
+public abstract class CustomButtonBase : MonoBehaviour, IPointerClickHandler
 {
     public Action OnClick;
 
     public virtual void OnPointerClick(PointerEventData eventData) { }
-
-    public virtual void OnPointerEnter(PointerEventData eventData) { }
-
-    public virtual void OnPointerExit(PointerEventData eventData) { }
 
     public virtual void RemoveAllListeners()
     {

@@ -3,67 +3,74 @@ using PrimeTween;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public sealed class TweenHelper
+public readonly struct TweenHelper
 {
-    public static void AnimateHoverRotation(bool isHovering, Transform transform)
+    public readonly Transform Transform { get; init; }
+    public readonly RectTransform RectTransform { get; init; }
+
+    const float duration = 0.2f;
+
+    public void AnimateHoverRotation()
     {
-        const float duration = 0.2f;
+        float scaleUp;
+        float rotation;
 
-        float scaleUp = 1f;
-        float rotation = 0f;
+        scaleUp = 1.05f;
+        rotation = 4f;
 
-        if (isHovering)
-        {
-            scaleUp = 1.05f;
-            rotation = 4f;
-        }
+        Sequence sequence = Sequence
+            .Create()
+            .Group(Tween.Scale(Transform, scaleUp, duration))
+            .Group(Tween.Rotation(Transform, new Vector3(0, 0, rotation), duration));
 
-        Tween transformTween = Tween.Scale(transform, scaleUp, duration);
+        scaleUp = 1f;
+        rotation = 0f;
 
-        Tween rotateTween = Tween.Rotation(transform, new Vector3(0, 0, rotation), duration);
-
-        Sequence.Create().Group(transformTween).Group(rotateTween);
+        sequence
+            .Chain(Tween.Scale(Transform, scaleUp, duration))
+            .Group(Tween.Rotation(Transform, new Vector3(0, 0, rotation), duration));
     }
 
-    public static void AnimateHoverTranslate(bool isHovering, Transform transform)
+    public void AnimateHoverTranslate()
     {
-        const float duration = 0.2f;
+        float scaleUp;
+        float translationY;
 
-        float scaleUp = 1f;
-        float translationY = 0f;
+        scaleUp = 1.05f;
+        translationY = Transform.localPosition.y + 0.1f;
 
-        if (isHovering)
-        {
-            translationY = transform.localPosition.y + 0.1f;
-            scaleUp = 1.05f;
-        }
+        Sequence sequence = Sequence
+            .Create()
+            .Group(Tween.Scale(Transform, scaleUp, duration))
+            .Group(Tween.LocalPositionY(Transform, translationY, duration));
 
-        Tween transformTween = Tween.Scale(transform, scaleUp, duration);
+        scaleUp = 1f;
+        translationY = 0f;
 
-        Tween translateTween = Tween.LocalPositionY(transform, translationY, duration);
-
-        Sequence.Create().Group(transformTween).Group(translateTween);
+        sequence
+            .Chain(Tween.Scale(Transform, scaleUp, duration))
+            .Group(Tween.LocalPositionY(Transform, translationY, duration));
     }
 
-    public static void AnimateHoverTranslate(bool isHovering, RectTransform transform)
+    public void UIAnimateHoverTranslate()
     {
-        const float duration = 0.2f;
+        float scaleUp;
+        float translationY;
 
-        float scaleUp = 1f;
-        float translationY = 0f;
+        scaleUp = 1.05f;
+        translationY = RectTransform.anchoredPosition.y + 5f;
 
-        if (isHovering)
-        {
-            float traslation = 5f;
-            translationY = transform.anchoredPosition.y + traslation;
-            scaleUp = 1.05f;
-        }
+        Sequence sequence = Sequence
+            .Create()
+            .Group(Tween.Scale(Transform, scaleUp, duration))
+            .Group(Tween.UIAnchoredPositionY(RectTransform, translationY, duration));
 
-        Tween transformTween = Tween.Scale(transform, scaleUp, duration);
+        scaleUp = 1f;
+        translationY = 0f;
 
-        Tween translateTween = Tween.UIAnchoredPositionY(transform, translationY, duration);
-
-        Sequence.Create().Group(transformTween).Group(translateTween);
+        sequence
+            .Chain(Tween.Scale(Transform, scaleUp, duration))
+            .Group(Tween.UIAnchoredPositionY(RectTransform, translationY, duration));
     }
 }
 
@@ -74,11 +81,7 @@ public enum AnimationType : byte
     None,
 }
 
-public sealed class ItemSelectable
-    : MonoBehaviour,
-        IPointerClickHandler,
-        IPointerEnterHandler,
-        IPointerExitHandler
+public sealed class ItemSelectable : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField]
     private Transform _itemTransform;
@@ -90,52 +93,39 @@ public sealed class ItemSelectable
 
     public int ItemIndex { get; set; }
 
-    private Action<bool> _animateHover;
+    private Action _animateHover;
 
     public void Awake()
     {
         if (_animationType == AnimationType.None)
             return;
 
+        TweenHelper tweenHelper = new()
+        {
+            Transform = _itemTransform,
+            RectTransform = _itemTransform as RectTransform,
+        };
+
         if (_animationType == AnimationType.RotateAndScale)
         {
-            _animateHover = isHovering =>
-            {
-                TweenHelper.AnimateHoverRotation(isHovering, _itemTransform);
-            };
+            _animateHover = tweenHelper.AnimateHoverRotation;
             return;
         }
 
         if (_itemTransform is RectTransform)
         {
             RectTransform rectTransform = _itemTransform as RectTransform;
-            _animateHover = isHovering =>
-            {
-                TweenHelper.AnimateHoverTranslate(isHovering, rectTransform);
-            };
+            _animateHover = tweenHelper.UIAnimateHoverTranslate;
             return;
         }
 
-        _animateHover = isHovering =>
-        {
-            TweenHelper.AnimateHoverTranslate(isHovering, _itemTransform);
-        };
+        _animateHover = tweenHelper.AnimateHoverTranslate;
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         ItemSelectedEventChannel?.Raise(ItemIndex);
 
-        _animateHover?.Invoke(false);
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        _animateHover?.Invoke(true);
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        _animateHover?.Invoke(false);
+        _animateHover?.Invoke();
     }
 }

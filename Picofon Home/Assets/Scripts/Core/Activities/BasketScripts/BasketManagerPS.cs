@@ -251,7 +251,9 @@ public class BasketManagerPS : MonoBehaviour
 
         _uiManager.SetViewContent(in content);
 
-        AudioManager.Instance.GetAudios(_currentActivityIndex, 2, _audioItems);
+        AudioManager.Instance.GetAudios(_currentActivityIndex, 4, _audioItems);
+
+        _uiManager.SetAudioClips(_audioItems);
 
         ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords);
 

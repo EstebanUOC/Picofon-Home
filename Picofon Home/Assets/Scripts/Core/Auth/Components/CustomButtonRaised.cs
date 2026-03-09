@@ -30,25 +30,14 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
             _interactable = value;
 
             float fade = 0.6f;
-
             if (_interactable)
                 fade = 1f;
 
             Tween.Alpha(_contentCanvasGroup, fade, Duration);
-
-            if (_interactable)
-            {
-                AnimateHover(false);
-                return;
-            }
-
-            if (!_isHovered)
-                AnimateHover(true);
         }
     }
 
     private bool _interactable = true;
-    private bool _isHovered = false;
 
     private Color _defaultColor;
     private float _defaultContentY;
@@ -69,55 +58,40 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
             return;
 
         OnClick?.Invoke();
+        AnimateClick();
     }
 
-    public override void OnPointerEnter(PointerEventData eventData)
+    private void AnimateClick()
     {
-        if (!_interactable)
-            return;
+        float moveY;
+        Color targetColor;
 
-        _isHovered = true;
-        AnimateHover(true);
-    }
+        Vector2 bgSize;
+        Vector2 bgMoveY;
 
-    public override void OnPointerExit(PointerEventData eventData)
-    {
-        if (!_interactable)
-            return;
+        moveY = _defaultContentY - 11f;
+        targetColor = HoverColor;
 
-        _isHovered = false;
-        AnimateHover(false);
-    }
+        bgSize = -11f * Vector2.up;
+        bgMoveY = -5.5f * Vector2.up;
 
-    private void AnimateHover(bool isHovering)
-    {
-        float moveY = _defaultContentY;
-        Color targetColor = _defaultColor;
-
-        Vector2 bgSize = Vector2.zero;
-        Vector2 bgMoveY = Vector2.zero;
-
-        if (isHovering)
-        {
-            moveY = _defaultContentY - 11f;
-            targetColor = HoverColor;
-            bgSize = -11f * Vector2.up;
-            bgMoveY = -5.5f * Vector2.up;
-        }
-
-        Tween colorTween = Tween.Color(_contentImage, targetColor, Duration);
-
-        Tween contentPositionTween = Tween.UIAnchoredPositionY(_contentRect, moveY, Duration);
-
-        Tween backgroundSizeTween = Tween.UISizeDelta(BackgroundRect, bgSize, Duration);
-
-        Tween backgroundPositionTween = Tween.UIAnchoredPosition(BackgroundRect, bgMoveY, Duration);
-
-        Sequence
+        Sequence sequence = Sequence
             .Create()
-            .Group(colorTween)
-            .Group(contentPositionTween)
-            .Group(backgroundSizeTween)
-            .Group(backgroundPositionTween);
+            .Group(Tween.Color(_contentImage, targetColor, Duration))
+            .Group(Tween.UIAnchoredPositionY(_contentRect, moveY, Duration))
+            .Group(Tween.UISizeDelta(BackgroundRect, bgSize, Duration))
+            .Group(Tween.UIAnchoredPosition(BackgroundRect, bgMoveY, Duration));
+
+        moveY = _defaultContentY;
+        targetColor = _defaultColor;
+
+        bgSize = Vector2.zero;
+        bgMoveY = Vector2.zero;
+
+        sequence
+            .Chain(Tween.Color(_contentImage, targetColor, Duration))
+            .Group(Tween.UIAnchoredPositionY(_contentRect, moveY, Duration))
+            .Group(Tween.UISizeDelta(BackgroundRect, bgSize, Duration))
+            .Group(Tween.UIAnchoredPosition(BackgroundRect, bgMoveY, Duration));
     }
 }
