@@ -2343,7 +2343,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 58fd99b4f82719d6e9ba8c070f417686
-    m_Address: CA-ximpance1
+    m_Address: CA-ximpanze
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -6374,11 +6374,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e8b67cc45af7d3eb3b19839edf3d0eb6
     m_Address: CA-dames
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e8b878debb9946b029351ce3e20015e6
-    m_Address: CA-ximpanze2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
