@@ -1,29 +1,61 @@
 using PrimeTween;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ProgressBar : MonoBehaviour
 {
     [SerializeField]
-    private RectTransform fillRect;
+    private GameObject _starPrefab;
 
-    private float _maxWidth;
-    private float _partWidth;
+    [SerializeField]
+    private Transform _starContainer;
 
-    private Vector2 _size = Vector2.zero;
+    [SerializeField]
+    private RectTransform _rocket;
 
-    public void Awake()
-    {
-        _maxWidth = transform.GetComponent<RectTransform>().rect.width;
-    }
+    [SerializeField]
+    private RectTransform _fill;
+
+    private readonly Color32 _starColor = new(130, 208, 210, 255);
 
     public void Initialize(int parts)
     {
-        _partWidth = _maxWidth / parts;
+        if (parts <= 0)
+            return;
+
+        int starCount = _starContainer.childCount;
+
+        if (starCount < parts)
+        {
+            for (int i = starCount; i < parts; i++)
+            {
+                Instantiate(_starPrefab, _starContainer);
+            }
+        }
+
+        if (starCount > parts)
+        {
+            for (int i = parts; i < starCount; i++)
+            {
+                _starContainer.GetChild(i).gameObject.SetActive(false);
+            }
+        }
     }
 
     public void SetProgress(int progress)
     {
-        _size.x = _partWidth * progress;
-        Tween.UISizeDelta(fillRect, endValue: _size, duration: 0.5f);
+        RectTransform star = _starContainer.GetChild(progress - 1) as RectTransform;
+        Image image = star.GetComponent<Image>();
+
+        Vector2 size = _fill.sizeDelta;
+        Vector2 position = Vector2.right * star.anchoredPosition.x;
+
+        size.x = star.anchoredPosition.x;
+
+        Sequence
+            .Create()
+            .Group(Tween.UIAnchoredPosition(_rocket, endValue: position, duration: 0.5f))
+            .Group(Tween.UISizeDelta(_fill, endValue: size, duration: 0.5f))
+            .Chain(Tween.Color(image, endValue: _starColor, duration: 0.3f, ease: Ease.OutBack));
     }
 }
