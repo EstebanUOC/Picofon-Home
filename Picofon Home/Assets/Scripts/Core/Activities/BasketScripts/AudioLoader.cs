@@ -18,8 +18,16 @@ public class AudioLoader
             string path = TextUtils.RemoveAccentsAndPrepend(audioPaths[i], "CA-");
 
             AsyncOperationHandle<AudioClip> handle = Addressables.LoadAssetAsync<AudioClip>(path);
+            await handle.Task.AsUniTask();
 
-            AudioClip audio = await handle.Task.AsUniTask();
+            if (handle.Status != AsyncOperationStatus.Succeeded)
+            {
+                Addressables.Release(handle);
+                Debug.LogError($"Failed to load audio at path: {path}");
+                continue;
+            }
+
+            AudioClip audio = handle.Result;
 
             audio.LoadAudioData();
 
@@ -49,6 +57,13 @@ public class AudioLoader
     {
         for (int i = 0; i < quantity; i++)
         {
+            var handle = _audioHandles[index * quantity + i];
+
+            if (!handle.IsValid())
+            {
+                continue;
+            }
+
             clips[i] = _audioHandles[index * quantity + i].Result;
         }
     }
