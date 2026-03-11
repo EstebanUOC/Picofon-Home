@@ -18,8 +18,6 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private LevelItemManager _itemManager;
 
-    private string _lastChildId;
-
     public void Start()
     {
         string childId = MapPathPayload.ChildId;
@@ -52,52 +50,13 @@ public class MapManager : MonoBehaviour
     {
         LevelDataStore instance = LevelDataStore.Instance;
 
-        bool existsData = instance.HasPlans();
-
-        int levelCount;
-
-        if (existsData && _lastChildId == childId)
-        {
-            levelCount = instance.GetPlansCount();
-        }
-        else
-        {
-            _lastChildId = childId;
-
-            await GetPlans(childId);
-
-            levelCount = instance.GetPlansCount();
-        }
+        await instance.LoadPlans(childId);
 
         _itemManager.RenderLevels(
-            count: levelCount,
+            count: instance.GetPlansCount(),
             last: instance.LastLevel,
             current: instance.CurrentLevel
         );
-    }
-
-    private async UniTask GetPlans(string childId)
-    {
-        TherapyPlanService service = new();
-        CancellationToken token = this.GetCancellationTokenOnDestroy();
-
-        ApiResult<TherapyData> result = await service.GetAllPlans<TherapyData>(childId, token);
-
-        if (!result.Success)
-        {
-            Debug.LogError($"Error loading activities: {result.Message}");
-            return;
-        }
-
-        TherapyPlan[] plans = result.Data.Plans;
-
-        if (plans is null || plans.Length == 0)
-        {
-            Debug.LogError("No therapy plans found for the child.");
-            return;
-        }
-
-        LevelDataStore.Instance.SavePlans(plans);
     }
 
     private void HandleLevelSelected(LevelConfig config, int index)

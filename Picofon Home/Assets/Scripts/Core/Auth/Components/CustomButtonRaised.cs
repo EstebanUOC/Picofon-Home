@@ -57,8 +57,12 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
         if (!_interactable)
             return;
 
-        OnClick?.Invoke();
         AnimateClick();
+    }
+
+    private void HandleClick()
+    {
+        OnClick?.Invoke();
     }
 
     private void AnimateClick()
@@ -93,5 +97,7 @@ public class CustomButtonRaised : CustomButtonBase, IInteractableButton
             .Group(Tween.UIAnchoredPositionY(_contentRect, moveY, Duration))
             .Group(Tween.UISizeDelta(BackgroundRect, bgSize, Duration))
             .Group(Tween.UIAnchoredPosition(BackgroundRect, bgMoveY, Duration));
+
+        sequence.OnComplete(target: this, target => target.HandleClick());
     }
 }

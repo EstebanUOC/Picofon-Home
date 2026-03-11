@@ -1,3 +1,5 @@
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class LevelDataStore : MonoBehaviour
@@ -5,6 +7,8 @@ public class LevelDataStore : MonoBehaviour
     public static LevelDataStore Instance { get; private set; }
 
     private TherapyPlan[] _cachedPlans;
+
+    private string _lastId;
 
     private int _currentLevel = 0;
     private int _lastLevel = -1;
@@ -27,9 +31,35 @@ public class LevelDataStore : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public async UniTask LoadPlans(string id)
+    {
+        if (HasPlans() && _lastId == id)
+            return;
+
+        _lastId = id;
+
+        await GetPlans(id);
+    }
+
     public void SavePlans(TherapyPlan[] plans)
     {
         _cachedPlans = plans;
+    }
+
+    public bool HasPlans()
+    {
+        return _cachedPlans != null && _cachedPlans.Length > 0;
+    }
+
+    public int GetPlansCount()
+    {
+        return _cachedPlans.Length;
+    }
+
+    public void LevelCompleted()
+    {
+        _lastLevel = _currentLevel;
+        _currentLevel++;
     }
 
     public TherapyPlan GetPlanByIndex(int index)
@@ -42,24 +72,27 @@ public class LevelDataStore : MonoBehaviour
         return null;
     }
 
-    public bool HasPlans()
+    private async UniTask GetPlans(string childId)
     {
-        return _cachedPlans != null && _cachedPlans.Length > 0;
-    }
+        TherapyPlanService service = new();
+        CancellationToken token = this.GetCancellationTokenOnDestroy();
 
-    public TherapyPlan[] GetAllPlans()
-    {
-        return _cachedPlans;
-    }
+        ApiResult<TherapyData> result = await service.GetAllPlans<TherapyData>(childId, token);
 
-    public int GetPlansCount()
-    {
-        return _cachedPlans.Length;
-    }
+        if (!result.Success)
+        {
+            Debug.LogError($"Error loading activities: {result.Message}");
+            return;
+        }
 
-    public void LevelCompleted()
-    {
-        _lastLevel = _currentLevel;
-        _currentLevel++;
+        TherapyPlan[] plans = result.Data.Plans;
+
+        if (plans is null || plans.Length == 0)
+        {
+            Debug.LogError("No therapy plans found for the child.");
+            return;
+        }
+
+        SavePlans(plans);
     }
 }
