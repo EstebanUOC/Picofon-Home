@@ -18,6 +18,19 @@ public class ProgressBar : MonoBehaviour
 
     private readonly Color32 _starColor = new(130, 208, 210, 255);
 
+    const float referenceWidth = 1920f;
+    const float referenceHeight = 1080f;
+    const float baseOrthoSize = 5f;
+
+    public void Awake()
+    {
+        float refAspect = referenceWidth / referenceHeight;
+        float curAspect = (float)Screen.width / Screen.height;
+
+        Debug.Log($"Reference Aspect Ratio: {refAspect}, Current Aspect Ratio: {curAspect}");
+        Debug.Log($"Orto: {baseOrthoSize * (refAspect / curAspect)}");
+    }
+
     public void Initialize(int parts)
     {
         if (parts <= 0)
