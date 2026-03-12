@@ -1,6 +1,7 @@
 using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using PrimeTween;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,6 +9,9 @@ using UnityEngine.SceneManagement;
 public class UserChildren : Panel
 {
     public UIManager UIManager;
+
+    [SerializeField]
+    private GameObject _loading;
 
     [Space]
     [SerializeField]
@@ -21,7 +25,8 @@ public class UserChildren : Panel
     private GameObject _registerButton;
 
     [Space]
-    public SimpleButton LogoutButton;
+    [SerializeField]
+    private SimpleButton _logoutButton;
 
     private string[] _childrenIds;
 
@@ -35,7 +40,7 @@ public class UserChildren : Panel
         selectButton.OnClick += OnSelectChild;
         registerButton.OnClick += OnRegisterChild;
 
-        LogoutButton.OnClick += OnLogout;
+        _logoutButton.OnClick += OnLogout;
     }
 
     public override void Show()
@@ -97,12 +102,47 @@ public class UserChildren : Panel
 
     private void OnSelectChild()
     {
+        OnSelectChildAsync().Forget();
+    }
+
+    private async UniTaskVoid OnSelectChildAsync()
+    {
         int selectedIndex = _childrenDropdown.value;
         string childId = _childrenIds[selectedIndex];
 
         MapPathPayload.ChildId = childId;
 
-        SceneManager.LoadScene("MapPathScene");
+        _loading.SetActive(true);
+
+        Tween tween = Tween.EulerAngles(
+            _loading.transform.GetChild(1),
+            startValue: Vector3.zero,
+            endValue: Vector3.forward * 360f,
+            duration: 1f,
+            cycles: -1
+        );
+
+        LevelDataStore instance = LevelDataStore.Instance;
+
+        await instance.LoadPlans(childId);
+
+        tween.Complete();
+
+        if (instance.HasPlans())
+        {
+            SceneManager.LoadScene("MapPathScene");
+            return;
+        }
+
+        ModalData modalData = new()
+        {
+            Title = "Advertència",
+            Message = "Aquest nen encara no té cap pla de teràpia associat.",
+        };
+
+        await UIManager.ShowModal(modalData);
+
+        _loading.SetActive(false);
     }
 
     private void OnRegisterChild()

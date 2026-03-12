@@ -65,7 +65,7 @@ public class RegisterChild : Panel
 
         if (result.Success)
         {
-            SceneManager.LoadScene("MapPathScene");
+            _uiManager.ShowUserChildren();
         }
     }
 

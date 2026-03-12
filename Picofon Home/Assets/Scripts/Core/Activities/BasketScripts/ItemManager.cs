@@ -73,6 +73,6 @@ public class ItemManager : MonoBehaviour
     public void PlayItemSound(int index)
     {
         AudioManager.Instance.StopUI();
-        AudioManager.Instance.PlayUI(_audioClips[index]);
+        AudioManager.Instance.PlayUI(_audioClips[index], 1.5f);
     }
 }
