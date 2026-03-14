@@ -1,3 +1,4 @@
+using System;
 using BasketResponses;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,12 +22,8 @@ public class BasketUIManager : MonoBehaviour
     [SerializeField]
     private GameMenu _gameMenu;
 
-    [Header("Responsive UI")]
     [SerializeField]
-    private RectTransform _boardPadding;
-
-    [SerializeField]
-    private RectTransform _progressBar;
+    private UIResponsiveRect[] _responsiveRects;
 
     private AudioClip _introAudio;
 
@@ -111,13 +108,25 @@ public class BasketUIManager : MonoBehaviour
 
     private void ApplyResponsiveLayout()
     {
-        _boardPadding.sizeDelta = new Vector2(_boardPadding.sizeDelta.x, 215f);
+        foreach (var responsiveRect in _responsiveRects)
+        {
+            if (responsiveRect.Target is RectTransform target)
+            {
+                target.anchorMin = responsiveRect.AnchorMin;
+                target.anchorMax = responsiveRect.AnchorMax;
+                target.pivot = responsiveRect.Pivot;
+                target.anchoredPosition = responsiveRect.Position;
+                target.localRotation = responsiveRect.Rotation;
+                target.localScale = responsiveRect.Scale;
+                continue;
+            }
 
-        _progressBar.anchorMin = new Vector2(0.5f, 1f);
-        _progressBar.anchorMax = new Vector2(0.5f, 1f);
-        _progressBar.pivot = new Vector2(0.5f, 1f);
-        _progressBar.anchoredPosition = new Vector2(0f, -75f);
-        _progressBar.rotation = Quaternion.Euler(0f, 0f, 0f);
+            Transform targetRect = responsiveRect.Target;
+
+            targetRect.localPosition = responsiveRect.Position;
+            targetRect.localRotation = responsiveRect.Rotation;
+            targetRect.localScale = responsiveRect.Scale;
+        }
     }
 
     private void BackToMap()
@@ -125,4 +134,17 @@ public class BasketUIManager : MonoBehaviour
         SceneManager.LoadScene("MapPathScene");
         AudioManager.Instance.StopVoice();
     }
+}
+
+[Serializable]
+public struct UIResponsiveRect
+{
+    public Transform Target;
+    public Vector2 Size;
+    public Vector2 Position;
+    public Vector2 AnchorMin;
+    public Vector2 AnchorMax;
+    public Vector2 Pivot;
+    public Quaternion Rotation;
+    public Vector3 Scale;
 }

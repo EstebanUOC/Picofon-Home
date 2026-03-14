@@ -7,9 +7,12 @@ using ActivitiesResult = ApiResult<ActivitiesData<BasketResponses.RelateActivity
 
 public class BasketManagerRE : MonoBehaviour
 {
-    [Space(15)]
+    [Space]
     [SerializeField]
     private BallController _ballController;
+
+    [SerializeField]
+    private ProgressBar _progressBar;
 
     [SerializeField]
     private CanvasUI _canvasUI;
@@ -26,6 +29,9 @@ public class BasketManagerRE : MonoBehaviour
 
     [SerializeField]
     private SessionManager _sessionManager;
+
+    [SerializeField]
+    private Camera _camera;
 
     [Space]
     [SerializeField]
@@ -63,6 +69,12 @@ public class BasketManagerRE : MonoBehaviour
             @params = new ActivityRequestParams { PlanId = 43, ChildId = "19013454K" };
             Debug.LogWarning("Using default parameters for testing in Unity Editor.");
 # endif
+        }
+
+        if (_uiManager.IsTablet())
+        {
+            _camera.orthographicSize = 5.9f;
+            _camera.transform.position = new Vector3(0f, 0.6f, -10f);
         }
 
         _canvasUI.Init(skill);
@@ -137,6 +149,7 @@ public class BasketManagerRE : MonoBehaviour
         };
 
         _sessionManager.InitializeSession(sessionInfo, sessions);
+        _progressBar.Initialize(_activities.Length);
 
         ChangeActivity();
 
@@ -201,6 +214,7 @@ public class BasketManagerRE : MonoBehaviour
     private async UniTaskVoid InitCount(bool isCorrect)
     {
         FeedbackType feedbackType = isCorrect ? FeedbackType.Positive : FeedbackType.Neutral;
+        _progressBar.SetProgress(_currentActivityIndex);
 
         await UniTask.WaitForSeconds(2f);
 

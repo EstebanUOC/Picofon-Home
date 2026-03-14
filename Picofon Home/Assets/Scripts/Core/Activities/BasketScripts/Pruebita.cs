@@ -1,7 +1,15 @@
+using System;
 using UnityEngine;
+
+[Serializable]
+public struct LabeledString
+{
+    public string label;
+    public string value;
+}
 
 public class Pruebita : MonoBehaviour
 {
-    public bool showText = false;
-    public string textToShow = "";
+    [SerializeField]
+    private LabeledString myLabeledString;
 }
