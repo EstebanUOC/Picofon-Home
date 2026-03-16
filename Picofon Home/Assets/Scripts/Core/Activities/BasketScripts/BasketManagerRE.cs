@@ -37,6 +37,7 @@ public class BasketManagerRE : MonoBehaviour
     [SerializeField]
     private AudioCategory<OthersAudioID>[] audioCategories;
 
+    private bool _taskCompleted = false;
     private int _currentActivityIndex = 0;
 
     private RelateActivity[] _activities;
@@ -58,6 +59,8 @@ public class BasketManagerRE : MonoBehaviour
 
         ActivityRequestParams @params = LevelPayload.Params;
         ActivitySkill skill = LevelPayload.Skill;
+
+        _taskCompleted = LevelPayload.TaskCompleted;
 
         if (@params.ChildId is null)
         {
@@ -141,15 +144,24 @@ public class BasketManagerRE : MonoBehaviour
 
         await AudioManager.Instance.LoadAudios(audioPaths);
 
-        TherapySessionDTO[] sessions = new TherapySessionDTO[_activities.Length];
-        GeneralSessionDTO sessionInfo = new()
+        if (!_taskCompleted)
         {
-            TherapyPlanId = @params.PlanId,
-            ChildId = @params.ChildId,
-        };
+            TherapySessionDTO[] sessions = new TherapySessionDTO[_activities.Length];
 
-        _sessionManager.InitializeSession(sessionInfo, sessions);
-        _progressBar.Initialize(_activities.Length);
+            GeneralSessionDTO sessionInfo = new()
+            {
+                TherapyPlanId = @params.PlanId,
+                ChildId = @params.ChildId,
+            };
+
+            _sessionManager.InitializeSession(
+                sessionInfo: sessionInfo,
+                sessionResults: sessions,
+                completed: _taskCompleted
+            );
+        }
+
+        _progressBar.Initialize(parts: _activities.Length, completed: _taskCompleted);
 
         ChangeActivity();
 

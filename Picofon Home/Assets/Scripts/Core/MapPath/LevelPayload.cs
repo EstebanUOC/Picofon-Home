@@ -5,4 +5,5 @@ public static class LevelPayload
 
     public static ActivityRequestParams Params { get; set; }
     public static ActivitySkill Skill { get; set; }
+    public static bool TaskCompleted { get; set; }
 }

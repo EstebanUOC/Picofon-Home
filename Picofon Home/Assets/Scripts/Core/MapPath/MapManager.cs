@@ -73,6 +73,7 @@ public class MapManager : MonoBehaviour
 
         LevelPayload.Params = @params;
         LevelPayload.Skill = (ActivitySkill)template.Skill.Id;
+        LevelPayload.TaskCompleted = plan.Status == TherapyStatus.Completed;
 
         ActivityType type = (ActivityType)template.TaskType.Id;
 
