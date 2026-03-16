@@ -19,8 +19,6 @@ public class LevelDataStore : MonoBehaviour
 
     public void Awake()
     {
-        _currentLevel = GamePrefs.LastCompletedLevel;
-
         if (Instance == null)
         {
             Instance = this;
@@ -39,6 +37,18 @@ public class LevelDataStore : MonoBehaviour
         _lastId = id;
 
         await GetPlans(id);
+
+        int index = 0;
+
+        foreach (TherapyPlan plan in _cachedPlans)
+        {
+            if (plan.Status == TherapyStatus.Active)
+            {
+                _currentLevel = index;
+                break;
+            }
+            index++;
+        }
     }
 
     public void SavePlans(TherapyPlan[] plans)

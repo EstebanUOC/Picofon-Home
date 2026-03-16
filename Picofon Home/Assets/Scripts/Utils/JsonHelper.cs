@@ -9,7 +9,11 @@ public static class JsonHelper
     {
         PropertyNamingPolicy = new SnakeCaseNamingPolicy(),
         PropertyNameCaseInsensitive = true,
-        Converters = { new CaseInsensitiveEnumConverter<UserRole>() },
+        Converters =
+        {
+            new CaseInsensitiveEnumConverter<UserRole>(),
+            new CaseInsensitiveEnumConverter<TherapyStatus>(),
+        },
     };
 
     public static T FromJson<T>(string json)
@@ -86,14 +90,6 @@ public class CaseInsensitiveEnumConverter<T> : JsonConverter<T>
 
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
     {
-        var stringValue = value switch
-        {
-            UserRole.Invited => "INVITED",
-            UserRole.Therapist => "THERAPIST",
-            UserRole.Parent => "PARENT",
-            UserRole.Admin => "ADMIN",
-            _ => throw new JsonException($"Unknown UserRole: {value}"),
-        };
-        writer.WriteStringValue(stringValue);
+        writer.WriteStringValue(value.ToString().ToUpperInvariant());
     }
 }
