@@ -10432,10 +10432,11 @@ MonoBehaviour:
   _itemManager: {fileID: 2105849200}
   _itemClueManager: {fileID: 2105849201}
   _gameMenu: {fileID: 1958738642}
-  _responsiveRects:
+  _responsiveTransforms: []
+  _responsiveUITransforms:
   - Target: {fileID: 2106309904}
     Size: {x: 0, y: 0}
-    Position: {x: 0, y: -125}
+    Position: {x: 0, y: -120}
     AnchorMin: {x: 0.5, y: 1}
     AnchorMax: {x: 0.5, y: 1}
     Pivot: {x: 0.5, y: 0.5}

@@ -23,7 +23,10 @@ public class BasketUIManager : MonoBehaviour
     private GameMenu _gameMenu;
 
     [SerializeField]
-    private UIResponsiveRect[] _responsiveRects;
+    private ResponsiveTransform[] _responsiveTransforms;
+
+    [SerializeField]
+    private UIResponsiveTransform[] _responsiveUITransforms;
 
     private AudioClip _introAudio;
 
@@ -108,24 +111,42 @@ public class BasketUIManager : MonoBehaviour
 
     private void ApplyResponsiveLayout()
     {
-        foreach (var responsiveRect in _responsiveRects)
+        foreach (ResponsiveTransform responsiveRect in _responsiveTransforms)
         {
-            if (responsiveRect.Target is RectTransform target)
-            {
-                target.anchorMin = responsiveRect.AnchorMin;
-                target.anchorMax = responsiveRect.AnchorMax;
-                target.pivot = responsiveRect.Pivot;
-                target.anchoredPosition = responsiveRect.Position;
-                target.localRotation = responsiveRect.Rotation;
-                target.localScale = responsiveRect.Scale;
+            Transform target = responsiveRect.Target;
+
+            target.localPosition = responsiveRect.Position;
+            target.localRotation = responsiveRect.Rotation;
+            target.localScale = responsiveRect.Scale;
+
+            if (!responsiveRect.Mirror)
                 continue;
-            }
 
-            Transform targetRect = responsiveRect.Target;
+            Transform mirrorTarget = responsiveRect.TargetMirror;
 
-            targetRect.localPosition = responsiveRect.Position;
-            targetRect.localRotation = responsiveRect.Rotation;
-            targetRect.localScale = responsiveRect.Scale;
+            mirrorTarget.localPosition = responsiveRect.Position * new Vector2(-1f, 1f);
+        }
+
+        foreach (UIResponsiveTransform responsiveRect in _responsiveUITransforms)
+        {
+            RectTransform target = responsiveRect.Target;
+
+            target.anchorMin = responsiveRect.AnchorMin;
+            target.anchorMax = responsiveRect.AnchorMax;
+            target.pivot = responsiveRect.Pivot;
+            target.anchoredPosition = responsiveRect.Position;
+            target.localRotation = responsiveRect.Rotation;
+            target.localScale = responsiveRect.Scale;
+
+            if (responsiveRect.Size != Vector2.zero)
+                target.sizeDelta = responsiveRect.Size;
+
+            if (!responsiveRect.Mirror)
+                continue;
+
+            RectTransform mirrorTarget = responsiveRect.TargetMirror;
+
+            mirrorTarget.anchoredPosition = responsiveRect.Position * new Vector2(-1f, 1f);
         }
     }
 
@@ -137,14 +158,27 @@ public class BasketUIManager : MonoBehaviour
 }
 
 [Serializable]
-public struct UIResponsiveRect
+public struct ResponsiveTransform
 {
+    public bool Mirror;
     public Transform Target;
-    public Vector2 Size;
+    public Transform TargetMirror;
+    public Vector2 Position;
+    public Quaternion Rotation;
+    public Vector3 Scale;
+}
+
+[Serializable]
+public struct UIResponsiveTransform
+{
+    public bool Mirror;
+    public RectTransform Target;
+    public RectTransform TargetMirror;
     public Vector2 Position;
     public Vector2 AnchorMin;
     public Vector2 AnchorMax;
     public Vector2 Pivot;
+    public Vector2 Size;
     public Quaternion Rotation;
     public Vector3 Scale;
 }

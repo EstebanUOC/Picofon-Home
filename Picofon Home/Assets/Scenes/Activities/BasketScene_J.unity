@@ -722,7 +722,8 @@ MonoBehaviour:
   _itemManager: {fileID: 1496139101}
   _itemClueManager: {fileID: 1496139102}
   _gameMenu: {fileID: 90741979}
-  _responsiveRects:
+  _responsiveTransforms: []
+  _responsiveUITransforms:
   - Target: {fileID: 122077116}
     Size: {x: 0, y: 0}
     Position: {x: 0, y: -215}
@@ -733,7 +734,7 @@ MonoBehaviour:
     Scale: {x: 1, y: 1, z: 1}
   - Target: {fileID: 487504267}
     Size: {x: 0, y: 0}
-    Position: {x: 0, y: -125}
+    Position: {x: 0, y: -120}
     AnchorMin: {x: 0.5, y: 1}
     AnchorMax: {x: 0.5, y: 1}
     Pivot: {x: 0.5, y: 0.5}
