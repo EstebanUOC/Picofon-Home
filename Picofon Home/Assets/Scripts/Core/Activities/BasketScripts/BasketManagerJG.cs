@@ -29,6 +29,9 @@ public class BasketGameManagerJG : MonoBehaviour
     [SerializeField]
     private ProgressBar _progressBar;
 
+    [SerializeField]
+    private Counter _counter;
+
     [Space]
     [SerializeField]
     private HoopManager _hoopManager;
@@ -223,6 +226,7 @@ public class BasketGameManagerJG : MonoBehaviour
             result == AnswerEvaluation.Correct ? FeedbackType.Positive : FeedbackType.Neutral;
 
         _progressBar.SetProgress(_currentActivityIndex);
+        _counter.AddScore();
 
         await UniTask.WaitForSeconds(2f);
 

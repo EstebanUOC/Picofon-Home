@@ -15,7 +15,7 @@ public class ScreenResponsive : MonoBehaviour
     void ApplySafeArea()
     {
         Rect safeArea = Screen.safeArea;
-        Debug.Log("Safe Area: " + safeArea);
+        PerformanceLog.Log("Safe Area: " + safeArea);
         lastSafeArea = safeArea;
 
         Vector2 anchorMin = safeArea.position;

@@ -28,7 +28,7 @@ namespace Picofon.Core.Network
             {
                 if (!_root.TryGetProperty(ApiJsonKeys.Success, out var success))
                 {
-                    Debug.Log("[Debug] 'success' property not found in JSON response.");
+                    PerformanceLog.Log("[Debug] 'success' property not found in JSON response.");
                     return false;
                 }
                 return success.GetBoolean();
