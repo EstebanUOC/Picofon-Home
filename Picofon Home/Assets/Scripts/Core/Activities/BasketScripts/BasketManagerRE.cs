@@ -15,9 +15,12 @@ public class BasketManagerRE : MonoBehaviour
     private ProgressBar _progressBar;
 
     [SerializeField]
+    private Counter _counter;
+
+    [SerializeField]
     private CanvasUI _canvasUI;
 
-    [Space(15)]
+    [Space]
     [SerializeField]
     private AnswerManagerPS _answerManager;
 
@@ -221,6 +224,7 @@ public class BasketManagerRE : MonoBehaviour
         _currentActivityIndex++;
 
         _progressBar.SetProgress(progress: _currentActivityIndex, correct: isCorrect);
+        _counter.AddScore(correct: isCorrect);
 
         InitCount(isCorrect).Forget();
     }
