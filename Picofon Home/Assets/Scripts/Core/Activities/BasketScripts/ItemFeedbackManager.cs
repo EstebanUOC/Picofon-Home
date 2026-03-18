@@ -71,14 +71,42 @@ public class ItemFeedbackManager : MonoBehaviour
                 }
                 case ActivitySkill.Final:
                 {
-                    int sep = word.LastIndexOf('#');
-                    _builder.Append(word, 0, sep);
-                    ColorWord(word, sep + 1, word.Length - sep - 1, feedbackType);
+                    CountSyllables(word, out int syllablesCount);
+
+                    int firstSep = word.IndexOf('#');
+                    int lastSep = word.LastIndexOf('#');
+
+                    _builder.Append(word, 0, firstSep);
+
+                    if (syllablesCount > 2)
+                    {
+                        _builder.Append(word, firstSep + 1, lastSep - firstSep - 1);
+                    }
+
+                    ColorWord(
+                        word,
+                        startIndex: lastSep + 1,
+                        length: word.Length - lastSep - 1,
+                        feedbackType
+                    );
                     break;
                 }
             }
 
             item.ConfigureItem(_builder, textColor);
+        }
+    }
+
+    private void CountSyllables(string word, out int syllablesCount)
+    {
+        syllablesCount = 1;
+
+        for (int i = 0; i < word.Length; i++)
+        {
+            if (word[i] == '#')
+            {
+                syllablesCount++;
+            }
         }
     }
 
