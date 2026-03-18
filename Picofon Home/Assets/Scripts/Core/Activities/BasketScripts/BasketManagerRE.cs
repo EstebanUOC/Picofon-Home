@@ -220,13 +220,14 @@ public class BasketManagerRE : MonoBehaviour
 
         _currentActivityIndex++;
 
+        _progressBar.SetProgress(progress: _currentActivityIndex, correct: isCorrect);
+
         InitCount(isCorrect).Forget();
     }
 
     private async UniTaskVoid InitCount(bool isCorrect)
     {
         FeedbackType feedbackType = isCorrect ? FeedbackType.Positive : FeedbackType.Neutral;
-        _progressBar.SetProgress(_currentActivityIndex);
 
         await UniTask.WaitForSeconds(2f);
 

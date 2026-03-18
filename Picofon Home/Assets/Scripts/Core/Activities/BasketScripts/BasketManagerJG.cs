@@ -217,6 +217,9 @@ public class BasketGameManagerJG : MonoBehaviour
 
         _currentActivityIndex++;
 
+        _progressBar.SetProgress(progress: _currentActivityIndex, correct: isCorrect);
+        _counter.AddScore();
+
         InitCount(answerResult).Forget();
     }
 
@@ -224,9 +227,6 @@ public class BasketGameManagerJG : MonoBehaviour
     {
         FeedbackType feedbackType =
             result == AnswerEvaluation.Correct ? FeedbackType.Positive : FeedbackType.Neutral;
-
-        _progressBar.SetProgress(_currentActivityIndex);
-        _counter.AddScore();
 
         await UniTask.WaitForSeconds(2f);
 

@@ -17,7 +17,8 @@ public class ProgressBar : MonoBehaviour
     [SerializeField]
     private RectTransform _fill;
 
-    private readonly Color32 _starColor = new(130, 208, 210, 255);
+    private readonly Color32 _positiveColor = new(130, 208, 210, 255);
+    private readonly Color32 _negativeColor = new(210, 130, 133, 255);
 
     private bool _completed;
 
@@ -52,7 +53,7 @@ public class ProgressBar : MonoBehaviour
         }
     }
 
-    public void SetProgress(int progress)
+    public void SetProgress(int progress, bool correct)
     {
         if (_completed)
             return;
@@ -67,11 +68,13 @@ public class ProgressBar : MonoBehaviour
 
         size.x = star.anchoredPosition.x;
 
+        Color32 targetColor = correct ? _positiveColor : _negativeColor;
+
         Sequence
             .Create()
             .Group(Tween.UIAnchoredPosition(_rocket, endValue: position, duration: 0.5f))
             .Group(Tween.UISizeDelta(_fill, endValue: size, duration: 0.5f))
-            .Chain(Tween.Color(image, endValue: _starColor, duration: 0.3f, ease: Ease.OutBack));
+            .Chain(Tween.Color(image, endValue: targetColor, duration: 0.3f, ease: Ease.OutBack));
     }
 
     private async UniTaskVoid FillProgressBar(int parts)
@@ -84,7 +87,7 @@ public class ProgressBar : MonoBehaviour
         {
             star = _starContainer.GetChild(i) as RectTransform;
             Image image = star.GetComponent<Image>();
-            image.color = _starColor;
+            image.color = _positiveColor;
         }
 
         Vector2 size = _fill.sizeDelta;
