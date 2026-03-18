@@ -10,8 +10,11 @@ public class Counter : MonoBehaviour
 
     private readonly char[] scoreChars = new char[3];
 
-    public void AddScore()
+    public void AddScore(bool correct)
     {
+        if (!correct)
+            return;
+
         _score++;
         UpdateScore(_score);
     }

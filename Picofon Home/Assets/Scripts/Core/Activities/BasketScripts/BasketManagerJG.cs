@@ -218,7 +218,7 @@ public class BasketGameManagerJG : MonoBehaviour
         _currentActivityIndex++;
 
         _progressBar.SetProgress(progress: _currentActivityIndex, correct: isCorrect);
-        _counter.AddScore();
+        _counter.AddScore(correct: isCorrect);
 
         InitCount(answerResult).Forget();
     }
