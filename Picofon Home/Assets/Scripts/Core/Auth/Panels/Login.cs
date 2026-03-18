@@ -60,7 +60,7 @@ public class Login : Panel
         }
         catch (Exception e)
         {
-            Debug.LogError("<DEBUG> Google sign-in failed, Error: " + e.Message);
+            PerformanceLog.LogError("<DEBUG> Google sign-in failed, Error: " + e.Message);
             return;
         }
 
@@ -77,7 +77,7 @@ public class Login : Panel
         }
         catch (Exception e)
         {
-            Debug.LogError("<DEBUG> Firebase authentication failed, Error: " + e.Message);
+            PerformanceLog.LogError("<DEBUG> Firebase authentication failed, Error: " + e.Message);
             return;
         }
 
@@ -88,7 +88,9 @@ public class Login : Panel
         }
         catch (Exception e)
         {
-            Debug.LogError("<DEBUG> Failed to retrieve Firebase ID token, Error: " + e.Message);
+            PerformanceLog.LogError(
+                "<DEBUG> Failed to retrieve Firebase ID token, Error: " + e.Message
+            );
             return;
         }
 
@@ -138,7 +140,7 @@ public class Login : Panel
             case DebugMenuResult.Children:
                 debugUser = new()
                 {
-                    Id = "AwgdI1xsu5RoU6zgLvTfAZeklbn2",
+                    Id = "noXJSkWJnCW5iSEu32n5Kvofq5a2",
                     Email = "test@gmail.com",
                     Username = "Debug User",
                     Role = UserRole.Therapist,

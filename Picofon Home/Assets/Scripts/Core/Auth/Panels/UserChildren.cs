@@ -126,6 +126,8 @@ public class UserChildren : Panel
 
         await instance.LoadPlans(childId);
 
+        PerformanceLog.Log("Plans loaded");
+
         tween.Complete();
 
         if (instance.HasPlans())
