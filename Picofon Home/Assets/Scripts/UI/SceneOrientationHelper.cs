@@ -6,21 +6,28 @@ public static class SceneOrientationHelper
     {
         CheckFPS();
 
+        Screen.autorotateToPortrait = true;
         Screen.autorotateToLandscapeLeft = false;
         Screen.autorotateToLandscapeRight = false;
-        Screen.autorotateToPortrait = true;
-        Screen.autorotateToPortraitUpsideDown = false;
         Screen.orientation = ScreenOrientation.Portrait;
+    }
+
+    public static void UnlockPortrait()
+    {
+        CheckFPS();
+
+        Screen.autorotateToPortrait = false;
+        Screen.autorotateToLandscapeLeft = true;
+        Screen.autorotateToLandscapeRight = true;
     }
 
     public static void LockToLandscape()
     {
         CheckFPS();
 
-        Screen.autorotateToPortrait = false;
-        Screen.autorotateToPortraitUpsideDown = false;
         Screen.autorotateToLandscapeLeft = true;
         Screen.autorotateToLandscapeRight = true;
+        Screen.autorotateToPortrait = false;
         Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
 
@@ -30,5 +37,7 @@ public static class SceneOrientationHelper
         {
             Application.targetFrameRate = 60;
         }
+
+        Screen.autorotateToPortraitUpsideDown = false;
     }
 }

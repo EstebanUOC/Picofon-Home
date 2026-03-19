@@ -80,6 +80,10 @@ public class LoadingTransition : MonoBehaviour
                     endValue: Vector3.forward * -90,
                     duration: 1f
                 )
-            );
+            )
+            .OnComplete(() =>
+            {
+                SceneOrientationHelper.UnlockPortrait();
+            });
     }
 }
