@@ -14,6 +14,9 @@ public class BasketManagerPS : MonoBehaviour
     [SerializeField]
     private BallController _ballController;
 
+    // [SerializeField]
+    // private ProgressBar _progressBar;
+
     [Space]
     [SerializeField]
     private AnswerManagerPS _answerManager;
@@ -137,6 +140,7 @@ public class BasketManagerPS : MonoBehaviour
         };
 
         _sessionManager.InitializeSession(sessionInfo, sessions);
+        // _progressBar.Initialize(_activities.Length);
 
         ChangeActivity();
 
@@ -206,6 +210,8 @@ public class BasketManagerPS : MonoBehaviour
     private async UniTaskVoid InitCount(bool isCorrect)
     {
         FeedbackType feedbackType = isCorrect ? FeedbackType.Positive : FeedbackType.Neutral;
+
+        // _progressBar.SetProgress(_currentActivityIndex);
 
         await UniTask.WaitForSeconds(2f);
 

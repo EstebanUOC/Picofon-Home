@@ -4165,6 +4165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvasUI: {fileID: 323694381}
   _ballController: {fileID: 1628458931}
+  _progressBar: {fileID: 0}
   _answerManager: {fileID: 487383564}
   _hoopManager: {fileID: 487383563}
   _uiManager: {fileID: 2128032408}
@@ -9420,6 +9421,8 @@ MonoBehaviour:
   _itemManager: {fileID: 2105849200}
   _itemClueManager: {fileID: 2105849201}
   _gameMenu: {fileID: 1958738642}
+  _boardPadding: {fileID: 0}
+  _progressBar: {fileID: 0}
 --- !u!4 &2128032409
 Transform:
   m_ObjectHideFlags: 0
