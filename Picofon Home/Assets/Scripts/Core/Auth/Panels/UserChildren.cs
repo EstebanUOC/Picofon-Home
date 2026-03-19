@@ -1,7 +1,6 @@
 using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using PrimeTween;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,9 +8,6 @@ using UnityEngine.SceneManagement;
 public class UserChildren : Panel
 {
     public UIManager UIManager;
-
-    [SerializeField]
-    private GameObject _loading;
 
     [Space]
     [SerializeField]
@@ -112,21 +108,9 @@ public class UserChildren : Panel
 
         MapPathPayload.ChildId = childId;
 
-        _loading.SetActive(true);
-
-        Tween tween = Tween.EulerAngles(
-            _loading.transform.GetChild(1),
-            startValue: Vector3.zero,
-            endValue: Vector3.forward * 360f,
-            duration: 1f,
-            cycles: -1
-        );
-
         LevelDataStore instance = LevelDataStore.Instance;
 
         await instance.LoadPlans(childId);
-
-        tween.Complete();
 
         if (instance.HasPlans())
         {
@@ -141,8 +125,6 @@ public class UserChildren : Panel
         };
 
         await UIManager.ShowModal(modalData);
-
-        _loading.SetActive(false);
     }
 
     private void OnRegisterChild()

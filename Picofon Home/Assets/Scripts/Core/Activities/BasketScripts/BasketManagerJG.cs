@@ -65,8 +65,6 @@ public class BasketGameManagerJG : MonoBehaviour
 
     public void Start()
     {
-        Application.targetFrameRate = 60;
-
         _answerManager.OnAnswerSelected += HandleAnswerSelected;
 
         ActivityRequestParams @params = LevelPayload.Params;

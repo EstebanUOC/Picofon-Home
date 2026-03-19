@@ -34,6 +34,8 @@ public class BasketUIManager : MonoBehaviour
 
     public void Awake()
     {
+        SceneOrientationHelper.LockToLandscape();
+
         _gameMenu.OnMenuOptionSelected += HandleMenuOptionSelected;
 
         if (IsTablet())

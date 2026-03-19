@@ -56,8 +56,6 @@ public class BasketManagerRE : MonoBehaviour
 
     public void Start()
     {
-        Application.targetFrameRate = 60;
-
         _answerManager.OnHoopSelected += HandleHoopSelected;
 
         ActivityRequestParams @params = LevelPayload.Params;
