@@ -24,6 +24,8 @@ public class LoadingTransition : MonoBehaviour
 
     private async UniTaskVoid Pruebita()
     {
+        await UniTask.WaitForSeconds(10f);
+
         Image iconImage = _loading.GetComponent<Image>();
 
         Image checkImage = _check.GetComponent<Image>();
@@ -36,7 +38,7 @@ public class LoadingTransition : MonoBehaviour
             cycles: -1
         );
 
-        await UniTask.WaitForSeconds(1.5f);
+        await UniTask.WaitForSeconds(2.3f);
 
         tween.Stop();
 
