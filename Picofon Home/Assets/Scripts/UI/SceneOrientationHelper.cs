@@ -16,7 +16,7 @@ public static class SceneOrientationHelper
     {
         CheckFPS();
 
-        Screen.autorotateToPortrait = false;
+        Screen.autorotateToPortrait = true;
         Screen.autorotateToLandscapeLeft = true;
         Screen.autorotateToLandscapeRight = true;
     }

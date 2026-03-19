@@ -83,6 +83,7 @@ public class LoadingTransition : MonoBehaviour
             )
             .OnComplete(() =>
             {
+                Debug.Log("Transition complete");
                 SceneOrientationHelper.UnlockPortrait();
             });
     }
