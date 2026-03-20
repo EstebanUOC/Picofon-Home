@@ -19,6 +19,7 @@ public static class SceneOrientationHelper
         Screen.autorotateToPortrait = true;
         Screen.autorotateToLandscapeLeft = true;
         Screen.autorotateToLandscapeRight = true;
+        Screen.orientation = ScreenOrientation.AutoRotation;
     }
 
     public static void LockToLandscape()
