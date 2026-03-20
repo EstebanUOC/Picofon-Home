@@ -12,19 +12,41 @@ public class LoadingTransition : MonoBehaviour
     private RectTransform _check;
 
     [SerializeField]
-    private CanvasGroup _orientationGroup;
+    private RectTransform _phone;
 
     [SerializeField]
-    private RectTransform _phone;
+    private CanvasGroup _orientationGroup;
+
+    [Space]
+    [SerializeField]
+    private UIResponsiveTransform[] _responsiveTransforms;
 
     public void Start()
     {
         Pruebita().Forget();
+
+        enabled = false;
+    }
+
+    public void FixedUpdate()
+    {
+        bool changeOrientation = SceneOrientationHelper.ChangeOrientation();
+
+        if (changeOrientation)
+        {
+            Debug.Log($"Orientation changed to: {Screen.orientation}");
+            OnOrientationChanged();
+            enabled = false;
+        }
     }
 
     private async UniTaskVoid Pruebita()
     {
-        await UniTask.WaitForSeconds(10f);
+        await UniTask.WaitForSeconds(1f);
+
+#if UNITY_ANDROID
+        await UniTask.WaitForSeconds(9f);
+#endif
 
         Image iconImage = _loading.GetComponent<Image>();
 
@@ -84,6 +106,21 @@ public class LoadingTransition : MonoBehaviour
             .OnComplete(() =>
             {
                 SceneOrientationHelper.UnlockPortrait();
+                enabled = true;
             });
+    }
+
+    private void OnOrientationChanged()
+    {
+        foreach (UIResponsiveTransform responsiveTransform in _responsiveTransforms)
+        {
+            RectTransform target = responsiveTransform.Target;
+
+            target.anchoredPosition = responsiveTransform.Position;
+            target.anchorMin = responsiveTransform.AnchorMin;
+            target.anchorMax = responsiveTransform.AnchorMax;
+            target.pivot = responsiveTransform.Pivot;
+            target.localScale = responsiveTransform.Scale;
+        }
     }
 }

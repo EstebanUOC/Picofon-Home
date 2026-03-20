@@ -2,43 +2,64 @@ using UnityEngine;
 
 public static class SceneOrientationHelper
 {
+    private static ScreenOrientation _lastOrientation;
+    private static bool _checkedFPS = false;
+
     public static void LockToPortrait()
     {
-        CheckFPS();
-
         Screen.autorotateToPortrait = true;
         Screen.autorotateToLandscapeLeft = false;
         Screen.autorotateToLandscapeRight = false;
         Screen.orientation = ScreenOrientation.Portrait;
-    }
 
-    public static void UnlockPortrait()
-    {
         CheckFPS();
-
-        Screen.autorotateToPortrait = false;
-        Screen.autorotateToLandscapeLeft = true;
-        Screen.autorotateToLandscapeRight = true;
-        Screen.orientation = ScreenOrientation.AutoRotation;
     }
 
     public static void LockToLandscape()
     {
-        CheckFPS();
-
         Screen.autorotateToLandscapeLeft = true;
         Screen.autorotateToLandscapeRight = true;
         Screen.autorotateToPortrait = false;
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
+        Screen.orientation = ScreenOrientation.AutoRotation;
+
+        CheckFPS();
+    }
+
+    public static void UnlockPortrait()
+    {
+        Screen.autorotateToPortrait = false;
+        Screen.autorotateToLandscapeLeft = true;
+        Screen.autorotateToLandscapeRight = true;
+        Screen.orientation = ScreenOrientation.AutoRotation;
+
+        CheckFPS();
+    }
+
+    public static void UnlockLandscape()
+    {
+        Screen.autorotateToLandscapeLeft = false;
+        Screen.autorotateToLandscapeRight = false;
+        Screen.autorotateToPortrait = true;
+        Screen.orientation = ScreenOrientation.AutoRotation;
+
+        CheckFPS();
+    }
+
+    public static bool ChangeOrientation()
+    {
+        return _lastOrientation != Screen.orientation;
     }
 
     private static void CheckFPS()
     {
-        if (Application.targetFrameRate != 60)
+        if (!_checkedFPS)
         {
+            _checkedFPS = true;
             Application.targetFrameRate = 60;
+
+            Screen.autorotateToPortraitUpsideDown = false;
         }
 
-        Screen.autorotateToPortraitUpsideDown = false;
+        _lastOrientation = Screen.orientation;
     }
 }
