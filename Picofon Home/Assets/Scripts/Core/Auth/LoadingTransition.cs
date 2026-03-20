@@ -12,10 +12,13 @@ public class LoadingTransition : MonoBehaviour
     private RectTransform _check;
 
     [SerializeField]
-    private RectTransform _phone;
+    private RectTransform _animation;
 
     [SerializeField]
-    private CanvasGroup _orientationGroup;
+    private CanvasGroup _instruction;
+
+    [SerializeField]
+    private CanvasGroup _button;
 
     [Space]
     [SerializeField]
@@ -34,7 +37,6 @@ public class LoadingTransition : MonoBehaviour
 
         if (changeOrientation)
         {
-            Debug.Log($"Orientation changed to: {Screen.orientation}");
             OnOrientationChanged();
             enabled = false;
         }
@@ -51,6 +53,8 @@ public class LoadingTransition : MonoBehaviour
         Image iconImage = _loading.GetComponent<Image>();
 
         Image checkImage = _check.GetComponent<Image>();
+
+        RectTransform phone = _animation.GetChild(1) as RectTransform;
 
         Tween tween = Tween.EulerAngles(
             _loading,
@@ -94,10 +98,10 @@ public class LoadingTransition : MonoBehaviour
                     startDelay: 0.5f
                 )
             )
-            .Chain(Tween.Alpha(_orientationGroup, startValue: 0f, endValue: 1f, duration: 0.5f))
+            .Chain(Tween.Alpha(_instruction, startValue: 0f, endValue: 1f, duration: 0.5f))
             .Chain(
                 Tween.EulerAngles(
-                    _phone,
+                    phone,
                     startValue: Vector3.zero,
                     endValue: Vector3.forward * -90,
                     duration: 1f
@@ -108,6 +112,18 @@ public class LoadingTransition : MonoBehaviour
                 SceneOrientationHelper.UnlockPortrait();
                 enabled = true;
             });
+    }
+
+    private async UniTaskVoid Pruebita1()
+    {
+        await UniTask.WaitForSeconds(0.5f);
+
+        CanvasGroup animationCanvasGroup = _animation.GetComponent<CanvasGroup>();
+
+        _ = Sequence
+            .Create()
+            .Group(Tween.Alpha(animationCanvasGroup, startValue: 1f, endValue: 0f, duration: 0.5f))
+            .Chain(Tween.Alpha(_button, startValue: 0f, endValue: 1f, duration: 0.5f));
     }
 
     private void OnOrientationChanged()
@@ -122,5 +138,7 @@ public class LoadingTransition : MonoBehaviour
             target.pivot = responsiveTransform.Pivot;
             target.localScale = responsiveTransform.Scale;
         }
+
+        Pruebita1().Forget();
     }
 }
