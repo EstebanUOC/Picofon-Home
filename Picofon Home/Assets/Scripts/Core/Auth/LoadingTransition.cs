@@ -1,6 +1,8 @@
+using System;
 using Cysharp.Threading.Tasks;
 using PrimeTween;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LoadingTransition : MonoBehaviour
@@ -12,22 +14,25 @@ public class LoadingTransition : MonoBehaviour
     private RectTransform _check;
 
     [SerializeField]
+    private RectTransform _fail;
+
+    [SerializeField]
     private RectTransform _animation;
 
     [SerializeField]
     private CanvasGroup _instruction;
 
     [SerializeField]
-    private CanvasGroup _button;
+    private GameObject _button;
 
     [Space]
     [SerializeField]
     private UIResponsiveTransform[] _responsiveTransforms;
 
+    private Tween _loadingTween;
+
     public void Start()
     {
-        Pruebita().Forget();
-
         enabled = false;
     }
 
@@ -42,33 +47,40 @@ public class LoadingTransition : MonoBehaviour
         }
     }
 
-    private async UniTaskVoid Pruebita()
+    public void PlayLoadingTransition()
     {
-        await UniTask.WaitForSeconds(1f);
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
 
-#if UNITY_ANDROID
-        await UniTask.WaitForSeconds(9f);
-#endif
-
-        Image iconImage = _loading.GetComponent<Image>();
-
-        Image checkImage = _check.GetComponent<Image>();
-
-        RectTransform phone = _animation.GetChild(1) as RectTransform;
-
-        Tween tween = Tween.EulerAngles(
+        _loadingTween = Tween.EulerAngles(
             _loading,
             startValue: Vector3.zero,
             endValue: Vector3.forward * 360f,
             duration: 1f,
             cycles: -1
         );
+    }
 
-        await UniTask.WaitForSeconds(2.3f);
+    public void Continue(bool success, UIManager uiManager = null)
+    {
+        Image loadingImage = _loading.GetComponent<Image>();
 
-        tween.Stop();
+        RectTransform phone = _animation.GetChild(1) as RectTransform;
 
-        _ = Sequence
+        RectTransform statusRect = _check;
+
+        if (!success)
+        {
+            statusRect = _fail;
+        }
+
+        Image statusImage = statusRect.GetComponent<Image>();
+
+        _loadingTween.Stop();
+
+        Sequence sequence = Sequence
             .Create()
             .Group(
                 Tween.EulerAngles(
@@ -78,20 +90,56 @@ public class LoadingTransition : MonoBehaviour
                     duration: 1f
                 )
             )
-            .Chain(Tween.Alpha(iconImage, startValue: 1f, endValue: 0f, duration: 0.5f))
-            .Chain(Tween.Alpha(checkImage, startValue: 0f, endValue: 1f, duration: 0.5f))
+            .Chain(Tween.Alpha(loadingImage, startValue: 1f, endValue: 0f, duration: 0.5f))
+            .Chain(Tween.Alpha(statusImage, startValue: 0f, endValue: 1f, duration: 0.5f))
             .Group(
                 Tween.Scale(
-                    _check,
+                    statusRect,
                     startValue: Vector3.zero,
                     endValue: Vector3.one,
                     duration: 0.5f,
                     ease: Ease.OutBack
                 )
-            )
+            );
+
+        if (!success)
+        {
+            sequence.Chain(
+                Tween.ShakeLocalPosition(
+                    statusRect,
+                    strength: Vector3.right * 10f,
+                    duration: 0.5f,
+                    frequency: 20f
+                )
+            );
+
+            void onCompleteAction()
+            {
+                Color whiteTransparent = new(1f, 1f, 1f, 0f);
+
+                loadingImage.color = Color.white;
+                statusImage.color = whiteTransparent;
+
+                gameObject.SetActive(false);
+
+                ModalData modalData = new()
+                {
+                    Title = "Error",
+                    Message =
+                        "An error occurred while loading the therapy plan. Please try again later.",
+                };
+
+                _ = uiManager.ShowModal(modalData);
+            }
+
+            sequence.OnComplete(onCompleteAction);
+            return;
+        }
+
+        sequence
             .Chain(
                 Tween.Alpha(
-                    checkImage,
+                    statusImage,
                     startValue: 1f,
                     endValue: 0f,
                     duration: 0.5f,
@@ -114,16 +162,17 @@ public class LoadingTransition : MonoBehaviour
             });
     }
 
-    private async UniTaskVoid Pruebita1()
+    private async UniTaskVoid ShowButton()
     {
         await UniTask.WaitForSeconds(0.5f);
 
         CanvasGroup animationCanvasGroup = _animation.GetComponent<CanvasGroup>();
+        CanvasGroup buttonCanvasGroup = _button.GetComponent<CanvasGroup>();
 
         _ = Sequence
             .Create()
             .Group(Tween.Alpha(animationCanvasGroup, startValue: 1f, endValue: 0f, duration: 0.5f))
-            .Chain(Tween.Alpha(_button, startValue: 0f, endValue: 1f, duration: 0.5f));
+            .Chain(Tween.Alpha(buttonCanvasGroup, startValue: 0f, endValue: 1f, duration: 0.5f));
     }
 
     private void OnOrientationChanged()
@@ -139,6 +188,10 @@ public class LoadingTransition : MonoBehaviour
             target.localScale = responsiveTransform.Scale;
         }
 
-        Pruebita1().Forget();
+        ShowButton().Forget();
+
+        SimpleButton buttonComponent = _button.GetComponent<SimpleButton>();
+
+        buttonComponent.OnClick += () => SceneManager.LoadScene("MapPathScene");
     }
 }

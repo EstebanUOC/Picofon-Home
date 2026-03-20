@@ -9,6 +9,9 @@ public class UserChildren : Panel
 {
     public UIManager UIManager;
 
+    [SerializeField]
+    private LoadingTransition _loadingTransition;
+
     [Space]
     [SerializeField]
     private TMP_Dropdown _childrenDropdown;
@@ -110,21 +113,11 @@ public class UserChildren : Panel
 
         LevelDataStore instance = LevelDataStore.Instance;
 
+        _loadingTransition.PlayLoadingTransition();
+
         await instance.LoadPlans(childId);
 
-        if (instance.HasPlans())
-        {
-            SceneManager.LoadScene("MapPathScene");
-            return;
-        }
-
-        ModalData modalData = new()
-        {
-            Title = "Advertència",
-            Message = "Aquest nen encara no té cap pla de teràpia associat.",
-        };
-
-        await UIManager.ShowModal(modalData);
+        _loadingTransition.Continue(success: instance.HasPlans(), uiManager: UIManager);
     }
 
     private void OnRegisterChild()
