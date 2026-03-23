@@ -50,5 +50,6 @@ public class LevelPath : MonoBehaviour
         Vector2 algo = new(x: _content.transform.position.x + _offset, y: 0);
 
         transform.position = algo;
+        Debug.Log($"transform position: {transform.position}");
     }
 }
