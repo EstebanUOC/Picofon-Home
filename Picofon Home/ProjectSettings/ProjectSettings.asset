@@ -681,7 +681,7 @@ PlayerSettings:
     PS5: 
     QNX: 
     Stadia: 
-    Standalone: 
+    Standalone: DREAMTECK_SPLINES
     VisionOS: 
     WebGL: 
     Windows Store Apps: 

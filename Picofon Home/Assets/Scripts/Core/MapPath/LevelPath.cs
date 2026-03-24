@@ -1,7 +1,6 @@
 using System;
-using Unity.Mathematics;
+using Dreamteck.Splines;
 using UnityEngine;
-using UnityEngine.Splines;
 using UnityEngine.UI;
 
 public class LevelPath : MonoBehaviour
@@ -14,6 +13,8 @@ public class LevelPath : MonoBehaviour
 
     private float _offset;
 
+    private const int CountPerPoint = 5;
+
     public void Awake()
     {
         ScrollRect scrollRect = _scroll.GetComponent<ScrollRect>();
@@ -24,24 +25,43 @@ public class LevelPath : MonoBehaviour
 
     public void ChangePath(Span<Vector2> points)
     {
-        SplineContainer _container = GetComponent<SplineContainer>();
-        var spline = _container.Spline;
+        SplineComputer spline = GetComponent<SplineComputer>();
 
-        if (spline.Count > points.Length)
+        if (spline.pointCount > points.Length)
         {
-            spline.Resize(points.Length);
+            Resize(spline, points.Length);
             return;
         }
 
-        float3[] positions = new float3[points.Length];
+        // float3[] positions = new float3[points.Length];
+        //
+        // for (int i = 0; i < positions.Length; i++)
+        // {
+        //     Vector2 point = points[i];
+        //     positions[i] = new float3(point.x, point.y, 0f);
+        // }
+        //
+        // spline.AddRange(positions);
+    }
 
-        for (int i = 0; i < positions.Length; i++)
+    private void Resize(SplineComputer spline, int length)
+    {
+        SplinePoint[] points = spline.GetPoints();
+        SplinePoint[] newPoints = new SplinePoint[length];
+
+        ObjectController objectController = GetComponent<ObjectController>();
+
+        objectController.spawnCount = length * CountPerPoint;
+
+        for (int i = 0; i < points.Length; i++)
         {
-            Vector2 point = points[i];
-            positions[i] = new float3(point.x, point.y, 0f);
+            if (i < length)
+            {
+                newPoints[i] = points[i];
+            }
         }
 
-        spline.AddRange(positions);
+        spline.SetPoints(newPoints);
     }
 
     private void OnScroll(Vector2 value)
