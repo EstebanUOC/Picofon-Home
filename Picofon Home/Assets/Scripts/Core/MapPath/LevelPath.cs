@@ -24,6 +24,8 @@ public class LevelPath : MonoBehaviour
 
     public void ChangePath(Span<Vector2> points)
     {
+        return;
+
         SplineContainer _container = GetComponent<SplineContainer>();
         var spline = _container.Spline;
 
@@ -46,6 +48,8 @@ public class LevelPath : MonoBehaviour
 
     private void OnScroll(Vector2 value)
     {
+        return;
+
         Vector2 algo = new(x: _content.transform.position.x + _offset, y: 0);
 
         transform.position = algo;
