@@ -27,21 +27,7 @@ public class LevelPath : MonoBehaviour
         SplineContainer _container = GetComponent<SplineContainer>();
         var spline = _container.Spline;
 
-        for (int i = 0; i < spline.Count; i++)
-        {
-            Debug.Log($"Spline point {i}: {spline[i].Position}");
-        }
-
-        if (spline.Count > points.Length)
-        {
-            spline.Resize(points.Length);
-
-            for (int i = 0; i < spline.Count; i++)
-            {
-                Debug.Log($"Spline point {i}: {spline[i].Position}");
-            }
-            return;
-        }
+        spline.Clear();
 
         float3[] positions = new float3[points.Length];
 
