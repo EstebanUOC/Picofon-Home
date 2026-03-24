@@ -22,12 +22,16 @@ public class LevelPath : MonoBehaviour
         _offset = _content.transform.position.x * -1;
     }
 
-    public void ChangePath(Span<Vector2> points)
+    public void ChangePath(Vector2[] points)
     {
         SplineContainer _container = GetComponent<SplineContainer>();
         var spline = _container.Spline;
 
-        spline.Clear();
+        if (spline.Count > points.Length)
+        {
+            spline.Resize(points.Length);
+            return;
+        }
 
         float3[] positions = new float3[points.Length];
 

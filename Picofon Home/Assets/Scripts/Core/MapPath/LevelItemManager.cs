@@ -57,12 +57,12 @@ public sealed class LevelItemManager : MonoBehaviour
 
     public void RenderLevels(int count, int last, int current)
     {
-        float containerMiddle = _container.rect.height / 2;
         float spacingMiddle = _spacing.y / 2;
 
         int childCount = _container.childCount;
 
-        Span<Vector2> positions = stackalloc Vector2[count];
+        // Span<Vector2> positions = stackalloc Vector2[count];
+        Vector2[] positions = new Vector2[count];
 
         for (int i = 0; i < count; i++)
         {
