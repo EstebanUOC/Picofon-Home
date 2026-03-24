@@ -23,20 +23,32 @@ public class SessionManager : MonoBehaviour
     private TherapySessionDTO[] _sessionResults;
 
     private DateTime _activityStartTime;
+    private bool _taskCompleted = false;
 
-    public void InitializeSession(GeneralSessionDTO sessionInfo, TherapySessionDTO[] sessionResults)
+    public void InitializeSession(
+        GeneralSessionDTO sessionInfo,
+        TherapySessionDTO[] sessionResults,
+        bool completed
+    )
     {
         _sessionInfo = sessionInfo;
         _sessionResults = sessionResults;
+        _taskCompleted = completed;
     }
 
     public void StartTime()
     {
+        if (_taskCompleted)
+            return;
+
         _activityStartTime = DateTime.UtcNow;
     }
 
     public void RecordActivityResult(in TaskInfo taskInfo)
     {
+        if (_taskCompleted)
+            return;
+
         DateTime now = DateTime.UtcNow;
         TimeSpan activityDuration = now - _activityStartTime;
 
@@ -58,6 +70,9 @@ public class SessionManager : MonoBehaviour
         // TODO: descoment this
         // if (Application.isEditor)
         //     return;
+
+        if (_taskCompleted)
+            return;
 
         SessionService sessionService = new();
         sessionService.CreateTherapySession(_sessionInfo, _sessionResults).Forget();

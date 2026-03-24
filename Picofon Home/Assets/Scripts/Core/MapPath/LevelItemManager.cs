@@ -42,12 +42,12 @@ public sealed class LevelItemManager : MonoBehaviour
 
     [Header("Grid placement")]
     [SerializeField]
-    private int _startPos = -400;
+    private int _startPos = 250;
 
     [SerializeField]
-    private Vector2 _spacing = new(450f, -500f);
+    private Vector2 _spacing = new(1000, 320);
 
-    private int _columns = 2;
+    private int _rows = 2;
     private RectTransform _container;
 
     public void Awake()
@@ -57,8 +57,7 @@ public sealed class LevelItemManager : MonoBehaviour
 
     public void RenderLevels(int count, int last, int current)
     {
-        float containerMiddle = _container.rect.width / 2;
-        float spacingMiddle = _spacing.x / 2;
+        float spacingMiddle = _spacing.y / 2;
 
         int childCount = _container.childCount;
 
@@ -66,10 +65,10 @@ public sealed class LevelItemManager : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            int col = i % _columns;
-            int row = i;
-            float x = containerMiddle - spacingMiddle + (col * _spacing.x);
-            float y = _startPos + (row * _spacing.y);
+            int col = i;
+            int row = i % _rows;
+            float x = _startPos + (col * _spacing.x);
+            float y = spacingMiddle * (row == 0 ? -1 : 1);
             Vector2 position = new(x, y);
 
             RectTransform child;
@@ -138,8 +137,8 @@ public sealed class LevelItemManager : MonoBehaviour
         RectTransform bottomLevel = _container.GetChild(count - 1).GetComponent<RectTransform>();
 
         _contentRect.sizeDelta = new Vector2(
-            _contentRect.sizeDelta.x,
-            -bottomLevel.anchoredPosition.y + offset
+            bottomLevel.anchoredPosition.x + offset,
+            _contentRect.sizeDelta.y
         );
 
         int markerIndex = last >= 0 ? last : current;
@@ -163,7 +162,7 @@ public sealed class LevelItemManager : MonoBehaviour
 
         for (int i = 0; i < childCount; i++)
         {
-            int col = i % _columns;
+            int col = i % _rows;
             int row = i;
             float x = containerMiddle - spacingMiddle + (col * _spacing.x);
             float y = _startPos + (row * _spacing.y);

@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -12,19 +13,27 @@ public class LevelPath : MonoBehaviour
     [SerializeField]
     private GameObject _content;
 
-    private readonly Vector3 _offset = new(0f, 5f, 90f);
+    private float _offset;
 
     public void Awake()
     {
         ScrollRect scrollRect = _scroll.GetComponent<ScrollRect>();
         scrollRect.onValueChanged.AddListener(OnScroll);
+
+        _offset = _content.transform.position.x * -1;
     }
 
     public void ChangePath(Span<Vector2> points)
     {
+        Prueba(points.ToArray()).Forget();
+    }
+
+    private async UniTaskVoid Prueba(Vector2[] points)
+    {
+        await UniTask.WaitForSeconds(5f);
+
         SplineContainer _container = GetComponent<SplineContainer>();
         var spline = _container.Spline;
-        spline.Clear();
 
         if (spline.Count > points.Length)
         {
@@ -45,6 +54,8 @@ public class LevelPath : MonoBehaviour
 
     private void OnScroll(Vector2 value)
     {
-        transform.position = _content.transform.position - _offset;
+        Vector2 algo = new(x: _content.transform.position.x + _offset, y: 0);
+
+        transform.position = algo;
     }
 }

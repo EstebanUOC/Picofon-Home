@@ -7,14 +7,20 @@ using ActivitiesResult = ApiResult<ActivitiesData<BasketResponses.RelateActivity
 
 public class BasketManagerRE : MonoBehaviour
 {
-    [Space(15)]
+    [Space]
     [SerializeField]
     private BallController _ballController;
 
     [SerializeField]
+    private ProgressBar _progressBar;
+
+    [SerializeField]
+    private Counter _counter;
+
+    [SerializeField]
     private CanvasUI _canvasUI;
 
-    [Space(15)]
+    [Space]
     [SerializeField]
     private AnswerManagerPS _answerManager;
 
@@ -27,10 +33,14 @@ public class BasketManagerRE : MonoBehaviour
     [SerializeField]
     private SessionManager _sessionManager;
 
+    [SerializeField]
+    private Camera _camera;
+
     [Space]
     [SerializeField]
     private AudioCategory<OthersAudioID>[] audioCategories;
 
+    private bool _taskCompleted = false;
     private int _currentActivityIndex = 0;
 
     private RelateActivity[] _activities;
@@ -46,12 +56,12 @@ public class BasketManagerRE : MonoBehaviour
 
     public void Start()
     {
-        Application.targetFrameRate = 60;
-
         _answerManager.OnHoopSelected += HandleHoopSelected;
 
         ActivityRequestParams @params = LevelPayload.Params;
         ActivitySkill skill = LevelPayload.Skill;
+
+        _taskCompleted = LevelPayload.TaskCompleted;
 
         if (@params.ChildId is null)
         {
@@ -60,9 +70,15 @@ public class BasketManagerRE : MonoBehaviour
             return;
 # else
             skill = ActivitySkill.Final;
-            @params = new ActivityRequestParams { PlanId = 43, ChildId = "19013454K" };
-            Debug.LogWarning("Using default parameters for testing in Unity Editor.");
+            @params = new ActivityRequestParams { PlanId = 114, ChildId = "12345678Z" };
+            PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
 # endif
+        }
+
+        if (_uiManager.IsTablet())
+        {
+            _camera.orthographicSize = 5.9f;
+            _camera.transform.position = new Vector3(0f, 0.6f, -10f);
         }
 
         _canvasUI.Init(skill);
@@ -129,14 +145,24 @@ public class BasketManagerRE : MonoBehaviour
 
         await AudioManager.Instance.LoadAudios(audioPaths);
 
-        TherapySessionDTO[] sessions = new TherapySessionDTO[_activities.Length];
-        GeneralSessionDTO sessionInfo = new()
+        if (!_taskCompleted)
         {
-            TherapyPlanId = @params.PlanId,
-            ChildId = @params.ChildId,
-        };
+            TherapySessionDTO[] sessions = new TherapySessionDTO[_activities.Length];
 
-        _sessionManager.InitializeSession(sessionInfo, sessions);
+            GeneralSessionDTO sessionInfo = new()
+            {
+                TherapyPlanId = @params.PlanId,
+                ChildId = @params.ChildId,
+            };
+
+            _sessionManager.InitializeSession(
+                sessionInfo: sessionInfo,
+                sessionResults: sessions,
+                completed: _taskCompleted
+            );
+        }
+
+        _progressBar.Initialize(parts: _activities.Length, completed: _taskCompleted);
 
         ChangeActivity();
 
@@ -194,6 +220,9 @@ public class BasketManagerRE : MonoBehaviour
         _sessionManager.RecordActivityResult(in taskInfo);
 
         _currentActivityIndex++;
+
+        _progressBar.SetProgress(progress: _currentActivityIndex, correct: isCorrect);
+        _counter.AddScore(correct: isCorrect);
 
         InitCount(isCorrect).Forget();
     }

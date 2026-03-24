@@ -1,16 +1,18 @@
-using System.Text.Json.Serialization;
+public enum TherapyStatus : byte
+{
+    Active = 1,
+    Completed = 2,
+    Paused = 3,
+    Cancelled = 4,
+}
 
 public class TherapyPlan
 {
-    [JsonInclude]
-    public int TherapyTemplateId { get; private set; }
+    public string ChildId { get; init; }
 
-    [JsonInclude]
-    public string ChildId { get; private set; }
+    public int TherapyPlanId { get; init; }
 
-    [JsonInclude]
-    public int TherapyPlanId { get; private set; }
+    public TherapyStatus Status { get; init; }
 
-    [JsonInclude]
-    public TherapyTemplate TherapyTemplate { get; private set; }
+    public TherapyTemplate TherapyTemplate { get; init; }
 }

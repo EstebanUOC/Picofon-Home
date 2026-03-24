@@ -27,6 +27,8 @@ public class UIManager : MonoBehaviour
 
     public void Start()
     {
+        SceneOrientationHelper.LockToPortrait();
+
         LoadingPanel.Show();
         BootstrapApplicacion().Forget();
     }

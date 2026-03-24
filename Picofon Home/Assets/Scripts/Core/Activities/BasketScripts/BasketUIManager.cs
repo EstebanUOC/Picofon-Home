@@ -1,3 +1,4 @@
+using System;
 using BasketResponses;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,12 +22,11 @@ public class BasketUIManager : MonoBehaviour
     [SerializeField]
     private GameMenu _gameMenu;
 
-    [Header("Responsive UI")]
     [SerializeField]
-    private RectTransform _boardPadding;
+    private ResponsiveTransform[] _responsiveTransforms;
 
     [SerializeField]
-    private RectTransform _progressBar;
+    private UIResponsiveTransform[] _responsiveUITransforms;
 
     private AudioClip _introAudio;
 
@@ -34,6 +34,8 @@ public class BasketUIManager : MonoBehaviour
 
     public void Awake()
     {
+        SceneOrientationHelper.LockToLandscape();
+
         _gameMenu.OnMenuOptionSelected += HandleMenuOptionSelected;
 
         if (IsTablet())
@@ -111,13 +113,43 @@ public class BasketUIManager : MonoBehaviour
 
     private void ApplyResponsiveLayout()
     {
-        _boardPadding.sizeDelta = new Vector2(_boardPadding.sizeDelta.x, 215f);
+        foreach (ResponsiveTransform responsiveRect in _responsiveTransforms)
+        {
+            Transform target = responsiveRect.Target;
 
-        _progressBar.anchorMin = new Vector2(0.5f, 1f);
-        _progressBar.anchorMax = new Vector2(0.5f, 1f);
-        _progressBar.pivot = new Vector2(0.5f, 1f);
-        _progressBar.anchoredPosition = new Vector2(0f, -75f);
-        _progressBar.rotation = Quaternion.Euler(0f, 0f, 0f);
+            target.localPosition = responsiveRect.Position;
+            target.localRotation = responsiveRect.Rotation;
+            target.localScale = responsiveRect.Scale;
+
+            if (!responsiveRect.Mirror)
+                continue;
+
+            Transform mirrorTarget = responsiveRect.TargetMirror;
+
+            mirrorTarget.localPosition = responsiveRect.Position * new Vector2(-1f, 1f);
+        }
+
+        foreach (UIResponsiveTransform responsiveRect in _responsiveUITransforms)
+        {
+            RectTransform target = responsiveRect.Target;
+
+            target.anchorMin = responsiveRect.AnchorMin;
+            target.anchorMax = responsiveRect.AnchorMax;
+            target.pivot = responsiveRect.Pivot;
+            target.anchoredPosition = responsiveRect.Position;
+            target.localRotation = responsiveRect.Rotation;
+            target.localScale = responsiveRect.Scale;
+
+            if (responsiveRect.Size != Vector2.zero)
+                target.sizeDelta = responsiveRect.Size;
+
+            if (!responsiveRect.Mirror)
+                continue;
+
+            RectTransform mirrorTarget = responsiveRect.TargetMirror;
+
+            mirrorTarget.anchoredPosition = responsiveRect.Position * new Vector2(-1f, 1f);
+        }
     }
 
     private void BackToMap()
@@ -125,4 +157,30 @@ public class BasketUIManager : MonoBehaviour
         SceneManager.LoadScene("MapPathScene");
         AudioManager.Instance.StopVoice();
     }
+}
+
+[Serializable]
+public struct ResponsiveTransform
+{
+    public bool Mirror;
+    public Transform Target;
+    public Transform TargetMirror;
+    public Vector2 Position;
+    public Quaternion Rotation;
+    public Vector3 Scale;
+}
+
+[Serializable]
+public struct UIResponsiveTransform
+{
+    public bool Mirror;
+    public RectTransform Target;
+    public RectTransform TargetMirror;
+    public Vector2 Position;
+    public Vector2 AnchorMin;
+    public Vector2 AnchorMax;
+    public Vector2 Pivot;
+    public Vector2 Size;
+    public Quaternion Rotation;
+    public Vector3 Scale;
 }

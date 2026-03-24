@@ -14,8 +14,11 @@ public class BasketManagerPS : MonoBehaviour
     [SerializeField]
     private BallController _ballController;
 
-    // [SerializeField]
-    // private ProgressBar _progressBar;
+    [SerializeField]
+    private ProgressBar _progressBar;
+
+    [SerializeField]
+    private Counter _counter;
 
     [Space]
     [SerializeField]
@@ -34,6 +37,7 @@ public class BasketManagerPS : MonoBehaviour
     [SerializeField]
     private AudioCategory<OthersAudioID>[] audioCategories;
 
+    private bool _taskCompleted = false;
     private int _currentActivityIndex = 0;
 
     private SelectActivity[] _activities;
@@ -49,12 +53,12 @@ public class BasketManagerPS : MonoBehaviour
 
     public void Start()
     {
-        Application.targetFrameRate = 60;
-
         _answerManager.OnHoopSelected += HandleHoopSelected;
 
         ActivityRequestParams @params = LevelPayload.Params;
         ActivitySkill skill = LevelPayload.Skill;
+
+        _taskCompleted = LevelPayload.TaskCompleted;
 
         if (@params.ChildId is null)
         {
@@ -132,15 +136,24 @@ public class BasketManagerPS : MonoBehaviour
 
         await AudioManager.Instance.LoadAudios(audioPaths);
 
-        TherapySessionDTO[] sessions = new TherapySessionDTO[_activities.Length];
-        GeneralSessionDTO sessionInfo = new()
+        if (!_taskCompleted)
         {
-            TherapyPlanId = @params.PlanId,
-            ChildId = @params.ChildId,
-        };
+            TherapySessionDTO[] sessions = new TherapySessionDTO[_activities.Length];
 
-        _sessionManager.InitializeSession(sessionInfo, sessions);
-        // _progressBar.Initialize(_activities.Length);
+            GeneralSessionDTO sessionInfo = new()
+            {
+                TherapyPlanId = @params.PlanId,
+                ChildId = @params.ChildId,
+            };
+
+            _sessionManager.InitializeSession(
+                sessionInfo: sessionInfo,
+                sessionResults: sessions,
+                completed: _taskCompleted
+            );
+        }
+
+        _progressBar.Initialize(parts: _activities.Length, completed: _taskCompleted);
 
         ChangeActivity();
 
@@ -204,14 +217,15 @@ public class BasketManagerPS : MonoBehaviour
 
         _currentActivityIndex++;
 
+        _progressBar.SetProgress(progress: _currentActivityIndex, correct: isCorrect);
+        _counter.AddScore(correct: isCorrect);
+
         InitCount(isCorrect).Forget();
     }
 
     private async UniTaskVoid InitCount(bool isCorrect)
     {
         FeedbackType feedbackType = isCorrect ? FeedbackType.Positive : FeedbackType.Neutral;
-
-        // _progressBar.SetProgress(_currentActivityIndex);
 
         await UniTask.WaitForSeconds(2f);
 

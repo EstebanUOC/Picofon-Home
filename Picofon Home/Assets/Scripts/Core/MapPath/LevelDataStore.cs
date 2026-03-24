@@ -19,8 +19,6 @@ public class LevelDataStore : MonoBehaviour
 
     public void Awake()
     {
-        _currentLevel = GamePrefs.LastCompletedLevel;
-
         if (Instance == null)
         {
             Instance = this;
@@ -39,6 +37,24 @@ public class LevelDataStore : MonoBehaviour
         _lastId = id;
 
         await GetPlans(id);
+
+        if (!HasPlans())
+        {
+            PerformanceLog.LogError("No plans loaded, cannot determine current level.");
+            return;
+        }
+
+        int index = 0;
+
+        foreach (TherapyPlan plan in _cachedPlans)
+        {
+            if (plan.Status == TherapyStatus.Active)
+            {
+                _currentLevel = index;
+                break;
+            }
+            index++;
+        }
     }
 
     public void SavePlans(TherapyPlan[] plans)
@@ -81,7 +97,7 @@ public class LevelDataStore : MonoBehaviour
 
         if (!result.Success)
         {
-            Debug.LogError($"Error loading activities: {result.Message}");
+            PerformanceLog.LogError($"Error loading activities: {result.Message}");
             return;
         }
 
@@ -89,7 +105,7 @@ public class LevelDataStore : MonoBehaviour
 
         if (plans is null || plans.Length == 0)
         {
-            Debug.LogError("No therapy plans found for the child.");
+            PerformanceLog.LogError("No therapy plans found for the child.");
             return;
         }
 

@@ -10,6 +10,8 @@ public class MapUIManager : MonoBehaviour
 
     public void Start()
     {
+        SceneOrientationHelper.LockToLandscape();
+
         _exitButton.OnClick += HandleExitButtonClicked;
     }
 
