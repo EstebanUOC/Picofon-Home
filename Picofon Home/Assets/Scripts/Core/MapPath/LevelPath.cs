@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -24,6 +25,13 @@ public class LevelPath : MonoBehaviour
 
     public void ChangePath(Span<Vector2> points)
     {
+        Prueba(points.ToArray()).Forget();
+    }
+
+    private async UniTaskVoid Prueba(Vector2[] points)
+    {
+        await UniTask.WaitForSeconds(5f);
+
         SplineContainer _container = GetComponent<SplineContainer>();
         var spline = _container.Spline;
 
