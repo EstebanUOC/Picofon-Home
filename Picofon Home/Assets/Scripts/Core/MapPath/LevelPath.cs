@@ -22,7 +22,7 @@ public class LevelPath : MonoBehaviour
         _offset = _content.transform.position.x * -1;
     }
 
-    public void ChangePath(Vector2[] points)
+    public void ChangePath(Span<Vector2> points)
     {
         SplineContainer _container = GetComponent<SplineContainer>();
         var spline = _container.Spline;

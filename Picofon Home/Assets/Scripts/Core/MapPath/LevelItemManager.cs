@@ -61,8 +61,7 @@ public sealed class LevelItemManager : MonoBehaviour
 
         int childCount = _container.childCount;
 
-        // Span<Vector2> positions = stackalloc Vector2[count];
-        Vector2[] positions = new Vector2[count];
+        Span<Vector2> positions = stackalloc Vector2[count];
 
         for (int i = 0; i < count; i++)
         {
