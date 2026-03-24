@@ -26,7 +26,6 @@ public class LevelPath : MonoBehaviour
     {
         SplineContainer _container = GetComponent<SplineContainer>();
         var spline = _container.Spline;
-        spline.Clear();
 
         if (spline.Count > points.Length)
         {
@@ -50,6 +49,5 @@ public class LevelPath : MonoBehaviour
         Vector2 algo = new(x: _content.transform.position.x + _offset, y: 0);
 
         transform.position = algo;
-        Debug.Log($"transform position: {transform.position}");
     }
 }
