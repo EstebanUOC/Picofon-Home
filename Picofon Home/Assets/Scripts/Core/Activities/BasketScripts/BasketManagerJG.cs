@@ -32,6 +32,9 @@ public class BasketGameManagerJG : MonoBehaviour
     [SerializeField]
     private Counter _counter;
 
+    [SerializeField]
+    private Fade _fade;
+
     [Space]
     [SerializeField]
     private HoopManager _hoopManager;
@@ -116,6 +119,8 @@ public class BasketGameManagerJG : MonoBehaviour
     {
         BasketService basketService = new();
 
+        _fade.Load();
+
         ActivitiesResult result = await basketService.GetActivities<ActivitiesData<JudgeActivity>>(
             @params
         );
@@ -171,6 +176,8 @@ public class BasketGameManagerJG : MonoBehaviour
         ChangeActivity();
 
         _answerManager.DisableAnswers();
+
+        _fade.Stop();
 
         AudioClip introClip = _audioClips[JudgeAudioID.Intro];
 

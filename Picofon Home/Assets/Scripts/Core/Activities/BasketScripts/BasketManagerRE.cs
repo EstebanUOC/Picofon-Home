@@ -18,6 +18,9 @@ public class BasketManagerRE : MonoBehaviour
     private Counter _counter;
 
     [SerializeField]
+    private Fade _fade;
+
+    [SerializeField]
     private CanvasUI _canvasUI;
 
     [Space]
@@ -111,6 +114,8 @@ public class BasketManagerRE : MonoBehaviour
     {
         BasketService basketService = new();
 
+        _fade.Load();
+
         ActivitiesResult result = await basketService.GetActivities<ActivitiesData<RelateActivity>>(
             @params
         );
@@ -165,6 +170,8 @@ public class BasketManagerRE : MonoBehaviour
         _progressBar.Initialize(parts: _activities.Length, completed: _taskCompleted);
 
         ChangeActivity();
+
+        _fade.Stop();
 
         AudioClip introClip = _audioClips[OthersAudioID.Intro];
 

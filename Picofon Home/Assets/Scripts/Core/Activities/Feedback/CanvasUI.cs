@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class CanvasUI : MonoBehaviour
 {
-    [Space(10)]
+    [Space]
     [SerializeField]
     private GameObject _feedback;
 
