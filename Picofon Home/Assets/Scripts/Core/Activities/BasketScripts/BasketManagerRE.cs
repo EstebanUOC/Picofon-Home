@@ -114,7 +114,7 @@ public class BasketManagerRE : MonoBehaviour
     {
         BasketService basketService = new();
 
-        _fade.Load();
+        _fade.FirstLoad();
 
         ActivitiesResult result = await basketService.GetActivities<ActivitiesData<RelateActivity>>(
             @params

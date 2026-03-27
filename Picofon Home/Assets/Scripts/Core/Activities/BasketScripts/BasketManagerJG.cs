@@ -119,7 +119,7 @@ public class BasketGameManagerJG : MonoBehaviour
     {
         BasketService basketService = new();
 
-        _fade.Load();
+        _fade.FirstLoad();
 
         ActivitiesResult result = await basketService.GetActivities<ActivitiesData<JudgeActivity>>(
             @params
