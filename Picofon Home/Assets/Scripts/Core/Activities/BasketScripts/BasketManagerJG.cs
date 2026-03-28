@@ -246,9 +246,11 @@ public class BasketGameManagerJG : MonoBehaviour
     {
         if (_currentActivityIndex >= _activities.Length)
         {
+            _fade.Load();
+
             _sessionManager.EndSession();
 
-            _canvasUI.ShowSummary();
+            // _canvasUI.ShowSummary();
 
             LevelDataStore instance = LevelDataStore.Instance;
 

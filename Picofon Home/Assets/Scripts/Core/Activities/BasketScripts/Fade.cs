@@ -17,19 +17,52 @@ public class Fade : MonoBehaviour
             gameObject.SetActive(true);
         }
 
+        _material.SetFloat("_Radius", 0);
+
+        Image image = _rocket.GetComponent<Image>();
+
+        Vector2 rocketPosition = _rocket.transform.localPosition;
+        float initialRocketX = rocketPosition.x;
+
+        Sequence
+            .Create()
+            .Group(Tween.Alpha(target: image, startValue: 0, endValue: 1, duration: 0.45f))
+            .Group(
+                Tween.Custom(
+                    target: _rocket.transform,
+                    startValue: 0,
+                    endValue: 1,
+                    duration: 1,
+                    onValueChange: (target, value) =>
+                    {
+                        rocketPosition.x = initialRocketX + value * 30;
+
+                        target.localPosition = rocketPosition;
+                    },
+                    cycles: 100,
+                    cycleMode: CycleMode.Yoyo,
+                    ease: Ease.InOutSine
+                )
+            );
+    }
+
+    public void Stop()
+    {
         Image image = _rocket.GetComponent<Image>();
 
         Sequence
             .Create()
-            .Group(Tween.Alpha(target: image, startValue: 0, endValue: 1, duration: 0.5f))
+            .Group(Tween.Alpha(target: image, startValue: 1, endValue: 0, duration: 0.5f))
             .Chain(
-                Tween.UIAnchoredPositionY(
-                    target: image.rectTransform,
-                    endValue: 100,
-                    duration: 0.5f,
-                    ease: Ease.OutBack
+                Tween.Custom(
+                    target: _material,
+                    startValue: 0,
+                    endValue: 1.2f,
+                    duration: 0.6f,
+                    onValueChange: (target, value) => target.SetFloat("_Radius", value)
                 )
-            );
+            )
+            .OnComplete(target: this, onComplete: target => target.gameObject.SetActive(false));
     }
 
     public void Load()
@@ -38,6 +71,11 @@ public class Fade : MonoBehaviour
         {
             gameObject.SetActive(true);
         }
+
+        Image image = _rocket.GetComponent<Image>();
+
+        Vector2 rocketPosition = _rocket.transform.localPosition;
+        float initialRocketX = rocketPosition.x;
 
         Sequence
             .Create()
@@ -50,8 +88,24 @@ public class Fade : MonoBehaviour
                     onValueChange: (target, value) => target.SetFloat("_Radius", value)
                 )
             )
+            .Chain(Tween.Alpha(target: image, startValue: 0, endValue: 1, duration: 0.45f))
+            .Group(
+                Tween.Custom(
+                    target: _rocket.transform,
+                    startValue: 0,
+                    endValue: 1,
+                    duration: 1,
+                    onValueChange: (target, value) =>
+                    {
+                        rocketPosition.x = initialRocketX + value * 30;
+
+                        target.localPosition = rocketPosition;
+                    },
+                    cycles: 100,
+                    cycleMode: CycleMode.Yoyo,
+                    ease: Ease.InOutSine
+                )
+            )
             .OnComplete(target: this, onComplete: target => target.gameObject.SetActive(false));
     }
-
-    public void Stop() { }
 }
