@@ -79,17 +79,14 @@ public class BasketGameManagerJG : MonoBehaviour
 
         _taskCompleted = LevelPayload.TaskCompleted;
 
+#if DEBUG
         if (@params.ChildId is null)
         {
-#if !UNITY_EDITOR
-            Debug.LogError("Parameters are missing in LevelPayload.");
-            return;
-# else
             skill = ActivitySkill.Initial;
             @params = new ActivityRequestParams { PlanId = 112, ChildId = "12345678Z" };
             PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
-# endif
         }
+# endif
 
         _canvasUI.Init(skill);
 
@@ -166,6 +163,8 @@ public class BasketGameManagerJG : MonoBehaviour
             {
                 TherapyPlanId = @params.PlanId,
                 ChildId = @params.ChildId,
+                Console = "MO",
+                ConductedById = @params.ConductedById,
             };
 
             _sessionManager.InitializeSession(

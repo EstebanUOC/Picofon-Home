@@ -162,6 +162,8 @@ public class BasketManagerRE : MonoBehaviour
             {
                 TherapyPlanId = @params.PlanId,
                 ChildId = @params.ChildId,
+                Console = "MO",
+                ConductedById = @params.ConductedById,
             };
 
             _sessionManager.InitializeSession(

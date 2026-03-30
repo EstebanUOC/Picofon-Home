@@ -110,6 +110,7 @@ public class UserChildren : Panel
         string childId = _childrenIds[selectedIndex];
 
         MapPathPayload.ChildId = childId;
+        MapPathPayload.ConductedById = UIManager.CurrentUser.Id;
 
         LevelDataStore instance = LevelDataStore.Instance;
 
