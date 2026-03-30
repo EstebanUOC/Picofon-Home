@@ -74,7 +74,10 @@ public class SessionManager : MonoBehaviour
         if (_taskCompleted)
             return;
 
+        TherapyPlanService therapyPlanService = new();
         SessionService sessionService = new();
+
+        await therapyPlanService.CompletePlan(id: _sessionInfo.TherapyPlanId);
         await sessionService.CreateTherapySession(_sessionInfo, _sessionResults);
     }
 }
