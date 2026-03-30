@@ -17,11 +17,11 @@ public readonly struct TherapySessionDTO
 
     public readonly DateTime CompletedAt { get; init; }
 
-    public readonly int MainAttributeWs { get; init; }
+    public readonly int? MainAttributeWs { get; init; }
 
-    public readonly int CorrectAttributeWs { get; init; }
+    public readonly int? CorrectAttributeWs { get; init; }
 
-    public readonly int SelectedAttributeWs { get; init; }
+    public readonly int? SelectedAttributeWs { get; init; }
 
     public readonly bool SelectedButton { get; init; }
 }

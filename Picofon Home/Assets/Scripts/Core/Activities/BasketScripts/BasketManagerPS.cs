@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using ActivitiesResult = ApiResult<ActivitiesData<BasketResponses.SelectActivity>>;
 
 public class BasketManagerPS : MonoBehaviour
@@ -10,6 +11,9 @@ public class BasketManagerPS : MonoBehaviour
     [Space]
     [SerializeField]
     private CanvasUI _canvasUI;
+
+    [SerializeField]
+    private ModalGame _modalGame;
 
     [SerializeField]
     private BallController _ballController;
@@ -70,8 +74,8 @@ public class BasketManagerPS : MonoBehaviour
             return;
 # else
             skill = ActivitySkill.Initial;
-            @params = new ActivityRequestParams { PlanId = 42, ChildId = "19013454K" };
-            Debug.LogWarning("Using default parameters for testing in Unity Editor.");
+            @params = new ActivityRequestParams { PlanId = 113, ChildId = "12345678Z" };
+            PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
 # endif
         }
 
@@ -105,7 +109,7 @@ public class BasketManagerPS : MonoBehaviour
     {
         BasketService basketService = new();
 
-        _fade.Load();
+        _fade.FirstLoad();
 
         ActivitiesResult result = await basketService.GetActivities<ActivitiesData<SelectActivity>>(
             @params
@@ -162,7 +166,7 @@ public class BasketManagerPS : MonoBehaviour
 
         ChangeActivity();
 
-        _fade.Stop();
+        _fade.StopAndZoom();
 
         AudioClip introClip = _audioClips[OthersAudioID.Intro];
 
@@ -247,12 +251,7 @@ public class BasketManagerPS : MonoBehaviour
     {
         if (_currentActivityIndex >= _activities.Length)
         {
-            _canvasUI.ShowSummary();
-            _sessionManager.EndSession();
-
-            LevelDataStore instance = LevelDataStore.Instance;
-
-            instance?.LevelCompleted();
+            EndActivity().Forget();
             return;
         }
 
@@ -287,6 +286,27 @@ public class BasketManagerPS : MonoBehaviour
         _canvasUI.SetFeedbackContent(in feedbackContent);
 
         ResetActivity();
+    }
+
+    private async UniTaskVoid EndActivity()
+    {
+        await _modalGame.ShowModal();
+
+        _fade.Load();
+        LevelDataStore.Instance?.LevelCompleted();
+
+        await _sessionManager.EndSession();
+        await UniTask.WaitForSeconds(1f);
+
+        AsyncOperation loadOperation = SceneManager.LoadSceneAsync("MapPathScene");
+        loadOperation.allowSceneActivation = false;
+
+        await UniTask.WaitUntil(() => loadOperation.progress >= 0.9f);
+
+        _ = _fade.Stop(
+            target: loadOperation,
+            onComplete: target => target.allowSceneActivation = true
+        );
     }
 
     private void ResetActivity()
