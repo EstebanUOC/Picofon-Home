@@ -27,7 +27,7 @@ public class MapManager : MonoBehaviour
             Debug.LogError("ChildId is null or empty in MapPathPayload.");
             return;
 # else
-            childId = "X1234567O";
+            childId = "12345678Z";
             Debug.LogWarning("Using default ChildId for testing in Unity Editor.");
 # endif
         }

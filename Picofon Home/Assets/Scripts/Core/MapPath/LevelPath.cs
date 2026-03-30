@@ -33,15 +33,7 @@ public class LevelPath : MonoBehaviour
             return;
         }
 
-        // float3[] positions = new float3[points.Length];
-        //
-        // for (int i = 0; i < positions.Length; i++)
-        // {
-        //     Vector2 point = points[i];
-        //     positions[i] = new float3(point.x, point.y, 0f);
-        // }
-        //
-        // spline.AddRange(positions);
+        AddRange(spline, points);
     }
 
     private void Resize(SplineComputer spline, int length)
@@ -59,6 +51,32 @@ public class LevelPath : MonoBehaviour
             {
                 newPoints[i] = points[i];
             }
+        }
+
+        spline.SetPoints(newPoints);
+    }
+
+    private void AddRange(SplineComputer spline, Span<Vector2> points)
+    {
+        if (spline.pointCount == points.Length)
+            return;
+
+        SplinePoint[] oldPoints = spline.GetPoints();
+        SplinePoint[] newPoints = new SplinePoint[points.Length];
+
+        ObjectController objectController = GetComponent<ObjectController>();
+
+        objectController.spawnCount = points.Length * CountPerPoint;
+
+        for (int i = 0; i < points.Length; i++)
+        {
+            if (i < spline.pointCount)
+            {
+                newPoints[i] = oldPoints[i];
+                continue;
+            }
+
+            newPoints[i] = new SplinePoint(points[i]);
         }
 
         spline.SetPoints(newPoints);

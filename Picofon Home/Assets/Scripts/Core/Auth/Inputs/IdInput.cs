@@ -110,13 +110,12 @@ public class IdInput : BasicInput
 
         string numbers = dni[..8];
 
-        if (!int.TryParse(numbers, out int dniNumber))
+        if (!int.TryParse(numbers, out int _))
             return false;
 
-        char letter = dni.ToUpper()[8];
-        char calculatedLetter = CalculateControlLetter(dniNumber);
+        char letter = dni[8];
 
-        return letter == calculatedLetter;
+        return char.IsLetter(letter);
     }
 
     private bool ValidateNIE(string nie)
@@ -144,14 +143,5 @@ public class IdInput : BasicInput
         }
 
         return !someChar;
-    }
-
-    private char CalculateControlLetter(int number)
-    {
-        string letters = "TRWAGMYFPDXBNJZSQVHLCKE";
-
-        int remainder = number % 23;
-
-        return letters[remainder];
     }
 }
