@@ -1,3 +1,4 @@
+using System;
 using PrimeTween;
 using UnityEngine;
 using UnityEngine.UI;
@@ -46,14 +47,58 @@ public class Fade : MonoBehaviour
             );
     }
 
-    public void Stop()
+    public void StopAndZoom()
     {
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+
         Image image = _rocket.GetComponent<Image>();
 
         Sequence
             .Create()
             .Group(Tween.Alpha(target: image, startValue: 1, endValue: 0, duration: 0.5f))
             .Chain(
+                Tween.Custom(
+                    target: _material,
+                    startValue: 0,
+                    endValue: 1.2f,
+                    duration: 0.6f,
+                    onValueChange: (target, value) => target.SetFloat("_Radius", value)
+                )
+            )
+            .OnComplete(target: this, onComplete: target => target.gameObject.SetActive(false));
+    }
+
+    public Sequence Stop<T>(T target, Action<T> onComplete)
+        where T : class
+    {
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+
+        Image image = _rocket.GetComponent<Image>();
+
+        return Sequence
+            .Create()
+            .Group(Tween.Alpha(target: image, startValue: 1, endValue: 0, duration: 0.5f))
+            .OnComplete(target: target, onComplete: onComplete);
+    }
+
+    public void ZoomIn()
+    {
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+
+        _material.SetFloat("_Radius", 0);
+
+        Sequence
+            .Create()
+            .Group(
                 Tween.Custom(
                     target: _material,
                     startValue: 0,
@@ -105,7 +150,11 @@ public class Fade : MonoBehaviour
                     cycleMode: CycleMode.Yoyo,
                     ease: Ease.InOutSine
                 )
-            )
-            .OnComplete(target: this, onComplete: target => target.gameObject.SetActive(false));
+            );
+    }
+
+    public void OnDestroy()
+    {
+        _material.SetFloat("_Radius", 1.2f);
     }
 }

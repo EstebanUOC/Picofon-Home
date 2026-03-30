@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using ActivitiesResult = ApiResult<ActivitiesData<BasketResponses.RelateActivity>>;
 
 public class BasketManagerRE : MonoBehaviour
@@ -22,6 +23,9 @@ public class BasketManagerRE : MonoBehaviour
 
     [SerializeField]
     private CanvasUI _canvasUI;
+
+    [SerializeField]
+    private ModalGame _modalGame;
 
     [Space]
     [SerializeField]
@@ -171,7 +175,7 @@ public class BasketManagerRE : MonoBehaviour
 
         ChangeActivity();
 
-        _fade.Stop();
+        _fade.StopAndZoom();
 
         AudioClip introClip = _audioClips[OthersAudioID.Intro];
 
@@ -251,12 +255,7 @@ public class BasketManagerRE : MonoBehaviour
     {
         if (_currentActivityIndex >= _activities.Length)
         {
-            _canvasUI.ShowSummary();
-            _sessionManager.EndSession();
-
-            LevelDataStore instance = LevelDataStore.Instance;
-
-            instance?.LevelCompleted();
+            EndActivity().Forget();
             return;
         }
         _currentActivity = _activities[_currentActivityIndex];
@@ -295,6 +294,27 @@ public class BasketManagerRE : MonoBehaviour
         _canvasUI.SetFeedbackContent(in feedbackContent);
 
         ResetActivity();
+    }
+
+    private async UniTaskVoid EndActivity()
+    {
+        await _modalGame.ShowModal();
+
+        _fade.Load();
+        LevelDataStore.Instance?.LevelCompleted();
+
+        await _sessionManager.EndSession();
+        await UniTask.WaitForSeconds(1f);
+
+        AsyncOperation loadOperation = SceneManager.LoadSceneAsync("MapPathScene");
+        loadOperation.allowSceneActivation = false;
+
+        await UniTask.WaitUntil(() => loadOperation.progress >= 0.9f);
+
+        _ = _fade.Stop(
+            target: loadOperation,
+            onComplete: target => target.allowSceneActivation = true
+        );
     }
 
     private void ResetActivity()

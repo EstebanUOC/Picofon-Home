@@ -46,6 +46,9 @@ public class SessionService
 
         if (!responseView.Success)
         {
+            PerformanceLog.Log(
+                $"Failed to create therapy session \nURL: {url} \nRoot: {root} \nRequest: {JsonHelper.ToJson(sessionRequest)}"
+            );
             return ApiResult.Fail(responseView.ErrorMessage);
         }
 

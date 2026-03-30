@@ -10,7 +10,7 @@ public struct ModalData
 
 public class Modal : MonoBehaviour
 {
-    [Space(15)]
+    [Space]
     [SerializeField]
     private TMP_Text _title;
 

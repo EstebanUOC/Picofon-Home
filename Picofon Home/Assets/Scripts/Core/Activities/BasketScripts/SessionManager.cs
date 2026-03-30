@@ -65,7 +65,7 @@ public class SessionManager : MonoBehaviour
         };
     }
 
-    public void EndSession()
+    public async UniTask EndSession()
     {
         // TODO: descoment this
         // if (Application.isEditor)
@@ -75,6 +75,6 @@ public class SessionManager : MonoBehaviour
             return;
 
         SessionService sessionService = new();
-        sessionService.CreateTherapySession(_sessionInfo, _sessionResults).Forget();
+        await sessionService.CreateTherapySession(_sessionInfo, _sessionResults);
     }
 }
