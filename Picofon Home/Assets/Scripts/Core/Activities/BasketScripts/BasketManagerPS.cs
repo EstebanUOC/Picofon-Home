@@ -74,8 +74,8 @@ public class BasketManagerPS : MonoBehaviour
             return;
 # else
             skill = ActivitySkill.Initial;
-            @params = new ActivityRequestParams { PlanId = 42, ChildId = "19013454K" };
-            Debug.LogWarning("Using default parameters for testing in Unity Editor.");
+            @params = new ActivityRequestParams { PlanId = 113, ChildId = "12345678Z" };
+            PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
 # endif
         }
 

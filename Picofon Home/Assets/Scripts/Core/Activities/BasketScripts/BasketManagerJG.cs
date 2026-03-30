@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
-using PrimeTween;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using ActivitiesResult = ApiResult<ActivitiesData<BasketResponses.JudgeActivity>>;
@@ -87,8 +86,8 @@ public class BasketGameManagerJG : MonoBehaviour
             return;
 # else
             skill = ActivitySkill.Initial;
-            @params = new ActivityRequestParams { PlanId = 41, ChildId = "19013454K" };
-            Debug.LogWarning("Using default parameters for testing in Unity Editor.");
+            @params = new ActivityRequestParams { PlanId = 112, ChildId = "12345678Z" };
+            PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
 # endif
         }
 

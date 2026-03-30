@@ -8,11 +8,11 @@ public readonly struct TaskInfo
 
     public readonly int TaskIndex { get; init; }
 
-    public readonly int MainAttributeWs { get; init; }
+    public readonly int? MainAttributeWs { get; init; }
 
-    public readonly int CorrectAttributeWs { get; init; }
+    public readonly int? CorrectAttributeWs { get; init; }
 
-    public readonly int SelectedAttributeWs { get; init; }
+    public readonly int? SelectedAttributeWs { get; init; }
 
     public readonly bool SelectedButton { get; init; }
 }
