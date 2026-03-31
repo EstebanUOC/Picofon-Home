@@ -11,6 +11,14 @@ public class Fade : MonoBehaviour
     [SerializeField]
     private GameObject _rocket;
 
+    private Image _rocketImage;
+
+    public void Awake()
+    {
+        _rocketImage = _rocket.GetComponent<Image>();
+        _rocketImage.color = new Color(1, 1, 1, 0);
+    }
+
     public void FirstLoad()
     {
         if (!gameObject.activeSelf)
@@ -20,14 +28,12 @@ public class Fade : MonoBehaviour
 
         _material.SetFloat("_Radius", 0);
 
-        Image image = _rocket.GetComponent<Image>();
-
         Vector2 rocketPosition = _rocket.transform.localPosition;
         float initialRocketX = rocketPosition.x;
 
         Sequence
             .Create()
-            .Group(Tween.Alpha(target: image, startValue: 0, endValue: 1, duration: 0.45f))
+            .Group(Tween.Alpha(target: _rocketImage, startValue: 0, endValue: 1, duration: 0.45f))
             .Group(
                 Tween.Custom(
                     target: _rocket.transform,
@@ -54,11 +60,9 @@ public class Fade : MonoBehaviour
             gameObject.SetActive(true);
         }
 
-        Image image = _rocket.GetComponent<Image>();
-
         Sequence
             .Create()
-            .Group(Tween.Alpha(target: image, startValue: 1, endValue: 0, duration: 0.5f))
+            .Group(Tween.Alpha(target: _rocketImage, startValue: 1, endValue: 0, duration: 0.5f))
             .Chain(
                 Tween.Custom(
                     target: _material,
@@ -79,11 +83,9 @@ public class Fade : MonoBehaviour
             gameObject.SetActive(true);
         }
 
-        Image image = _rocket.GetComponent<Image>();
-
         return Sequence
             .Create()
-            .Group(Tween.Alpha(target: image, startValue: 1, endValue: 0, duration: 0.5f))
+            .Group(Tween.Alpha(target: _rocketImage, startValue: 1, endValue: 0, duration: 0.5f))
             .OnComplete(target: target, onComplete: onComplete);
     }
 
@@ -94,11 +96,9 @@ public class Fade : MonoBehaviour
             gameObject.SetActive(true);
         }
 
-        Image image = _rocket.GetComponent<Image>();
-
         return Sequence
             .Create()
-            .Group(Tween.Alpha(target: image, startValue: 1, endValue: 0, duration: 0.5f))
+            .Group(Tween.Alpha(target: _rocketImage, startValue: 1, endValue: 0, duration: 0.5f))
             .OnComplete(onComplete: onComplete);
     }
 
@@ -132,8 +132,6 @@ public class Fade : MonoBehaviour
             gameObject.SetActive(true);
         }
 
-        Image image = _rocket.GetComponent<Image>();
-
         Vector2 rocketPosition = _rocket.transform.localPosition;
         float initialRocketX = rocketPosition.x;
 
@@ -148,7 +146,7 @@ public class Fade : MonoBehaviour
                     onValueChange: (target, value) => target.SetFloat("_Radius", value)
                 )
             )
-            .Chain(Tween.Alpha(target: image, startValue: 0, endValue: 1, duration: 0.45f))
+            .Chain(Tween.Alpha(target: _rocketImage, startValue: 0, endValue: 1, duration: 0.45f))
             .Group(
                 Tween.Custom(
                     target: _rocket.transform,

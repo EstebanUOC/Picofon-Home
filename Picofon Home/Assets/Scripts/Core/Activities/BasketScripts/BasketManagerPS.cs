@@ -123,8 +123,7 @@ public class BasketManagerPS : MonoBehaviour
 
         _activities = result.Data.Activities;
 
-        // if (_activities is null || _activities.Length == 0)
-        if (true)
+        if (_activities is null || _activities.Length == 0)
         {
             _fade.StopAndZoom();
 
