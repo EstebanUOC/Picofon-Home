@@ -87,6 +87,21 @@ public class Fade : MonoBehaviour
             .OnComplete(target: target, onComplete: onComplete);
     }
 
+    public Sequence Stop(Action onComplete)
+    {
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+
+        Image image = _rocket.GetComponent<Image>();
+
+        return Sequence
+            .Create()
+            .Group(Tween.Alpha(target: image, startValue: 1, endValue: 0, duration: 0.5f))
+            .OnComplete(onComplete: onComplete);
+    }
+
     public void ZoomIn()
     {
         if (!gameObject.activeSelf)
@@ -155,6 +170,6 @@ public class Fade : MonoBehaviour
 
     public void OnDestroy()
     {
-        _material.SetFloat("_Radius", 1.2f);
+        _material.SetFloat("_Radius", 0);
     }
 }

@@ -8,9 +8,6 @@ public class CanvasUI : MonoBehaviour
     [SerializeField]
     private GameObject _feedback;
 
-    [SerializeField]
-    private GameObject _warning;
-
     private FeedbackController _feedbackController;
 
     public void Awake()
@@ -31,10 +28,5 @@ public class CanvasUI : MonoBehaviour
     public async UniTask<bool> ShowFeedback(FeedbackType type)
     {
         return await _feedbackController.Show(type);
-    }
-
-    public void ShowWarning()
-    {
-        _warning.SetActive(true);
     }
 }
