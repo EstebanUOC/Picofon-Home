@@ -5,6 +5,10 @@ public readonly struct GeneralSessionDTO
     public readonly int TherapyPlanId { get; init; }
 
     public readonly string ChildId { get; init; }
+
+    public readonly string Console { get; init; }
+
+    public readonly string ConductedById { get; init; }
 }
 
 public readonly struct TherapySessionDTO

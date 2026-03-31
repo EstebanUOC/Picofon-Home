@@ -7,6 +7,7 @@ using UnityEngine;
 public struct ActivityRequestParams
 {
     public int PlanId;
+    public string ConductedById;
     public string ChildId;
 }
 

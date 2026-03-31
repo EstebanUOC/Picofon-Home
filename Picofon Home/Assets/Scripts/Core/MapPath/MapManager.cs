@@ -17,20 +17,28 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private LevelItemManager _itemManager;
 
+    private string _conductedById;
+
     public void Start()
     {
         string childId = MapPathPayload.ChildId;
+        _conductedById = MapPathPayload.ConductedById;
 
+#if DEBUG
         if (string.IsNullOrEmpty(childId))
         {
-#if !DEBUG
-            Debug.LogError("ChildId is null or empty in MapPathPayload.");
-            return;
-# else
             childId = "12345678Z";
             Debug.LogWarning("Using default ChildId for testing in Unity Editor.");
-# endif
         }
+# endif
+
+#if DEBUG
+        if (string.IsNullOrEmpty(_conductedById))
+        {
+            _conductedById = "noXJSkWJnCW5iSEu32n5Kvofq5a2";
+            Debug.LogWarning("Using default ConductedById for testing in Unity Editor.");
+        }
+# endif
 
         LoadPlans(childId).Forget();
     }
@@ -66,6 +74,7 @@ public class MapManager : MonoBehaviour
         {
             PlanId = plan.TherapyPlanId,
             ChildId = plan.ChildId,
+            ConductedById = _conductedById,
         };
 
         TherapyTemplate template = plan.TherapyTemplate;
