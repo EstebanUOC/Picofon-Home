@@ -15,6 +15,9 @@ public class Fade : MonoBehaviour
 
     public void Awake()
     {
+        if (_rocket == null)
+            return;
+
         _rocketImage = _rocket.GetComponent<Image>();
         _rocketImage.color = new Color(1, 1, 1, 0);
     }

@@ -29,28 +29,35 @@ public class LevelPath : MonoBehaviour
 
         if (spline.pointCount > points.Length)
         {
-            Resize(spline, points.Length);
+            Resize(spline: spline, points: points);
             return;
         }
 
         AddRange(spline, points);
     }
 
-    private void Resize(SplineComputer spline, int length)
+    private void Resize(SplineComputer spline, Span<Vector2> points)
     {
-        SplinePoint[] points = spline.GetPoints();
+        int length = points.Length;
+
+        SplinePoint[] oldPoints = spline.GetPoints();
         SplinePoint[] newPoints = new SplinePoint[length];
 
         ObjectController objectController = GetComponent<ObjectController>();
 
         objectController.spawnCount = length * CountPerPoint;
 
-        for (int i = 0; i < points.Length; i++)
+        for (int i = 0; i < oldPoints.Length; i++)
         {
             if (i < length)
             {
-                newPoints[i] = points[i];
+                newPoints[i] = oldPoints[i];
             }
+        }
+
+        for (int i = 0; i < length; i++)
+        {
+            newPoints[i].position = points[i];
         }
 
         spline.SetPoints(newPoints);
@@ -61,14 +68,16 @@ public class LevelPath : MonoBehaviour
         if (spline.pointCount == points.Length)
             return;
 
+        int length = points.Length;
+
         SplinePoint[] oldPoints = spline.GetPoints();
         SplinePoint[] newPoints = new SplinePoint[points.Length];
 
         ObjectController objectController = GetComponent<ObjectController>();
 
-        objectController.spawnCount = points.Length * CountPerPoint;
+        objectController.spawnCount = length * CountPerPoint;
 
-        for (int i = 0; i < points.Length; i++)
+        for (int i = 0; i < length; i++)
         {
             if (i < spline.pointCount)
             {
@@ -77,6 +86,11 @@ public class LevelPath : MonoBehaviour
             }
 
             newPoints[i] = new SplinePoint(points[i]);
+        }
+
+        for (int i = 0; i < length; i++)
+        {
+            newPoints[i].position = points[i];
         }
 
         spline.SetPoints(newPoints);
