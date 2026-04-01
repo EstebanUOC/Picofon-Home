@@ -102,6 +102,7 @@ public sealed class LevelItemManager : MonoBehaviour
             positions[i] = child.position;
 
             LevelItemView comp = child.GetComponent<LevelItemView>();
+            LevelButton button = child.GetComponent<LevelButton>();
 
             bool locked = i > current;
 
@@ -133,7 +134,8 @@ public sealed class LevelItemManager : MonoBehaviour
                 State = state,
             };
 
-            comp.Init(in data);
+            button.Init(enabled: !locked, itemView: comp);
+            comp.Init(data: in data);
         }
 
         if (count < childCount)

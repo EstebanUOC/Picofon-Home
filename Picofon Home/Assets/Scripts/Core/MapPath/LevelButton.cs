@@ -20,17 +20,27 @@ public class LevelButton : MonoBehaviour, IPointerClickHandler
     private float _defaultContentY;
     private Vector2 _defaultBackgroundSizeDelta;
 
+    private bool _enabled = true;
+    private LevelItemView _itemView;
+
     public void Awake()
     {
         _defaultContentY = _contentRect.anchoredPosition.y;
         _defaultBackgroundSizeDelta = _backgroundRect.sizeDelta;
     }
 
+    public void Init(bool enabled, LevelItemView itemView)
+    {
+        _enabled = enabled;
+        _itemView = itemView;
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
-        LevelItemView itemView = GetComponent<LevelItemView>();
+        if (!_enabled)
+            return;
 
-        AnimateClick(itemView);
+        AnimateClick(_itemView);
     }
 
     private void AnimateClick(LevelItemView itemView)

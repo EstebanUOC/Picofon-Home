@@ -55,7 +55,7 @@ public class LevelItemView : MonoBehaviour
         switch (value)
         {
             case LevelState.Locked:
-                _lockedOverlay.SetActive(true);
+                Instantiate(_lockedOverlay, transform);
                 break;
             case LevelState.Unlocked:
                 break;
