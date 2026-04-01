@@ -136,7 +136,15 @@ public class BasketGameManagerJG : MonoBehaviour
 
         if (_activities is null || _activities.Length == 0)
         {
-            Debug.LogWarning("No activities found for the given parameters.");
+            _fade.StopAndZoom();
+
+            await _modalGame.ShowWarning();
+
+            _fade.Load();
+            await UniTask.WaitForSeconds(1f);
+
+            _ = _fade.Stop(onComplete: () => SceneManager.LoadScene("MapPathScene"));
+
             return;
         }
 
@@ -219,6 +227,7 @@ public class BasketGameManagerJG : MonoBehaviour
             IsCorrect = isCorrect,
             TaskIndex = _currentActivityIndex,
             SelectedButton = isPositive,
+            CorrectAttributeWs = _currentActivity.Words[0].Id,
         };
 
         _sessionManager.RecordActivityResult(in taskInfo);
@@ -287,7 +296,7 @@ public class BasketGameManagerJG : MonoBehaviour
 
     private async UniTaskVoid EndActivity()
     {
-        await _modalGame.ShowModal();
+        await _modalGame.ShowSummary();
 
         _fade.Load();
         LevelDataStore.Instance?.LevelCompleted();

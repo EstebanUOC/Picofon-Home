@@ -36,7 +36,7 @@ Material:
     m_Floats:
     - _Feather: 0
     - _Inverted: 1
-    - _Radius: 1.2
+    - _Radius: 0
     m_Colors:
     - _Center: {r: 0.5, g: 0.5, b: 0, a: 0}
     - _Color: {r: 0, g: 0, b: 0, a: 1}

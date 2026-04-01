@@ -17,6 +17,9 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private LevelItemManager _itemManager;
 
+    [SerializeField]
+    private Fade _transition;
+
     private string _conductedById;
 
     public void Start()
@@ -64,6 +67,8 @@ public class MapManager : MonoBehaviour
             last: instance.LastLevel,
             current: instance.CurrentLevel
         );
+
+        _transition.ZoomIn();
     }
 
     private void HandleLevelSelected(LevelConfig config, int index)

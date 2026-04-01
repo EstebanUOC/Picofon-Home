@@ -125,7 +125,15 @@ public class BasketManagerPS : MonoBehaviour
 
         if (_activities is null || _activities.Length == 0)
         {
-            _canvasUI.ShowWarning();
+            _fade.StopAndZoom();
+
+            await _modalGame.ShowWarning();
+
+            _fade.Load();
+            await UniTask.WaitForSeconds(1f);
+
+            _ = _fade.Stop(onComplete: () => SceneManager.LoadScene("MapPathScene"));
+
             return;
         }
 
@@ -292,7 +300,7 @@ public class BasketManagerPS : MonoBehaviour
 
     private async UniTaskVoid EndActivity()
     {
-        await _modalGame.ShowModal();
+        await _modalGame.ShowSummary();
 
         _fade.Load();
         LevelDataStore.Instance?.LevelCompleted();
