@@ -2154,7 +2154,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fae657f77d1e37042a5270d30f612e8d, type: 2}
   - {fileID: 11400000, guid: 9dd758d6931039803b4276764db2c9af, type: 2}
   - {fileID: 11400000, guid: 7a656f238dd5b4598a6cf964633fb258, type: 2}
-  _canvas: {fileID: 1805974928}
+  _scroll: {fileID: 360732183}
   _levelPrefab: {fileID: 5802726018472738063, guid: efa43f099012534e9b7c52325476378b, type: 3}
   _marker: {fileID: 1969754793}
   _path: {fileID: 1901330684}
