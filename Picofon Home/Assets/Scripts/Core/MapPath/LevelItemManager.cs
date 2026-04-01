@@ -30,7 +30,7 @@ public sealed class LevelItemManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField]
-    private RectTransform _scroll;
+    private RectTransform _canvas;
 
     [SerializeField]
     private GameObject _levelPrefab;
@@ -60,23 +60,14 @@ public sealed class LevelItemManager : MonoBehaviour
     {
         _container = GetComponent<RectTransform>();
 
-        PerformanceLog.Log($"Scroll width: {_scroll.rect}");
-        Prueba().Forget();
-
-        _containerMiddle = _contentRect.rect.width / 2;
-
-        Debug.Log($"Middle: {_containerMiddle}");
+        CalculateMiddle().Forget();
     }
 
-    private async UniTaskVoid Prueba()
+    private async UniTaskVoid CalculateMiddle()
     {
-        await UniTask.WaitForSeconds(2f);
+        await UniTask.WaitForEndOfFrame(this);
 
-        PerformanceLog.Log($"Scroll width: {_scroll.rect}");
-
-        await UniTask.WaitForSeconds(5f);
-
-        PerformanceLog.Log($"Scroll width: {_scroll.rect}");
+        _containerMiddle = _canvas.rect.width / 2;
     }
 
     public void RenderLevels(int count, int last, int current, in Sequence sequence)
