@@ -671,7 +671,7 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Android: 
+    Android: DREAMTECK_SPLINES
     EmbeddedLinux: 
     GameCoreScarlett: 
     GameCoreXboxOne: 
