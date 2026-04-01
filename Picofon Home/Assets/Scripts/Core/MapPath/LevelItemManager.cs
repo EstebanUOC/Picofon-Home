@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using PrimeTween;
 using UnityEngine;
 
 public enum LevelScene
@@ -50,12 +51,16 @@ public sealed class LevelItemManager : MonoBehaviour
     private int _rows = 2;
     private RectTransform _container;
 
+    private float _containerMiddle;
+
     public void Awake()
     {
         _container = GetComponent<RectTransform>();
+
+        _containerMiddle = _container.rect.width / 2;
     }
 
-    public void RenderLevels(int count, int last, int current)
+    public void RenderLevels(int count, int last, int current, in Sequence sequence)
     {
         float spacingMiddle = _spacing.y / 2;
 
@@ -132,7 +137,7 @@ public sealed class LevelItemManager : MonoBehaviour
 
         _path.ChangePath(positions);
 
-        const float offset = 300f;
+        const float offset = 600;
 
         RectTransform bottomLevel = _container.GetChild(count - 1).GetComponent<RectTransform>();
 
@@ -146,8 +151,17 @@ public sealed class LevelItemManager : MonoBehaviour
         RectTransform markerLevel = _container.GetChild(markerIndex).GetComponent<RectTransform>();
         _marker.PositionMarker(markerLevel.anchoredPosition);
 
+        float targetX = markerLevel.anchoredPosition.x - _containerMiddle;
+
+        if (targetX > 0)
+        {
+            sequence.Chain(
+                Tween.UIAnchoredPositionX(_contentRect, -targetX, 1f, ease: Ease.OutCubic)
+            );
+        }
+
         if (last >= 0)
-            MoveMarkerToLevel(current).Forget();
+            MoveMarkerToLevel(current, in sequence);
     }
 
     public void OnValidate()
@@ -177,11 +191,10 @@ public sealed class LevelItemManager : MonoBehaviour
         }
     }
 
-    private async UniTaskVoid MoveMarkerToLevel(int levelIndex)
+    private void MoveMarkerToLevel(int levelIndex, in Sequence sequence)
     {
-        await UniTask.WaitForSeconds(1f);
-
         RectTransform targetLevel = _container.GetChild(levelIndex) as RectTransform;
-        _marker.MoveMarker(targetLevel.anchoredPosition);
+
+        _marker.MoveMarker(targetLevel.anchoredPosition, in sequence);
     }
 }

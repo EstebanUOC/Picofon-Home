@@ -30,8 +30,10 @@ public class Marker : MonoBehaviour
         _rectTransform.anchoredPosition = position + offset;
     }
 
-    public void MoveMarker(Vector2 position)
+    public void MoveMarker(Vector2 position, in Sequence sequence)
     {
-        Tween.UIAnchoredPosition(_rectTransform, position + offset, 1f, Ease.InOutBack);
+        sequence.Chain(
+            Tween.UIAnchoredPosition(_rectTransform, position + offset, 1f, Ease.InOutBack)
+        );
     }
 }

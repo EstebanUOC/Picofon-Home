@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using PrimeTween;
 using UnityEngine;
 
 public enum ActivityType : byte
@@ -62,13 +63,14 @@ public class MapManager : MonoBehaviour
 
         await instance.LoadPlans(childId);
 
+        Sequence sequence = _transition.ZoomIn();
+
         _itemManager.RenderLevels(
             count: instance.GetPlansCount(),
             last: instance.LastLevel,
-            current: instance.CurrentLevel
+            current: instance.CurrentLevel,
+            sequence: in sequence
         );
-
-        _transition.ZoomIn();
     }
 
     private void HandleLevelSelected(LevelConfig config, int index)

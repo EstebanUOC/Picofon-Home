@@ -105,7 +105,7 @@ public class Fade : MonoBehaviour
             .OnComplete(onComplete: onComplete);
     }
 
-    public void ZoomIn()
+    public Sequence ZoomIn()
     {
         if (!gameObject.activeSelf)
         {
@@ -114,8 +114,9 @@ public class Fade : MonoBehaviour
 
         _material.SetFloat("_Radius", 0);
 
-        Sequence
+        Sequence sequence = Sequence
             .Create()
+            .OnComplete(target: this, onComplete: target => target.gameObject.SetActive(false))
             .Group(
                 Tween.Custom(
                     target: _material,
@@ -124,8 +125,9 @@ public class Fade : MonoBehaviour
                     duration: 0.6f,
                     onValueChange: (target, value) => target.SetFloat("_Radius", value)
                 )
-            )
-            .OnComplete(target: this, onComplete: target => target.gameObject.SetActive(false));
+            );
+
+        return sequence;
     }
 
     public void Load()
