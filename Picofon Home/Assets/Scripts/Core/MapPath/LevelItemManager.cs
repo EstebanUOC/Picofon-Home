@@ -30,6 +30,9 @@ public sealed class LevelItemManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField]
+    private RectTransform _canvas;
+
+    [SerializeField]
     private GameObject _levelPrefab;
 
     [SerializeField]
@@ -57,7 +60,8 @@ public sealed class LevelItemManager : MonoBehaviour
     {
         _container = GetComponent<RectTransform>();
 
-        _containerMiddle = _container.rect.width / 2;
+        _containerMiddle = _canvas.rect.width / 2;
+        Debug.Log($"Container Middle: {_canvas.rect}");
     }
 
     public void RenderLevels(int count, int last, int current, in Sequence sequence)
@@ -147,11 +151,15 @@ public sealed class LevelItemManager : MonoBehaviour
         );
 
         int markerIndex = last >= 0 ? last : current;
+        markerIndex = 2;
 
         RectTransform markerLevel = _container.GetChild(markerIndex).GetComponent<RectTransform>();
         _marker.PositionMarker(markerLevel.anchoredPosition);
 
         float targetX = markerLevel.anchoredPosition.x - _containerMiddle;
+        PerformanceLog.Log(
+            $"TargetX: {targetX}, ContainerMiddle: {_containerMiddle}, MarkerLevelX: {markerLevel.anchoredPosition.x}"
+        );
 
         if (targetX > 0)
         {
