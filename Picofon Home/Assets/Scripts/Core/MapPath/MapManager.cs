@@ -32,6 +32,8 @@ public class MapManager : MonoBehaviour
         string childId = MapPathPayload.ChildId;
         _conductedById = MapPathPayload.ConductedById;
 
+        _transition.Active();
+
 #if DEBUG
         if (string.IsNullOrEmpty(childId))
         {

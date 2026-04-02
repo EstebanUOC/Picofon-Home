@@ -22,12 +22,22 @@ public class Fade : MonoBehaviour
         _rocketImage.color = new Color(1, 1, 1, 0);
     }
 
-    public void FirstLoad()
+    public void OnDestroy()
+    {
+        _material.SetFloat("_Radius", 0);
+    }
+
+    public void Active()
     {
         if (!gameObject.activeSelf)
         {
             gameObject.SetActive(true);
         }
+    }
+
+    public void FirstLoad()
+    {
+        Active();
 
         _material.SetFloat("_Radius", 0);
 
@@ -58,10 +68,7 @@ public class Fade : MonoBehaviour
 
     public void StopAndZoom()
     {
-        if (!gameObject.activeSelf)
-        {
-            gameObject.SetActive(true);
-        }
+        Active();
 
         Sequence
             .Create()
@@ -81,10 +88,7 @@ public class Fade : MonoBehaviour
     public Sequence Stop<T>(T target, Action<T> onComplete)
         where T : class
     {
-        if (!gameObject.activeSelf)
-        {
-            gameObject.SetActive(true);
-        }
+        Active();
 
         return Sequence
             .Create()
@@ -94,10 +98,7 @@ public class Fade : MonoBehaviour
 
     public Sequence Stop(Action onComplete)
     {
-        if (!gameObject.activeSelf)
-        {
-            gameObject.SetActive(true);
-        }
+        Active();
 
         return Sequence
             .Create()
@@ -107,10 +108,7 @@ public class Fade : MonoBehaviour
 
     public Sequence ZoomIn()
     {
-        if (!gameObject.activeSelf)
-        {
-            gameObject.SetActive(true);
-        }
+        Active();
 
         _material.SetFloat("_Radius", 0);
 
@@ -132,10 +130,7 @@ public class Fade : MonoBehaviour
 
     public void Load()
     {
-        if (!gameObject.activeSelf)
-        {
-            gameObject.SetActive(true);
-        }
+        Active();
 
         Vector2 rocketPosition = _rocket.transform.localPosition;
         float initialRocketX = rocketPosition.x;
@@ -169,10 +164,5 @@ public class Fade : MonoBehaviour
                     ease: Ease.InOutSine
                 )
             );
-    }
-
-    public void OnDestroy()
-    {
-        _material.SetFloat("_Radius", 0);
     }
 }
