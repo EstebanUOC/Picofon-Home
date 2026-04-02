@@ -124,7 +124,15 @@ public sealed class LevelItemManager : MonoBehaviour
 
             LevelType type = i % 2 == 0 ? LevelType.Syllable : LevelType.Phoneme;
 
-            LevelState state = locked ? LevelState.Locked : LevelState.Unlocked;
+            LevelState state = LevelState.Unlocked;
+
+            if (locked)
+                state = LevelState.Locked;
+
+            if (i < current)
+                state = LevelState.Completed;
+
+            bool enabled = !locked && i == current;
 
             LevelData data = new()
             {
@@ -134,7 +142,7 @@ public sealed class LevelItemManager : MonoBehaviour
                 State = state,
             };
 
-            button.Init(enabled: !locked, itemView: comp);
+            button.Init(enabled: enabled, itemView: comp);
             comp.Init(data: in data);
         }
 

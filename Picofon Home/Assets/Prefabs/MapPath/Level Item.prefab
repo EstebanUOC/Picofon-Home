@@ -242,7 +242,8 @@ MonoBehaviour:
   _icon: {fileID: 5495187143461384949}
   _shadow: {fileID: 1362769568152723603}
   _content: {fileID: 7447318253375993555}
-  _lockedOverlay: {fileID: 2208604709672261288, guid: c1c6c6c05a18f94fe854d2196cc4a506, type: 3}
+  _locked: {fileID: 2208604709672261288, guid: c1c6c6c05a18f94fe854d2196cc4a506, type: 3}
+  _completed: {fileID: 6386870730620977360, guid: 684948dc65fcd9793a5999ef5d5d62a9, type: 3}
 --- !u!114 &275431212645873306
 MonoBehaviour:
   m_ObjectHideFlags: 0
