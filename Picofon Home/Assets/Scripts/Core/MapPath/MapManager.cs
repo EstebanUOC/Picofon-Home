@@ -62,6 +62,7 @@ public class MapManager : MonoBehaviour
         LevelDataStore instance = LevelDataStore.Instance;
 
         await instance.LoadPlans(childId);
+        await UniTask.WaitForEndOfFrame(this);
 
         Sequence sequence = _transition.ZoomIn();
 
