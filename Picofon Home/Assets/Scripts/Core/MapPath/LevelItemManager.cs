@@ -175,6 +175,7 @@ public sealed class LevelItemManager : MonoBehaviour
         _marker.PositionMarker(markerLevel.anchoredPosition);
 
         float targetX = markerLevel.anchoredPosition.x - _containerMiddle;
+        PerformanceLog.Log($"Target X: {targetX}, Container middle: {_containerMiddle}");
 
         if (targetX > 0)
         {
