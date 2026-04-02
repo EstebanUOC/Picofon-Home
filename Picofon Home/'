@@ -18,12 +18,8 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private LevelItemManager _itemManager;
 
-    [Space]
     [SerializeField]
     private Fade _transition;
-
-    [SerializeField]
-    private Counter _counter;
 
     private string _conductedById;
 
@@ -114,7 +110,7 @@ public class MapManager : MonoBehaviour
 
     private async UniTask LoadOralnitas(string childId)
     {
-        OralnitasService service = new(0);
+        OralnitasService service = new();
 
         ApiResult<OralnitasData> response = await service.GetOralnitas(childId);
 
@@ -123,7 +119,5 @@ public class MapManager : MonoBehaviour
             PerformanceLog.Log($"Failed to load Oralnitas data: {response.Message}");
             return;
         }
-
-        _counter.SetScore(response.Data.CorrectAnswers);
     }
 }
