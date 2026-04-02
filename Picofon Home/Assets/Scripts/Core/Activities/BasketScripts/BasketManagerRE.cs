@@ -82,7 +82,7 @@ public class BasketManagerRE : MonoBehaviour
 # endif
         }
 
-        if (_uiManager.IsTablet())
+        if (SceneOrientationHelper.IsTablet())
         {
             _camera.orthographicSize = 5.9f;
             _camera.transform.position = new Vector3(0f, 0.6f, -10f);

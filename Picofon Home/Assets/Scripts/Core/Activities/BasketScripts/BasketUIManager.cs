@@ -30,15 +30,13 @@ public class BasketUIManager : MonoBehaviour
 
     private AudioClip _introAudio;
 
-    private DeviceType _deviceType = DeviceType.Any;
-
     public void Awake()
     {
         SceneOrientationHelper.LockToLandscape();
 
         _gameMenu.OnMenuOptionSelected += HandleMenuOptionSelected;
 
-        if (IsTablet())
+        if (SceneOrientationHelper.IsTablet())
             ApplyResponsiveLayout();
     }
 
@@ -65,34 +63,6 @@ public class BasketUIManager : MonoBehaviour
     public void SetIntroAudio(AudioClip clip)
     {
         _introAudio = clip;
-    }
-
-    public bool IsTablet()
-    {
-        if (_deviceType != DeviceType.Any)
-            return _deviceType == DeviceType.Tablet;
-
-        float dpi = Screen.dpi;
-
-        bool isTablet;
-
-        if (dpi == 0)
-        {
-            isTablet = Mathf.Min(Screen.width, Screen.height) >= 1200;
-
-            _deviceType = isTablet ? DeviceType.Tablet : DeviceType.Mobile;
-            return isTablet;
-        }
-
-        float widthInches = Screen.width / dpi;
-        float heightInches = Screen.height / dpi;
-        float diagonal = Mathf.Sqrt(widthInches * widthInches + heightInches * heightInches);
-
-        isTablet = diagonal >= 6.5f;
-
-        _deviceType = isTablet ? DeviceType.Tablet : DeviceType.Mobile;
-
-        return isTablet;
     }
 
     private void HandleMenuOptionSelected(GameMenuEvent menuEvent)

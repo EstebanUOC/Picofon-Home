@@ -5,6 +5,36 @@ public static class SceneOrientationHelper
     private static ScreenOrientation _lastOrientation;
     private static bool _checkedFPS = false;
 
+    private static DeviceType _deviceType = DeviceType.Any;
+
+    public static bool IsTablet()
+    {
+        if (_deviceType != DeviceType.Any)
+            return _deviceType == DeviceType.Tablet;
+
+        float dpi = Screen.dpi;
+
+        bool isTablet;
+
+        if (dpi == 0)
+        {
+            isTablet = Mathf.Min(Screen.width, Screen.height) >= 1200;
+
+            _deviceType = isTablet ? DeviceType.Tablet : DeviceType.Mobile;
+            return isTablet;
+        }
+
+        float widthInches = Screen.width / dpi;
+        float heightInches = Screen.height / dpi;
+        float diagonal = Mathf.Sqrt(widthInches * widthInches + heightInches * heightInches);
+
+        isTablet = diagonal >= 6.5f;
+
+        _deviceType = isTablet ? DeviceType.Tablet : DeviceType.Mobile;
+
+        return isTablet;
+    }
+
     public static void LockToPortrait()
     {
         Screen.autorotateToPortrait = true;
