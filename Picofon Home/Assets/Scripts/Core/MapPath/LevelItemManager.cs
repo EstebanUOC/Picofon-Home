@@ -67,7 +67,9 @@ public sealed class LevelItemManager : MonoBehaviour
     {
         await UniTask.WaitForEndOfFrame(this);
 
+        PerformanceLog.Log($"Canvas rect: {_canvas.rect}");
         _containerMiddle = _canvas.rect.width / 2;
+        PerformanceLog.Log($"Container middle calculated: {_containerMiddle}");
     }
 
     public void RenderLevels(int count, int last, int current, in Sequence sequence)
