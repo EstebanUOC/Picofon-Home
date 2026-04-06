@@ -39,7 +39,7 @@ public class ComboBox : MonoBehaviour, IPointerClickHandler
 
         _selectedLanguage = _options[1].EventData;
 
-        channel.OnRaised += HandleOptionSelected;
+        channel.OnRaised += (data) => HandleOptionSelected(data);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -54,7 +54,19 @@ public class ComboBox : MonoBehaviour, IPointerClickHandler
         return _selectedLanguage.Code;
     }
 
-    private void HandleOptionSelected(LanguageData data)
+    public void SetSelectedLanguage(LanguageCode code)
+    {
+        foreach (var option in _options)
+        {
+            if (option.EventData.Code == code)
+            {
+                HandleOptionSelected(option.EventData, false);
+                break;
+            }
+        }
+    }
+
+    private void HandleOptionSelected(LanguageData data, bool raiseAnimation = true)
     {
         isOpen = false;
         _selectedLanguage = data;
@@ -69,7 +81,8 @@ public class ComboBox : MonoBehaviour, IPointerClickHandler
         _flag.sprite = data.Flag;
         _languageName.text = name;
 
-        AnimatedOpenClose();
+        if (raiseAnimation)
+            AnimatedOpenClose();
     }
 
     private void AnimatedOpenClose()

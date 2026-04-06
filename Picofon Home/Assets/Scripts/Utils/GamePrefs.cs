@@ -2,6 +2,16 @@ using UnityEngine;
 
 public static class GamePrefs
 {
+    public static string PreferredLanguage
+    {
+        get => PlayerPrefs.GetString(nameof(PreferredLanguage), "CA");
+        set
+        {
+            PlayerPrefs.SetString(nameof(PreferredLanguage), value);
+            Save();
+        }
+    }
+
     public static int LastCompletedLevel
     {
         get => PlayerPrefs.GetInt(nameof(LastCompletedLevel), 0);

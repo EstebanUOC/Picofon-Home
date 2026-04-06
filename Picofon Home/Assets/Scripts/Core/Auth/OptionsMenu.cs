@@ -14,11 +14,23 @@ public class OptionsMenu : MonoBehaviour
     public void Awake()
     {
         _saveButton.OnClick += HandleSaveButtonClicked;
+
+        string preferredLanguage = GamePrefs.PreferredLanguage;
+
+        Debug.Log($"Preferred language: {preferredLanguage}");
+
+        if (preferredLanguage[0] == 'C')
+            return;
+
+        if (Enum.TryParse(preferredLanguage, out LanguageCode language))
+        {
+            _languageComboBox.SetSelectedLanguage(language);
+        }
     }
 
     private void HandleSaveButtonClicked()
     {
-        PerformanceLog.Log($"Selected language: {_languageComboBox.GetSelectedLanguage()}");
+        GamePrefs.PreferredLanguage = _languageComboBox.GetSelectedLanguage().ToString();
 
         OnClose?.Invoke();
     }
