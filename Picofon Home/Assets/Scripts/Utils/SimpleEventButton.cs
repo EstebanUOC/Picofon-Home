@@ -24,6 +24,9 @@ public class SimpleEventButton<T> : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (!_interactable)
+            return;
+
         _eventChannel?.Raise(EventData);
     }
 }

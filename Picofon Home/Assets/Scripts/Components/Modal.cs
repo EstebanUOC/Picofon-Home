@@ -20,11 +20,15 @@ public class Modal : MonoBehaviour
     [SerializeField]
     private CustomButtonBase _button;
 
+    [Space]
     [SerializeField]
     private GameObject _content;
 
     [SerializeField]
     private GameObject _menu;
+
+    [SerializeField]
+    private GameObject _options;
 
     private ReusableCompletionSource<bool> _taskCompletion;
     private ReusableCompletionSource<DebugMenuResult> _taskDebug;
@@ -62,6 +66,18 @@ public class Modal : MonoBehaviour
         return await _taskCompletion.Task;
     }
 
+    public async UniTask<bool> ShowOptions()
+    {
+        gameObject.SetActive(true);
+
+        _options.SetActive(true);
+
+        OptionsMenu optionsMenu = _options.GetComponent<OptionsMenu>();
+        optionsMenu.OnClose += OnOptionsMenuClose;
+
+        return await _taskCompletion.Task;
+    }
+
     public void OnDestroy()
     {
         _taskCompletion.TrySetCanceled();
@@ -80,6 +96,14 @@ public class Modal : MonoBehaviour
 
         _content.SetActive(true);
         _menu.SetActive(false);
+        gameObject.SetActive(false);
+    }
+
+    private void OnOptionsMenuClose()
+    {
+        _taskCompletion.TrySetResult(true);
+
+        _options.SetActive(false);
         gameObject.SetActive(false);
     }
 }
