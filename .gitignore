@@ -82,6 +82,7 @@ ExportedObj/
 
 # Unity Addressables
 /[Aa]ssets/AddressableAssetsData/*/*.bin*
+*/[Aa]ssets/Packages
 /[Aa]ssets/StreamingAssets/aa.meta
 /[Aa]ssets/StreamingAssets/aa/*
 
