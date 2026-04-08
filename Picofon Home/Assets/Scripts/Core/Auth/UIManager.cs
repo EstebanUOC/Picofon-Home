@@ -87,6 +87,10 @@ public class UIManager : MonoBehaviour
 
         if (FirebaseAuthInstance.CurrentUser != null)
         {
+            PerformanceLog.Log(
+                $"User is already authenticated with Firebase. User ID: {FirebaseAuthInstance.CurrentUser.UserId}"
+            );
+
             string firebaseIdToken = await FirebaseAuthInstance
                 .CurrentUser.TokenAsync(false)
                 .AsUniTask()
