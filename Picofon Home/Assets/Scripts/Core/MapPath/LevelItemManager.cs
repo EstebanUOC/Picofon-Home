@@ -167,7 +167,6 @@ public sealed class LevelItemManager : MonoBehaviour
         );
 
         int markerIndex = last >= 0 ? last : current;
-        markerIndex = 2;
 
         RectTransform markerLevel = _container.GetChild(markerIndex).GetComponent<RectTransform>();
         _marker.PositionMarker(markerLevel.anchoredPosition);

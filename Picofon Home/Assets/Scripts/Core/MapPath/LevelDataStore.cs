@@ -48,6 +48,7 @@ public class LevelDataStore : MonoBehaviour
 
         foreach (TherapyPlan plan in _cachedPlans)
         {
+            PerformanceLog.Log($"Order number: {plan.OrderNumber}, Status: {plan.Status}");
             if (plan.Status == TherapyStatus.Active)
             {
                 _currentLevel = index;

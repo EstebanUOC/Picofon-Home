@@ -15,4 +15,6 @@ public class TherapyPlan
     public TherapyStatus Status { get; init; }
 
     public TherapyTemplate TherapyTemplate { get; init; }
+
+    public int OrderNumber { get; init; }
 }
