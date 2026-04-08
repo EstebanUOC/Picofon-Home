@@ -17,6 +17,8 @@ public class LevelDataStore : MonoBehaviour
 
     public int LastLevel => _lastLevel;
 
+    private TherapyPlanService _service;
+
     public void Awake()
     {
         if (Instance == null)
@@ -48,7 +50,6 @@ public class LevelDataStore : MonoBehaviour
 
         foreach (TherapyPlan plan in _cachedPlans)
         {
-            PerformanceLog.Log($"Order number: {plan.OrderNumber}, Status: {plan.Status}");
             if (plan.Status == TherapyStatus.Active)
             {
                 _currentLevel = index;
@@ -56,6 +57,11 @@ public class LevelDataStore : MonoBehaviour
             }
             index++;
         }
+    }
+
+    public async UniTask CreateDefaultPlans(string id, string assignedById)
+    {
+        await CreatePlans(id, assignedById);
     }
 
     public void SavePlans(TherapyPlan[] plans)
@@ -91,10 +97,37 @@ public class LevelDataStore : MonoBehaviour
 
     private async UniTask GetPlans(string childId)
     {
-        TherapyPlanService service = new();
+        _service = new();
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 
-        ApiResult<TherapyData> result = await service.GetAllPlans<TherapyData>(childId, token);
+        ApiResult<TherapyData> result = await _service.GetAllPlans<TherapyData>(childId, token);
+
+        if (!result.Success)
+        {
+            PerformanceLog.LogError($"Error loading activities: {result.Message}");
+            return;
+        }
+
+        TherapyPlan[] plans = result.Data.Plans;
+
+        if (plans is null || plans.Length == 0)
+        {
+            PerformanceLog.LogError("No therapy plans found for the child.");
+            return;
+        }
+
+        SavePlans(plans);
+    }
+
+    private async UniTask CreatePlans(string childId, string assignedById)
+    {
+        CancellationToken token = this.GetCancellationTokenOnDestroy();
+
+        ApiResult<TherapyData> result = await _service.CreateDefaultPlans<TherapyData>(
+            childId,
+            assignedById,
+            token: token
+        );
 
         if (!result.Success)
         {
