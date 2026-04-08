@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using PrimeTween;
 using UnityEngine;
 
 public enum ActivityType : byte
@@ -17,8 +18,12 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private LevelItemManager _itemManager;
 
+    [Space]
     [SerializeField]
     private Fade _transition;
+
+    [SerializeField]
+    private Counter _counter;
 
     private string _conductedById;
 
@@ -26,6 +31,8 @@ public class MapManager : MonoBehaviour
     {
         string childId = MapPathPayload.ChildId;
         _conductedById = MapPathPayload.ConductedById;
+
+        _transition.Active();
 
 #if DEBUG
         if (string.IsNullOrEmpty(childId))
@@ -61,14 +68,18 @@ public class MapManager : MonoBehaviour
         LevelDataStore instance = LevelDataStore.Instance;
 
         await instance.LoadPlans(childId);
+        await LoadOralnitas(childId);
+
+        await UniTask.WaitForEndOfFrame(this);
+
+        Sequence sequence = _transition.ZoomIn();
 
         _itemManager.RenderLevels(
             count: instance.GetPlansCount(),
             last: instance.LastLevel,
-            current: instance.CurrentLevel
+            current: instance.CurrentLevel,
+            sequence: in sequence
         );
-
-        _transition.ZoomIn();
     }
 
     private void HandleLevelSelected(LevelConfig config, int index)
@@ -101,5 +112,20 @@ public class MapManager : MonoBehaviour
         string scene = $"{config.SceneName}_{suffix}";
 
         UnityEngine.SceneManagement.SceneManager.LoadScene(scene);
+    }
+
+    private async UniTask LoadOralnitas(string childId)
+    {
+        OralnitasService service = new(0);
+
+        ApiResult<OralnitasData> response = await service.GetOralnitas(childId);
+
+        if (!response.Success)
+        {
+            PerformanceLog.Log($"Failed to load Oralnitas data: {response.Message}");
+            return;
+        }
+
+        _counter.SetScore(response.Data.CorrectAnswers);
     }
 }

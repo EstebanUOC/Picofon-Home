@@ -162,6 +162,11 @@ public class UIManager : MonoBehaviour
         return result;
     }
 
+    public async UniTask ShowOptions()
+    {
+        await ModalPanel.ShowOptions();
+    }
+
     public void Logout()
     {
         // FirebaseAuthInstance.SignOut();

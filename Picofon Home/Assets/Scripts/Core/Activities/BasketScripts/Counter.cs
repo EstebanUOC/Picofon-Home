@@ -19,6 +19,14 @@ public class Counter : MonoBehaviour
         UpdateScore(_score);
     }
 
+    public void SetScore(int score)
+    {
+        if (score < 0)
+            return;
+
+        UpdateScore(score);
+    }
+
     private void UpdateScore(int score)
     {
         int length = ConvertIntToCharArray(score, scoreChars, 0);

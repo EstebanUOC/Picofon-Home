@@ -16,6 +16,9 @@ public class Login : Panel
     [SerializeField]
     private GameObject _debugButton;
 
+    [SerializeField]
+    private SimpleButton _optionsButton;
+
     [Space]
     [SerializeField]
     private TMPro.TMP_Text _versionText;
@@ -37,6 +40,7 @@ public class Login : Panel
 
         loginButton.OnClickAsync += AuthenticateWithGoogle;
         debugLoginButton.OnClick += OnDebugLogin;
+        _optionsButton.OnClick += OnOptions;
 
         OnHide += () => gameObject.SetActive(false);
 
@@ -46,6 +50,11 @@ public class Login : Panel
     private void OnDebugLogin()
     {
         ShowDebugMenu().Forget();
+    }
+
+    private void OnOptions()
+    {
+        ShowOptions().Forget();
     }
 
     private async UniTask AuthenticateWithGoogle()
@@ -167,5 +176,10 @@ public class Login : Panel
             default:
                 break;
         }
+    }
+
+    private async UniTaskVoid ShowOptions()
+    {
+        await UIManager.ShowOptions();
     }
 }

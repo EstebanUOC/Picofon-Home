@@ -26,9 +26,12 @@ public class LevelItemView : MonoBehaviour
     [SerializeField]
     private Image _content;
 
-    [Space]
+    [Header("Overlays")]
     [SerializeField]
-    private GameObject _lockedOverlay;
+    private GameObject _locked;
+
+    [SerializeField]
+    private GameObject _completed;
 
     public LevelConfig Config => _config;
     public int Index => _index;
@@ -55,11 +58,12 @@ public class LevelItemView : MonoBehaviour
         switch (value)
         {
             case LevelState.Locked:
-                _lockedOverlay.SetActive(true);
+                Instantiate(_locked, transform);
                 break;
             case LevelState.Unlocked:
                 break;
             case LevelState.Completed:
+                Instantiate(_completed, transform);
                 break;
         }
     }
