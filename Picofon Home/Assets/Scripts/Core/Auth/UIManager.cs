@@ -173,7 +173,7 @@ public class UIManager : MonoBehaviour
 
     public void Logout()
     {
-        // FirebaseAuthInstance.SignOut();
+        FirebaseAuthInstance.SignOut();
 
         CurrentUser = null;
 
