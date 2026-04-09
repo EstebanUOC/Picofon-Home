@@ -19,6 +19,9 @@ public class MapUIManager : MonoBehaviour
 
         if (SceneOrientationHelper.IsTablet())
         {
+            PerformanceLog.Log(
+                $"Applying responsive transform for tablet: {_responsiveTransform.Scale}"
+            );
             RectTransform target = _responsiveTransform.Target;
             target.localScale = _responsiveTransform.Scale;
         }
