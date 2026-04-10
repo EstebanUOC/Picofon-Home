@@ -118,6 +118,74 @@ MonoBehaviour:
     m_Localized: "DNI: 8 d\xEDgits + lletra | NIE: X/Y/Z + 7 d\xEDgits + lletra"
     m_Metadata:
       m_Items: []
+  - m_Id: 355242674864128
+    m_Localized: Nom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 356364194004992
+    m_Localized: Introdueix el nom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 356663684087808
+    m_Localized: Cognom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 356869309841408
+    m_Localized: "Exemple: Sanz\u200B"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357054819713024
+    m_Localized: "Quan va n\xE9ixer?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357328254779392
+    m_Localized: Any
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357526297231360
+    m_Localized: "Introdu\xEFu una data v\xE0lida"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357653112012800
+    m_Localized: A quina escola estudia?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357841121689600
+    m_Localized: 'Exemple: Bressol Chiqui La Vila'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358083267248128
+    m_Localized: Quina llengua parla?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358595597287424
+    m_Localized: En quin grau es troba?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358917900189696
+    m_Localized: "\xBFTu menor tiene alguna necesidad espec\xEDfica de apoyo educativo?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 359804529917952
+    m_Localized: Trastorn Especifico del Llenguatge (TEL)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360041218686976
+    m_Localized: Trastorn de l'Espectre Autista (TEA)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360295766802432
+    m_Localized: Altres
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360793387417600
+    m_Localized: A quin centre pertany?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360930834759680
+    m_Localized: Centre per defecte
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

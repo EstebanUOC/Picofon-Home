@@ -117,6 +117,74 @@ MonoBehaviour:
     m_Localized: "DNI: 8 d\xEDgitos + letra | NIE: X/Y/Z + 7 d\xEDgitos + letra"
     m_Metadata:
       m_Items: []
+  - m_Id: 355242674864128
+    m_Localized: Nombre
+    m_Metadata:
+      m_Items: []
+  - m_Id: 356364194004992
+    m_Localized: Introduce el nombre
+    m_Metadata:
+      m_Items: []
+  - m_Id: 356663684087808
+    m_Localized: Apellido
+    m_Metadata:
+      m_Items: []
+  - m_Id: 356869309841408
+    m_Localized: 'Ejemplo: Sanz'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357054819713024
+    m_Localized: "Cu\xE1ndo naci\xF3?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357328254779392
+    m_Localized: "A\xF1o"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357526297231360
+    m_Localized: "Introduzca una fecha v\xE1lida"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357653112012800
+    m_Localized: "En qu\xE9 escuela estudia?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357841121689600
+    m_Localized: 'Ejemplo: Bressol Chiqui La Vila'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358083267248128
+    m_Localized: "Qu\xE9 lengua habla?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358595597287424
+    m_Localized: "En qu\xE9 grado se encuentra?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358917900189696
+    m_Localized: "Tu menor tiene alguna necesidad espec\xEDfica de apoyo educativo?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 359804529917952
+    m_Localized: Trastorno Especifico del Lenguaje (TEL)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360041218686976
+    m_Localized: Trastorno del Espectro Autista (TEA)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360295766802432
+    m_Localized: Otros
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360793387417600
+    m_Localized: "A qu\xE9 centro pertenece?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360930834759680
+    m_Localized: Centro por defecto
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
