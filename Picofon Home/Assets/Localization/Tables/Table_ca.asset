@@ -39,6 +39,85 @@ MonoBehaviour:
       Picofon"
     m_Metadata:
       m_Items: []
+  - m_Id: 329403241447424
+    m_Localized: "Picofon \xE9s una aplicaci\xF3 educativa dissenyada per millorar
+      la consci\xE8ncia fonol\xF2gica dels infants d\u2019entre 3 i 7 anys.\nL\u2019aplicaci\xF3
+      ha estat desenvolupada i gestionada pel Grup de Recerca en Cognici\xF3 i Llenguatge
+      (UOC-UB), GRECIL!, format per terapeutes del llenguatge, ling\xFCistes i investigadors
+      especialitzats en el desenvolupament del llenguatge infantil.\nEn continuar,
+      vost\xE8 confirma que \xE9s el pare, la mare o el/la tutor/a legal de l\u2019infant
+      i autoritza l\u2019\xFAs de Picofon amb finalitats exclusivament educatives
+      i de recerca.\nLes dades que es recullen a trav\xE9s de l\u2019aplicaci\xF3
+      s\xF3n tractades de manera segura i confidencial. Nom\xE9s un petit conjunt
+      d\u2019aquestes dades podr\xE0 ser utilitzat pels professionals del grup GRECIL!
+      per a:\n\n\u2022 Fer un seguiment del progr\xE9s de l\u2019infant, i/o\n\u2022
+      Fins cient\xEDfics o terap\xE8utics, sempre de forma an\xF2nima i agregada.\n\nEn
+      cap cas les dades seran cedides a tercers ni utilitzades amb finalitats comercials.\nEn
+      pr\xE9mer \u201CAccepto\u201D, declara haver llegit i ent\xE8s aquest av\xEDs
+      i consentir el tractament de les dades segons s\u2019hi descriu."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 331081260843008
+    m_Localized: Accepto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 331229546266624
+    m_Localized: No accepto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 331701699067904
+    m_Localized: "Vas iniciar sessi\xF3 com a Convidat, quin \xE9s el teu rol actual:"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 332546985541632
+    m_Localized: Professional
+    m_Metadata:
+      m_Items: []
+  - m_Id: 332782021754880
+    m_Localized: (terapeuta / docent)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 333362127552512
+    m_Localized: "Fam\xEDlia"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 333515093819392
+    m_Localized: (mare, pare o tutor/a)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 334195409928192
+    m_Localized: Infants
+    m_Metadata:
+      m_Items: []
+  - m_Id: 334462775836672
+    m_Localized: Continuar amb aquest infant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 334624835354624
+    m_Localized: Registrar un nou infant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 335638120480768
+    m_Localized: "Si us plau, posa el dispositiu en horitzontal per gaudir de l'experi\xE8ncia
+      completa\n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349028515692544
+    m_Localized: "gr\xE0cies per registrar-te"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349723927101440
+    m_Localized: "Informaci\xF3 de l'infant"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 350278250512384
+    m_Localized: "\xC9s un Passaport"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 350420521304064
+    m_Localized: "DNI: 8 d\xEDgits + lletra | NIE: X/Y/Z + 7 d\xEDgits + lletra"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

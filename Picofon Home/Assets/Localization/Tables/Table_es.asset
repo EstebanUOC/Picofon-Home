@@ -38,6 +38,85 @@ MonoBehaviour:
     m_Localized: "Aviso y consentimiento para el uso de la aplicaci\xF3n Picofon"
     m_Metadata:
       m_Items: []
+  - m_Id: 329403241447424
+    m_Localized: "Picofon es una aplicaci\xF3n educativa dise\xF1ada para mejorar
+      la conciencia fonol\xF3gica de los ni\xF1os de entre 3 y 7 a\xF1os.\nLa aplicaci\xF3n
+      ha sido desarrollada y gestionada por el Grupo de Investigaci\xF3n en Cognici\xF3n
+      y Lenguaje (UOC-UB), GRECIL!, formado por terapeutas del lenguaje, ling\xFCistas
+      e investigadores especializados en el desarrollo del lenguaje infantil.\nAl
+      continuar, usted confirma que es el padre, la madre o el/la tutor/a legal del
+      ni\xF1o y autoriza el uso de Picofon con fines exclusivamente educativos y
+      de investigaci\xF3n.\nLos datos que se recogen a trav\xE9s de la aplicaci\xF3n
+      son tratados de forma segura y confidencial. \xA1S\xF3lo un peque\xF1o conjunto
+      de estos datos podr\xE1 ser utilizado por los profesionales del grupo GRECIL!
+      para:\n\n\u2022 Hacer un seguimiento del progreso del ni\xF1o, y/o\n\u2022
+      Fines cient\xEDficos o terap\xE9uticos, siempre de forma an\xF3nima y agregada.\n\nEn
+      ning\xFAn caso los datos ser\xE1n cedidos a terceros ni utilizados con fines
+      comerciales.\nAl pulsar \u201CAcepto\u201D, declara haber le\xEDdo y entendido
+      este aviso y consentir el tratamiento de los datos seg\xFAn se describe."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 331081260843008
+    m_Localized: Acepto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 331229546266624
+    m_Localized: No acepto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 331701699067904
+    m_Localized: "Iniciaste sesi\xF3n como Invitado, cu\xE1l es tu rol actual:"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 332546985541632
+    m_Localized: Profesional
+    m_Metadata:
+      m_Items: []
+  - m_Id: 332782021754880
+    m_Localized: (terapeuta / docente)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 333362127552512
+    m_Localized: Familia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 333515093819392
+    m_Localized: (madre, padre o tutor/a)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 334195409928192
+    m_Localized: Infantes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 334462775836672
+    m_Localized: "Continuar con este ni\xF1o"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 334624835354624
+    m_Localized: "Registrar a un nuevo ni\xF1o"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 335638120480768
+    m_Localized: Por favor, coloca el dispositivo en horizontal para disfrutar de
+      la experiencia completa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349028515692544
+    m_Localized: gracias por registrarte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349723927101440
+    m_Localized: "Informaci\xF3n del infante"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 350278250512384
+    m_Localized: Es un Pasaporte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 350420521304064
+    m_Localized: "DNI: 8 d\xEDgitos + letra | NIE: X/Y/Z + 7 d\xEDgitos + letra"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

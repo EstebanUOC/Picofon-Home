@@ -127,7 +127,7 @@ public class IdInput : BasicInput
 
         if (!endsWithLetter)
         {
-            Debug.Log("NIE debe terminar con una letra.");
+            PerformanceLog.Log("NIE debe terminar con una letra.");
             return false;
         }
 

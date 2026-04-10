@@ -119,8 +119,6 @@ public class UserChildren : Panel
 
         _loadingTransition.PlayLoadingTransition();
 
-        await UniTask.WaitForSeconds(2f);
-
         await instance.LoadPlans(childId);
 
         if (!instance.HasPlans())
