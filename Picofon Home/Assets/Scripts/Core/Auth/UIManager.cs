@@ -3,6 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Firebase.Auth;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 
 public class UIManager : MonoBehaviour
 {
@@ -51,6 +52,19 @@ public class UIManager : MonoBehaviour
         }
 
         UserService = new UserService();
+
+        string preferredLanguage = GamePrefs.PreferredLanguage;
+
+        if (preferredLanguage[0] != 'C')
+        {
+            int index = 1;
+
+            await LocalizationSettings.InitializationOperation;
+
+            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[
+                index
+            ];
+        }
 
         if (Application.isEditor)
         {
