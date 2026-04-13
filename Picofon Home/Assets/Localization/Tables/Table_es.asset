@@ -185,6 +185,10 @@ MonoBehaviour:
     m_Localized: Centro por defecto
     m_Metadata:
       m_Items: []
+  - m_Id: 1427275047354368
+    m_Localized: "aprende m\xE1s"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -167,6 +167,10 @@ MonoBehaviour:
     m_Key: A038
     m_Metadata:
       m_Items: []
+  - m_Id: 1427275047354368
+    m_Key: B001
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

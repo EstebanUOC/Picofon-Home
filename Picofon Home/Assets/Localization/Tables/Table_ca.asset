@@ -186,6 +186,10 @@ MonoBehaviour:
     m_Localized: Centre per defecte
     m_Metadata:
       m_Items: []
+  - m_Id: 1427275047354368
+    m_Localized: "apr\xE8n m\xE9s"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
