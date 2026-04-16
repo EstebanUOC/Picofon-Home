@@ -3,6 +3,13 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
+public enum AudioID
+{
+    Intro,
+    Positive,
+    Negative,
+}
+
 public class AudioLoader
 {
     private AsyncOperationHandle<AudioClip>[] _audioHandles;
