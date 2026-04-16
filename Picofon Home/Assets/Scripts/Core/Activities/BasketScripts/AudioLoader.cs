@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -10,14 +11,53 @@ public enum AudioID
     Negative,
 }
 
+public readonly struct ActivityLabels
+{
+    public readonly string Language { get; init; }
+    public readonly ActivitySkill Skill { get; init; }
+    public readonly string Activity { get; init; }
+}
+
 public class AudioLoader
 {
     private AsyncOperationHandle<AudioClip>[] _audioHandles;
     private AudioClip _clip;
 
-    public async UniTask LoadAudios(string[] audioPaths)
+    public async UniTask LoadAudios(string[] audioPaths, ActivityLabels labels = default)
     {
         _audioHandles = new AsyncOperationHandle<AudioClip>[audioPaths.Length];
+
+        ActivityLabels prueba = new()
+        {
+            Language = "lang-ca",
+            Skill = ActivitySkill.Initial,
+            Activity = "judge",
+        };
+
+        string skillLabel = labels.Skill switch
+        {
+            ActivitySkill.Initial => "initial",
+            ActivitySkill.Medial => "medial",
+            ActivitySkill.Final => "final",
+            _ => string.Empty,
+        };
+
+        IEnumerable<string> keys = new string[] { prueba.Language, skillLabel, prueba.Activity };
+
+        AsyncOperationHandle<IList<AudioClip>> testHandle = Addressables.LoadAssetsAsync<AudioClip>(
+            keys,
+            null,
+            Addressables.MergeMode.Intersection
+        );
+
+        await testHandle;
+
+        foreach (var clip in testHandle.Result)
+        {
+            clip.LoadAudioData();
+
+            await LoadAudio(clip);
+        }
 
         for (int i = 0; i < audioPaths.Length; i++)
         {
@@ -25,12 +65,12 @@ public class AudioLoader
             string path = TextUtils.RemoveAccentsAndPrepend(audioPaths[i], "CA-");
 
             AsyncOperationHandle<AudioClip> handle = Addressables.LoadAssetAsync<AudioClip>(path);
-            await handle.Task.AsUniTask();
+            await handle;
 
             if (handle.Status != AsyncOperationStatus.Succeeded)
             {
                 Addressables.Release(handle);
-                Debug.LogError($"Failed to load audio at path: {path}");
+                PerformanceLog.LogError($"Failed to load audio at path: {path}");
                 continue;
             }
 

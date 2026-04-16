@@ -1,0 +1,289 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: AudiosSP
+  m_EditorClassIdentifier: 
+  m_GroupName: AudiosSP
+  m_Data:
+    m_SerializedData: []
+  m_GUID: aaba9df5b5a6474f48b203e0a34f10e9
+  m_SerializeEntries:
+  - m_GUID: 018eafef1172f63d6b4244e8cc1ee771
+    m_Address: SP-MO-SY-ISM-R-BA-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - relate
+    - skill-medial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0971290795f7ffdfa835b352219fe695
+    m_Address: SP-MO-SY-ISI-S-BA-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - select
+    - skill-initial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d1c68d6f8cdb00f09ba76db51c391b5
+    m_Address: SP-MO-SY-ISM-S-GE-T-P
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - select
+    - skill-medial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 152a3731a6da8ba3c90caa7fab080903
+    m_Address: SP-MO-SY-ISF-R-GE-T-N
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - relate
+    - skill-final
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1aab2c16828d16dec8b207c01527b2a9
+    m_Address: SP-MO-SY-ISI-J-GE-T-NN
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - skill-initial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 21f7886aabf3f10d4951775707326e6f
+    m_Address: SP-MO-SY-ISF-R-BA-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - relate
+    - skill-final
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 23ed2f92ca09a17e0bc345deaa1e85ad
+    m_Address: SP-MO-SY-ISI-R-GE-T-P
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - relate
+    - skill-initial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3d885d5ca1999101fa6b3901585d6d5a
+    m_Address: SP-MO-SY-ISM-J-BA-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - skill-medial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ddcf7ebb84f3514d927c50ecfbad745
+    m_Address: SP-MO-SY-ISF-R-GE-T-P
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - relate
+    - skill-final
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4bcadda2ec38677f2a102836548e8db1
+    m_Address: SP-MO-SY-ISF-J-GE-T-NN
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - skill-final
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c33070237c965e31ac3a52c7e096c16
+    m_Address: SP-MO-SY-ISM-J-GE-T-NS
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - skill-medial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f352daa0dc609653a5678c436077d4d
+    m_Address: SP-MO-SY-ISF-S-BA-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - select
+    - skill-final
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5c76bae6b2852ce5b9d46cf4dd0e4121
+    m_Address: SP-MO-SY-ISF-J-GE-T-PS
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - skill-final
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5fe4a7c8c40390e98bc7154777a4f49f
+    m_Address: SP-MO-SY-ISM-R-GE-T-P
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - relate
+    - skill-medial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 601e535dcb1d1457aa94ccfce629a9d1
+    m_Address: SP-MO-SY-ISI-S-GE-T-P
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - select
+    - skill-initial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68f57acdf2fdc8f9da6547ce6e112303
+    m_Address: SP-MO-SY-ISF-J-GE-T-NS
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - skill-final
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 704c84eee71eb0d08918ca08662d4d14
+    m_Address: SP-MO-SY-ISI-J-GE-T-NS
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - skill-initial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 722a5fe9dc5080e8b8ca02f0bc3a52a1
+    m_Address: SP-MO-SY-ISI-R-GE-T-N
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - relate
+    - skill-initial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7ae4419eae2464bbb96b00f5f7810a8b
+    m_Address: SP-MO-SY-ISI-J-GE-T-PN
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - skill-initial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8016980ce68c6ba4dac4c19510ea80c0
+    m_Address: SP-MO-SY-ISM-J-GE-T-PN
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - skill-medial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 83b40a9b2eee3afbf995ff04b7e977e6
+    m_Address: SP-MO-SY-ISI-S-GE-T-N
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - select
+    - skill-initial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9032f86d05be30f23a31e8165938391c
+    m_Address: SP-MO-SY-ISF-J-GE-T-PN
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - skill-final
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9af02078f925b0b77b60fc0c900cef98
+    m_Address: SP-MO-SY-ISM-J-GE-T-PS
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - skill-medial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab81a83f335425a7c8498b0248313689
+    m_Address: SP-MO-SY-ISI-J-GE-T-PS
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - skill-initial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b513dee383ec014989d2adb3e2bda4bd
+    m_Address: SP-MO-SY-ISM-R-GE-T-N
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - relate
+    - skill-medial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cf24c2cca23c1201f8f2c8d964bb5ee8
+    m_Address: SP-MO-SY-ISM-J-GE-T-NN
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - skill-medial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e071c9bd84470bce1afcf526065c39a5
+    m_Address: SP-MO-SY-ISF-S-GE-T-P
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - select
+    - skill-final
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e2584de70f1c02a869ea684d605a5ebb
+    m_Address: SP-MO-SY-ISI-J-BA-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - skill-initial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e2cf9388fe877d62698f3e25130991a2
+    m_Address: SP-MO-SY-ISM-S-GE-T-N
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - select
+    - skill-medial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ea9fcb75d74b5d07ebc070ca0d74c1a9
+    m_Address: SP-MO-SY-ISF-J-BA-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - skill-final
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eb3913d531d482ce7acf5ab5bd834495
+    m_Address: SP-MO-SY-ISM-S-BA-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - select
+    - skill-medial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ef4d2ace653d18938b7085e48f233612
+    m_Address: SP-MO-SY-ISF-S-GE-T-N
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - select
+    - skill-final
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa62004ad6136612691a5acaabec56b3
+    m_Address: SP-MO-SY-ISI-R-BA-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - relate
+    - skill-initial
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 6405bf6c4ff9eb802bed9986fbbf8cec, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 322d8f4e40ba3a6a0b902a046be3e83e, type: 2}
+    - {fileID: 11400000, guid: f2386a7445f82605381c7b1ff5a54648, type: 2}

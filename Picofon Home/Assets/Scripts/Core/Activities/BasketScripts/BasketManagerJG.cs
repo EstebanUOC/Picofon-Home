@@ -106,7 +106,7 @@ public class BasketGameManagerJG : MonoBehaviour
             _audioClips[entry.Id] = entry.Clip;
         }
 
-        LoadActivities(@params).Forget();
+        LoadActivities(@params: @params, skill: skill).Forget();
     }
 
     public void OnDestroy()
@@ -116,7 +116,7 @@ public class BasketGameManagerJG : MonoBehaviour
         AudioManager.Instance.UnloadAudios();
     }
 
-    private async UniTaskVoid LoadActivities(ActivityRequestParams @params)
+    private async UniTaskVoid LoadActivities(ActivityRequestParams @params, ActivitySkill skill)
     {
         BasketService basketService = new();
 
@@ -160,6 +160,13 @@ public class BasketGameManagerJG : MonoBehaviour
                 audioPaths[i * 2 + j] = word;
             }
         }
+
+        ActivityLabels labels = new()
+        {
+            Language = "lang-ca",
+            Skill = skill,
+            Activity = "judge",
+        };
 
         await AudioManager.Instance.LoadAudios(audioPaths);
 

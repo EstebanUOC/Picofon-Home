@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: AudioWords
+  m_Name: AudiosCatalan
   m_EditorClassIdentifier: 
-  m_GroupName: AudioWords
+  m_GroupName: AudiosCatalan
   m_Data:
     m_SerializedData: []
   m_GUID: f07376b991dc86560a69e850cd536761
@@ -47,14 +47,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 018eafef1172f63d6b4244e8cc1ee771
-    m_Address: SP-MO-SY-ISM-R-BA-T-I
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - relate
-    - skill-medial
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 01bc5b79c12dd6780b2575cd5fd1102a
     m_Address: CA-ninja
     m_ReadOnly: 0
@@ -63,7 +55,10 @@ MonoBehaviour:
   - m_GUID: 01d4baddcb270e391bce565a3b674197
     m_Address: CA-MO-SY-ISI-J-GE-T-PS
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 01eae2157cd63ddeca65405533843abd
     m_Address: CA-triomf
@@ -113,7 +108,10 @@ MonoBehaviour:
   - m_GUID: 03ef73be85f27c668baa8777632d0b8a
     m_Address: CA-MO-SY-ISF-R-GE-T-N
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - relate
+    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0432fd9242c1172b6b50af2a0ff3efb7
     m_Address: CA-dragonet
@@ -245,14 +243,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0971290795f7ffdfa835b352219fe695
-    m_Address: SP-MO-SY-ISI-S-BA-T-I
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - select
-    - skill-initial
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 09762fbcf1b57cb99aab1f18a53d4187
     m_Address: CA-coronel
     m_ReadOnly: 0
@@ -338,14 +328,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0d1c68d6f8cdb00f09ba76db51c391b5
-    m_Address: SP-MO-SY-ISM-S-GE-T-P
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - select
-    - skill-medial
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0d7add9206486d8b8b53eae401482bae
     m_Address: CA-dos
     m_ReadOnly: 0
@@ -429,7 +411,10 @@ MonoBehaviour:
   - m_GUID: 0fad894614d03b1028f674dbcfdf4f8a
     m_Address: CA-MO-SY-ISF-J-GE-T-PN
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1029e4c2c36bcad74a7c5ea788da5019
     m_Address: CA-toll
@@ -550,14 +535,6 @@ MonoBehaviour:
     m_Address: CA-bosseta
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 152a3731a6da8ba3c90caa7fab080903
-    m_Address: SP-MO-SY-ISF-R-GE-T-N
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - relate
-    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 153aec6d982148d70b1ba3d77c2213db
     m_Address: CA-ossos
@@ -693,14 +670,6 @@ MonoBehaviour:
     m_Address: CA-regla
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1aab2c16828d16dec8b207c01527b2a9
-    m_Address: SP-MO-SY-ISI-J-GE-T-NN
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1abbf926d6f17ec22b251498de879c61
     m_Address: CA-casino
@@ -867,14 +836,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 21f7886aabf3f10d4951775707326e6f
-    m_Address: SP-MO-SY-ISF-R-BA-T-I
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - relate
-    - skill-final
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 22240f9b98b416f29a9fa74b916e6c9a
     m_Address: CA-bossa
     m_ReadOnly: 0
@@ -923,7 +884,10 @@ MonoBehaviour:
   - m_GUID: 238a516ce6ebd1120aeb9da0fbff573c
     m_Address: CA-MO-SY-ISI-J-BA-T-I
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 23be4e17a9a74ad0198c2a33429ffd35
     m_Address: CA-aleta
@@ -944,14 +908,6 @@ MonoBehaviour:
     m_Address: CA-foguera
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 23ed2f92ca09a17e0bc345deaa1e85ad
-    m_Address: SP-MO-SY-ISI-R-GE-T-P
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - relate
-    - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 24203d8bfe99e9b689d6597c0dfcdbd4
     m_Address: CA-quatre
@@ -1346,7 +1302,10 @@ MonoBehaviour:
   - m_GUID: 32efc7f0de2aa4865b5761d8a86a2acd
     m_Address: CA-MO-SY-ISM-S-BA-T-I
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - select
+    - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 330947653e79763caa203ca23203ebda
     m_Address: CA-pipa
@@ -1476,7 +1435,10 @@ MonoBehaviour:
   - m_GUID: 3679006048f8fb460b0d2d2ea592cc66
     m_Address: CA-MO-SY-ISM-R-GE-T-P
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - relate
+    - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3686840e8876f532b8d0687e0ab43bfe
     m_Address: CA-maionesa
@@ -1738,22 +1700,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3d885d5ca1999101fa6b3901585d6d5a
-    m_Address: SP-MO-SY-ISM-J-BA-T-I
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-medial
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3ddcf7ebb84f3514d927c50ecfbad745
-    m_Address: SP-MO-SY-ISF-R-GE-T-P
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - relate
-    - skill-final
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3de0d327728151273a1d9441e4623e92
     m_Address: CA-pati
     m_ReadOnly: 0
@@ -1907,7 +1853,10 @@ MonoBehaviour:
   - m_GUID: 42b52f499f0b6afc8881a95348fd7897
     m_Address: CA-MO-SY-ISM-J-GE-T-NN
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 430796be77bfb34c0a224c3faff0f839
     m_Address: CA-judo
@@ -2007,7 +1956,10 @@ MonoBehaviour:
   - m_GUID: 4562ba0ed246074e2b3f422ca37fc56b
     m_Address: CA-MO-SY-ISM-R-BA-T-I
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - relate
+    - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 46650e7099b65abc8b58fad026c4d909
     m_Address: CA-capsula
@@ -2114,14 +2066,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4bcadda2ec38677f2a102836548e8db1
-    m_Address: SP-MO-SY-ISF-J-GE-T-NN
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-final
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4bf7893ddca0d2f92b17cdcb6782ffa5
     m_Address: CA-totxo
     m_ReadOnly: 0
@@ -2136,14 +2080,6 @@ MonoBehaviour:
     m_Address: CA-equip
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4c33070237c965e31ac3a52c7e096c16
-    m_Address: SP-MO-SY-ISM-J-GE-T-NS
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4c48973ac81afbdf284bc9a61c1b13e3
     m_Address: CA-llavadora
@@ -2234,14 +2170,6 @@ MonoBehaviour:
     m_Address: CA-alba
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4f352daa0dc609653a5678c436077d4d
-    m_Address: SP-MO-SY-ISF-S-BA-T-I
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - select
-    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4f6de4549698b6cea80d26f3f77fc2ec
     m_Address: CA-all
@@ -2491,7 +2419,10 @@ MonoBehaviour:
   - m_GUID: 59331de0a4dfd2bbcbeed8b667d89546
     m_Address: CA-MO-SY-ISM-S-GE-T-P
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - select
+    - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5957332bd5e080b6cb5aedb735009639
     m_Address: CA-kiwi
@@ -2542,14 +2473,6 @@ MonoBehaviour:
     m_Address: CA-tren
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5c76bae6b2852ce5b9d46cf4dd0e4121
-    m_Address: SP-MO-SY-ISF-J-GE-T-PS
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5c9d27b18fd5a258986ba1718551439f
     m_Address: CA-llit
@@ -2661,14 +2584,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5fe4a7c8c40390e98bc7154777a4f49f
-    m_Address: SP-MO-SY-ISM-R-GE-T-P
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - relate
-    - skill-medial
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5ff2b5483860ee36ba8a367cf7b738f3
     m_Address: CA-lampara
     m_ReadOnly: 0
@@ -2678,14 +2593,6 @@ MonoBehaviour:
     m_Address: CA-advocat
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 601e535dcb1d1457aa94ccfce629a9d1
-    m_Address: SP-MO-SY-ISI-S-GE-T-P
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - select
-    - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6032b892ff5cb8dd6860fff59edce0c4
     m_Address: CA-antena
@@ -2750,7 +2657,10 @@ MonoBehaviour:
   - m_GUID: 6263907b7fab112248fc0f736c6ffb13
     m_Address: CA-MO-SY-ISI-S-GE-T-P
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - select
+    - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6283381db5d465c88bfbc6629d3a668c
     m_Address: CA-vampir
@@ -2942,14 +2852,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 68f57acdf2fdc8f9da6547ce6e112303
-    m_Address: SP-MO-SY-ISF-J-GE-T-NS
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-final
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 690c11d0a2f36e59c87e9bd0971c1bab
     m_Address: CA-vel
     m_ReadOnly: 0
@@ -3135,14 +3037,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 704c84eee71eb0d08918ca08662d4d14
-    m_Address: SP-MO-SY-ISI-J-GE-T-NS
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-initial
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7058af172922ab274be1eb1a0ec13976
     m_Address: CA-creu
     m_ReadOnly: 0
@@ -3218,14 +3112,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 722a5fe9dc5080e8b8ca02f0bc3a52a1
-    m_Address: SP-MO-SY-ISI-R-GE-T-N
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - relate
-    - skill-initial
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 72452034842e2918895b234df6c778b8
     m_Address: CA-germana
     m_ReadOnly: 0
@@ -3249,7 +3135,10 @@ MonoBehaviour:
   - m_GUID: 72c5fad831f183ad58105de879e50419
     m_Address: CA-MO-SY-ISF-J-GE-T-NN
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 72e2f8b1972f11ae0964a4ba631b6686
     m_Address: CA-esquiar
@@ -3456,14 +3345,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7ae4419eae2464bbb96b00f5f7810a8b
-    m_Address: SP-MO-SY-ISI-J-GE-T-PN
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-initial
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7af0a1ac7976d6179886241527e90167
     m_Address: CA-telescopi
     m_ReadOnly: 0
@@ -3563,14 +3444,6 @@ MonoBehaviour:
     m_Address: CA-circ
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8016980ce68c6ba4dac4c19510ea80c0
-    m_Address: SP-MO-SY-ISM-J-GE-T-PN
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 803a8bf5f319a7aabb955ae58c760bd5
     m_Address: CA-lladre
@@ -3692,14 +3565,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 83b40a9b2eee3afbf995ff04b7e977e6
-    m_Address: SP-MO-SY-ISI-S-GE-T-N
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - select
-    - skill-initial
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 83ca9f717a277c6478bf2b6a24c5a5e1
     m_Address: CA-cansat
     m_ReadOnly: 0
@@ -3743,7 +3608,10 @@ MonoBehaviour:
   - m_GUID: 84df91a0f402953999476e514c072fa1
     m_Address: CA-MO-SY-ISF-J-GE-T-PS
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 84ed69bcf96c2d65fa8943399531c5e9
     m_Address: CA-bec
@@ -3758,7 +3626,10 @@ MonoBehaviour:
   - m_GUID: 85110ee3ec422fba8a5361b830c7e9bf
     m_Address: CA-MO-SY-ISI-R-GE-T-N
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - relate
+    - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 85385b5c40a556dc39cd5a5deac3d206
     m_Address: CA-xiclet2
@@ -4080,14 +3951,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9032f86d05be30f23a31e8165938391c
-    m_Address: SP-MO-SY-ISF-J-GE-T-PN
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-final
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 90358c96ad9f4ed288b3a38aa1ebc324
     m_Address: CA-banyera
     m_ReadOnly: 0
@@ -4398,14 +4261,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9af02078f925b0b77b60fc0c900cef98
-    m_Address: SP-MO-SY-ISM-J-GE-T-PS
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-medial
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9b0c1285dae0750dd9a2084f027bee39
     m_Address: CA-litxi
     m_ReadOnly: 0
@@ -4469,12 +4324,18 @@ MonoBehaviour:
   - m_GUID: 9c87420ede9e09388a9bdbbccd0fa832
     m_Address: CA-MO-SY-ISM-J-BA-T-I
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9d3e3591f18a788d88b6fe6c3d11a934
     m_Address: CA-MO-SY-ISM-J-GE-T-PS
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9d5268a98f2ea49579b2e055da315da9
     m_Address: CA-carraca
@@ -4534,7 +4395,10 @@ MonoBehaviour:
   - m_GUID: 9efffebc621affb0a9dda43354738ab6
     m_Address: CA-MO-SY-ISI-J-GE-T-NS
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9f01e1f837dc9c1a18974a17f117c49f
     m_Address: CA-cloisa
@@ -4584,7 +4448,10 @@ MonoBehaviour:
   - m_GUID: 9f8dac5cad0442ff3a195a5c03393ddc
     m_Address: CA-MO-SY-ISI-R-GE-T-P
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - relate
+    - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9fcd952cece71cefdbe1ad424830a035
     m_Address: CA-lladrar
@@ -4684,7 +4551,10 @@ MonoBehaviour:
   - m_GUID: a4102c3b07940780bb44d5cdb43c1a6d
     m_Address: CA-MO-SY-ISI-S-BA-T-I
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - select
+    - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a418d44afcd858ed2bb252cc922336cb
     m_Address: CA-premi
@@ -4694,7 +4564,10 @@ MonoBehaviour:
   - m_GUID: a42e22582e5d274fb906dedef0702a49
     m_Address: CA-MO-SY-ISM-R-GE-T-N
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - relate
+    - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a444f1c1d0e8668adb1b5ea8b8cb8b41
     m_Address: CA-con
@@ -4804,7 +4677,10 @@ MonoBehaviour:
   - m_GUID: a81896e18fcec68828b085ceaf9c794c
     m_Address: CA-MO-SY-ISF-S-BA-T-I
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - select
+    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a82384ade419bdb54924fe5bc572e94b
     m_Address: CA-caixa
@@ -4895,14 +4771,6 @@ MonoBehaviour:
     m_Address: CA-llimonada
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ab81a83f335425a7c8498b0248313689
-    m_Address: SP-MO-SY-ISI-J-GE-T-PS
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ab8e77a96b83e9da9a80f618c6a13b70
     m_Address: CA-zoo
@@ -5002,7 +4870,10 @@ MonoBehaviour:
   - m_GUID: af7fc18e6930e4c8397afc15f498bfaa
     m_Address: CA-MO-SY-ISF-J-BA-T-I
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: afce1511343633627a9c538669a430c0
     m_Address: CA-pesol
@@ -5148,14 +5019,6 @@ MonoBehaviour:
     m_Address: CA-ronyo
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b513dee383ec014989d2adb3e2bda4bd
-    m_Address: SP-MO-SY-ISM-R-GE-T-N
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - relate
-    - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b51d37228aaa444aaa15f8773b9dd962
     m_Address: CA-saltamarti
@@ -5355,12 +5218,18 @@ MonoBehaviour:
   - m_GUID: bdfd7513b61e20908a9e95265510215f
     m_Address: CA-MO-SY-ISI-S-GE-T-N
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - select
+    - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: be08aaf7f96d17581a6ccc0634e40f72
     m_Address: CA-MO-SY-ISM-J-GE-T-NS
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: be1d052906162133594e4eb882237ce4
     m_Address: CA-mostassa
@@ -5445,7 +5314,10 @@ MonoBehaviour:
   - m_GUID: c0903c7b38e9db957ac411a5ec5c5f1a
     m_Address: CA-MO-SY-ISM-S-GE-T-N
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - select
+    - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c0a2d34b3f187d4bcb7a1e51e07b5889
     m_Address: CA-xiclet1
@@ -5892,23 +5764,21 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cf24c2cca23c1201f8f2c8d964bb5ee8
-    m_Address: SP-MO-SY-ISM-J-GE-T-NN
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-medial
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cf45cbb152fb92d83b86ccb50e65d023
     m_Address: CA-MO-SY-ISI-J-GE-T-NN
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cf669f667bd232c7f92dcda55bb8bf9c
     m_Address: CA-MO-SY-ISF-J-GE-T-NS
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cf879ba8b9160473586bf3fb6b72204c
     m_Address: CA-escacs
@@ -6153,7 +6023,10 @@ MonoBehaviour:
   - m_GUID: d669d7de3f392aeb891eb0b3f1cf2ffe
     m_Address: CA-MO-SY-ISF-S-GE-T-P
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - select
+    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d6c05a24f9e10ab17894d67a2f86f139
     m_Address: CA-parpella
@@ -6298,7 +6171,10 @@ MonoBehaviour:
   - m_GUID: daef9abd92a62046fb8065f1cd9fd412
     m_Address: CA-MO-SY-ISI-R-BA-T-I
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - relate
+    - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: daf7c029895b30179aa4e2b835a04616
     m_Address: CA-trapezi
@@ -6338,7 +6214,10 @@ MonoBehaviour:
   - m_GUID: dc81755a24de9f9519e22257b4065e30
     m_Address: CA-MO-SY-ISF-R-BA-T-I
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - relate
+    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: dc8199c31abd00ce280e428f39a351c2
     m_Address: CA-truita
@@ -6475,14 +6354,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e071c9bd84470bce1afcf526065c39a5
-    m_Address: SP-MO-SY-ISF-S-GE-T-P
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - select
-    - skill-final
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e07f3067270e2cbdbab0f29e3840f134
     m_Address: CA-carreta
     m_ReadOnly: 0
@@ -6518,14 +6389,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e2584de70f1c02a869ea684d605a5ebb
-    m_Address: SP-MO-SY-ISI-J-BA-T-I
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-initial
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e259a71c06a9c5870826b75b807a727a
     m_Address: CA-conte
     m_ReadOnly: 0
@@ -6535,14 +6398,6 @@ MonoBehaviour:
     m_Address: CA-lavabo
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e2cf9388fe877d62698f3e25130991a2
-    m_Address: SP-MO-SY-ISM-S-GE-T-N
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - select
-    - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e2f8b76d547c4d6369020965ad8bf54f
     m_Address: CA-llebre
@@ -6672,7 +6527,10 @@ MonoBehaviour:
   - m_GUID: e6d9c0fd831ec092e8f4fcc4d4b47f66
     m_Address: CA-MO-SY-ISI-J-GE-T-PN
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e6decb192d6825c70aed8626b8b859db
     m_Address: CA-detectiu
@@ -6687,7 +6545,10 @@ MonoBehaviour:
   - m_GUID: e6f722cfd5230c3a7b56b511804245f3
     m_Address: CA-MO-SY-ISF-R-GE-T-P
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - relate
+    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e70c4a6fcc4ce89b48a90d8e865be5d8
     m_Address: CA-transit
@@ -6767,12 +6628,18 @@ MonoBehaviour:
   - m_GUID: e8cd39214e5b9038b9bf26b12dfaf2a2
     m_Address: CA-MO-SY-ISF-S-GE-T-N
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - lang-ca
+    - select
+    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e8f367c01b5d8b709a6e34104923464a
     m_Address: CA-MO-SY-ISM-J-GE-T-PN
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e9210bb9b9f3a0b2fae2a16656211208
     m_Address: CA-pinya
@@ -6829,26 +6696,10 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ea9fcb75d74b5d07ebc070ca0d74c1a9
-    m_Address: SP-MO-SY-ISF-J-BA-T-I
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-final
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eb27d93c7d529819f96cecb88f43c212
     m_Address: CA-catedral
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: eb3913d531d482ce7acf5ab5bd834495
-    m_Address: SP-MO-SY-ISM-S-BA-T-I
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - select
-    - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ebc2bc2fb4f106d609de7133b1f7f8aa
     m_Address: CA-terra
@@ -6969,14 +6820,6 @@ MonoBehaviour:
     m_Address: CA-neteja
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ef4d2ace653d18938b7085e48f233612
-    m_Address: SP-MO-SY-ISF-S-GE-T-N
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - select
-    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: efaed7d17449aa78faad0f70fdd5d1f7
     m_Address: CA-bidet
@@ -7172,14 +7015,6 @@ MonoBehaviour:
     m_Address: CA-tisores
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fa62004ad6136612691a5acaabec56b3
-    m_Address: SP-MO-SY-ISI-R-BA-T-I
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - relate
-    - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa895b34f71f0a20986030985c16c1ed
     m_Address: CA-veterinari

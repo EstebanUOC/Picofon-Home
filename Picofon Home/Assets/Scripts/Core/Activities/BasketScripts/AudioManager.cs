@@ -29,11 +29,11 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public async UniTask LoadAudios(string[] audioPaths)
+    public async UniTask LoadAudios(string[] audioPaths, ActivityLabels labels = default)
     {
         _audioLoader ??= new AudioLoader();
 
-        await _audioLoader.LoadAudios(audioPaths);
+        await _audioLoader.LoadAudios(audioPaths, labels);
     }
 
     public void UnloadAudios()
