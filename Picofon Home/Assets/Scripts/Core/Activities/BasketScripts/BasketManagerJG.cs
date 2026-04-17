@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -8,8 +7,8 @@ using ActivitiesResult = ApiResult<ActivitiesData<BasketResponses.JudgeActivity>
 
 public enum HoopType
 {
-    Positive,
-    Negative,
+    Si,
+    No,
 }
 
 public enum AnswerEvaluation
@@ -52,10 +51,6 @@ public class BasketGameManagerJG : MonoBehaviour
     [SerializeField]
     private SessionManager _sessionManager;
 
-    [Space]
-    [SerializeField]
-    private AudioCategory<JudgeAudioID>[] audioCategories;
-
     private readonly Sprite[] _icons = new Sprite[2];
     private readonly string[] _texts = new string[2];
     private readonly string[] _syllabifiedWords = new string[2];
@@ -66,7 +61,7 @@ public class BasketGameManagerJG : MonoBehaviour
     private JudgeActivity[] _activities;
     private JudgeActivity _currentActivity;
 
-    private readonly Dictionary<JudgeAudioID, AudioClip> _audioClips = new(5);
+    private readonly AudioClip[] _audioClips = new AudioClip[5];
 
     private readonly AudioClip[] _audioItems = new AudioClip[2];
 
@@ -84,29 +79,13 @@ public class BasketGameManagerJG : MonoBehaviour
         if (@params.ChildId is null)
         {
             skill = ActivitySkill.Initial;
-            language = LanguageID.Catalan;
+            language = LanguageID.Spanish;
             @params = new ActivityRequestParams { PlanId = 112, ChildId = "12345678Z" };
             PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
         }
 # endif
 
         _canvasUI.Init(skill);
-
-        AudioEntry<JudgeAudioID>[] audioEntries = Array.Empty<AudioEntry<JudgeAudioID>>();
-
-        foreach (AudioCategory<JudgeAudioID> category in audioCategories)
-        {
-            if (category.Id == skill)
-            {
-                audioEntries = category.Entries;
-                break;
-            }
-        }
-
-        foreach (AudioEntry<JudgeAudioID> entry in audioEntries)
-        {
-            _audioClips[entry.Id] = entry.Clip;
-        }
 
         LoadActivities(@params: @params, skill: skill, language: language).Forget();
     }
@@ -176,6 +155,8 @@ public class BasketGameManagerJG : MonoBehaviour
 
         await AudioManager.Instance.LoadAudios(audioPaths, labels);
 
+        AudioManager.Instance.GetIntroAudios(_audioClips);
+
         if (!_taskCompleted)
         {
             TherapySessionDTO[] sessions = new TherapySessionDTO[_activities.Length];
@@ -203,7 +184,8 @@ public class BasketGameManagerJG : MonoBehaviour
 
         _fade.StopAndZoom();
 
-        AudioClip introClip = _audioClips[JudgeAudioID.Intro];
+        int introIndex = (int)ResponseAudioID.Intro;
+        AudioClip introClip = _audioClips[introIndex];
 
         _uiManager.SetIntroAudio(introClip);
         AudioManager.Instance.PlayVoice(clip: introClip);
@@ -217,23 +199,25 @@ public class BasketGameManagerJG : MonoBehaviour
 
     private void HandleAnswerSelected(HoopType hoopType)
     {
-        int hoopIndex = hoopType == HoopType.Positive ? 0 : 1;
+        int hoopIndex = hoopType == HoopType.Si ? 0 : 1;
         Transform hoopTransform = _hoopManager.GetHoopTransform(hoopIndex);
 
         _ballController.LaunchBall(hoopTransform);
 
-        bool isPositive = hoopType == HoopType.Positive;
+        bool isPositive = hoopType == HoopType.Si;
         bool isCorrect = _currentActivity.Answer == isPositive;
 
         AnswerEvaluation answerResult = isCorrect
             ? AnswerEvaluation.Correct
             : AnswerEvaluation.Incorrect;
 
-        JudgeAudioID id = isCorrect
-            ? (isPositive ? JudgeAudioID.PositiveAndCorrect : JudgeAudioID.NegativeAndCorrect)
-            : (isPositive ? JudgeAudioID.PositiveAndIncorrect : JudgeAudioID.NegativeAndIncorrect);
+        ResponseAudioID id = isCorrect ? ResponseAudioID.Correct : ResponseAudioID.Incorrect;
 
-        AudioManager.Instance.PlayVoice(_audioClips[id]);
+        int variant = hoopIndex;
+
+        int audioIndex = (int)id + variant;
+
+        AudioManager.Instance.PlayVoice(_audioClips[audioIndex]);
 
         TaskInfo taskInfo = new()
         {

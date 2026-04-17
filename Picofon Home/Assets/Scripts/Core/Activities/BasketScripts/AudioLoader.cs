@@ -21,6 +21,9 @@ public readonly struct ActivityLabels
 public class AudioLoader
 {
     private AsyncOperationHandle<AudioClip>[] _audioHandles;
+
+    private AsyncOperationHandle<IList<AudioClip>> _introHandle;
+
     private AudioClip _clip;
 
     public async UniTask LoadAudios(string[] audioPaths, ActivityLabels labels)
@@ -44,15 +47,15 @@ public class AudioLoader
 
         IEnumerable<string> keys = new string[] { languageLabel, skillLabel, labels.Activity };
 
-        AsyncOperationHandle<IList<AudioClip>> testHandle = Addressables.LoadAssetsAsync<AudioClip>(
+        _introHandle = Addressables.LoadAssetsAsync<AudioClip>(
             keys,
             null,
             Addressables.MergeMode.Intersection
         );
 
-        await testHandle;
+        await _introHandle;
 
-        foreach (var clip in testHandle.Result)
+        foreach (var clip in _introHandle.Result)
         {
             clip.LoadAudioData();
 
@@ -89,6 +92,16 @@ public class AudioLoader
         if (_audioHandles == null)
             return;
 
+        if (_introHandle.IsValid())
+        {
+            foreach (var clip in _introHandle.Result)
+            {
+                clip.UnloadAudioData();
+            }
+
+            Addressables.Release(_introHandle);
+        }
+
         for (int i = 0; i < _audioHandles.Length; i++)
         {
             _audioHandles[i].Result.UnloadAudioData();
@@ -112,6 +125,46 @@ public class AudioLoader
             }
 
             clips[i] = _audioHandles[index * quantity + i].Result;
+        }
+    }
+
+    public void GetIntroAudios(AudioClip[] clips)
+    {
+        IList<AudioClip> introClips = _introHandle.Result;
+
+        for (int i = 0; i < introClips.Count; i++)
+        {
+            char lastChar = introClips[i].name[^1];
+
+            if (lastChar == 'I')
+            {
+                clips[0] = introClips[i];
+                continue;
+            }
+
+            char secondLastChar = introClips[i].name[^2];
+
+            int variant = 0;
+
+            if (secondLastChar == 'N')
+            {
+                variant = 1;
+            }
+
+            switch (lastChar)
+            {
+                case 'P':
+                    clips[1 + variant] = introClips[i];
+                    break;
+                case 'N':
+                    if (secondLastChar != '-')
+                    {
+                        variant++;
+                    }
+
+                    clips[2 + variant] = introClips[i];
+                    break;
+            }
         }
     }
 

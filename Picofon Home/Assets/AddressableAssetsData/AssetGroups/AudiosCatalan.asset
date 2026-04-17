@@ -53,7 +53,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 01d4baddcb270e391bce565a3b674197
-    m_Address: CA-MO-SY-ISI-J-GE-T-PS
+    m_Address: CA-MO-SY-ISI-J-GE-T-SP
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -409,7 +409,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0fad894614d03b1028f674dbcfdf4f8a
-    m_Address: CA-MO-SY-ISF-J-GE-T-PN
+    m_Address: CA-MO-SY-ISF-J-GE-T-NP
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -3606,7 +3606,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 84df91a0f402953999476e514c072fa1
-    m_Address: CA-MO-SY-ISF-J-GE-T-PS
+    m_Address: CA-MO-SY-ISF-J-GE-T-SP
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -4330,7 +4330,7 @@ MonoBehaviour:
     - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9d3e3591f18a788d88b6fe6c3d11a934
-    m_Address: CA-MO-SY-ISM-J-GE-T-PS
+    m_Address: CA-MO-SY-ISM-J-GE-T-SP
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -4393,7 +4393,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9efffebc621affb0a9dda43354738ab6
-    m_Address: CA-MO-SY-ISI-J-GE-T-NS
+    m_Address: CA-MO-SY-ISI-J-GE-T-SN
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -5224,7 +5224,7 @@ MonoBehaviour:
     - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: be08aaf7f96d17581a6ccc0634e40f72
-    m_Address: CA-MO-SY-ISM-J-GE-T-NS
+    m_Address: CA-MO-SY-ISM-J-GE-T-SN
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -5773,7 +5773,7 @@ MonoBehaviour:
     - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cf669f667bd232c7f92dcda55bb8bf9c
-    m_Address: CA-MO-SY-ISF-J-GE-T-NS
+    m_Address: CA-MO-SY-ISF-J-GE-T-SN
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -6525,7 +6525,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e6d9c0fd831ec092e8f4fcc4d4b47f66
-    m_Address: CA-MO-SY-ISI-J-GE-T-PN
+    m_Address: CA-MO-SY-ISI-J-GE-T-NP
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -6634,7 +6634,7 @@ MonoBehaviour:
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e8f367c01b5d8b709a6e34104923464a
-    m_Address: CA-MO-SY-ISM-J-GE-T-PN
+    m_Address: CA-MO-SY-ISM-J-GE-T-NP
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge

@@ -11,8 +11,8 @@ public class AnswerManagerJG : MonoBehaviour
 
     public void Start()
     {
-        PositiveAnswer.OnClick += () => AnswerSelected(HoopType.Positive);
-        NegativeAnswer.OnClick += () => AnswerSelected(HoopType.Negative);
+        PositiveAnswer.OnClick += () => AnswerSelected(HoopType.Si);
+        NegativeAnswer.OnClick += () => AnswerSelected(HoopType.No);
     }
 
     private void AnswerSelected(HoopType hoopType)

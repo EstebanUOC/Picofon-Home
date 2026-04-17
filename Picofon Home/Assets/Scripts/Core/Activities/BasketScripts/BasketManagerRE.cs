@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -45,7 +44,7 @@ public class BasketManagerRE : MonoBehaviour
 
     [Space]
     [SerializeField]
-    private AudioCategory<OthersAudioID>[] audioCategories;
+    private AudioCategory<ResponseAudioID>[] audioCategories;
 
     private bool _taskCompleted = false;
     private int _currentActivityIndex = 0;
@@ -57,7 +56,7 @@ public class BasketManagerRE : MonoBehaviour
     private readonly string[] _texts = new string[5];
     private readonly string[] _syllabifiedWords = new string[5];
 
-    private readonly Dictionary<OthersAudioID, AudioClip> _audioClips = new(3);
+    private readonly AudioClip[] _audioClips = new AudioClip[3];
 
     private readonly AudioClip[] _audioItems = new AudioClip[5];
 
@@ -74,9 +73,9 @@ public class BasketManagerRE : MonoBehaviour
 #if DEBUG
         if (@params.ChildId is null)
         {
-            skill = ActivitySkill.Initial;
+            skill = ActivitySkill.Final;
             language = LanguageID.Spanish;
-            @params = new ActivityRequestParams { PlanId = 113, ChildId = "12345678Z" };
+            @params = new ActivityRequestParams { PlanId = 114, ChildId = "12345678Z" };
             PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
         }
 # endif
@@ -89,20 +88,15 @@ public class BasketManagerRE : MonoBehaviour
 
         _canvasUI.Init(skill);
 
-        AudioEntry<OthersAudioID>[] audioEntries = Array.Empty<AudioEntry<OthersAudioID>>();
+        AudioEntry<ResponseAudioID>[] audioEntries = Array.Empty<AudioEntry<ResponseAudioID>>();
 
-        foreach (AudioCategory<OthersAudioID> category in audioCategories)
+        foreach (AudioCategory<ResponseAudioID> category in audioCategories)
         {
             if (category.Id == skill)
             {
                 audioEntries = category.Entries;
                 break;
             }
-        }
-
-        foreach (AudioEntry<OthersAudioID> entry in audioEntries)
-        {
-            _audioClips[entry.Id] = entry.Clip;
         }
 
         LoadActivities(@params: @params, skill: skill, language: language).Forget();
@@ -167,10 +161,12 @@ public class BasketManagerRE : MonoBehaviour
         {
             Language = language,
             Skill = skill,
-            Activity = "judge",
+            Activity = "relate",
         };
 
         await AudioManager.Instance.LoadAudios(audioPaths, labels);
+
+        AudioManager.Instance.GetIntroAudios(_audioClips);
 
         if (!_taskCompleted)
         {
@@ -197,7 +193,8 @@ public class BasketManagerRE : MonoBehaviour
 
         _fade.StopAndZoom();
 
-        AudioClip introClip = _audioClips[OthersAudioID.Intro];
+        int introIndex = (int)ResponseAudioID.Intro;
+        AudioClip introClip = _audioClips[introIndex];
 
         _uiManager.SetIntroAudio(introClip);
         AudioManager.Instance.PlayVoice(introClip);
@@ -217,9 +214,10 @@ public class BasketManagerRE : MonoBehaviour
 
         bool isCorrect = currentWord.Answer;
 
-        OthersAudioID id = isCorrect ? OthersAudioID.Positive : OthersAudioID.Negative;
+        ResponseAudioID id = isCorrect ? ResponseAudioID.Correct : ResponseAudioID.Incorrect;
+        int audioIndex = (int)id;
 
-        AudioManager.Instance.PlayVoice(_audioClips[id]);
+        AudioManager.Instance.PlayVoice(_audioClips[audioIndex]);
 
         int correctWordId = 0;
 

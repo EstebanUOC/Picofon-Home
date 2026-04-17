@@ -98,7 +98,7 @@ MonoBehaviour:
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4c33070237c965e31ac3a52c7e096c16
-    m_Address: SP-MO-SY-ISM-J-GE-T-NS
+    m_Address: SP-MO-SY-ISM-J-GE-T-SN
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -114,7 +114,7 @@ MonoBehaviour:
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5c76bae6b2852ce5b9d46cf4dd0e4121
-    m_Address: SP-MO-SY-ISF-J-GE-T-PS
+    m_Address: SP-MO-SY-ISF-J-GE-T-SP
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -138,7 +138,7 @@ MonoBehaviour:
     - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 68f57acdf2fdc8f9da6547ce6e112303
-    m_Address: SP-MO-SY-ISF-J-GE-T-NS
+    m_Address: SP-MO-SY-ISF-J-GE-T-SN
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -146,7 +146,7 @@ MonoBehaviour:
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 704c84eee71eb0d08918ca08662d4d14
-    m_Address: SP-MO-SY-ISI-J-GE-T-NS
+    m_Address: SP-MO-SY-ISI-J-GE-T-SN
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -162,7 +162,7 @@ MonoBehaviour:
     - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7ae4419eae2464bbb96b00f5f7810a8b
-    m_Address: SP-MO-SY-ISI-J-GE-T-PN
+    m_Address: SP-MO-SY-ISI-J-GE-T-NP
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -170,7 +170,7 @@ MonoBehaviour:
     - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8016980ce68c6ba4dac4c19510ea80c0
-    m_Address: SP-MO-SY-ISM-J-GE-T-PN
+    m_Address: SP-MO-SY-ISM-J-GE-T-NP
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -186,7 +186,7 @@ MonoBehaviour:
     - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9032f86d05be30f23a31e8165938391c
-    m_Address: SP-MO-SY-ISF-J-GE-T-PN
+    m_Address: SP-MO-SY-ISF-J-GE-T-NP
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -194,7 +194,7 @@ MonoBehaviour:
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9af02078f925b0b77b60fc0c900cef98
-    m_Address: SP-MO-SY-ISM-J-GE-T-PS
+    m_Address: SP-MO-SY-ISM-J-GE-T-SP
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -202,7 +202,7 @@ MonoBehaviour:
     - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ab81a83f335425a7c8498b0248313689
-    m_Address: SP-MO-SY-ISI-J-GE-T-PS
+    m_Address: SP-MO-SY-ISI-J-GE-T-SP
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge

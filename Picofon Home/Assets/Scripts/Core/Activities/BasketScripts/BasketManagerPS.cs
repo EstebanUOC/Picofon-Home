@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -42,7 +41,7 @@ public class BasketManagerPS : MonoBehaviour
 
     [Space]
     [SerializeField]
-    private AudioCategory<OthersAudioID>[] audioCategories;
+    private AudioCategory<ResponseAudioID>[] audioCategories;
 
     private bool _taskCompleted = false;
     private int _currentActivityIndex = 0;
@@ -54,7 +53,7 @@ public class BasketManagerPS : MonoBehaviour
     private readonly string[] _texts = new string[4];
     private readonly string[] _syllabifiedWords = new string[4];
 
-    private readonly Dictionary<OthersAudioID, AudioClip> _audioClips = new(3);
+    private readonly AudioClip[] _audioClips = new AudioClip[3];
 
     private readonly AudioClip[] _audioItems = new AudioClip[4];
 
@@ -80,20 +79,15 @@ public class BasketManagerPS : MonoBehaviour
 
         _canvasUI.Init(skill);
 
-        AudioEntry<OthersAudioID>[] audioEntries = Array.Empty<AudioEntry<OthersAudioID>>();
+        AudioEntry<ResponseAudioID>[] audioEntries = Array.Empty<AudioEntry<ResponseAudioID>>();
 
-        foreach (AudioCategory<OthersAudioID> category in audioCategories)
+        foreach (AudioCategory<ResponseAudioID> category in audioCategories)
         {
             if (category.Id == skill)
             {
                 audioEntries = category.Entries;
                 break;
             }
-        }
-
-        foreach (AudioEntry<OthersAudioID> entry in audioEntries)
-        {
-            _audioClips[entry.Id] = entry.Clip;
         }
 
         LoadActivities(@params: @params, skill: skill, language: language).Forget();
@@ -158,10 +152,12 @@ public class BasketManagerPS : MonoBehaviour
         {
             Language = language,
             Skill = skill,
-            Activity = "judge",
+            Activity = "select",
         };
 
         await AudioManager.Instance.LoadAudios(audioPaths, labels);
+
+        AudioManager.Instance.GetIntroAudios(_audioClips);
 
         if (!_taskCompleted)
         {
@@ -188,9 +184,11 @@ public class BasketManagerPS : MonoBehaviour
 
         _fade.StopAndZoom();
 
-        AudioClip introClip = _audioClips[OthersAudioID.Intro];
+        int introIndex = (int)ResponseAudioID.Intro;
+        AudioClip introClip = _audioClips[introIndex];
 
         _uiManager.SetIntroAudio(introClip);
+
         AudioManager.Instance.PlayVoice(introClip);
 
         await AudioManager.Instance.WaitVoiceToEnd();
@@ -214,9 +212,10 @@ public class BasketManagerPS : MonoBehaviour
 
         bool isCorrect = currentWord.Answer;
 
-        OthersAudioID id = isCorrect ? OthersAudioID.Positive : OthersAudioID.Negative;
+        ResponseAudioID id = isCorrect ? ResponseAudioID.Correct : ResponseAudioID.Incorrect;
+        int audioIndex = (int)id;
 
-        AudioManager.Instance.PlayVoice(_audioClips[id]);
+        AudioManager.Instance.PlayVoice(_audioClips[audioIndex]);
 
         int correctWordId = 0;
 

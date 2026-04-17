@@ -55,6 +55,11 @@ public class AudioManager : MonoBehaviour
         _audioLoader.GetAudios(index, quantity, clips);
     }
 
+    public void GetIntroAudios(AudioClip[] clips)
+    {
+        _audioLoader.GetIntroAudios(clips);
+    }
+
     public void PlayVoice(AudioClip clip, float volume = 1f)
     {
         _voiceSource.Stop();

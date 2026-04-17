@@ -4,20 +4,11 @@ using UnityEngine;
 
 namespace BasketResponses
 {
-    public enum JudgeAudioID
+    public enum ResponseAudioID : byte
     {
-        Intro,
-        PositiveAndCorrect,
-        PositiveAndIncorrect,
-        NegativeAndCorrect,
-        NegativeAndIncorrect,
-    }
-
-    public enum OthersAudioID
-    {
-        Intro,
-        Positive,
-        Negative,
+        Intro = 0,
+        Correct = 1,
+        Incorrect = 2,
     }
 
     [Serializable]
