@@ -16,5 +16,7 @@ public class TherapyPlan
 
     public TherapyTemplate TherapyTemplate { get; init; }
 
+    public int LanguageId { get; init; }
+
     public int OrderNumber { get; init; }
 }

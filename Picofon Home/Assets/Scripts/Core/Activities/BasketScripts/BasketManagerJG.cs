@@ -76,6 +76,7 @@ public class BasketGameManagerJG : MonoBehaviour
 
         ActivityRequestParams @params = LevelPayload.Params;
         ActivitySkill skill = LevelPayload.Skill;
+        LanguageID language = LevelPayload.Language;
 
         _taskCompleted = LevelPayload.TaskCompleted;
 
@@ -83,6 +84,7 @@ public class BasketGameManagerJG : MonoBehaviour
         if (@params.ChildId is null)
         {
             skill = ActivitySkill.Initial;
+            language = LanguageID.Catalan;
             @params = new ActivityRequestParams { PlanId = 112, ChildId = "12345678Z" };
             PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
         }
@@ -106,7 +108,7 @@ public class BasketGameManagerJG : MonoBehaviour
             _audioClips[entry.Id] = entry.Clip;
         }
 
-        LoadActivities(@params: @params, skill: skill).Forget();
+        LoadActivities(@params: @params, skill: skill, language: language).Forget();
     }
 
     public void OnDestroy()
@@ -116,7 +118,11 @@ public class BasketGameManagerJG : MonoBehaviour
         AudioManager.Instance.UnloadAudios();
     }
 
-    private async UniTaskVoid LoadActivities(ActivityRequestParams @params, ActivitySkill skill)
+    private async UniTaskVoid LoadActivities(
+        ActivityRequestParams @params,
+        ActivitySkill skill,
+        LanguageID language
+    )
     {
         BasketService basketService = new();
 
@@ -163,12 +169,12 @@ public class BasketGameManagerJG : MonoBehaviour
 
         ActivityLabels labels = new()
         {
-            Language = "lang-ca",
+            Language = language,
             Skill = skill,
             Activity = "judge",
         };
 
-        await AudioManager.Instance.LoadAudios(audioPaths);
+        await AudioManager.Instance.LoadAudios(audioPaths, labels);
 
         if (!_taskCompleted)
         {

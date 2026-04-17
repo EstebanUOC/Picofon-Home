@@ -13,7 +13,7 @@ public enum AudioID
 
 public readonly struct ActivityLabels
 {
-    public readonly string Language { get; init; }
+    public readonly LanguageID Language { get; init; }
     public readonly ActivitySkill Skill { get; init; }
     public readonly string Activity { get; init; }
 }
@@ -23,26 +23,26 @@ public class AudioLoader
     private AsyncOperationHandle<AudioClip>[] _audioHandles;
     private AudioClip _clip;
 
-    public async UniTask LoadAudios(string[] audioPaths, ActivityLabels labels = default)
+    public async UniTask LoadAudios(string[] audioPaths, ActivityLabels labels)
     {
         _audioHandles = new AsyncOperationHandle<AudioClip>[audioPaths.Length];
 
-        ActivityLabels prueba = new()
-        {
-            Language = "lang-ca",
-            Skill = ActivitySkill.Initial,
-            Activity = "judge",
-        };
-
         string skillLabel = labels.Skill switch
         {
-            ActivitySkill.Initial => "initial",
-            ActivitySkill.Medial => "medial",
-            ActivitySkill.Final => "final",
+            ActivitySkill.Initial => "skill-initial",
+            ActivitySkill.Medial => "skill-medial",
+            ActivitySkill.Final => "skill-final",
             _ => string.Empty,
         };
 
-        IEnumerable<string> keys = new string[] { prueba.Language, skillLabel, prueba.Activity };
+        string languageLabel = labels.Language switch
+        {
+            LanguageID.Catalan => "lang-ca",
+            LanguageID.Spanish => "lang-es",
+            _ => string.Empty,
+        };
+
+        IEnumerable<string> keys = new string[] { languageLabel, skillLabel, labels.Activity };
 
         AsyncOperationHandle<IList<AudioClip>> testHandle = Addressables.LoadAssetsAsync<AudioClip>(
             keys,

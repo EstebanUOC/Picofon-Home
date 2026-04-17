@@ -26,9 +26,6 @@ public class GameAPIService : MonoBehaviour
         string url = BASE_URL + therapyPlanId + "/" + childId;
 
         Debug.Log($"🌐 Solicitando datos del plan {therapyPlanId} → {url}");
-        Debug.Log(
-            $"📋 Modo de juego: {currentPlan.TherapyTemplate?.TaskTypeId} - {currentPlan.TherapyTemplate?.TaskTypeName}"
-        );
 
         using (UnityWebRequest req = UnityWebRequest.Get(url))
         {

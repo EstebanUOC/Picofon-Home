@@ -64,20 +64,19 @@ public class BasketManagerPS : MonoBehaviour
 
         ActivityRequestParams @params = LevelPayload.Params;
         ActivitySkill skill = LevelPayload.Skill;
+        LanguageID language = LevelPayload.Language;
 
         _taskCompleted = LevelPayload.TaskCompleted;
 
+#if DEBUG
         if (@params.ChildId is null)
         {
-#if !UNITY_EDITOR
-            Debug.LogError("Parameters are missing in LevelPayload.");
-            return;
-# else
             skill = ActivitySkill.Initial;
+            language = LanguageID.Spanish;
             @params = new ActivityRequestParams { PlanId = 113, ChildId = "12345678Z" };
             PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
-# endif
         }
+# endif
 
         _canvasUI.Init(skill);
 
@@ -97,7 +96,7 @@ public class BasketManagerPS : MonoBehaviour
             _audioClips[entry.Id] = entry.Clip;
         }
 
-        LoadActivities(@params).Forget();
+        LoadActivities(@params: @params, skill: skill, language: language).Forget();
     }
 
     public void OnDestroy()
@@ -105,7 +104,11 @@ public class BasketManagerPS : MonoBehaviour
         AudioManager.Instance.UnloadAudios();
     }
 
-    private async UniTaskVoid LoadActivities(ActivityRequestParams @params)
+    private async UniTaskVoid LoadActivities(
+        ActivityRequestParams @params,
+        ActivitySkill skill,
+        LanguageID language
+    )
     {
         BasketService basketService = new();
 
@@ -151,7 +154,14 @@ public class BasketManagerPS : MonoBehaviour
             }
         }
 
-        await AudioManager.Instance.LoadAudios(audioPaths);
+        ActivityLabels labels = new()
+        {
+            Language = language,
+            Skill = skill,
+            Activity = "judge",
+        };
+
+        await AudioManager.Instance.LoadAudios(audioPaths, labels);
 
         if (!_taskCompleted)
         {
