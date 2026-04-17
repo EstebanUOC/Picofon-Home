@@ -199,7 +199,7 @@ public class BasketGameManagerJG : MonoBehaviour
 
     private void HandleAnswerSelected(HoopType hoopType)
     {
-        int hoopIndex = hoopType == HoopType.Si ? 0 : 1;
+        int hoopIndex = (int)hoopType;
         Transform hoopTransform = _hoopManager.GetHoopTransform(hoopIndex);
 
         _ballController.LaunchBall(hoopTransform);
@@ -207,15 +207,17 @@ public class BasketGameManagerJG : MonoBehaviour
         bool isPositive = hoopType == HoopType.Si;
         bool isCorrect = _currentActivity.Answer == isPositive;
 
-        AnswerEvaluation answerResult = isCorrect
-            ? AnswerEvaluation.Correct
-            : AnswerEvaluation.Incorrect;
+        AnswerEvaluation answerResult = AnswerEvaluation.Correct;
 
-        ResponseAudioID id = isCorrect ? ResponseAudioID.Correct : ResponseAudioID.Incorrect;
+        int variant = 0;
 
-        int variant = hoopIndex;
+        if (!isCorrect)
+        {
+            variant = 2;
+            answerResult = AnswerEvaluation.Incorrect;
+        }
 
-        int audioIndex = (int)id + variant;
+        int audioIndex = (int)hoopType + 1 + variant;
 
         AudioManager.Instance.PlayVoice(_audioClips[audioIndex]);
 
@@ -239,8 +241,12 @@ public class BasketGameManagerJG : MonoBehaviour
 
     private async UniTaskVoid InitCount(AnswerEvaluation result)
     {
-        FeedbackType feedbackType =
-            result == AnswerEvaluation.Correct ? FeedbackType.Positive : FeedbackType.Neutral;
+        FeedbackType feedbackType = FeedbackType.Positive;
+
+        if (result == AnswerEvaluation.Incorrect)
+        {
+            feedbackType = FeedbackType.Neutral;
+        }
 
         await UniTask.WaitForSeconds(2f);
 

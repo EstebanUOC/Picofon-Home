@@ -39,10 +39,6 @@ public class BasketManagerPS : MonoBehaviour
     [SerializeField]
     private SessionManager _sessionManager;
 
-    [Space]
-    [SerializeField]
-    private AudioCategory<ResponseAudioID>[] audioCategories;
-
     private bool _taskCompleted = false;
     private int _currentActivityIndex = 0;
 
@@ -80,15 +76,6 @@ public class BasketManagerPS : MonoBehaviour
         _canvasUI.Init(skill);
 
         AudioEntry<ResponseAudioID>[] audioEntries = Array.Empty<AudioEntry<ResponseAudioID>>();
-
-        foreach (AudioCategory<ResponseAudioID> category in audioCategories)
-        {
-            if (category.Id == skill)
-            {
-                audioEntries = category.Entries;
-                break;
-            }
-        }
 
         LoadActivities(@params: @params, skill: skill, language: language).Forget();
     }

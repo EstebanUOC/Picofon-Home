@@ -50,7 +50,7 @@ MonoBehaviour:
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1aab2c16828d16dec8b207c01527b2a9
-    m_Address: SP-MO-SY-ISI-J-GE-T-NN
+    m_Address: SP-MO-SY-ISI-J-GE-T-SN
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -90,7 +90,7 @@ MonoBehaviour:
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4bcadda2ec38677f2a102836548e8db1
-    m_Address: SP-MO-SY-ISF-J-GE-T-NN
+    m_Address: SP-MO-SY-ISF-J-GE-T-SN
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -98,7 +98,7 @@ MonoBehaviour:
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4c33070237c965e31ac3a52c7e096c16
-    m_Address: SP-MO-SY-ISM-J-GE-T-SN
+    m_Address: SP-MO-SY-ISM-J-GE-T-NN
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -138,7 +138,7 @@ MonoBehaviour:
     - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 68f57acdf2fdc8f9da6547ce6e112303
-    m_Address: SP-MO-SY-ISF-J-GE-T-SN
+    m_Address: SP-MO-SY-ISF-J-GE-T-NN
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -146,7 +146,7 @@ MonoBehaviour:
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 704c84eee71eb0d08918ca08662d4d14
-    m_Address: SP-MO-SY-ISI-J-GE-T-SN
+    m_Address: SP-MO-SY-ISI-J-GE-T-NN
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -218,7 +218,7 @@ MonoBehaviour:
     - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cf24c2cca23c1201f8f2c8d964bb5ee8
-    m_Address: SP-MO-SY-ISM-J-GE-T-NN
+    m_Address: SP-MO-SY-ISM-J-GE-T-SN
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge

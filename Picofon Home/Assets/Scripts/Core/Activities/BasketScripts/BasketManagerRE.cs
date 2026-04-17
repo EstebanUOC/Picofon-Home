@@ -42,10 +42,6 @@ public class BasketManagerRE : MonoBehaviour
     [SerializeField]
     private Camera _camera;
 
-    [Space]
-    [SerializeField]
-    private AudioCategory<ResponseAudioID>[] audioCategories;
-
     private bool _taskCompleted = false;
     private int _currentActivityIndex = 0;
 
@@ -89,15 +85,6 @@ public class BasketManagerRE : MonoBehaviour
         _canvasUI.Init(skill);
 
         AudioEntry<ResponseAudioID>[] audioEntries = Array.Empty<AudioEntry<ResponseAudioID>>();
-
-        foreach (AudioCategory<ResponseAudioID> category in audioCategories)
-        {
-            if (category.Id == skill)
-            {
-                audioEntries = category.Entries;
-                break;
-            }
-        }
 
         LoadActivities(@params: @params, skill: skill, language: language).Forget();
     }
