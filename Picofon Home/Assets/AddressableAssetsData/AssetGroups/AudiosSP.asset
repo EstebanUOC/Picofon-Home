@@ -49,14 +49,6 @@ MonoBehaviour:
     - relate
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1aab2c16828d16dec8b207c01527b2a9
-    m_Address: SP-MO-SY-ISI-J-GE-T-SN
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-initial
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 21f7886aabf3f10d4951775707326e6f
     m_Address: SP-MO-SY-ISF-R-BA-T-I
     m_ReadOnly: 0
@@ -146,7 +138,7 @@ MonoBehaviour:
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 704c84eee71eb0d08918ca08662d4d14
-    m_Address: SP-MO-SY-ISI-J-GE-T-NN
+    m_Address: SP-MO-SY-ISI-J-GE-T-SN
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
@@ -183,6 +175,14 @@ MonoBehaviour:
     m_SerializedLabels:
     - lang-es
     - select
+    - skill-initial
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f6673855fd59f632bd51a6d35e82923
+    m_Address: SP-MO-SY-ISI-J-GE-T-NN
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
     - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9032f86d05be30f23a31e8165938391c
