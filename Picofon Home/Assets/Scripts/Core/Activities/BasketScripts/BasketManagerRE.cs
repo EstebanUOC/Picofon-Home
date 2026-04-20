@@ -69,9 +69,14 @@ public class BasketManagerRE : MonoBehaviour
 #if DEBUG
         if (@params.ChildId is null)
         {
-            skill = ActivitySkill.Final;
+            // skill = ActivitySkill.Final;
+            // language = LanguageID.Catalan;
+            // @params = new ActivityRequestParams { PlanId = 114, ChildId = "12345678Z" };
+
+            skill = ActivitySkill.Initial;
             language = LanguageID.Spanish;
-            @params = new ActivityRequestParams { PlanId = 114, ChildId = "12345678Z" };
+            @params = new ActivityRequestParams { PlanId = 126, ChildId = "88345678A" };
+
             PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
         }
 # endif

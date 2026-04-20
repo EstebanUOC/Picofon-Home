@@ -53,7 +53,7 @@ public class AudioLoader
             Addressables.MergeMode.Intersection
         );
 
-        await _introHandle;
+        await _introHandle.Task.AsUniTask();
 
         foreach (var clip in _introHandle.Result)
         {
@@ -62,13 +62,19 @@ public class AudioLoader
             await LoadAudio(clip);
         }
 
+        string prefix = labels.Language switch
+        {
+            LanguageID.Catalan => "CA-",
+            LanguageID.Spanish => "SP-",
+            _ => string.Empty,
+        };
+
         for (int i = 0; i < audioPaths.Length; i++)
         {
-            // TODO: Use localized paths when localization is implemented
-            string path = TextUtils.RemoveAccentsAndPrepend(audioPaths[i], "CA-");
+            string path = TextUtils.RemoveAccentsAndPrepend(input: audioPaths[i], prefix: prefix);
 
             AsyncOperationHandle<AudioClip> handle = Addressables.LoadAssetAsync<AudioClip>(path);
-            await handle;
+            await handle.Task.AsUniTask();
 
             if (handle.Status != AsyncOperationStatus.Succeeded)
             {
