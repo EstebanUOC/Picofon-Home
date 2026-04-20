@@ -3381,43 +3381,6 @@ MonoBehaviour:
   _answerManager: {fileID: 1932736848}
   _uiManager: {fileID: 94296185}
   _sessionManager: {fileID: 699825655}
-  audioCategories:
-  - Id: 1
-    Entries:
-    - Id: 0
-      Clip: {fileID: 8300000, guid: 238a516ce6ebd1120aeb9da0fbff573c, type: 3}
-    - Id: 1
-      Clip: {fileID: 8300000, guid: 01d4baddcb270e391bce565a3b674197, type: 3}
-    - Id: 2
-      Clip: {fileID: 8300000, guid: cf45cbb152fb92d83b86ccb50e65d023, type: 3}
-    - Id: 3
-      Clip: {fileID: 8300000, guid: e6d9c0fd831ec092e8f4fcc4d4b47f66, type: 3}
-    - Id: 4
-      Clip: {fileID: 8300000, guid: 9efffebc621affb0a9dda43354738ab6, type: 3}
-  - Id: 2
-    Entries:
-    - Id: 0
-      Clip: {fileID: 8300000, guid: 9c87420ede9e09388a9bdbbccd0fa832, type: 3}
-    - Id: 1
-      Clip: {fileID: 8300000, guid: 9d3e3591f18a788d88b6fe6c3d11a934, type: 3}
-    - Id: 2
-      Clip: {fileID: 8300000, guid: 42b52f499f0b6afc8881a95348fd7897, type: 3}
-    - Id: 3
-      Clip: {fileID: 8300000, guid: e8f367c01b5d8b709a6e34104923464a, type: 3}
-    - Id: 4
-      Clip: {fileID: 8300000, guid: be08aaf7f96d17581a6ccc0634e40f72, type: 3}
-  - Id: 3
-    Entries:
-    - Id: 0
-      Clip: {fileID: 8300000, guid: af7fc18e6930e4c8397afc15f498bfaa, type: 3}
-    - Id: 1
-      Clip: {fileID: 8300000, guid: 84df91a0f402953999476e514c072fa1, type: 3}
-    - Id: 2
-      Clip: {fileID: 8300000, guid: 72c5fad831f183ad58105de879e50419, type: 3}
-    - Id: 3
-      Clip: {fileID: 8300000, guid: 0fad894614d03b1028f674dbcfdf4f8a, type: 3}
-    - Id: 4
-      Clip: {fileID: 8300000, guid: cf669f667bd232c7f92dcda55bb8bf9c, type: 3}
 --- !u!1 &1075156704
 GameObject:
   m_ObjectHideFlags: 0
