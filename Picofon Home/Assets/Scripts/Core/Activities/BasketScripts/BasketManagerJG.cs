@@ -78,13 +78,13 @@ public class BasketGameManagerJG : MonoBehaviour
 #if DEBUG
         if (@params.ChildId is null)
         {
-            // skill = ActivitySkill.Initial;
-            // language = LanguageID.Catalan;
-            // @params = new ActivityRequestParams { PlanId = 112, ChildId = "12345678Z" };
-
             skill = ActivitySkill.Initial;
-            language = LanguageID.Spanish;
-            @params = new ActivityRequestParams { PlanId = 124, ChildId = "88345678A" };
+            language = LanguageID.Catalan;
+            @params = new ActivityRequestParams { PlanId = 112, ChildId = "12345678Z" };
+
+            // skill = ActivitySkill.Initial;
+            // language = LanguageID.Spanish;
+            // @params = new ActivityRequestParams { PlanId = 124, ChildId = "88345678A" };
 
             PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
         }

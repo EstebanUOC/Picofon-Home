@@ -47,9 +47,6 @@ public class MapManager : MonoBehaviour
             childId = "12345678Z";
             Debug.LogWarning("Using default ChildId for testing in Unity Editor.");
         }
-# endif
-
-#if DEBUG
         if (string.IsNullOrEmpty(_conductedById))
         {
             _conductedById = "noXJSkWJnCW5iSEu32n5Kvofq5a2";
