@@ -29,11 +29,11 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public async UniTask LoadAudios(string[] audioPaths)
+    public async UniTask LoadAudios(string[] audioPaths, ActivityLabels labels)
     {
         _audioLoader ??= new AudioLoader();
 
-        await _audioLoader.LoadAudios(audioPaths);
+        await _audioLoader.LoadAudios(audioPaths, labels);
     }
 
     public void UnloadAudios()
@@ -53,6 +53,11 @@ public class AudioManager : MonoBehaviour
     public void GetAudios(int index, int quantity, AudioClip[] clips)
     {
         _audioLoader.GetAudios(index, quantity, clips);
+    }
+
+    public void GetIntroAudios(AudioClip[] clips)
+    {
+        _audioLoader.GetIntroAudios(clips);
     }
 
     public void PlayVoice(AudioClip clip, float volume = 1f)

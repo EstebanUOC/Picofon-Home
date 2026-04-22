@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -40,10 +39,6 @@ public class BasketManagerPS : MonoBehaviour
     [SerializeField]
     private SessionManager _sessionManager;
 
-    [Space]
-    [SerializeField]
-    private AudioCategory<OthersAudioID>[] audioCategories;
-
     private bool _taskCompleted = false;
     private int _currentActivityIndex = 0;
 
@@ -54,7 +49,7 @@ public class BasketManagerPS : MonoBehaviour
     private readonly string[] _texts = new string[4];
     private readonly string[] _syllabifiedWords = new string[4];
 
-    private readonly Dictionary<OthersAudioID, AudioClip> _audioClips = new(3);
+    private readonly AudioClip[] _audioClips = new AudioClip[3];
 
     private readonly AudioClip[] _audioItems = new AudioClip[4];
 
@@ -64,40 +59,25 @@ public class BasketManagerPS : MonoBehaviour
 
         ActivityRequestParams @params = LevelPayload.Params;
         ActivitySkill skill = LevelPayload.Skill;
+        LanguageID language = LevelPayload.Language;
 
         _taskCompleted = LevelPayload.TaskCompleted;
 
+#if DEBUG
         if (@params.ChildId is null)
         {
-#if !UNITY_EDITOR
-            Debug.LogError("Parameters are missing in LevelPayload.");
-            return;
-# else
             skill = ActivitySkill.Initial;
+            language = LanguageID.Spanish;
             @params = new ActivityRequestParams { PlanId = 113, ChildId = "12345678Z" };
             PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
-# endif
         }
+# endif
 
         _canvasUI.Init(skill);
 
-        AudioEntry<OthersAudioID>[] audioEntries = Array.Empty<AudioEntry<OthersAudioID>>();
+        AudioEntry<ResponseAudioID>[] audioEntries = Array.Empty<AudioEntry<ResponseAudioID>>();
 
-        foreach (AudioCategory<OthersAudioID> category in audioCategories)
-        {
-            if (category.Id == skill)
-            {
-                audioEntries = category.Entries;
-                break;
-            }
-        }
-
-        foreach (AudioEntry<OthersAudioID> entry in audioEntries)
-        {
-            _audioClips[entry.Id] = entry.Clip;
-        }
-
-        LoadActivities(@params).Forget();
+        LoadActivities(@params: @params, skill: skill, language: language).Forget();
     }
 
     public void OnDestroy()
@@ -105,7 +85,11 @@ public class BasketManagerPS : MonoBehaviour
         AudioManager.Instance.UnloadAudios();
     }
 
-    private async UniTaskVoid LoadActivities(ActivityRequestParams @params)
+    private async UniTaskVoid LoadActivities(
+        ActivityRequestParams @params,
+        ActivitySkill skill,
+        LanguageID language
+    )
     {
         BasketService basketService = new();
 
@@ -151,7 +135,16 @@ public class BasketManagerPS : MonoBehaviour
             }
         }
 
-        await AudioManager.Instance.LoadAudios(audioPaths);
+        ActivityLabels labels = new()
+        {
+            Language = language,
+            Skill = skill,
+            Activity = "select",
+        };
+
+        await AudioManager.Instance.LoadAudios(audioPaths, labels);
+
+        AudioManager.Instance.GetIntroAudios(_audioClips);
 
         if (!_taskCompleted)
         {
@@ -178,9 +171,11 @@ public class BasketManagerPS : MonoBehaviour
 
         _fade.StopAndZoom();
 
-        AudioClip introClip = _audioClips[OthersAudioID.Intro];
+        int introIndex = (int)ResponseAudioID.Intro;
+        AudioClip introClip = _audioClips[introIndex];
 
         _uiManager.SetIntroAudio(introClip);
+
         AudioManager.Instance.PlayVoice(introClip);
 
         await AudioManager.Instance.WaitVoiceToEnd();
@@ -204,9 +199,10 @@ public class BasketManagerPS : MonoBehaviour
 
         bool isCorrect = currentWord.Answer;
 
-        OthersAudioID id = isCorrect ? OthersAudioID.Positive : OthersAudioID.Negative;
+        ResponseAudioID id = isCorrect ? ResponseAudioID.Correct : ResponseAudioID.Incorrect;
+        int audioIndex = (int)id;
 
-        AudioManager.Instance.PlayVoice(_audioClips[id]);
+        AudioManager.Instance.PlayVoice(_audioClips[audioIndex]);
 
         int correctWordId = 0;
 

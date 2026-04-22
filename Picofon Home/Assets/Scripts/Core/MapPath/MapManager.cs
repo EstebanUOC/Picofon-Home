@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using PrimeTween;
 using UnityEngine;
@@ -7,6 +8,12 @@ public enum ActivityType : byte
     Judge = 1,
     Select = 2,
     Relate = 3,
+}
+
+public enum LanguageID : byte
+{
+    Catalan = 1,
+    Spanish = 2,
 }
 
 public class MapManager : MonoBehaviour
@@ -37,12 +44,9 @@ public class MapManager : MonoBehaviour
 #if DEBUG
         if (string.IsNullOrEmpty(childId))
         {
-            childId = "12345678Z";
+            childId = "88345678A";
             Debug.LogWarning("Using default ChildId for testing in Unity Editor.");
         }
-# endif
-
-#if DEBUG
         if (string.IsNullOrEmpty(_conductedById))
         {
             _conductedById = "noXJSkWJnCW5iSEu32n5Kvofq5a2";
@@ -86,20 +90,20 @@ public class MapManager : MonoBehaviour
     {
         TherapyPlan plan = LevelDataStore.Instance.GetPlanByIndex(index);
 
-        ActivityRequestParams @params = new()
+        TherapyTemplate template = plan.TherapyTemplate;
+
+        LevelPayload.Params = new ActivityRequestParams
         {
             PlanId = plan.TherapyPlanId,
             ChildId = plan.ChildId,
             ConductedById = _conductedById,
         };
 
-        TherapyTemplate template = plan.TherapyTemplate;
+        LevelPayload.Skill = (ActivitySkill)template.SkillId;
+        LevelPayload.Language = (LanguageID)plan.LanguageId;
+        ActivityType type = (ActivityType)template.TaskTypeId;
 
-        LevelPayload.Params = @params;
-        LevelPayload.Skill = (ActivitySkill)template.Skill.Id;
         LevelPayload.TaskCompleted = plan.Status == TherapyStatus.Completed;
-
-        ActivityType type = (ActivityType)template.TaskType.Id;
 
         string suffix = type switch
         {

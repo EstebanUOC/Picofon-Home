@@ -1,0 +1,195 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Table_ca
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: ca
+  m_SharedData: {fileID: 11400000, guid: 9218e6ba46a99bc4bbfb36d6b92602f6, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 26655811813376
+    m_Localized: "Hola, \xA1Benvinguts!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27000914952192
+    m_Localized: "Iniciar sessi\xF3"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27546942029824
+    m_Localized: Continua amb Google
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30919154057216
+    m_Localized: Document de consentiment informat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31146925735936
+    m_Localized: "Av\xEDs i consentiment per a l\u2019\xFAs de l\u2019aplicaci\xF3
+      Picofon"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 329403241447424
+    m_Localized: "Picofon \xE9s una aplicaci\xF3 educativa dissenyada per millorar
+      la consci\xE8ncia fonol\xF2gica dels infants d\u2019entre 3 i 7 anys.\nL\u2019aplicaci\xF3
+      ha estat desenvolupada i gestionada pel Grup de Recerca en Cognici\xF3 i Llenguatge
+      (UOC-UB), GRECIL!, format per terapeutes del llenguatge, ling\xFCistes i investigadors
+      especialitzats en el desenvolupament del llenguatge infantil.\nEn continuar,
+      vost\xE8 confirma que \xE9s el pare, la mare o el/la tutor/a legal de l\u2019infant
+      i autoritza l\u2019\xFAs de Picofon amb finalitats exclusivament educatives
+      i de recerca.\nLes dades que es recullen a trav\xE9s de l\u2019aplicaci\xF3
+      s\xF3n tractades de manera segura i confidencial. Nom\xE9s un petit conjunt
+      d\u2019aquestes dades podr\xE0 ser utilitzat pels professionals del grup GRECIL!
+      per a:\n\n\u2022 Fer un seguiment del progr\xE9s de l\u2019infant, i/o\n\u2022
+      Fins cient\xEDfics o terap\xE8utics, sempre de forma an\xF2nima i agregada.\n\nEn
+      cap cas les dades seran cedides a tercers ni utilitzades amb finalitats comercials.\nEn
+      pr\xE9mer \u201CAccepto\u201D, declara haver llegit i ent\xE8s aquest av\xEDs
+      i consentir el tractament de les dades segons s\u2019hi descriu."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 331081260843008
+    m_Localized: Accepto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 331229546266624
+    m_Localized: No accepto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 331701699067904
+    m_Localized: "Vas iniciar sessi\xF3 com a Convidat, quin \xE9s el teu rol actual:"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 332546985541632
+    m_Localized: Professional
+    m_Metadata:
+      m_Items: []
+  - m_Id: 332782021754880
+    m_Localized: (terapeuta / docent)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 333362127552512
+    m_Localized: "Fam\xEDlia"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 333515093819392
+    m_Localized: (mare, pare o tutor/a)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 334195409928192
+    m_Localized: Infants
+    m_Metadata:
+      m_Items: []
+  - m_Id: 334462775836672
+    m_Localized: Continuar amb aquest infant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 334624835354624
+    m_Localized: Registrar un nou infant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 335638120480768
+    m_Localized: "Si us plau, posa el dispositiu en horitzontal per gaudir de l'experi\xE8ncia
+      completa\n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349028515692544
+    m_Localized: "gr\xE0cies per registrar-te"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349723927101440
+    m_Localized: "Informaci\xF3 de l'infant"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 350278250512384
+    m_Localized: "\xC9s un Passaport"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 350420521304064
+    m_Localized: "DNI: 8 d\xEDgits + lletra | NIE: X/Y/Z + 7 d\xEDgits + lletra"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 355242674864128
+    m_Localized: Nom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 356364194004992
+    m_Localized: Introdueix el nom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 356663684087808
+    m_Localized: Cognom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 356869309841408
+    m_Localized: "Exemple: Sanz\u200B"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357054819713024
+    m_Localized: "Quan va n\xE9ixer?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357328254779392
+    m_Localized: Any
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357526297231360
+    m_Localized: "Introdu\xEFu una data v\xE0lida"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357653112012800
+    m_Localized: A quina escola estudia?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357841121689600
+    m_Localized: 'Exemple: Bressol Chiqui La Vila'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358083267248128
+    m_Localized: Quina llengua parla?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358595597287424
+    m_Localized: En quin grau es troba?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358917900189696
+    m_Localized: "\xBFTu menor tiene alguna necesidad espec\xEDfica de apoyo educativo?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 359804529917952
+    m_Localized: Trastorn Especifico del Llenguatge (TEL)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360041218686976
+    m_Localized: Trastorn de l'Espectre Autista (TEA)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360295766802432
+    m_Localized: Altres
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360793387417600
+    m_Localized: A quin centre pertany?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360930834759680
+    m_Localized: Centre per defecte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1427275047354368
+    m_Localized: "apr\xE8n m\xE9s"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

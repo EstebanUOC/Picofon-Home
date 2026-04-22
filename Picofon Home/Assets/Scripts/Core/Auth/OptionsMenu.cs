@@ -1,5 +1,7 @@
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 
 public class OptionsMenu : MonoBehaviour
 {
@@ -13,11 +15,9 @@ public class OptionsMenu : MonoBehaviour
 
     public void Awake()
     {
-        _saveButton.OnClick += HandleSaveButtonClicked;
+        _saveButton.OnClick += HandleClick;
 
         string preferredLanguage = GamePrefs.PreferredLanguage;
-
-        Debug.Log($"Preferred language: {preferredLanguage}");
 
         if (preferredLanguage[0] == 'C')
             return;
@@ -28,9 +28,18 @@ public class OptionsMenu : MonoBehaviour
         }
     }
 
-    private void HandleSaveButtonClicked()
+    private void HandleClick()
     {
         GamePrefs.PreferredLanguage = _languageComboBox.GetSelectedLanguage().ToString();
+
+        int index = 0;
+
+        if (GamePrefs.PreferredLanguage[0] != 'C')
+        {
+            index = 1;
+        }
+
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
 
         OnClose?.Invoke();
     }

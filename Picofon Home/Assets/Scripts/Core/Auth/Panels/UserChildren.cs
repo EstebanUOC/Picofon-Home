@@ -3,7 +3,6 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class UserChildren : Panel
 {
@@ -29,6 +28,8 @@ public class UserChildren : Panel
 
     private string[] _childrenIds;
 
+    private string _userId;
+
     public void Start()
     {
         OnHide += () => gameObject.SetActive(false);
@@ -40,6 +41,8 @@ public class UserChildren : Panel
         registerButton.OnClick += OnRegisterChild;
 
         _logoutButton.OnClick += OnLogout;
+
+        _userId = UIManager.CurrentUser.Id;
     }
 
     public override void Show()
@@ -53,9 +56,9 @@ public class UserChildren : Panel
         UserService userService = UIManager.UserService;
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 
-        string userId = UIManager.CurrentUser.Id;
+        _userId = UIManager.CurrentUser.Id;
 
-        ApiResult<ChildListItemDTO[]> result = await userService.GetUserChildren(userId, token);
+        ApiResult<ChildListItemDTO[]> result = await userService.GetUserChildren(_userId, token);
 
         if (!result.Success)
         {
@@ -117,6 +120,11 @@ public class UserChildren : Panel
         _loadingTransition.PlayLoadingTransition();
 
         await instance.LoadPlans(childId);
+
+        if (!instance.HasPlans())
+        {
+            await instance.CreateDefaultPlans(childId, _userId);
+        }
 
         _loadingTransition.Continue(success: instance.HasPlans(), uiManager: UIManager);
     }

@@ -1,0 +1,194 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Table_es
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: es
+  m_SharedData: {fileID: 11400000, guid: 9218e6ba46a99bc4bbfb36d6b92602f6, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 26655811813376
+    m_Localized: "Hola, \xA1Bienvenidos!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27000914952192
+    m_Localized: "Iniciar sesi\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27546942029824
+    m_Localized: "Contin\xFAa con Google"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 30919154057216
+    m_Localized: Documento de consentimiento informado
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31146925735936
+    m_Localized: "Aviso y consentimiento para el uso de la aplicaci\xF3n Picofon"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 329403241447424
+    m_Localized: "Picofon es una aplicaci\xF3n educativa dise\xF1ada para mejorar
+      la conciencia fonol\xF3gica de los ni\xF1os de entre 3 y 7 a\xF1os.\nLa aplicaci\xF3n
+      ha sido desarrollada y gestionada por el Grupo de Investigaci\xF3n en Cognici\xF3n
+      y Lenguaje (UOC-UB), GRECIL!, formado por terapeutas del lenguaje, ling\xFCistas
+      e investigadores especializados en el desarrollo del lenguaje infantil.\nAl
+      continuar, usted confirma que es el padre, la madre o el/la tutor/a legal del
+      ni\xF1o y autoriza el uso de Picofon con fines exclusivamente educativos y
+      de investigaci\xF3n.\nLos datos que se recogen a trav\xE9s de la aplicaci\xF3n
+      son tratados de forma segura y confidencial. \xA1S\xF3lo un peque\xF1o conjunto
+      de estos datos podr\xE1 ser utilizado por los profesionales del grupo GRECIL!
+      para:\n\n\u2022 Hacer un seguimiento del progreso del ni\xF1o, y/o\n\u2022
+      Fines cient\xEDficos o terap\xE9uticos, siempre de forma an\xF3nima y agregada.\n\nEn
+      ning\xFAn caso los datos ser\xE1n cedidos a terceros ni utilizados con fines
+      comerciales.\nAl pulsar \u201CAcepto\u201D, declara haber le\xEDdo y entendido
+      este aviso y consentir el tratamiento de los datos seg\xFAn se describe."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 331081260843008
+    m_Localized: Acepto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 331229546266624
+    m_Localized: No acepto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 331701699067904
+    m_Localized: "Iniciaste sesi\xF3n como Invitado, cu\xE1l es tu rol actual:"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 332546985541632
+    m_Localized: Profesional
+    m_Metadata:
+      m_Items: []
+  - m_Id: 332782021754880
+    m_Localized: (terapeuta / docente)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 333362127552512
+    m_Localized: Familia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 333515093819392
+    m_Localized: (madre, padre o tutor/a)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 334195409928192
+    m_Localized: Infantes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 334462775836672
+    m_Localized: "Continuar con este ni\xF1o"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 334624835354624
+    m_Localized: "Registrar a un nuevo ni\xF1o"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 335638120480768
+    m_Localized: Por favor, coloca el dispositivo en horizontal para disfrutar de
+      la experiencia completa
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349028515692544
+    m_Localized: gracias por registrarte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 349723927101440
+    m_Localized: "Informaci\xF3n del infante"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 350278250512384
+    m_Localized: Es un Pasaporte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 350420521304064
+    m_Localized: "DNI: 8 d\xEDgitos + letra | NIE: X/Y/Z + 7 d\xEDgitos + letra"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 355242674864128
+    m_Localized: Nombre
+    m_Metadata:
+      m_Items: []
+  - m_Id: 356364194004992
+    m_Localized: Introduce el nombre
+    m_Metadata:
+      m_Items: []
+  - m_Id: 356663684087808
+    m_Localized: Apellido
+    m_Metadata:
+      m_Items: []
+  - m_Id: 356869309841408
+    m_Localized: 'Ejemplo: Sanz'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357054819713024
+    m_Localized: "Cu\xE1ndo naci\xF3?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357328254779392
+    m_Localized: "A\xF1o"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357526297231360
+    m_Localized: "Introduzca una fecha v\xE1lida"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357653112012800
+    m_Localized: "En qu\xE9 escuela estudia?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 357841121689600
+    m_Localized: 'Ejemplo: Bressol Chiqui La Vila'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358083267248128
+    m_Localized: "Qu\xE9 lengua habla?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358595597287424
+    m_Localized: "En qu\xE9 grado se encuentra?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358917900189696
+    m_Localized: "Tu menor tiene alguna necesidad espec\xEDfica de apoyo educativo?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 359804529917952
+    m_Localized: Trastorno Especifico del Lenguaje (TEL)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360041218686976
+    m_Localized: Trastorno del Espectro Autista (TEA)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360295766802432
+    m_Localized: Otros
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360793387417600
+    m_Localized: "A qu\xE9 centro pertenece?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360930834759680
+    m_Localized: Centro por defecto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1427275047354368
+    m_Localized: "aprende m\xE1s"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

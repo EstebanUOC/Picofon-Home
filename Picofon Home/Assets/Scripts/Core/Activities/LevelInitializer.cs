@@ -11,7 +11,6 @@ public class LevelInitializer : MonoBehaviour
 
         Debug.Log($"Initializing level with");
         Debug.Log($"ChildId: {plan.ChildId}");
-        Debug.Log($"TaskType: {plan.TherapyTemplate.TaskTypeId}");
 
         LevelPayload.PlanIndex = -1;
     }
