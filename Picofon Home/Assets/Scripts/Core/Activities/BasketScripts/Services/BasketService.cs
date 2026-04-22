@@ -37,10 +37,12 @@ public class BasketService
                 cancellationToken: token
             );
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
             if (!GamePrefs.DebugMode)
             {
+                PerformanceLog.LogError($"Network request failed with error: {e.Message}");
+
                 return ApiResult<T>.Fail("Network error occurred while fetching activities.");
             }
 
