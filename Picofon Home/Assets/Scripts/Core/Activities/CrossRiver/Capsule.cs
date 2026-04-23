@@ -3,98 +3,101 @@ using UnityEngine;
 public class Capsule : MonoBehaviour
 {
     [SerializeField]
-    private float jumpDuration = 0.5f;
+    private float _jumpDuration = 0.5f;
 
     private float _targetY;
 
-    private float speed = 2f;
-    private float amplitude = 0.5f;
+    private float _jumpHeight;
+    private float _time;
+    private float _startY;
 
-    private float jumpTime;
-    private float startY;
-
-    private bool isJumping = false;
+    private bool _isJumping = false;
 
     private const float _offset = 1f;
+    private const float _compensation = 4f; // Normaliza la parábola para que el máximo sea exactamente jumpHeight
+
+    private const float _speed = 5f;
+    private const float _amplitude = 0.05f;
 
     public void Start()
     {
-        startY = transform.position.y;
+        _startY = transform.position.y;
     }
 
-    public void Update()
+    public void FixedUpdate()
     {
-        // float offset = Mathf.Sin(Time.time * speed) * amplitude;
-        //
-        // transform.position = new Vector3(
-        //     transform.position.x,
-        //     startY + offset,
-        //     transform.position.z
-        // );
+        float offset = Mathf.Sin(Time.time * _speed) * _amplitude;
 
-        if (Input.GetKeyDown(KeyCode.A) && !isJumping)
+        transform.position = new Vector3(
+            transform.position.x,
+            _startY + offset,
+            transform.position.z
+        );
+
+        if (Input.GetKeyDown(KeyCode.A) && !_isJumping)
         {
-            isJumping = true;
-            _targetY = 1.3f;
-            startY = transform.position.y;
+            _isJumping = true;
+            _targetY = 1.3f + _offset;
+            _startY = transform.position.y;
+
+            _jumpHeight = 3f;
+
+            if (_targetY == _startY)
+            {
+                _jumpHeight = 1f;
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.B) && !isJumping)
+        if (Input.GetKeyDown(KeyCode.B) && !_isJumping)
         {
-            isJumping = true;
-            _targetY = -3.4f;
-            startY = transform.position.y;
+            _isJumping = true;
+            _targetY = -3.4f + _offset;
+            _startY = transform.position.y;
+
+            _jumpHeight = 3f;
+
+            if (_targetY == _startY)
+            {
+                _jumpHeight = 1f;
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.C) && !isJumping)
+        if (Input.GetKeyDown(KeyCode.C) && !_isJumping)
         {
-            transform.position = new Vector3(transform.position.x, startY, transform.position.z);
+            transform.position = new Vector3(transform.position.x, _startY, transform.position.z);
         }
 
-        // if (isJumping)
-        // {
-        //     jumpTime += Time.deltaTime;
-        //     float t = jumpTime / jumpDuration;
-        //
-        //     if (t >= 1f)
-        //     {
-        //         isJumping = false;
-        //         jumpTime = 0f;
-        //         transform.position = new Vector3(
-        //             transform.position.x,
-        //             startY,
-        //             transform.position.z
-        //         );
-        //         return;
-        //     }
-        //
-        //     float height = 4 * jumpHeight * t * (1 - t);
-        //
-        //     transform.position = new Vector3(
-        //         transform.position.x,
-        //         startY + height,
-        //         transform.position.z
-        //     );
-        // }
-
-        if (isJumping)
+        if (_isJumping)
         {
-            jumpTime += Time.deltaTime;
-            float t = jumpTime / jumpDuration;
+            _time += Time.deltaTime;
+            float t = _time / _jumpDuration;
 
             if (t >= 1f)
             {
-                isJumping = false;
-                jumpTime = 0f;
+                _isJumping = false;
+                _time = 0f;
+
+                transform.position = new Vector3(
+                    transform.position.x,
+                    _targetY,
+                    transform.position.z
+                );
                 return;
             }
 
-            Vector3 a = transform.position;
-            Vector3 b = new(transform.position.x, _targetY + _offset, transform.position.z);
+            float a = _compensation * _jumpHeight;
 
-            Vector3 pos = Vector3.Lerp(a, b, t);
+            float targetY = _targetY - _startY;
 
-            transform.position = pos;
+            float b = a + targetY;
+
+            float height = -a * (t * t) + b * t;
+
+            transform.position = new Vector3(
+                transform.position.x,
+                _startY + height,
+                transform.position.z
+            );
         }
     }
 }
