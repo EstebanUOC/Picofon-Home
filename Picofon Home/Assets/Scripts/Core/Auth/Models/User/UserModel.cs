@@ -14,5 +14,7 @@ public readonly struct UserModel
 
     public readonly string Email { get; init; }
 
+    public readonly bool LegalAccepted { get; init; }
+
     public readonly UserRole Role { get; init; }
 }

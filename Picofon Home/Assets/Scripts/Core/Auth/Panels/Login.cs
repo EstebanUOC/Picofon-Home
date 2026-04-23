@@ -107,6 +107,8 @@ public class Login : Panel
             firebaseIdToken
         );
 
+        PerformanceLog.Log($"Legal accepted: {result.Data.User.LegalAccepted}");
+
         if (!result.Success)
         {
             ModalData modalData = new()
