@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 
 public struct ModalData
@@ -12,98 +11,84 @@ public class Modal : MonoBehaviour
 {
     [Space]
     [SerializeField]
-    private TMP_Text _title;
+    private GameObject _contentObject;
 
     [SerializeField]
-    private TMP_Text _message;
+    private GameObject _debugMenuObject;
 
     [SerializeField]
-    private CustomButtonBase _button;
+    private GameObject _optionsMenuObject;
 
-    [Space]
-    [SerializeField]
-    private GameObject _content;
-
-    [SerializeField]
-    private GameObject _menu;
-
-    [SerializeField]
-    private GameObject _options;
-
+    private GenericEventChannel _eventChannel;
     private ReusableCompletionSource<bool> _taskCompletion;
-    private ReusableCompletionSource<DebugMenuResult> _taskDebug;
+
+    private DebugMenu _debugMenu;
+
+    private OptionsMenu _optionsMenu;
+
+    private ContentMenu _contentMenu;
 
     public void Awake()
     {
+        _eventChannel = new GenericEventChannel();
+
+        _eventChannel.OnRaised += HandleClose;
+
         _taskCompletion = new ReusableCompletionSource<bool>();
-        _taskDebug = new ReusableCompletionSource<DebugMenuResult>();
-
-        _button.OnClick += OnConfirmButtonClicked;
-    }
-
-    public async UniTask<DebugMenuResult> ShowDebugMenu()
-    {
-        gameObject.SetActive(true);
-
-        _content.SetActive(false);
-        _menu.SetActive(true);
-
-        DebugMenu debugMenu = _menu.GetComponent<DebugMenu>();
-        debugMenu.OnClose -= OnMenuClose;
-        debugMenu.OnClose += OnMenuClose;
-
-        _taskDebug.Reset();
-
-        return await _taskDebug.Task;
     }
 
     public async UniTask<bool> Show(ModalData data)
     {
         gameObject.SetActive(true);
-        _title.text = data.Title;
-        _message.text = data.Message;
 
-        return await _taskCompletion.Task;
+        _contentObject.SetActive(true);
+
+        if (_contentMenu == null)
+        {
+            _contentMenu = _contentObject.GetComponent<ContentMenu>();
+
+            _contentMenu.EventChannel = _eventChannel;
+            _contentMenu.TaskCompletion = _taskCompletion;
+        }
+
+        return await _contentMenu.Show(data);
     }
 
     public async UniTask<bool> ShowOptions()
     {
         gameObject.SetActive(true);
 
-        _options.SetActive(true);
+        _optionsMenuObject.SetActive(true);
 
-        OptionsMenu optionsMenu = _options.GetComponent<OptionsMenu>();
-        optionsMenu.OnClose += OnOptionsMenuClose;
+        if (_optionsMenu == null)
+        {
+            _optionsMenu = _optionsMenuObject.GetComponent<OptionsMenu>();
 
-        return await _taskCompletion.Task;
+            _optionsMenu.EventChannel = _eventChannel;
+            _optionsMenu.TaskCompletion = _taskCompletion;
+        }
+
+        return await _optionsMenu.Show();
     }
 
-    public void OnDestroy()
+    public async UniTask<DebugMenuResult> ShowDebugMenu()
     {
-        _taskCompletion.TrySetCanceled();
+        gameObject.SetActive(true);
+
+        _debugMenuObject.SetActive(true);
+
+        if (_debugMenu == null)
+        {
+            _debugMenu = _debugMenuObject.GetComponent<DebugMenu>();
+
+            _debugMenu.EventChannel = _eventChannel;
+        }
+
+        return await _debugMenu.Show();
     }
 
-    private void OnConfirmButtonClicked()
+    private void HandleClose()
     {
-        _taskCompletion.TrySetResult(true);
-
-        gameObject.SetActive(false);
-    }
-
-    private void OnMenuClose(DebugMenuResult result)
-    {
-        _taskDebug.TrySetResult(result);
-
-        _content.SetActive(true);
-        _menu.SetActive(false);
-        gameObject.SetActive(false);
-    }
-
-    private void OnOptionsMenuClose()
-    {
-        _taskCompletion.TrySetResult(true);
-
-        _options.SetActive(false);
         gameObject.SetActive(false);
     }
 }

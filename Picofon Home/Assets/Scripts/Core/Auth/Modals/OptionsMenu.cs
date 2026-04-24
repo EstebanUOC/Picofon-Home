@@ -11,7 +11,9 @@ public class OptionsMenu : MonoBehaviour
     [SerializeField]
     private CustomButtonRaised _saveButton;
 
-    public Action OnClose;
+    public GenericEventChannel EventChannel;
+
+    public ReusableCompletionSource<bool> TaskCompletion;
 
     public void Awake()
     {
@@ -28,6 +30,13 @@ public class OptionsMenu : MonoBehaviour
         }
     }
 
+    public async UniTask<bool> Show()
+    {
+        gameObject.SetActive(true);
+
+        return await TaskCompletion.Task;
+    }
+
     private void HandleClick()
     {
         GamePrefs.PreferredLanguage = _languageComboBox.GetSelectedLanguage().ToString();
@@ -41,6 +50,9 @@ public class OptionsMenu : MonoBehaviour
 
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
 
-        OnClose?.Invoke();
+        TaskCompletion.TrySetResult(true);
+        EventChannel.Raise();
+
+        gameObject.SetActive(false);
     }
 }

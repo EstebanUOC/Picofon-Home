@@ -5,7 +5,7 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
 
-    [Space(15)]
+    [Space]
     [SerializeField]
     private AudioSource _sfxSource;
 
@@ -46,6 +46,9 @@ public class AudioManager : MonoBehaviour
 
         if (_sfxSource.isPlaying)
             _sfxSource.Stop();
+
+        if (_audioLoader == null)
+            return;
 
         _audioLoader.UnloadAudios();
     }

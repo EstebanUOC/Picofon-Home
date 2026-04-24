@@ -5674,12 +5674,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 473c7cf21228c4760867111db91813f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _title: {fileID: 253328153}
-  _message: {fileID: 768433456}
-  _button: {fileID: 519544180}
-  _content: {fileID: 1993589727}
-  _menu: {fileID: 893557003}
-  _options: {fileID: 2000809158}
+  _contentObject: {fileID: 1993589727}
+  _debugMenuObject: {fileID: 893557003}
+  _optionsMenuObject: {fileID: 2000809158}
 --- !u!1 &456158152
 GameObject:
   m_ObjectHideFlags: 0
@@ -23889,6 +23886,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &1993589736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993589727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91dd1f7aa10753b08a019d1e538996c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _title: {fileID: 253328153}
+  _message: {fileID: 768433456}
+  _button: {fileID: 519544180}
 --- !u!1 &1994449535
 GameObject:
   m_ObjectHideFlags: 0
@@ -26065,6 +26077,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5664625503607208437, guid: 7bf0372be24be89889691c5971fa6ceb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1993589732}
+    - targetCorrespondingSourceObject: {fileID: 5664625503607208437, guid: 7bf0372be24be89889691c5971fa6ceb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1993589736}
   m_SourcePrefab: {fileID: 100100000, guid: 7bf0372be24be89889691c5971fa6ceb, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
