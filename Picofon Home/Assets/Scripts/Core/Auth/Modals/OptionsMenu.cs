@@ -52,7 +52,5 @@ public class OptionsMenu : MonoBehaviour
 
         TaskCompletion.TrySetResult(true);
         EventChannel.Raise();
-
-        gameObject.SetActive(false);
     }
 }

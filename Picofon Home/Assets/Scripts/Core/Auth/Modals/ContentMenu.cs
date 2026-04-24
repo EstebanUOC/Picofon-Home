@@ -37,7 +37,5 @@ public class ContentMenu : MonoBehaviour
     {
         TaskCompletion.TrySetResult(true);
         EventChannel.Raise();
-
-        gameObject.SetActive(false);
     }
 }

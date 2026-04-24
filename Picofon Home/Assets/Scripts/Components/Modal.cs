@@ -1,5 +1,9 @@
+using System;
 using Cysharp.Threading.Tasks;
+using PrimeTween;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public struct ModalData
 {
@@ -7,7 +11,7 @@ public struct ModalData
     public string Message;
 }
 
-public class Modal : MonoBehaviour
+public class Modal : MonoBehaviour, IPointerClickHandler
 {
     [Space]
     [SerializeField]
@@ -19,6 +23,15 @@ public class Modal : MonoBehaviour
     [SerializeField]
     private GameObject _optionsMenuObject;
 
+    [Space]
+    [SerializeField]
+    private Image _background;
+
+    [SerializeField]
+    private RectTransform _panel;
+
+    private const float _duration = 0.5f;
+
     private GenericEventChannel _eventChannel;
     private ReusableCompletionSource<bool> _taskCompletion;
 
@@ -28,6 +41,13 @@ public class Modal : MonoBehaviour
 
     private ContentMenu _contentMenu;
 
+    private AnimationCurve _animationCurve;
+
+    private GameObject _currentMenuObject;
+    private RectTransform _currentContent;
+
+    private Action _onAnimationComplete;
+
     public void Awake()
     {
         _eventChannel = new GenericEventChannel();
@@ -35,6 +55,28 @@ public class Modal : MonoBehaviour
         _eventChannel.OnRaised += HandleClose;
 
         _taskCompletion = new ReusableCompletionSource<bool>();
+
+        Keyframe k0 = new(0f, 0f)
+        {
+            outTangent = 0.84f / 0.165f,
+            outWeight = 0.165f,
+            weightedMode = WeightedMode.Out,
+        };
+
+        Keyframe k1 = new(1f, 1f)
+        {
+            inTangent = 0f,
+            inWeight = 1f - 0.440f,
+            weightedMode = WeightedMode.In,
+        };
+
+        _animationCurve = new(k0, k1);
+
+        _onAnimationComplete = () =>
+        {
+            _currentMenuObject.SetActive(false);
+            gameObject.SetActive(false);
+        };
     }
 
     public async UniTask<bool> Show(ModalData data)
@@ -42,6 +84,11 @@ public class Modal : MonoBehaviour
         gameObject.SetActive(true);
 
         _contentObject.SetActive(true);
+
+        _currentMenuObject = _contentObject;
+        _currentContent = _contentObject.GetComponent<RectTransform>();
+
+        AnimateOpen();
 
         if (_contentMenu == null)
         {
@@ -60,6 +107,11 @@ public class Modal : MonoBehaviour
 
         _optionsMenuObject.SetActive(true);
 
+        _currentMenuObject = _optionsMenuObject;
+        _currentContent = _optionsMenuObject.GetComponent<RectTransform>();
+
+        AnimateOpen();
+
         if (_optionsMenu == null)
         {
             _optionsMenu = _optionsMenuObject.GetComponent<OptionsMenu>();
@@ -77,6 +129,11 @@ public class Modal : MonoBehaviour
 
         _debugMenuObject.SetActive(true);
 
+        _currentMenuObject = _debugMenuObject;
+        _currentContent = _debugMenuObject.GetComponent<RectTransform>();
+
+        AnimateOpen();
+
         if (_debugMenu == null)
         {
             _debugMenu = _debugMenuObject.GetComponent<DebugMenu>();
@@ -87,8 +144,98 @@ public class Modal : MonoBehaviour
         return await _debugMenu.Show();
     }
 
+    private void AnimateOpen()
+    {
+        _ = Sequence
+            .Create()
+            .Group(
+                Tween.Alpha(
+                    _background,
+                    startValue: 0,
+                    endValue: 0.7f,
+                    duration: _duration,
+                    ease: _animationCurve
+                )
+            )
+            .Group(
+                Tween.Scale(
+                    _currentContent,
+                    startValue: Vector3.one * 0.8f,
+                    endValue: Vector3.one,
+                    duration: _duration,
+                    ease: _animationCurve
+                )
+            )
+            .Group(
+                Tween.UIAnchoredPositionY(
+                    _currentContent,
+                    startValue: -1500f,
+                    endValue: 0f,
+                    duration: _duration,
+                    ease: _animationCurve
+                )
+            )
+            .Group(
+                Tween.Scale(
+                    _panel,
+                    startValue: Vector3.one,
+                    endValue: Vector3.one * 0.85f,
+                    duration: _duration,
+                    ease: _animationCurve
+                )
+            );
+    }
+
     private void HandleClose()
     {
-        gameObject.SetActive(false);
+        _ = Sequence
+            .Create()
+            .Group(
+                Tween.Alpha(
+                    _background,
+                    startValue: 0.7f,
+                    endValue: 0,
+                    duration: _duration,
+                    ease: _animationCurve
+                )
+            )
+            .Group(
+                Tween.Scale(
+                    _currentContent,
+                    startValue: Vector3.one,
+                    endValue: Vector3.one * 0.8f,
+                    duration: _duration,
+                    ease: _animationCurve
+                )
+            )
+            .Group(
+                Tween.UIAnchoredPositionY(
+                    _currentContent,
+                    startValue: 0f,
+                    endValue: -1500f,
+                    duration: _duration,
+                    ease: _animationCurve
+                )
+            )
+            .Group(
+                Tween.Scale(
+                    _panel,
+                    startValue: Vector3.one * 0.85f,
+                    endValue: Vector3.one,
+                    duration: _duration,
+                    ease: _animationCurve
+                )
+            )
+            .OnComplete(_onAnimationComplete);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        var clicked = eventData.pointerPressRaycast.gameObject;
+
+        if (clicked == _background.gameObject)
+        {
+            HandleClose();
+        }
     }
 }

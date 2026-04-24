@@ -53,7 +53,5 @@ public class DebugMenu : MonoBehaviour
     {
         _taskDebug.TrySetResult(result);
         EventChannel.Raise();
-
-        gameObject.SetActive(false);
     }
 }
