@@ -2,18 +2,25 @@ using UnityEngine;
 
 public class Disclaimer : Panel
 {
-    public UIManager UIManager;
+    [SerializeField]
+    private UIManager _uiManager;
 
-    [Space(15)]
-    public CustomButtonBase AcceptButton;
-    public CustomButtonBase DeclineButton;
+    [SerializeField]
+    private AuthManager _authManager;
+
+    [Space]
+    [SerializeField]
+    private CustomButtonBase _acceptButton;
+
+    [SerializeField]
+    private CustomButtonBase _declineButton;
 
     public void Start()
     {
         OnHide += () => gameObject.SetActive(false);
 
-        AcceptButton.OnClick += OnAccept;
-        DeclineButton.OnClick += OnDecline;
+        _acceptButton.OnClick += OnAccept;
+        _declineButton.OnClick += OnDecline;
     }
 
     private void OnAccept()
@@ -22,17 +29,17 @@ public class Disclaimer : Panel
         GamePrefs.HasAcceptedTerms = true;
 #endif
 
-        if (UIManager.CurrentUser.Role == UserRole.Invited)
+        if (_authManager.CurrentUser.Role == UserRole.Invited)
         {
-            UIManager.ShowRolePanel();
+            _uiManager.ShowRolePanel();
             return;
         }
 
-        UIManager.ShowUserChildren();
+        _uiManager.ShowUserChildren();
     }
 
     private void OnDecline()
     {
-        UIManager.ShowLogin();
+        _uiManager.ShowLogin();
     }
 }

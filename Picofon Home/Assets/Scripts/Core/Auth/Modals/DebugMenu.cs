@@ -1,4 +1,3 @@
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public enum DebugMenuResult : byte
@@ -11,6 +10,10 @@ public enum DebugMenuResult : byte
 
 public class DebugMenu : MonoBehaviour
 {
+    [SerializeField]
+    private AuthManager _authManager;
+
+    [Space]
     [SerializeField]
     private CustomButtonBase _mapButton;
 
@@ -25,12 +28,8 @@ public class DebugMenu : MonoBehaviour
 
     public GenericEventChannel EventChannel;
 
-    private ReusableCompletionSource<DebugMenuResult> _taskDebug;
-
     public void Awake()
     {
-        _taskDebug = new ReusableCompletionSource<DebugMenuResult>();
-
         _mapButton.OnClick += () => HandleClose(DebugMenuResult.Map);
 
         _childrenButton.OnClick += () => HandleClose(DebugMenuResult.Children);
@@ -40,18 +39,15 @@ public class DebugMenu : MonoBehaviour
         _roleButton.OnClick += () => HandleClose(DebugMenuResult.Role);
     }
 
-    public async UniTask<DebugMenuResult> Show()
+    public void Show()
     {
         gameObject.SetActive(true);
-
-        _taskDebug.Reset();
-
-        return await _taskDebug.Task;
     }
 
     private void HandleClose(DebugMenuResult result)
     {
-        _taskDebug.TrySetResult(result);
         EventChannel.Raise();
+
+        _authManager.HandleDebugMenu(result);
     }
 }

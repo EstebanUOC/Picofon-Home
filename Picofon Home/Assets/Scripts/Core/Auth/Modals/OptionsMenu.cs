@@ -1,5 +1,4 @@
 using System;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 
@@ -12,8 +11,6 @@ public class OptionsMenu : MonoBehaviour
     private CustomButtonRaised _saveButton;
 
     public GenericEventChannel EventChannel;
-
-    public ReusableCompletionSource<bool> TaskCompletion;
 
     public void Awake()
     {
@@ -30,11 +27,9 @@ public class OptionsMenu : MonoBehaviour
         }
     }
 
-    public async UniTask<bool> Show()
+    public void Show()
     {
         gameObject.SetActive(true);
-
-        return await TaskCompletion.Task;
     }
 
     private void HandleClick()
@@ -50,7 +45,6 @@ public class OptionsMenu : MonoBehaviour
 
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
 
-        TaskCompletion.TrySetResult(true);
         EventChannel.Raise();
     }
 }

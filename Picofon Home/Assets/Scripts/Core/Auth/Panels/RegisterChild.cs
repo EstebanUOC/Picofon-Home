@@ -8,6 +8,9 @@ public class RegisterChild : Panel
     [SerializeField]
     private UIManager _uiManager;
 
+    [SerializeField]
+    private AuthManager _authManager;
+
     [Space]
     [SerializeField]
     private TMP_Text _emailText;
@@ -34,15 +37,17 @@ public class RegisterChild : Panel
     {
         base.Show();
 
-        _emailText.text = _uiManager.CurrentUser.Email;
-        _usernameText.text = _uiManager.CurrentUser.Username;
-        _registerForm.ParentId = _uiManager.CurrentUser.Id;
-        _registerForm.Relationship = _uiManager.CurrentUser.Role;
+        UserDataDTO currentUser = _authManager.CurrentUser;
+
+        _emailText.text = currentUser.Email;
+        _usernameText.text = currentUser.Username;
+        _registerForm.ParentId = currentUser.Id;
+        _registerForm.Relationship = currentUser.Role;
     }
 
     private async UniTask HandleSubmit(ChildCreateDTO data)
     {
-        UserService userService = _uiManager.UserService;
+        UserService userService = _authManager.UserService;
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 
         ApiResult result = await userService.RegisterChild(data, token);

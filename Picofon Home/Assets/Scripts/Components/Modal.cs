@@ -101,7 +101,7 @@ public class Modal : MonoBehaviour, IPointerClickHandler
         return await _contentMenu.Show(data);
     }
 
-    public async UniTask<bool> ShowOptions()
+    public void ShowOptions()
     {
         gameObject.SetActive(true);
 
@@ -117,13 +117,12 @@ public class Modal : MonoBehaviour, IPointerClickHandler
             _optionsMenu = _optionsMenuObject.GetComponent<OptionsMenu>();
 
             _optionsMenu.EventChannel = _eventChannel;
-            _optionsMenu.TaskCompletion = _taskCompletion;
         }
 
-        return await _optionsMenu.Show();
+        _optionsMenu.Show();
     }
 
-    public async UniTask<DebugMenuResult> ShowDebugMenu()
+    public void ShowDebugMenu()
     {
         gameObject.SetActive(true);
 
@@ -141,7 +140,7 @@ public class Modal : MonoBehaviour, IPointerClickHandler
             _debugMenu.EventChannel = _eventChannel;
         }
 
-        return await _debugMenu.Show();
+        _debugMenu.Show();
     }
 
     private void AnimateOpen()
@@ -179,7 +178,7 @@ public class Modal : MonoBehaviour, IPointerClickHandler
                 Tween.Scale(
                     _panel,
                     startValue: Vector3.one,
-                    endValue: Vector3.one * 0.85f,
+                    endValue: Vector3.one * 0.95f,
                     duration: _duration,
                     ease: _animationCurve
                 )
@@ -212,15 +211,15 @@ public class Modal : MonoBehaviour, IPointerClickHandler
                 Tween.UIAnchoredPositionY(
                     _currentContent,
                     startValue: 0f,
-                    endValue: -1500f,
-                    duration: _duration,
+                    endValue: -1700f,
+                    duration: _duration - 0.3f,
                     ease: _animationCurve
                 )
             )
             .Group(
                 Tween.Scale(
                     _panel,
-                    startValue: Vector3.one * 0.85f,
+                    startValue: Vector3.one * 0.95f,
                     endValue: Vector3.one,
                     duration: _duration,
                     ease: _animationCurve

@@ -6,8 +6,13 @@ using UnityEngine;
 
 public class UserChildren : Panel
 {
-    public UIManager UIManager;
+    [SerializeField]
+    public AuthManager _authManager;
 
+    [SerializeField]
+    public UIManager _uiManager;
+
+    [Space]
     [SerializeField]
     private LoadingTransition _loadingTransition;
 
@@ -42,7 +47,7 @@ public class UserChildren : Panel
 
         _logoutButton.OnClick += OnLogout;
 
-        _userId = UIManager.CurrentUser.Id;
+        _userId = _authManager.CurrentUser.Id;
     }
 
     public override void Show()
@@ -53,10 +58,10 @@ public class UserChildren : Panel
 
     private async UniTaskVoid LoadChildren()
     {
-        UserService userService = UIManager.UserService;
+        UserService userService = _authManager.UserService;
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 
-        _userId = UIManager.CurrentUser.Id;
+        _userId = _authManager.CurrentUser.Id;
 
         ApiResult<ChildListItemDTO[]> result = await userService.GetUserChildren(_userId, token);
 
@@ -67,7 +72,7 @@ public class UserChildren : Panel
                 Title = "Error",
                 Message = "Could not load children. Please try again later.",
             };
-            await UIManager.ShowModal(modalData);
+            await _uiManager.ShowModal(modalData);
             return;
         }
 
@@ -113,7 +118,7 @@ public class UserChildren : Panel
         string childId = _childrenIds[selectedIndex];
 
         MapPathPayload.ChildId = childId;
-        MapPathPayload.ConductedById = UIManager.CurrentUser.Id;
+        MapPathPayload.ConductedById = _authManager.CurrentUser.Id;
 
         LevelDataStore instance = LevelDataStore.Instance;
 
@@ -126,16 +131,16 @@ public class UserChildren : Panel
             await instance.CreateDefaultPlans(childId, _userId);
         }
 
-        _loadingTransition.Continue(success: instance.HasPlans(), uiManager: UIManager);
+        _loadingTransition.Continue(success: instance.HasPlans(), uiManager: _uiManager);
     }
 
     private void OnRegisterChild()
     {
-        UIManager.ShowRegisterChild();
+        _uiManager.ShowRegisterChild();
     }
 
     private void OnLogout()
     {
-        UIManager.Logout();
+        _authManager.Logout();
     }
 }

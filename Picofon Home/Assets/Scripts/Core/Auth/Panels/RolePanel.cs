@@ -9,6 +9,10 @@ public class RolePanel : Panel
     private UIManager _uiManager;
 
     [SerializeField]
+    private AuthManager _authManager;
+
+    [Space]
+    [SerializeField]
     private RoleCard _therapistCard;
 
     [SerializeField]
@@ -51,8 +55,8 @@ public class RolePanel : Panel
 
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 
-        ApiResult result = await _uiManager.UserService.UpdateUserRole(
-            _uiManager.CurrentUser.Id,
+        ApiResult result = await _authManager.UserService.UpdateUserRole(
+            _authManager.CurrentUser.Id,
             roleType,
             token
         );
