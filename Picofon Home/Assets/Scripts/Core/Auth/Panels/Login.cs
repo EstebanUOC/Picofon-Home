@@ -22,10 +22,6 @@ public class Login : Panel
     [SerializeField]
     private SimpleButton _optionsButton;
 
-    [Space]
-    [SerializeField]
-    private TMPro.TMP_Text _versionText;
-
     private RectTransform _panel;
 
     public void Start()
@@ -38,8 +34,6 @@ public class Login : Panel
         _optionsButton.OnClick += ShowOptions;
 
         OnHide += () => gameObject.SetActive(false);
-
-        _versionText.text = _uiManager.VersionNumber.ToString("0.00");
 
         _panel = GetComponent<RectTransform>();
     }

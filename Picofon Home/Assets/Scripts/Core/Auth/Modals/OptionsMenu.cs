@@ -10,6 +10,9 @@ public class OptionsMenu : MonoBehaviour
     [SerializeField]
     private CustomButtonRaised _saveButton;
 
+    [SerializeField]
+    private TMPro.TMP_Text _versionText;
+
     public GenericEventChannel EventChannel;
 
     public void Awake()
@@ -30,6 +33,11 @@ public class OptionsMenu : MonoBehaviour
     public void Show()
     {
         gameObject.SetActive(true);
+    }
+
+    public void SetVersionText(float version)
+    {
+        _versionText.text = version.ToString("0.00");
     }
 
     private void HandleClick()

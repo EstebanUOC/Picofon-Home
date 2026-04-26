@@ -59,7 +59,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowOptions(RectTransform panel)
     {
-        ModalPanel.ShowOptions(panel);
+        ModalPanel.ShowOptions(panel, VersionNumber);
     }
 
     public void ShowDebugMenu(RectTransform panel)

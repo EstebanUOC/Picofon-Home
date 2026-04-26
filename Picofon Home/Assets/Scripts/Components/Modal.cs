@@ -99,7 +99,7 @@ public class Modal : MonoBehaviour, IPointerClickHandler
         return await _contentMenu.Show(data);
     }
 
-    public void ShowOptions(RectTransform panel)
+    public void ShowOptions(RectTransform panel, float version)
     {
         gameObject.SetActive(true);
 
@@ -116,6 +116,7 @@ public class Modal : MonoBehaviour, IPointerClickHandler
             _optionsMenu = _optionsMenuObject.GetComponent<OptionsMenu>();
 
             _optionsMenu.EventChannel = _eventChannel;
+            _optionsMenu.SetVersionText(version);
         }
 
         _optionsMenu.Show();

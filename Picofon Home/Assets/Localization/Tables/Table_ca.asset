@@ -19,7 +19,7 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 26655811813376
-    m_Localized: "Hola, \xA1Benvinguts!"
+    m_Localized: "\xA1Benvinguts!"
     m_Metadata:
       m_Items: []
   - m_Id: 27000914952192
