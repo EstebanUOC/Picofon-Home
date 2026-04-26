@@ -24,6 +24,8 @@ public class RolePanel : Panel
     [SerializeField]
     private RectTransform _loadingIcon;
 
+    private RectTransform _panel;
+
     public void Start()
     {
         GenericEventChannel<UserRole> eventChannel = new();
@@ -34,6 +36,8 @@ public class RolePanel : Panel
         _parentCard.EventChannel = eventChannel;
 
         OnHide += () => gameObject.SetActive(false);
+
+        _panel = GetComponent<RectTransform>();
     }
 
     private void OnRoleSelected(UserRole roleType)
@@ -63,18 +67,27 @@ public class RolePanel : Panel
 
         rotation.Complete();
 
-        ModalData data;
-
         if (!result.Success)
         {
-            data = new() { Title = "Error", Message = result.Message };
-            await _uiManager.ShowModal(data);
+            await _uiManager.ShowModal(
+                new ModalData()
+                {
+                    Title = "Error",
+                    Message = "There was an error updating your role. Please try again.",
+                    Panel = _panel,
+                }
+            );
             return;
         }
 
-        data = new() { Title = "Success", Message = "Your role has been updated." };
-
-        await _uiManager.ShowModal(data);
+        await _uiManager.ShowModal(
+            new ModalData()
+            {
+                Title = "Success",
+                Message = "Your role has been updated successfully.",
+                Panel = _panel,
+            }
+        );
 
         _uiManager.ShowUserChildren();
     }

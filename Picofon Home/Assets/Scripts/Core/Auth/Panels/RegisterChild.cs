@@ -25,12 +25,16 @@ public class RegisterChild : Panel
     [SerializeField]
     private SimpleButton _returnButton;
 
+    private RectTransform _panel;
+
     public void Start()
     {
         OnHide += () => gameObject.SetActive(false);
 
         _registerForm.OnSubmit += HandleSubmit;
         _returnButton.OnClick += HandleReturn;
+
+        _panel = GetComponent<RectTransform>();
     }
 
     public override void Show()
@@ -63,7 +67,12 @@ public class RegisterChild : Panel
             message = result.Message;
         }
 
-        ModalData modalData = new() { Title = "Registre de nen", Message = message };
+        ModalData modalData = new()
+        {
+            Title = "Registre de nen",
+            Message = message,
+            Panel = _panel,
+        };
 
         await _uiManager.ShowModal(modalData);
 

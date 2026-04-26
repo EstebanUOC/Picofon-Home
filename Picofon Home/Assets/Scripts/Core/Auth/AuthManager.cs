@@ -10,6 +10,9 @@ public class AuthManager : MonoBehaviour
     [SerializeField]
     private UIManager _uiManager;
 
+    [SerializeField]
+    private RectTransform _panel;
+
     public UserDataDTO CurrentUser { get; private set; }
 
     public UserService UserService { get; private set; }
@@ -86,14 +89,15 @@ public class AuthManager : MonoBehaviour
 
         if (!existsConnection)
         {
-            ModalData modalData = new()
-            {
-                Title = "Error",
-                Message =
-                    "No es va detectar cap connexió a internet. Comprova la teva connexió i torna a intentar-ho, o pots fer servir l'aplicació en mode de prova",
-            };
-
-            await _uiManager.ShowModal(modalData);
+            _ = _uiManager.ShowModal(
+                new ModalData
+                {
+                    Title = "Error",
+                    Message =
+                        "No internet connection detected. Please check your connection and try again, or you can use the app in debug mode.",
+                    Panel = _panel,
+                }
+            );
 
             _uiManager.LoadingPanel.Hide();
             return;
@@ -133,13 +137,15 @@ public class AuthManager : MonoBehaviour
 
         if (!success)
         {
-            ModalData modalData = new()
-            {
-                Title = "Error",
-                Message = "Failed to initialize Firebase services. Please try again later.",
-            };
-
-            await _uiManager.ShowModal(modalData);
+            await _uiManager.ShowModal(
+                new ModalData
+                {
+                    Title = "Error",
+                    Message =
+                        "Failed to initialize Firebase services. Please check your internet connection and try again, or you can use the app in debug mode.",
+                    Panel = _panel,
+                }
+            );
 
             Application.Quit();
         }

@@ -35,6 +35,8 @@ public class UserChildren : Panel
 
     private string _userId;
 
+    private RectTransform _panel;
+
     public void Start()
     {
         OnHide += () => gameObject.SetActive(false);
@@ -48,6 +50,8 @@ public class UserChildren : Panel
         _logoutButton.OnClick += OnLogout;
 
         _userId = _authManager.CurrentUser.Id;
+
+        _panel = GetComponent<RectTransform>();
     }
 
     public override void Show()
@@ -71,6 +75,7 @@ public class UserChildren : Panel
             {
                 Title = "Error",
                 Message = "Could not load children. Please try again later.",
+                Panel = _panel,
             };
             await _uiManager.ShowModal(modalData);
             return;
@@ -131,7 +136,11 @@ public class UserChildren : Panel
             await instance.CreateDefaultPlans(childId, _userId);
         }
 
-        _loadingTransition.Continue(success: instance.HasPlans(), uiManager: _uiManager);
+        _loadingTransition.Continue(
+            success: instance.HasPlans(),
+            panel: _panel,
+            uiManager: _uiManager
+        );
     }
 
     private void OnRegisterChild()

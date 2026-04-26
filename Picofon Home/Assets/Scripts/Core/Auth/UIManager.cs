@@ -57,14 +57,14 @@ public class UIManager : MonoBehaviour
         await ModalPanel.Show(data);
     }
 
-    public void ShowOptions()
+    public void ShowOptions(RectTransform panel)
     {
-        ModalPanel.ShowOptions();
+        ModalPanel.ShowOptions(panel);
     }
 
-    public void ShowDebugMenu()
+    public void ShowDebugMenu(RectTransform panel)
     {
-        ModalPanel.ShowDebugMenu();
+        ModalPanel.ShowDebugMenu(panel);
     }
 
     private void HideAllPanels()

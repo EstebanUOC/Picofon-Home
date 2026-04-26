@@ -26,6 +26,8 @@ public class Login : Panel
     [SerializeField]
     private TMPro.TMP_Text _versionText;
 
+    private RectTransform _panel;
+
     public void Start()
     {
         CustomButtonLoading loginButton = _loginButton.GetComponent<CustomButtonLoading>();
@@ -38,6 +40,8 @@ public class Login : Panel
         OnHide += () => gameObject.SetActive(false);
 
         _versionText.text = _uiManager.VersionNumber.ToString("0.00");
+
+        _panel = GetComponent<RectTransform>();
     }
 
     private async UniTask AuthenticateWithGoogle()
@@ -100,6 +104,7 @@ public class Login : Panel
             {
                 Title = "Error",
                 Message = "Could not log in. Please try again later.",
+                Panel = _panel,
             };
             await _uiManager.ShowModal(modalData);
             return;
@@ -125,11 +130,11 @@ public class Login : Panel
 
     private void ShowOptions()
     {
-        _uiManager.ShowOptions();
+        _uiManager.ShowOptions(_panel);
     }
 
     private void ShowDebugMenu()
     {
-        _uiManager.ShowDebugMenu();
+        _uiManager.ShowDebugMenu(_panel);
     }
 }

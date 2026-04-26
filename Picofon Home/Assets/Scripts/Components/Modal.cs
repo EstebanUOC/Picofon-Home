@@ -9,6 +9,8 @@ public struct ModalData
 {
     public string Title;
     public string Message;
+
+    public RectTransform Panel;
 }
 
 public class Modal : MonoBehaviour, IPointerClickHandler
@@ -27,24 +29,19 @@ public class Modal : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private Image _background;
 
-    [SerializeField]
-    private RectTransform _panel;
-
-    private const float _duration = 0.5f;
+    private const float Duration = 0.5f;
 
     private GenericEventChannel _eventChannel;
     private ReusableCompletionSource<bool> _taskCompletion;
 
     private DebugMenu _debugMenu;
-
     private OptionsMenu _optionsMenu;
-
     private ContentMenu _contentMenu;
 
     private AnimationCurve _animationCurve;
-
-    private GameObject _currentMenuObject;
     private RectTransform _currentContent;
+    private RectTransform _currentPanel;
+    private GameObject _currentMenuObject;
 
     private Action _onAnimationComplete;
 
@@ -87,6 +84,7 @@ public class Modal : MonoBehaviour, IPointerClickHandler
 
         _currentMenuObject = _contentObject;
         _currentContent = _contentObject.GetComponent<RectTransform>();
+        _currentPanel = data.Panel;
 
         AnimateOpen();
 
@@ -101,7 +99,7 @@ public class Modal : MonoBehaviour, IPointerClickHandler
         return await _contentMenu.Show(data);
     }
 
-    public void ShowOptions()
+    public void ShowOptions(RectTransform panel)
     {
         gameObject.SetActive(true);
 
@@ -109,6 +107,7 @@ public class Modal : MonoBehaviour, IPointerClickHandler
 
         _currentMenuObject = _optionsMenuObject;
         _currentContent = _optionsMenuObject.GetComponent<RectTransform>();
+        _currentPanel = panel;
 
         AnimateOpen();
 
@@ -122,7 +121,7 @@ public class Modal : MonoBehaviour, IPointerClickHandler
         _optionsMenu.Show();
     }
 
-    public void ShowDebugMenu()
+    public void ShowDebugMenu(RectTransform panel)
     {
         gameObject.SetActive(true);
 
@@ -130,6 +129,7 @@ public class Modal : MonoBehaviour, IPointerClickHandler
 
         _currentMenuObject = _debugMenuObject;
         _currentContent = _debugMenuObject.GetComponent<RectTransform>();
+        _currentPanel = panel;
 
         AnimateOpen();
 
@@ -152,7 +152,7 @@ public class Modal : MonoBehaviour, IPointerClickHandler
                     _background,
                     startValue: 0,
                     endValue: 0.7f,
-                    duration: _duration,
+                    duration: Duration,
                     ease: _animationCurve
                 )
             )
@@ -161,7 +161,7 @@ public class Modal : MonoBehaviour, IPointerClickHandler
                     _currentContent,
                     startValue: Vector3.one * 0.8f,
                     endValue: Vector3.one,
-                    duration: _duration,
+                    duration: Duration,
                     ease: _animationCurve
                 )
             )
@@ -170,16 +170,16 @@ public class Modal : MonoBehaviour, IPointerClickHandler
                     _currentContent,
                     startValue: -1500f,
                     endValue: 0f,
-                    duration: _duration,
+                    duration: Duration,
                     ease: _animationCurve
                 )
             )
             .Group(
                 Tween.Scale(
-                    _panel,
+                    _currentPanel,
                     startValue: Vector3.one,
                     endValue: Vector3.one * 0.95f,
-                    duration: _duration,
+                    duration: Duration,
                     ease: _animationCurve
                 )
             );
@@ -194,7 +194,7 @@ public class Modal : MonoBehaviour, IPointerClickHandler
                     _background,
                     startValue: 0.7f,
                     endValue: 0,
-                    duration: _duration,
+                    duration: Duration,
                     ease: _animationCurve
                 )
             )
@@ -203,7 +203,7 @@ public class Modal : MonoBehaviour, IPointerClickHandler
                     _currentContent,
                     startValue: Vector3.one,
                     endValue: Vector3.one * 0.8f,
-                    duration: _duration,
+                    duration: Duration,
                     ease: _animationCurve
                 )
             )
@@ -212,16 +212,16 @@ public class Modal : MonoBehaviour, IPointerClickHandler
                     _currentContent,
                     startValue: 0f,
                     endValue: -1700f,
-                    duration: _duration - 0.3f,
+                    duration: Duration - 0.3f,
                     ease: _animationCurve
                 )
             )
             .Group(
                 Tween.Scale(
-                    _panel,
+                    _currentPanel,
                     startValue: Vector3.one * 0.95f,
                     endValue: Vector3.one,
-                    duration: _duration,
+                    duration: Duration,
                     ease: _animationCurve
                 )
             )
