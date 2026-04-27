@@ -78,6 +78,8 @@ public class Modal : MonoBehaviour, IPointerClickHandler
 
     public async UniTask<bool> Show(ModalData data)
     {
+        PerformanceLog.Log("Showing modal");
+
         gameObject.SetActive(true);
 
         _contentObject.SetActive(true);
