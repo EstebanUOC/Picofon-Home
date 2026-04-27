@@ -160,39 +160,61 @@ public class AuthManager : MonoBehaviour
 
         FirebaseAuth firebaseInstance = FirebaseAuth.DefaultInstance;
 
-        if (firebaseInstance.CurrentUser != null)
+        if (firebaseInstance.CurrentUser == null)
         {
-            string firebaseIdToken = await firebaseInstance
-                .CurrentUser.TokenAsync(false)
-                .AsUniTask()
-                .AttachExternalCancellation(ct);
-
-            ApiResult<LoginData> result = await UserService.LoginWithFirebaseToken(firebaseIdToken);
-            UserModel user = result.Data.User;
-
-            CurrentUser = new UserDataDTO
-            {
-                Id = user.Id,
-                Email = user.Email,
-                Username = user.FirstName,
-            };
-        }
-
-        _uiManager.LoadingPanel.Hide();
-
-        if (CurrentUser is null)
-        {
+            _uiManager.LoadingPanel.Hide();
             _uiManager.ShowLogin();
             return;
         }
 
-        if (GamePrefs.HasAcceptedTerms)
+        string firebaseIdToken = await firebaseInstance
+            .CurrentUser.TokenAsync(false)
+            .AsUniTask()
+            .AttachExternalCancellation(ct);
+
+        ApiResult<LoginData> result = await UserService.LoginWithFirebaseToken(firebaseIdToken);
+        UserModel user = result.Data.User;
+
+        if (!result.Success)
         {
-            _uiManager.ShowUserChildren();
+            _uiManager.LoadingPanel.Hide();
+
+            await _uiManager.ShowModal(
+                new ModalData
+                {
+                    Title = "Error",
+                    Message =
+                        "Failed to log in with existing session. Please try logging in again, or you can use the app in debug mode.",
+                    Panel = _panel,
+                }
+            );
+
+            Logout();
             return;
         }
 
-        _uiManager.ShowDisclaimer();
+        CurrentUser = new UserDataDTO
+        {
+            Id = user.Id,
+            Email = user.Email,
+            Username = user.FirstName,
+        };
+
+        _uiManager.LoadingPanel.Hide();
+
+        if (!user.LegalAccepted)
+        {
+            _uiManager.ShowDisclaimer();
+            return;
+        }
+
+        if (user.Role == UserRole.Invited)
+        {
+            _uiManager.ShowRolePanel();
+            return;
+        }
+
+        _uiManager.ShowUserChildren();
     }
 
     private async UniTask<bool> CheckFirebaseDependencies(CancellationToken ct)
