@@ -106,6 +106,8 @@ public class RolePanel : Panel
             await _uiManager.ShowModal(modalData);
 
             _authManager.Logout();
+
+            return;
         }
 
         _uiManager.ShowUserChildren();
