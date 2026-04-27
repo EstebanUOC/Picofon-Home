@@ -94,6 +94,20 @@ public class RolePanel : Panel
             }
         );
 
+        if (!_authManager.CurrentUser.ProfileComplete)
+        {
+            ModalData modalData = new()
+            {
+                Title = "Profile Incomplete",
+                Message =
+                    "Your profile is incomplete. Please complete your profile in the web portal to access the app.",
+                Panel = _panel,
+            };
+            await _uiManager.ShowModal(modalData);
+
+            _authManager.Logout();
+        }
+
         _uiManager.ShowUserChildren();
     }
 }

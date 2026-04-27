@@ -44,6 +44,7 @@ public class AuthManager : MonoBehaviour
             Id = user.Id,
             Email = user.Email,
             Username = user.FirstName,
+            ProfileComplete = user.ProfileCompleted,
             Role = user.Role,
         };
     }
@@ -197,6 +198,7 @@ public class AuthManager : MonoBehaviour
             Id = user.Id,
             Email = user.Email,
             Username = user.FirstName,
+            ProfileComplete = user.ProfileCompleted,
         };
 
         _uiManager.LoadingPanel.Hide();
