@@ -23255,6 +23255,7 @@ MonoBehaviour:
   _parentCard: {fileID: 1024115165}
   _loading: {fileID: 1590230389}
   _loadingIcon: {fileID: 456158153}
+  _backButton: {fileID: 628232935}
 --- !u!1 &1891126089
 GameObject:
   m_ObjectHideFlags: 0
