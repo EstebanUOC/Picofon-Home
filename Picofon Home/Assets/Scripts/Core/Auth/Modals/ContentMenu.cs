@@ -27,6 +27,8 @@ public class ContentMenu : MonoBehaviour
     {
         gameObject.SetActive(true);
 
+        TaskCompletion.Reset();
+
         _title.text = data.Title;
         _message.text = data.Message;
 
