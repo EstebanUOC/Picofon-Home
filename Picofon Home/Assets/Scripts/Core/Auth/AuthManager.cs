@@ -30,10 +30,9 @@ public class AuthManager : MonoBehaviour
     public void Logout()
     {
         FirebaseAuth.DefaultInstance.SignOut();
+        GamePrefs.ClearAll();
 
         CurrentUser = null;
-
-        GamePrefs.ClearAll();
 
         _uiManager.ShowLogin();
     }

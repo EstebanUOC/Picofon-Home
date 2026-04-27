@@ -24,6 +24,9 @@ public class RolePanel : Panel
     [SerializeField]
     private RectTransform _loadingIcon;
 
+    [SerializeField]
+    private SimpleButton _backButton;
+
     private RectTransform _panel;
 
     public void Start()
@@ -38,6 +41,8 @@ public class RolePanel : Panel
         OnHide += () => gameObject.SetActive(false);
 
         _panel = GetComponent<RectTransform>();
+
+        _backButton.OnClick += () => _authManager.Logout();
     }
 
     private void OnRoleSelected(UserRole roleType)
