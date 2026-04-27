@@ -136,11 +136,22 @@ public class UserChildren : Panel
             await instance.CreateDefaultPlans(childId, _userId);
         }
 
-        _loadingTransition.Continue(
-            success: instance.HasPlans(),
-            panel: _panel,
-            uiManager: _uiManager
-        );
+        _loadingTransition.Continue(success: instance.HasPlans() && instance.HasActivePlans());
+
+        if (!instance.HasActivePlans())
+        {
+            await UniTask.WaitForSeconds(2.5f);
+            await _uiManager.ShowModal(
+                new ModalData
+                {
+                    Title = "No Active Plans",
+                    Message =
+                        "There are no active therapy plans for the selected child. Choose another child",
+                    Panel = _panel,
+                }
+            );
+            return;
+        }
     }
 
     private void OnRegisterChild()
