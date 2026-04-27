@@ -90,7 +90,6 @@ public class Login : Panel
             firebaseIdToken
         );
 
-        PerformanceLog.Log($"Legal accepted: {result.Data.User.LegalAccepted}");
         PerformanceLog.Log($"Profile completed: {result.Data.User.ProfileCompleted}");
 
         if (result.Data.User.Role == UserRole.Therapist && !result.Data.User.ProfileCompleted)
@@ -125,17 +124,21 @@ public class Login : Panel
 
     private void OnLoginSuccess(UserModel user)
     {
-        UserDataDTO userData = new()
+        _authManager.SetCurrentUser(user);
+
+        if (!user.LegalAccepted)
         {
-            Id = user.Id,
-            Email = user.Email,
-            Username = user.FirstName,
-            Role = user.Role,
-        };
+            _uiManager.ShowDisclaimer();
+            return;
+        }
 
-        _authManager.SetCurrentUser(userData);
+        if (user.Role == UserRole.Invited)
+        {
+            _uiManager.ShowRolePanel();
+            return;
+        }
 
-        _uiManager.ShowDisclaimer();
+        _uiManager.ShowUserChildren();
     }
 
     private void ShowOptions()

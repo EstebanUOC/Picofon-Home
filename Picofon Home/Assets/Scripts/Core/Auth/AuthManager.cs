@@ -38,9 +38,15 @@ public class AuthManager : MonoBehaviour
         _uiManager.ShowLogin();
     }
 
-    public void SetCurrentUser(UserDataDTO user)
+    public void SetCurrentUser(UserModel user)
     {
-        CurrentUser = user;
+        CurrentUser = new()
+        {
+            Id = user.Id,
+            Email = user.Email,
+            Username = user.FirstName,
+            Role = user.Role,
+        };
     }
 
     public void HandleDebugMenu(DebugMenuResult result)

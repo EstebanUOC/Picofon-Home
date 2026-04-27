@@ -25,10 +25,6 @@ public class Disclaimer : Panel
 
     private void OnAccept()
     {
-#if !UNITY_EDITOR
-        GamePrefs.HasAcceptedTerms = true;
-#endif
-
         if (_authManager.CurrentUser.Role == UserRole.Invited)
         {
             _uiManager.ShowRolePanel();

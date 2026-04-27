@@ -38,11 +38,8 @@ public class UserService
                 cancellationToken: token
             );
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
-            PerformanceLog.LogError(
-                "<DEBUG> Network error during login with Firebase token, Error: " + e.Message
-            );
             return ApiResult<LoginData>.Fail("Network error occurred while logging in.");
         }
 
@@ -53,10 +50,6 @@ public class UserService
 
         if (!responseView.Success)
         {
-            PerformanceLog.LogError(
-                "<DEBUG> API error during login with Firebase token, Error: "
-                    + responseView.ErrorMessage
-            );
             return ApiResult<LoginData>.Fail(responseView.ErrorMessage);
         }
 
