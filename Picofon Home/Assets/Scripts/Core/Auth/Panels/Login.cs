@@ -91,6 +91,22 @@ public class Login : Panel
         );
 
         PerformanceLog.Log($"Legal accepted: {result.Data.User.LegalAccepted}");
+        PerformanceLog.Log($"Profile completed: {result.Data.User.ProfileCompleted}");
+
+        if (result.Data.User.Role == UserRole.Therapist && !result.Data.User.ProfileCompleted)
+        {
+            ModalData modalData = new()
+            {
+                Title = "Profile Incomplete",
+                Message =
+                    "Your profile is incomplete. Please complete your profile in the web portal to access the app.",
+                Panel = _panel,
+            };
+            await _uiManager.ShowModal(modalData);
+
+            _authManager.Logout();
+            return;
+        }
 
         if (!result.Success)
         {

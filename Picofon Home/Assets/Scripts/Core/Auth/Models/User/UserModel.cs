@@ -16,5 +16,7 @@ public readonly struct UserModel
 
     public readonly bool LegalAccepted { get; init; }
 
+    public readonly bool ProfileCompleted { get; init; }
+
     public readonly UserRole Role { get; init; }
 }
