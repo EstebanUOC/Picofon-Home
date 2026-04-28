@@ -45,6 +45,11 @@ public class Modal : MonoBehaviour, IPointerClickHandler
 
     private Action _onAnimationComplete;
 
+    private bool _queu;
+    private bool _isClosed = true;
+
+    private ModalData _queuedData;
+
     public void Awake()
     {
         _eventChannel = new GenericEventChannel();
@@ -72,13 +77,27 @@ public class Modal : MonoBehaviour, IPointerClickHandler
         _onAnimationComplete = () =>
         {
             _currentMenuObject.SetActive(false);
+            _isClosed = true;
+
             gameObject.SetActive(false);
+
+            if (_queu)
+            {
+                _queu = false;
+                _ = Show(_queuedData);
+            }
         };
     }
 
     public async UniTask<bool> Show(ModalData data)
     {
-        PerformanceLog.Log("Showing modal");
+        if (_isClosed == false)
+        {
+            _queuedData = data;
+            _queu = true;
+
+            return false;
+        }
 
         gameObject.SetActive(true);
 
@@ -148,6 +167,8 @@ public class Modal : MonoBehaviour, IPointerClickHandler
 
     private void AnimateOpen()
     {
+        _isClosed = false;
+
         _ = Sequence
             .Create()
             .Group(
