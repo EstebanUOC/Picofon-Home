@@ -7,6 +7,8 @@ using UnityEngine.Localization.Settings;
 
 public class AuthManager : MonoBehaviour
 {
+    private static bool _initialized;
+
     [SerializeField]
     private UIManager _uiManager;
 
@@ -20,11 +22,17 @@ public class AuthManager : MonoBehaviour
     private const string GoogleClientId =
         "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
 
+    private bool _existsConnection = false;
+
+    private bool _firebaseDependenciesChecked = false;
+
+    private bool _failedLogin = false;
+
+    private bool _legalAccepted = false;
+
     public void Start()
     {
-        _uiManager.LoadingPanel.Show();
-
-        BootstrapApplicacion().Forget();
+        BootAppProcess().Forget();
     }
 
     public void Logout()
@@ -89,23 +97,14 @@ public class AuthManager : MonoBehaviour
         }
     }
 
-    private async UniTaskVoid BootstrapApplicacion()
+    private async UniTask InitializeApp()
     {
-        bool existsConnection = await ApiConfig.Ping();
+        _initialized = true;
 
-        if (!existsConnection)
+        _existsConnection = await ApiConfig.Ping();
+
+        if (!_existsConnection)
         {
-            _ = _uiManager.ShowModal(
-                new ModalData
-                {
-                    Title = "Error",
-                    Message =
-                        "No internet connection detected. Please check your connection and try again, or you can use the app in debug mode.",
-                    Panel = _panel,
-                }
-            );
-
-            _uiManager.LoadingPanel.Hide();
             return;
         }
 
@@ -133,15 +132,76 @@ public class AuthManager : MonoBehaviour
 
         if (Application.isEditor)
         {
-            _uiManager.LoadingPanel.Hide();
             return;
         }
 
         CancellationToken ct = this.GetCancellationTokenOnDestroy();
 
-        bool success = await CheckFirebaseDependencies(ct);
+        _firebaseDependenciesChecked = await CheckFirebaseDependencies(ct);
 
-        if (!success)
+        if (!_firebaseDependenciesChecked)
+        {
+            return;
+        }
+
+        await UniTask.WaitForSeconds(1f);
+
+        FirebaseAuth firebaseInstance = FirebaseAuth.DefaultInstance;
+
+        if (firebaseInstance.CurrentUser == null)
+        {
+            return;
+        }
+
+        string firebaseIdToken = await firebaseInstance
+            .CurrentUser.TokenAsync(false)
+            .AsUniTask()
+            .AttachExternalCancellation(ct);
+
+        ApiResult<LoginData> result = await UserService.LoginWithFirebaseToken(firebaseIdToken);
+
+        if (!result.Success)
+        {
+            _failedLogin = true;
+            return;
+        }
+
+        UserModel user = result.Data.User;
+
+        CurrentUser = new UserDataDTO
+        {
+            Id = user.Id,
+            Email = user.Email,
+            Username = user.FirstName,
+            Role = user.Role,
+            ProfileComplete = user.ProfileCompleted,
+        };
+
+        _legalAccepted = user.LegalAccepted;
+    }
+
+    private async UniTaskVoid CheckAppState()
+    {
+        if (!_existsConnection)
+        {
+            _ = _uiManager.ShowModal(
+                new ModalData
+                {
+                    Title = "Error",
+                    Message =
+                        "No internet connection detected. Please check your connection and try again, or you can use the app in debug mode.",
+                    Panel = _panel,
+                }
+            );
+            return;
+        }
+
+        if (Application.isEditor)
+        {
+            return;
+        }
+
+        if (!_firebaseDependenciesChecked)
         {
             await _uiManager.ShowModal(
                 new ModalData
@@ -156,29 +216,8 @@ public class AuthManager : MonoBehaviour
             Application.Quit();
         }
 
-        await UniTask.WaitForSeconds(1f);
-
-        FirebaseAuth firebaseInstance = FirebaseAuth.DefaultInstance;
-
-        if (firebaseInstance.CurrentUser == null)
+        if (_failedLogin)
         {
-            _uiManager.LoadingPanel.Hide();
-            _uiManager.ShowLogin();
-            return;
-        }
-
-        string firebaseIdToken = await firebaseInstance
-            .CurrentUser.TokenAsync(false)
-            .AsUniTask()
-            .AttachExternalCancellation(ct);
-
-        ApiResult<LoginData> result = await UserService.LoginWithFirebaseToken(firebaseIdToken);
-        UserModel user = result.Data.User;
-
-        if (!result.Success)
-        {
-            _uiManager.LoadingPanel.Hide();
-
             await _uiManager.ShowModal(
                 new ModalData
                 {
@@ -193,29 +232,39 @@ public class AuthManager : MonoBehaviour
             return;
         }
 
-        CurrentUser = new UserDataDTO
+        if (CurrentUser == null)
         {
-            Id = user.Id,
-            Email = user.Email,
-            Username = user.FirstName,
-            ProfileComplete = user.ProfileCompleted,
-        };
+            _uiManager.ShowLogin();
+            return;
+        }
 
-        _uiManager.LoadingPanel.Hide();
-
-        if (!user.LegalAccepted)
+        if (!_legalAccepted)
         {
             _uiManager.ShowDisclaimer();
             return;
         }
 
-        if (user.Role == UserRole.Invited)
+        if (CurrentUser.Role == UserRole.Invited)
         {
             _uiManager.ShowRolePanel();
             return;
         }
 
         _uiManager.ShowUserChildren();
+    }
+
+    private async UniTaskVoid BootAppProcess()
+    {
+        _uiManager.LoadingPanel.Show();
+
+        if (!_initialized)
+        {
+            await InitializeApp();
+        }
+
+        _uiManager.LoadingPanel.Hide();
+
+        _ = CheckAppState();
     }
 
     private async UniTask<bool> CheckFirebaseDependencies(CancellationToken ct)
