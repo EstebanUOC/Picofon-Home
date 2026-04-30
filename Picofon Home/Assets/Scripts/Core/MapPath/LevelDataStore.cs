@@ -13,6 +13,8 @@ public class LevelDataStore : MonoBehaviour
     private int _currentLevel = 0;
     private int _lastLevel = -1;
 
+    private bool _someActivePlanFound = false;
+
     public int CurrentLevel => _currentLevel;
 
     public int LastLevel => _lastLevel;
@@ -37,6 +39,7 @@ public class LevelDataStore : MonoBehaviour
             return;
 
         _lastId = id;
+        _someActivePlanFound = false;
 
         await GetPlans(id);
 
@@ -53,6 +56,7 @@ public class LevelDataStore : MonoBehaviour
             if (plan.Status == TherapyStatus.Active)
             {
                 _currentLevel = index;
+                _someActivePlanFound = true;
                 break;
             }
             index++;
@@ -72,6 +76,11 @@ public class LevelDataStore : MonoBehaviour
     public bool HasPlans()
     {
         return _cachedPlans != null && _cachedPlans.Length > 0;
+    }
+
+    public bool HasActivePlans()
+    {
+        return HasPlans() && _someActivePlanFound;
     }
 
     public int GetPlansCount()

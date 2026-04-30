@@ -1,4 +1,3 @@
-using System;
 using Cysharp.Threading.Tasks;
 using PrimeTween;
 using UnityEngine;
@@ -72,6 +71,12 @@ public class MapManager : MonoBehaviour
         LevelDataStore instance = LevelDataStore.Instance;
 
         await instance.LoadPlans(childId);
+
+        if (!instance.HasPlans() || !instance.HasActivePlans())
+        {
+            PerformanceLog.Log("No active plans found for the child.");
+        }
+
         await LoadOralnitas(childId);
 
         await UniTask.WaitForEndOfFrame(this);

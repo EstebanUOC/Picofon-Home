@@ -1,109 +1,264 @@
+using System;
 using Cysharp.Threading.Tasks;
-using TMPro;
+using PrimeTween;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public struct ModalData
 {
     public string Title;
     public string Message;
+
+    public RectTransform Panel;
 }
 
-public class Modal : MonoBehaviour
+public class Modal : MonoBehaviour, IPointerClickHandler
 {
     [Space]
     [SerializeField]
-    private TMP_Text _title;
+    private GameObject _contentObject;
 
     [SerializeField]
-    private TMP_Text _message;
+    private GameObject _debugMenuObject;
 
     [SerializeField]
-    private CustomButtonBase _button;
+    private GameObject _optionsMenuObject;
 
     [Space]
     [SerializeField]
-    private GameObject _content;
+    private Image _background;
 
-    [SerializeField]
-    private GameObject _menu;
+    private const float Duration = 0.5f;
 
-    [SerializeField]
-    private GameObject _options;
-
+    private GenericEventChannel _eventChannel;
     private ReusableCompletionSource<bool> _taskCompletion;
-    private ReusableCompletionSource<DebugMenuResult> _taskDebug;
+
+    private DebugMenu _debugMenu;
+    private OptionsMenu _optionsMenu;
+    private ContentMenu _contentMenu;
+
+    private AnimationCurve _animationCurve;
+    private RectTransform _currentContent;
+    private RectTransform _currentPanel;
+    private GameObject _currentMenuObject;
+
+    private Action _onAnimationComplete;
+
+    private bool _queu;
+    private bool _isClosed = true;
+
+    private ModalData _queuedData;
 
     public void Awake()
     {
+        _eventChannel = new GenericEventChannel();
+
+        _eventChannel.OnRaised += HandleClose;
+
         _taskCompletion = new ReusableCompletionSource<bool>();
-        _taskDebug = new ReusableCompletionSource<DebugMenuResult>();
 
-        _button.OnClick += OnConfirmButtonClicked;
-    }
+        Keyframe k0 = new(0f, 0f)
+        {
+            outTangent = 0.84f / 0.165f,
+            outWeight = 0.165f,
+            weightedMode = WeightedMode.Out,
+        };
 
-    public async UniTask<DebugMenuResult> ShowDebugMenu()
-    {
-        gameObject.SetActive(true);
+        Keyframe k1 = new(1f, 1f)
+        {
+            inTangent = 0f,
+            inWeight = 1f - 0.440f,
+            weightedMode = WeightedMode.In,
+        };
 
-        _content.SetActive(false);
-        _menu.SetActive(true);
+        _animationCurve = new(k0, k1);
 
-        DebugMenu debugMenu = _menu.GetComponent<DebugMenu>();
-        debugMenu.OnClose -= OnMenuClose;
-        debugMenu.OnClose += OnMenuClose;
+        _onAnimationComplete = () =>
+        {
+            _currentMenuObject.SetActive(false);
+            _isClosed = true;
 
-        _taskDebug.Reset();
+            gameObject.SetActive(false);
 
-        return await _taskDebug.Task;
+            if (_queu)
+            {
+                _queu = false;
+                _ = Show(_queuedData);
+            }
+        };
     }
 
     public async UniTask<bool> Show(ModalData data)
     {
+        if (_isClosed == false)
+        {
+            _queuedData = data;
+            _queu = true;
+
+            return false;
+        }
+
         gameObject.SetActive(true);
-        _title.text = data.Title;
-        _message.text = data.Message;
 
-        return await _taskCompletion.Task;
+        _contentObject.SetActive(true);
+
+        _currentMenuObject = _contentObject;
+        _currentContent = _contentObject.GetComponent<RectTransform>();
+        _currentPanel = data.Panel;
+
+        AnimateOpen();
+
+        if (_contentMenu == null)
+        {
+            _contentMenu = _contentObject.GetComponent<ContentMenu>();
+
+            _contentMenu.EventChannel = _eventChannel;
+            _contentMenu.TaskCompletion = _taskCompletion;
+        }
+
+        return await _contentMenu.Show(data);
     }
 
-    public async UniTask<bool> ShowOptions()
+    public void ShowOptions(RectTransform panel, float version)
     {
         gameObject.SetActive(true);
 
-        _options.SetActive(true);
+        _optionsMenuObject.SetActive(true);
 
-        OptionsMenu optionsMenu = _options.GetComponent<OptionsMenu>();
-        optionsMenu.OnClose += OnOptionsMenuClose;
+        _currentMenuObject = _optionsMenuObject;
+        _currentContent = _optionsMenuObject.GetComponent<RectTransform>();
+        _currentPanel = panel;
 
-        return await _taskCompletion.Task;
+        AnimateOpen();
+
+        if (_optionsMenu == null)
+        {
+            _optionsMenu = _optionsMenuObject.GetComponent<OptionsMenu>();
+
+            _optionsMenu.EventChannel = _eventChannel;
+            _optionsMenu.SetVersionText(version);
+        }
+
+        _optionsMenu.Show();
     }
 
-    public void OnDestroy()
+    public void ShowDebugMenu(RectTransform panel)
     {
-        _taskCompletion.TrySetCanceled();
+        gameObject.SetActive(true);
+
+        _debugMenuObject.SetActive(true);
+
+        _currentMenuObject = _debugMenuObject;
+        _currentContent = _debugMenuObject.GetComponent<RectTransform>();
+        _currentPanel = panel;
+
+        AnimateOpen();
+
+        if (_debugMenu == null)
+        {
+            _debugMenu = _debugMenuObject.GetComponent<DebugMenu>();
+
+            _debugMenu.EventChannel = _eventChannel;
+        }
+
+        _debugMenu.Show();
     }
 
-    private void OnConfirmButtonClicked()
+    private void AnimateOpen()
     {
-        _taskCompletion.TrySetResult(true);
+        _isClosed = false;
 
-        gameObject.SetActive(false);
+        _ = Sequence
+            .Create()
+            .Group(
+                Tween.Alpha(
+                    _background,
+                    startValue: 0,
+                    endValue: 0.7f,
+                    duration: Duration,
+                    ease: _animationCurve
+                )
+            )
+            .Group(
+                Tween.Scale(
+                    _currentContent,
+                    startValue: Vector3.one * 0.8f,
+                    endValue: Vector3.one,
+                    duration: Duration,
+                    ease: _animationCurve
+                )
+            )
+            .Group(
+                Tween.UIAnchoredPositionY(
+                    _currentContent,
+                    startValue: -1500f,
+                    endValue: 0f,
+                    duration: Duration,
+                    ease: _animationCurve
+                )
+            )
+            .Group(
+                Tween.Scale(
+                    _currentPanel,
+                    startValue: Vector3.one,
+                    endValue: Vector3.one * 0.95f,
+                    duration: Duration,
+                    ease: _animationCurve
+                )
+            );
     }
 
-    private void OnMenuClose(DebugMenuResult result)
+    private void HandleClose()
     {
-        _taskDebug.TrySetResult(result);
-
-        _content.SetActive(true);
-        _menu.SetActive(false);
-        gameObject.SetActive(false);
+        _ = Sequence
+            .Create()
+            .Group(
+                Tween.Alpha(
+                    _background,
+                    startValue: 0.7f,
+                    endValue: 0,
+                    duration: Duration,
+                    ease: _animationCurve
+                )
+            )
+            .Group(
+                Tween.Scale(
+                    _currentContent,
+                    startValue: Vector3.one,
+                    endValue: Vector3.one * 0.8f,
+                    duration: Duration,
+                    ease: _animationCurve
+                )
+            )
+            .Group(
+                Tween.UIAnchoredPositionY(
+                    _currentContent,
+                    startValue: 0f,
+                    endValue: -1700f,
+                    duration: Duration - 0.3f,
+                    ease: _animationCurve
+                )
+            )
+            .Group(
+                Tween.Scale(
+                    _currentPanel,
+                    startValue: Vector3.one * 0.95f,
+                    endValue: Vector3.one,
+                    duration: Duration,
+                    ease: _animationCurve
+                )
+            )
+            .OnComplete(_onAnimationComplete);
     }
 
-    private void OnOptionsMenuClose()
+    public void OnPointerClick(PointerEventData eventData)
     {
-        _taskCompletion.TrySetResult(true);
+        var clicked = eventData.pointerPressRaycast.gameObject;
 
-        _options.SetActive(false);
-        gameObject.SetActive(false);
+        if (clicked == _background.gameObject)
+        {
+            HandleClose();
+        }
     }
 }

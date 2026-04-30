@@ -1,9 +1,5 @@
-using System;
-using System.Threading;
 using Cysharp.Threading.Tasks;
-using Firebase.Auth;
 using UnityEngine;
-using UnityEngine.Localization.Settings;
 
 public class UIManager : MonoBehaviour
 {
@@ -21,118 +17,9 @@ public class UIManager : MonoBehaviour
     [Space]
     public float VersionNumber = 0.2f;
 
-    public UserDataDTO CurrentUser { get; set; }
-    public UserService UserService;
-
-    public FirebaseAuth FirebaseAuthInstance { get; private set; }
-
-    public void Start()
+    public void Awake()
     {
         SceneOrientationHelper.LockToPortrait();
-
-        LoadingPanel.Show();
-        BootstrapApplicacion().Forget();
-    }
-
-    private async UniTaskVoid BootstrapApplicacion()
-    {
-        bool existsConnection = await ApiConfig.Ping();
-
-        if (!existsConnection)
-        {
-            ModalData modalData = new()
-            {
-                Title = "Error",
-                Message =
-                    "No es va detectar cap connexió a internet. Comprova la teva connexió i torna a intentar-ho, o pots fer servir l'aplicació en mode de prova",
-            };
-            await ModalPanel.Show(modalData);
-            LoadingPanel.Hide();
-            return;
-        }
-
-        UserService = new UserService();
-
-        string preferredLanguage = GamePrefs.PreferredLanguage;
-
-        if (preferredLanguage[0] != 'C')
-        {
-            int index = 1;
-
-            await LocalizationSettings.InitializationOperation;
-
-            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[
-                index
-            ];
-        }
-
-        if (Application.isEditor)
-        {
-            LoadingPanel.Hide();
-            return;
-        }
-
-        CancellationToken ct = this.GetCancellationTokenOnDestroy();
-
-        TimeoutController timeoutController = new();
-        CancellationToken timeoutCt = timeoutController.Timeout(TimeSpan.FromSeconds(30));
-
-        CancellationTokenSource linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(
-            ct,
-            timeoutCt
-        );
-
-        bool success = await CheckFirebaseDependencies(linkedTokenSource.Token);
-
-        if (!success)
-        {
-            ModalData modalData = new()
-            {
-                Title = "Error",
-                Message = "Failed to initialize Firebase services. Please try again later.",
-            };
-            await ModalPanel.Show(modalData);
-            Application.Quit();
-        }
-
-        await UniTask.WaitForSeconds(2, cancellationToken: ct);
-
-        FirebaseAuthInstance = FirebaseAuth.DefaultInstance;
-
-        if (FirebaseAuthInstance.CurrentUser != null)
-        {
-            string firebaseIdToken = await FirebaseAuthInstance
-                .CurrentUser.TokenAsync(false)
-                .AsUniTask()
-                .AttachExternalCancellation(ct);
-
-            ApiResult<LoginData> result = await UserService.LoginWithFirebaseToken(firebaseIdToken);
-            UserModel user = result.Data.User;
-
-            CurrentUser = new UserDataDTO
-            {
-                Id = user.Id,
-                Email = user.Email,
-                Username = user.FirstName,
-            };
-        }
-
-        LoadingPanel.Hide();
-
-        if (CurrentUser is null)
-        {
-            ShowLogin();
-            return;
-        }
-
-        if (GamePrefs.HasAcceptedTerms)
-        {
-            ShowUserChildren();
-        }
-        else
-        {
-            ShowDisclaimer();
-        }
     }
 
     public void ShowLogin()
@@ -170,25 +57,14 @@ public class UIManager : MonoBehaviour
         await ModalPanel.Show(data);
     }
 
-    public async UniTask<DebugMenuResult> ShowDebugMenu()
+    public void ShowOptions(RectTransform panel)
     {
-        DebugMenuResult result = await ModalPanel.ShowDebugMenu();
-        return result;
+        ModalPanel.ShowOptions(panel, VersionNumber);
     }
 
-    public async UniTask ShowOptions()
+    public void ShowDebugMenu(RectTransform panel)
     {
-        await ModalPanel.ShowOptions();
-    }
-
-    public void Logout()
-    {
-        FirebaseAuthInstance.SignOut();
-
-        CurrentUser = null;
-
-        GamePrefs.ClearAll();
-        ShowLogin();
+        ModalPanel.ShowDebugMenu(panel);
     }
 
     private void HideAllPanels()
@@ -198,20 +74,5 @@ public class UIManager : MonoBehaviour
         UserChildrenPanel.Hide();
         DisclaimerPanel.Hide();
         RoleSelectionPanel.Hide();
-    }
-
-    private async UniTask<bool> CheckFirebaseDependencies(CancellationToken ct)
-    {
-        FirebaseService firebaseService = new();
-
-        bool success = await firebaseService.RunAsync(ct);
-
-        if (!success)
-        {
-            Debug.LogError("Firebase failed to initialize.");
-            return false;
-        }
-
-        return true;
     }
 }

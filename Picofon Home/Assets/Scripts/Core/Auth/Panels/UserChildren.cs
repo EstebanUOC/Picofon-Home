@@ -6,8 +6,13 @@ using UnityEngine;
 
 public class UserChildren : Panel
 {
-    public UIManager UIManager;
+    [SerializeField]
+    public AuthManager _authManager;
 
+    [SerializeField]
+    public UIManager _uiManager;
+
+    [Space]
     [SerializeField]
     private LoadingTransition _loadingTransition;
 
@@ -30,6 +35,8 @@ public class UserChildren : Panel
 
     private string _userId;
 
+    private RectTransform _panel;
+
     public void Start()
     {
         OnHide += () => gameObject.SetActive(false);
@@ -42,7 +49,9 @@ public class UserChildren : Panel
 
         _logoutButton.OnClick += OnLogout;
 
-        _userId = UIManager.CurrentUser.Id;
+        _userId = _authManager.CurrentUser.Id;
+
+        _panel = GetComponent<RectTransform>();
     }
 
     public override void Show()
@@ -53,10 +62,10 @@ public class UserChildren : Panel
 
     private async UniTaskVoid LoadChildren()
     {
-        UserService userService = UIManager.UserService;
+        UserService userService = _authManager.UserService;
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 
-        _userId = UIManager.CurrentUser.Id;
+        _userId = _authManager.CurrentUser.Id;
 
         ApiResult<ChildListItemDTO[]> result = await userService.GetUserChildren(_userId, token);
 
@@ -66,8 +75,9 @@ public class UserChildren : Panel
             {
                 Title = "Error",
                 Message = "Could not load children. Please try again later.",
+                Panel = _panel,
             };
-            await UIManager.ShowModal(modalData);
+            await _uiManager.ShowModal(modalData);
             return;
         }
 
@@ -113,7 +123,7 @@ public class UserChildren : Panel
         string childId = _childrenIds[selectedIndex];
 
         MapPathPayload.ChildId = childId;
-        MapPathPayload.ConductedById = UIManager.CurrentUser.Id;
+        MapPathPayload.ConductedById = _authManager.CurrentUser.Id;
 
         LevelDataStore instance = LevelDataStore.Instance;
 
@@ -126,16 +136,31 @@ public class UserChildren : Panel
             await instance.CreateDefaultPlans(childId, _userId);
         }
 
-        _loadingTransition.Continue(success: instance.HasPlans(), uiManager: UIManager);
+        _loadingTransition.Continue(success: instance.HasPlans() && instance.HasActivePlans());
+
+        if (!instance.HasActivePlans())
+        {
+            await UniTask.WaitForSeconds(2.5f);
+            await _uiManager.ShowModal(
+                new ModalData
+                {
+                    Title = "No Active Plans",
+                    Message =
+                        "There are no active therapy plans for the selected child. Choose another child",
+                    Panel = _panel,
+                }
+            );
+            return;
+        }
     }
 
     private void OnRegisterChild()
     {
-        UIManager.ShowRegisterChild();
+        _uiManager.ShowRegisterChild();
     }
 
     private void OnLogout()
     {
-        UIManager.Logout();
+        _authManager.Logout();
     }
 }

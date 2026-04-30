@@ -1,5 +1,4 @@
 using System;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 
@@ -11,7 +10,10 @@ public class OptionsMenu : MonoBehaviour
     [SerializeField]
     private CustomButtonRaised _saveButton;
 
-    public Action OnClose;
+    [SerializeField]
+    private TMPro.TMP_Text _versionText;
+
+    public GenericEventChannel EventChannel;
 
     public void Awake()
     {
@@ -28,6 +30,16 @@ public class OptionsMenu : MonoBehaviour
         }
     }
 
+    public void Show()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void SetVersionText(float version)
+    {
+        _versionText.text = version.ToString("0.00");
+    }
+
     private void HandleClick()
     {
         GamePrefs.PreferredLanguage = _languageComboBox.GetSelectedLanguage().ToString();
@@ -41,6 +53,6 @@ public class OptionsMenu : MonoBehaviour
 
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
 
-        OnClose?.Invoke();
+        EventChannel.Raise();
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using Cysharp.Threading.Tasks;
 using PrimeTween;
 using UnityEngine;
@@ -63,7 +62,7 @@ public class LoadingTransition : MonoBehaviour
         );
     }
 
-    public void Continue(bool success, UIManager uiManager = null)
+    public void Continue(bool success)
     {
         Image loadingImage = _loading.GetComponent<Image>();
 
@@ -121,15 +120,6 @@ public class LoadingTransition : MonoBehaviour
                 statusImage.color = whiteTransparent;
 
                 gameObject.SetActive(false);
-
-                ModalData modalData = new()
-                {
-                    Title = "Error",
-                    Message =
-                        "An error occurred while loading the therapy plan. Please try again later.",
-                };
-
-                _ = uiManager.ShowModal(modalData);
             }
 
             sequence.OnComplete(onCompleteAction);

@@ -5,13 +5,23 @@ public class Capsule : MonoBehaviour
     [SerializeField]
     private float _jumpDuration = 0.5f;
 
+    [SerializeField]
+    private FloatItem _floatItem1;
+
+    [SerializeField]
+    private FloatItem _floatItem2;
+
     private float _targetY;
 
-    private float _jumpHeight;
-    private float _time;
     private float _startY;
 
+    private float _jumpHeight;
+    private float _jumpTime;
+    private float _sineTime;
+
     private bool _isJumping = false;
+
+    private FloatItem _currentFloatItem;
 
     private const float _offset = 1f;
     private const float _compensation = 4f; // Normaliza la parábola para que el máximo sea exactamente jumpHeight
@@ -22,66 +32,33 @@ public class Capsule : MonoBehaviour
     public void Start()
     {
         _startY = transform.position.y;
+
+        _currentFloatItem = _floatItem2;
+        _currentFloatItem.SetFloating(true);
     }
 
     public void FixedUpdate()
     {
-        float offset = Mathf.Sin(Time.time * _speed) * _amplitude;
-
-        transform.position = new Vector3(
-            transform.position.x,
-            _startY + offset,
-            transform.position.z
-        );
-
-        if (Input.GetKeyDown(KeyCode.A) && !_isJumping)
-        {
-            _isJumping = true;
-            _targetY = 1.3f + _offset;
-            _startY = transform.position.y;
-
-            _jumpHeight = 3f;
-
-            if (_targetY == _startY)
-            {
-                _jumpHeight = 1f;
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.B) && !_isJumping)
-        {
-            _isJumping = true;
-            _targetY = -3.4f + _offset;
-            _startY = transform.position.y;
-
-            _jumpHeight = 3f;
-
-            if (_targetY == _startY)
-            {
-                _jumpHeight = 1f;
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.C) && !_isJumping)
-        {
-            transform.position = new Vector3(transform.position.x, _startY, transform.position.z);
-        }
-
         if (_isJumping)
         {
-            _time += Time.deltaTime;
-            float t = _time / _jumpDuration;
+            _jumpTime += Time.deltaTime;
+            float t = _jumpTime / _jumpDuration;
 
             if (t >= 1f)
             {
                 _isJumping = false;
-                _time = 0f;
+                _jumpTime = 0f;
 
                 transform.position = new Vector3(
                     transform.position.x,
                     _targetY,
                     transform.position.z
                 );
+
+                _startY = transform.position.y;
+                _sineTime = Mathf.PI;
+
+                _currentFloatItem.SetFloating(true);
                 return;
             }
 
@@ -98,6 +75,61 @@ public class Capsule : MonoBehaviour
                 _startY + height,
                 transform.position.z
             );
+        }
+
+        if (!_isJumping)
+        {
+            _sineTime += Time.deltaTime;
+
+            float offset = Mathf.Sin(_sineTime * _speed) * _amplitude;
+
+            transform.position = new Vector3(
+                transform.position.x,
+                _startY + offset,
+                transform.position.z
+            );
+        }
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A) && !_isJumping)
+        {
+            _currentFloatItem.SetFloating(false);
+
+            _isJumping = true;
+            _targetY = 1.3f + _offset;
+
+            _jumpHeight = 3f;
+
+            if (_targetY == _startY)
+            {
+                _jumpHeight = 1f;
+            }
+
+            _currentFloatItem = _floatItem1;
+        }
+
+        if (Input.GetKeyDown(KeyCode.B) && !_isJumping)
+        {
+            _currentFloatItem.SetFloating(false);
+
+            _isJumping = true;
+            _targetY = -3.4f + _offset;
+
+            _jumpHeight = 3f;
+
+            if (_targetY == _startY)
+            {
+                _jumpHeight = 1f;
+            }
+
+            _currentFloatItem = _floatItem2;
+        }
+
+        if (Input.GetKeyDown(KeyCode.C) && !_isJumping)
+        {
+            transform.position = new Vector3(transform.position.x, _startY, transform.position.z);
         }
     }
 }
