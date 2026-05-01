@@ -80,18 +80,6 @@ public class AuthManager : MonoBehaviour
             case DebugMenuResult.Map:
                 UnityEngine.SceneManagement.SceneManager.LoadScene("MapPathScene");
                 break;
-            case DebugMenuResult.Role:
-                user = new()
-                {
-                    Id = "STrmT4YxH2PiAObWJh9l0USKVZ53",
-                    Email = "test@gmail.com",
-                    Username = "Debug User",
-                    Role = UserRole.Invited,
-                };
-
-                CurrentUser = user;
-                _uiManager.ShowRolePanel();
-                break;
             default:
                 break;
         }

@@ -7,10 +7,10 @@ using UnityEngine;
 public class UserChildren : Panel
 {
     [SerializeField]
-    public AuthManager _authManager;
+    private AuthManager _authManager;
 
     [SerializeField]
-    public UIManager _uiManager;
+    private UIManager _uiManager;
 
     [Space]
     [SerializeField]
@@ -22,10 +22,10 @@ public class UserChildren : Panel
 
     [Space]
     [SerializeField]
-    private GameObject _selectButton;
+    private CustomButton _selectButton;
 
     [SerializeField]
-    private GameObject _registerButton;
+    private CustomButton _registerButton;
 
     [Space]
     [SerializeField]
@@ -41,11 +41,8 @@ public class UserChildren : Panel
     {
         OnHide += () => gameObject.SetActive(false);
 
-        CustomButtonBase selectButton = _selectButton.GetComponent<CustomButtonBase>();
-        CustomButtonBase registerButton = _registerButton.GetComponent<CustomButtonBase>();
-
-        selectButton.OnClick += OnSelectChild;
-        registerButton.OnClick += OnRegisterChild;
+        _selectButton.OnClick += OnSelectChild;
+        _registerButton.OnClick += OnRegisterChild;
 
         _logoutButton.OnClick += OnLogout;
 

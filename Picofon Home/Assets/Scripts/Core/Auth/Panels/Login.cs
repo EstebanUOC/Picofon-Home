@@ -150,8 +150,6 @@ public class Login : Panel
     private void LoginWithGoogle()
     {
         AuthenticateWithGoogle().Forget();
-
-        _loginButton.EndLoading();
     }
 
     private void ShowOptions()
