@@ -27501,6 +27501,10 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4286844986
       objectReference: {fileID: 0}
+    - target: {fileID: 7010699745154611281, guid: c1aa32f6c6211b3aba4e897eef3efa37, type: 3}
+      propertyPath: _contentInfo
+      value: 
+      objectReference: {fileID: 478983947}
     - target: {fileID: 8482869957645861070, guid: c1aa32f6c6211b3aba4e897eef3efa37, type: 3}
       propertyPath: m_Name
       value: Google
