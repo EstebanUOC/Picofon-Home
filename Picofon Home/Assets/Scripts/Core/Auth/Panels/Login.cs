@@ -26,18 +26,24 @@ public class Login : Panel
 
     public void Start()
     {
-        // loginButton.OnClickAsync += AuthenticateWithGoogle;
-
-        _debugButton.OnClick += ShowDebugMenu;
-
-        _optionsButton.OnClick += ShowOptions;
-
         OnHide += () => gameObject.SetActive(false);
 
         _panel = GetComponent<RectTransform>();
+
+        _optionsButton.OnClick += ShowOptions;
+
+        _debugButton.OnClick += ShowDebugMenu;
+
+        if (Application.isEditor)
+        {
+            _loginButton.Interactable = false;
+            return;
+        }
+
+        _loginButton.OnClick += LoginWithGoogle;
     }
 
-    private async UniTask AuthenticateWithGoogle()
+    private async UniTaskVoid AuthenticateWithGoogle()
     {
         FirebaseAuth firebaseInstance = FirebaseAuth.DefaultInstance;
         GoogleSignIn googleInstance = GoogleSignIn.DefaultInstance;
@@ -124,6 +130,7 @@ public class Login : Panel
     private void OnLoginSuccess(UserModel user)
     {
         _authManager.SetCurrentUser(user);
+        _loginButton.EndLoading();
 
         if (!user.LegalAccepted)
         {
@@ -138,6 +145,13 @@ public class Login : Panel
         }
 
         _uiManager.ShowUserChildren();
+    }
+
+    private void LoginWithGoogle()
+    {
+        AuthenticateWithGoogle().Forget();
+
+        _loginButton.EndLoading();
     }
 
     private void ShowOptions()

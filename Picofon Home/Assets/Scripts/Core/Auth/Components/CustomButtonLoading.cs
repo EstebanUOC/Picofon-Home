@@ -39,6 +39,7 @@ public class CustomButtonLoading : MonoBehaviour, IPointerDownHandler, IPointerU
 
     private float _defaultContentY;
     private bool _interactable = true;
+    private bool _isLoading = false;
 
     public void Awake()
     {
@@ -57,6 +58,8 @@ public class CustomButtonLoading : MonoBehaviour, IPointerDownHandler, IPointerU
     {
         if (!_interactable)
             return;
+
+        PerformanceLog.Log("<DEBUG> Button pressed, starting loading animation.");
 
         Vector2 contentPos = (_defaultContentY - 11f) * Vector2.up;
         Vector2 bgSize = 11f * Vector2.down;
@@ -79,7 +82,7 @@ public class CustomButtonLoading : MonoBehaviour, IPointerDownHandler, IPointerU
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (!_interactable)
+        if (_isLoading)
             return;
 
         Vector2 contentPos = _contentRect.anchoredPosition;
@@ -92,14 +95,20 @@ public class CustomButtonLoading : MonoBehaviour, IPointerDownHandler, IPointerU
         _overlayRect.sizeDelta = Vector2.zero;
         _overlayRect.anchoredPosition = Vector2.zero;
 
-        _contentInfo.SetActive(true);
-        _contentLoading.SetActive(false);
-
-        AnimateLoading(true);
-
-        Interactable = true;
+        _isLoading = true;
 
         OnClick?.Invoke();
+    }
+
+    public void EndLoading()
+    {
+        _contentLoading.SetActive(false);
+        _contentInfo.SetActive(true);
+
+        AnimateLoading(false);
+
+        Interactable = true;
+        _isLoading = false;
     }
 
     private void SetInteractable(bool value)
