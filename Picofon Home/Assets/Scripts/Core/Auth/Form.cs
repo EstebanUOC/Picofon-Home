@@ -45,7 +45,7 @@ public class Form : MonoBehaviour
         }
 
         _submitButton.Interactable = false;
-        _submitButton.OnClickAsync += HandleSubmit;
+        // _submitButton.OnClickAsync += HandleSubmit;
     }
 
     public ChildCreateDTO GatherChildData()

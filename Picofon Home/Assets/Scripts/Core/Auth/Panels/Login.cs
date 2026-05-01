@@ -14,10 +14,10 @@ public class Login : Panel
 
     [Space]
     [SerializeField]
-    private GameObject _loginButton;
+    private CustomButtonLoading _loginButton;
 
     [SerializeField]
-    private GameObject _debugButton;
+    private CustomButton _debugButton;
 
     [SerializeField]
     private SimpleButton _optionsButton;
@@ -26,11 +26,10 @@ public class Login : Panel
 
     public void Start()
     {
-        CustomButtonLoading loginButton = _loginButton.GetComponent<CustomButtonLoading>();
-        CustomButtonBase debugLoginButton = _debugButton.GetComponent<CustomButtonBase>();
+        // loginButton.OnClickAsync += AuthenticateWithGoogle;
 
-        loginButton.OnClickAsync += AuthenticateWithGoogle;
-        debugLoginButton.OnClick += ShowDebugMenu;
+        _debugButton.OnClick += ShowDebugMenu;
+
         _optionsButton.OnClick += ShowOptions;
 
         OnHide += () => gameObject.SetActive(false);
