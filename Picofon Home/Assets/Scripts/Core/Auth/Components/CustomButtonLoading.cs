@@ -59,8 +59,6 @@ public class CustomButtonLoading : MonoBehaviour, IPointerDownHandler, IPointerU
         if (!_interactable)
             return;
 
-        PerformanceLog.Log("<DEBUG> Button pressed, starting loading animation.");
-
         Vector2 contentPos = (_defaultContentY - 11f) * Vector2.up;
         Vector2 bgSize = 11f * Vector2.down;
         Vector2 bgMoveY = 5.5f * Vector2.down;
@@ -82,7 +80,7 @@ public class CustomButtonLoading : MonoBehaviour, IPointerDownHandler, IPointerU
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (_isLoading)
+        if (_isLoading || !_interactable)
             return;
 
         Vector2 contentPos = _contentRect.anchoredPosition;

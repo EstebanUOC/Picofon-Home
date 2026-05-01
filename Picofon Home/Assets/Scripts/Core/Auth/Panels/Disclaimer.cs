@@ -10,10 +10,10 @@ public class Disclaimer : Panel
 
     [Space]
     [SerializeField]
-    private CustomButtonBase _acceptButton;
+    private CustomButton _acceptButton;
 
     [SerializeField]
-    private CustomButtonBase _declineButton;
+    private CustomButton _declineButton;
 
     public void Start()
     {
