@@ -69,13 +69,6 @@ public class CustomButtonLoading : MonoBehaviour, IPointerDownHandler, IPointerU
 
         _overlayRect.sizeDelta = bgSize;
         _overlayRect.anchoredPosition = bgMoveY;
-
-        _contentInfo.SetActive(false);
-        _contentLoading.SetActive(true);
-
-        AnimateLoading(true);
-
-        Interactable = false;
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -93,6 +86,12 @@ public class CustomButtonLoading : MonoBehaviour, IPointerDownHandler, IPointerU
         _overlayRect.sizeDelta = Vector2.zero;
         _overlayRect.anchoredPosition = Vector2.zero;
 
+        _contentInfo.SetActive(false);
+        _contentLoading.SetActive(true);
+
+        AnimateLoading(true);
+
+        Interactable = false;
         _isLoading = true;
 
         OnClick?.Invoke();
