@@ -227,22 +227,28 @@ public class AuthManager : MonoBehaviour
 
         if (CurrentUser == null)
         {
-            _uiManager.Show(PanelEnum.Login);
+            PerformanceLog.Log("No user session found, showing login panel.");
+            _uiManager.Show(PanelEnum.Login, animate: false);
             return;
         }
 
         if (!_legalAccepted)
         {
-            _uiManager.Show(PanelEnum.Disclaimer);
+            PerformanceLog.Log("User has not accepted legal terms, showing disclaimer panel.");
+            _uiManager.Show(PanelEnum.Disclaimer, animate: false);
             return;
         }
 
         if (CurrentUser.Role == UserRole.Invited)
         {
-            _uiManager.Show(PanelEnum.Role);
+            PerformanceLog.Log(
+                "User is invited but has not completed profile, showing role selection panel."
+            );
+            _uiManager.Show(PanelEnum.Role, animate: false);
             return;
         }
 
+        PerformanceLog.Log("User session found, showing children panel.");
         _uiManager.Show(PanelEnum.Children);
     }
 
