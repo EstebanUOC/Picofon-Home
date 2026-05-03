@@ -4,7 +4,7 @@ using Firebase.Auth;
 using Google;
 using UnityEngine;
 
-public class Login : Panel
+public class Login : MonoBehaviour
 {
     [SerializeField]
     public UIManager _uiManager;
@@ -26,8 +26,6 @@ public class Login : Panel
 
     public void Start()
     {
-        OnHide += () => gameObject.SetActive(false);
-
         _panel = GetComponent<RectTransform>();
 
         _optionsButton.OnClick += ShowOptions;
@@ -134,17 +132,17 @@ public class Login : Panel
 
         if (!user.LegalAccepted)
         {
-            _uiManager.ShowDisclaimer();
+            // _uiManager.ShowDisclaimer();
             return;
         }
 
         if (user.Role == UserRole.Invited)
         {
-            _uiManager.ShowRolePanel();
+            _uiManager.Show(PanelEnum.Role);
             return;
         }
 
-        _uiManager.ShowUserChildren();
+        _uiManager.Show(PanelEnum.Children);
     }
 
     private void LoginWithGoogle()
@@ -154,11 +152,11 @@ public class Login : Panel
 
     private void ShowOptions()
     {
-        _uiManager.ShowOptions(_panel);
+        _uiManager.ShowModal(_panel, ModalEnum.Options);
     }
 
     private void ShowDebugMenu()
     {
-        _uiManager.ShowDebugMenu(_panel);
+        _uiManager.ShowModal(_panel, ModalEnum.DebugMenu);
     }
 }

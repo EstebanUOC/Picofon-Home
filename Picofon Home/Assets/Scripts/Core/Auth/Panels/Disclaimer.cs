@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Disclaimer : Panel
+public class Disclaimer : MonoBehaviour
 {
     [SerializeField]
     private UIManager _uiManager;
@@ -17,8 +17,6 @@ public class Disclaimer : Panel
 
     public void Start()
     {
-        OnHide += () => gameObject.SetActive(false);
-
         _acceptButton.OnClick += OnAccept;
         _declineButton.OnClick += OnDecline;
     }
@@ -27,15 +25,15 @@ public class Disclaimer : Panel
     {
         if (_authManager.CurrentUser.Role == UserRole.Invited)
         {
-            _uiManager.ShowRolePanel();
+            _uiManager.Show(PanelEnum.Role);
             return;
         }
 
-        _uiManager.ShowUserChildren();
+        _uiManager.Show(PanelEnum.Children);
     }
 
     private void OnDecline()
     {
-        _uiManager.ShowLogin();
+        _uiManager.Show(PanelEnum.Login);
     }
 }

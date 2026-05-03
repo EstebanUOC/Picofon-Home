@@ -1,78 +1,143 @@
+using System;
 using Cysharp.Threading.Tasks;
+using PrimeTween;
 using UnityEngine;
+using UnityEngine.UI;
+
+public enum PanelEnum : byte
+{
+    Login,
+    Disclaimer,
+    Role,
+    Children,
+    RegisterChild,
+}
+
+public enum ModalEnum : byte
+{
+    Options,
+    DebugMenu,
+}
 
 public class UIManager : MonoBehaviour
 {
-    [Space]
-    public Panel LoginPanel;
-    public Panel DisclaimerPanel;
-    public Panel RoleSelectionPanel;
-    public Panel UserChildrenPanel;
-    public Panel RegisterChildPanel;
+    [SerializeField]
+    private Image _fadeOverlay;
+
+    [SerializeField]
+    private RectTransform[] _panels;
 
     [Space]
-    public Panel LoadingPanel;
-    public Modal ModalPanel;
+    [SerializeField]
+    private LoadingPanel _loadingPanel;
+
+    [SerializeField]
+    private Modal _modalPanel;
 
     [Space]
     public float VersionNumber = 0.2f;
 
+    private RectTransform _currentPanel;
+    private RectTransform _nextPanel;
+
+    private Action _onAnimationComplete;
+
     public void Awake()
     {
         SceneOrientationHelper.LockToPortrait();
+
+        foreach (RectTransform panel in _panels)
+        {
+            panel.gameObject.SetActive(false);
+        }
+
+        _onAnimationComplete = () =>
+        {
+            const float duration = 0.2f;
+
+            Tween.Alpha(
+                _fadeOverlay,
+                endValue: 0f,
+                duration,
+                startDelay: 0.13f,
+                ease: Ease.InOutCubic
+            );
+
+            _currentPanel.localScale = Vector3.one;
+
+            _currentPanel.gameObject.SetActive(false);
+
+            _currentPanel = _nextPanel;
+            _currentPanel.gameObject.SetActive(true);
+        };
     }
 
-    public void ShowLogin()
+    public void Show(PanelEnum panel, bool animate = true)
     {
-        HideAllPanels();
-        LoginPanel.Show();
-    }
+        int index = (int)panel;
 
-    public void ShowRegisterChild()
-    {
-        HideAllPanels();
-        RegisterChildPanel.Show();
-    }
+        if (!animate)
+        {
+            _currentPanel = _panels[index];
+            _currentPanel.gameObject.SetActive(true);
+            return;
+        }
 
-    public void ShowDisclaimer()
-    {
-        HideAllPanels();
-        DisclaimerPanel.Show();
-    }
+        _nextPanel = _panels[index];
 
-    public void ShowRolePanel()
-    {
-        HideAllPanels();
-        RoleSelectionPanel.Show();
-    }
-
-    public void ShowUserChildren()
-    {
-        HideAllPanels();
-        UserChildrenPanel.Show();
+        ChangePanel();
     }
 
     public async UniTask ShowModal(ModalData data)
     {
-        await ModalPanel.Show(data);
+        await _modalPanel.Show(data);
     }
 
-    public void ShowOptions(RectTransform panel)
+    public void SetLoadingState(bool isLoading)
     {
-        ModalPanel.ShowOptions(panel, VersionNumber);
+        if (isLoading)
+        {
+            _loadingPanel.Show();
+        }
+        else
+        {
+            _loadingPanel.Hide();
+        }
     }
 
-    public void ShowDebugMenu(RectTransform panel)
+    public void ShowModal(RectTransform panel, ModalEnum modal)
     {
-        ModalPanel.ShowDebugMenu(panel);
+        switch (modal)
+        {
+            case ModalEnum.Options:
+                _modalPanel.ShowOptions(panel, VersionNumber);
+                break;
+            case ModalEnum.DebugMenu:
+                _modalPanel.ShowDebugMenu(panel);
+                break;
+        }
     }
 
-    private void HideAllPanels()
+    private void ChangePanel()
     {
-        LoginPanel.Hide();
-        RegisterChildPanel.Hide();
-        UserChildrenPanel.Hide();
-        DisclaimerPanel.Hide();
-        RoleSelectionPanel.Hide();
+        _fadeOverlay.gameObject.SetActive(true);
+
+        const float duration = 0.2f;
+
+        Sequence
+            .Create()
+            .Group(
+                Tween.Alpha(_fadeOverlay, endValue: 1f, duration: duration, ease: Ease.InOutCubic)
+            )
+            .Group(
+                Tween.Scale(
+                    _currentPanel,
+                    startValue: Vector3.one,
+                    endValue: Vector3.one * 0.95f,
+                    duration: duration,
+                    ease: Ease.InOutCubic
+                )
+            )
+            .OnComplete(_onAnimationComplete);
     }
 }

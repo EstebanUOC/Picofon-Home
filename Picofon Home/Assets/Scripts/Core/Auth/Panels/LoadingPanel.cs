@@ -3,30 +3,33 @@ using UnityEngine;
 
 public class LoadingPanel : MonoBehaviour
 {
-    public CanvasGroup CanvasContent;
-    public RectTransform RectContent;
+    [SerializeField]
+    private CanvasGroup _canvasContent;
+
+    [SerializeField]
+    private RectTransform _rectContent;
 
     private CanvasGroup _canvasGroup;
-    private Panel _panel;
 
     public void Awake()
     {
-        _panel = GetComponent<Panel>();
         _canvasGroup = GetComponent<CanvasGroup>();
-
-        _panel.OnShow += OnShow;
-        _panel.OnHide += OnHide;
     }
 
-    private void OnShow()
+    public void Show()
     {
-        CanvasContent.alpha = 0f;
-        RectContent.localScale = Vector3.zero;
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+
+        _canvasContent.alpha = 0f;
+        _rectContent.localScale = Vector3.zero;
 
         Sequence seq = Sequence.Create();
 
-        Tween fadeIn = Tween.Alpha(CanvasContent, 1, 0.5f);
-        Tween scaleUp = Tween.Scale(RectContent, 1f, 0.6f, Ease.OutBack);
+        Tween fadeIn = Tween.Alpha(_canvasContent, 1, 0.5f);
+        Tween scaleUp = Tween.Scale(_rectContent, 1f, 0.6f, Ease.OutBack);
 
 #if UNITY_ANDROID
         seq.ChainDelay(1f);
@@ -35,10 +38,10 @@ public class LoadingPanel : MonoBehaviour
         seq.Group(fadeIn).Group(scaleUp);
     }
 
-    private void OnHide()
+    public void Hide()
     {
         Tween
-            .Alpha(_canvasGroup, 0, 0.5f, startDelay: 0.3f)
-            .OnComplete(() => gameObject.SetActive(false));
+            .Alpha(_canvasGroup, endValue: 0, duration: 0.5f, startDelay: 0.3f)
+            .OnComplete(target: gameObject, go => go.SetActive(false));
     }
 }

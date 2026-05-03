@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
-public class UserChildren : Panel
+public class UserChildren : MonoBehaviour
 {
     [SerializeField]
     private AuthManager _authManager;
@@ -39,8 +39,6 @@ public class UserChildren : Panel
 
     public void Start()
     {
-        OnHide += () => gameObject.SetActive(false);
-
         _selectButton.OnClick += OnSelectChild;
         _registerButton.OnClick += OnRegisterChild;
 
@@ -51,9 +49,8 @@ public class UserChildren : Panel
         _panel = GetComponent<RectTransform>();
     }
 
-    public override void Show()
+    public void OnEnable()
     {
-        base.Show();
         LoadChildren().Forget();
     }
 
@@ -153,7 +150,7 @@ public class UserChildren : Panel
 
     private void OnRegisterChild()
     {
-        _uiManager.ShowRegisterChild();
+        _uiManager.Show(PanelEnum.RegisterChild);
     }
 
     private void OnLogout()

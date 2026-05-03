@@ -42,7 +42,7 @@ public class AuthManager : MonoBehaviour
 
         CurrentUser = null;
 
-        _uiManager.ShowLogin();
+        _uiManager.Show(PanelEnum.Login);
     }
 
     public void SetCurrentUser(UserModel user)
@@ -75,10 +75,14 @@ public class AuthManager : MonoBehaviour
                 };
 
                 CurrentUser = user;
-                _uiManager.ShowUserChildren();
+
+                _uiManager.Show(PanelEnum.Children);
+
                 break;
             case DebugMenuResult.Map:
+
                 UnityEngine.SceneManagement.SceneManager.LoadScene("MapPathScene");
+
                 break;
             default:
                 break;
@@ -186,6 +190,7 @@ public class AuthManager : MonoBehaviour
 
         if (Application.isEditor)
         {
+            _uiManager.Show(PanelEnum.Login, animate: false);
             return;
         }
 
@@ -222,35 +227,35 @@ public class AuthManager : MonoBehaviour
 
         if (CurrentUser == null)
         {
-            _uiManager.ShowLogin();
+            _uiManager.Show(PanelEnum.Login);
             return;
         }
 
         if (!_legalAccepted)
         {
-            _uiManager.ShowDisclaimer();
+            _uiManager.Show(PanelEnum.Disclaimer);
             return;
         }
 
         if (CurrentUser.Role == UserRole.Invited)
         {
-            _uiManager.ShowRolePanel();
+            _uiManager.Show(PanelEnum.Role);
             return;
         }
 
-        _uiManager.ShowUserChildren();
+        _uiManager.Show(PanelEnum.Children);
     }
 
     private async UniTaskVoid BootAppProcess()
     {
-        _uiManager.LoadingPanel.Show();
+        _uiManager.SetLoadingState(true);
 
         if (!_initialized)
         {
             await InitializeApp();
         }
 
-        _uiManager.LoadingPanel.Hide();
+        _uiManager.SetLoadingState(false);
 
         _ = CheckAppState();
     }

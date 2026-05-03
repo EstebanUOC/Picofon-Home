@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using PrimeTween;
 using UnityEngine;
 
-public class RolePanel : Panel
+public class RolePanel : MonoBehaviour
 {
     [SerializeField]
     private UIManager _uiManager;
@@ -38,11 +38,9 @@ public class RolePanel : Panel
         _therapistCard.EventChannel = eventChannel;
         _parentCard.EventChannel = eventChannel;
 
-        OnHide += () => gameObject.SetActive(false);
+        _backButton.OnClick += () => _authManager.Logout();
 
         _panel = GetComponent<RectTransform>();
-
-        _backButton.OnClick += () => _authManager.Logout();
     }
 
     private void OnRoleSelected(UserRole roleType)
@@ -96,20 +94,21 @@ public class RolePanel : Panel
 
         if (!_authManager.CurrentUser.ProfileComplete)
         {
-            ModalData modalData = new()
-            {
-                Title = "Profile Incomplete",
-                Message =
-                    "Your profile is incomplete. Please complete your profile in the web portal to access the app.",
-                Panel = _panel,
-            };
-            await _uiManager.ShowModal(modalData);
+            await _uiManager.ShowModal(
+                new ModalData()
+                {
+                    Title = "Profile Incomplete",
+                    Message =
+                        "Your profile is incomplete. Please complete your profile in the web portal to access the app.",
+                    Panel = _panel,
+                }
+            );
 
             _authManager.Logout();
 
             return;
         }
 
-        _uiManager.ShowUserChildren();
+        _uiManager.Show(PanelEnum.Children);
     }
 }
