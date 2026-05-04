@@ -14,10 +14,15 @@ public struct InitializeData
     public bool FailedLogin { get; set; }
 
     public bool LegalAccepted { get; set; }
+
+    public UserDataDTO CurrentUser { get; set; }
 }
 
 public class AuthManager : MonoBehaviour
 {
+    private const string GoogleClientId =
+        "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
+
     private static InitializeData _initializeData;
 
     [SerializeField]
@@ -26,12 +31,11 @@ public class AuthManager : MonoBehaviour
     [SerializeField]
     private RectTransform _panel;
 
-    public UserDataDTO CurrentUser { get; private set; }
+    public UserService UserService => _userService;
 
-    public UserService UserService { get; private set; }
+    public UserDataDTO CurrentUser => _initializeData.CurrentUser;
 
-    private const string GoogleClientId =
-        "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
+    private UserService _userService;
 
     private bool _existsConnection = false;
 
@@ -45,14 +49,14 @@ public class AuthManager : MonoBehaviour
         FirebaseAuth.DefaultInstance.SignOut();
         GamePrefs.ClearAll();
 
-        CurrentUser = null;
+        _initializeData = new InitializeData();
 
         _uiManager.Show(PanelEnum.Login);
     }
 
     public void SetCurrentUser(UserModel user)
     {
-        CurrentUser = new()
+        _initializeData.CurrentUser = new()
         {
             Id = user.Id,
             Email = user.Email,
@@ -79,7 +83,7 @@ public class AuthManager : MonoBehaviour
                     Role = UserRole.Therapist,
                 };
 
-                CurrentUser = user;
+                _initializeData.CurrentUser = user;
 
                 _uiManager.Show(PanelEnum.Children);
 
@@ -104,8 +108,6 @@ public class AuthManager : MonoBehaviour
             RequestIdToken = true,
             RequestEmail = true,
         };
-
-        UserService = new UserService();
 
         string preferredLanguage = GamePrefs.PreferredLanguage;
 
@@ -158,7 +160,7 @@ public class AuthManager : MonoBehaviour
 
         UserModel user = result.Data.User;
 
-        CurrentUser = new UserDataDTO
+        _initializeData.CurrentUser = new UserDataDTO
         {
             Id = user.Id,
             Email = user.Email,
@@ -223,7 +225,7 @@ public class AuthManager : MonoBehaviour
             return;
         }
 
-        if (CurrentUser == null)
+        if (_initializeData.CurrentUser == null)
         {
             ShowPanel(PanelEnum.Login);
             return;
@@ -235,7 +237,7 @@ public class AuthManager : MonoBehaviour
             return;
         }
 
-        if (CurrentUser.Role == UserRole.Invited)
+        if (_initializeData.CurrentUser.Role == UserRole.Invited)
         {
             ShowPanel(PanelEnum.Role);
             return;
@@ -258,8 +260,13 @@ public class AuthManager : MonoBehaviour
         if (!_existsConnection)
         {
             _ = CheckAppState();
+
+            Logout();
+
             return;
         }
+
+        _userService = new UserService();
 
         if (!_initializeData.Initialized)
         {
