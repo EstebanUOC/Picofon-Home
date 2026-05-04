@@ -34,6 +34,6 @@ public class Disclaimer : MonoBehaviour
 
     private void OnDecline()
     {
-        _uiManager.Show(PanelEnum.Login);
+        _authManager.Logout();
     }
 }

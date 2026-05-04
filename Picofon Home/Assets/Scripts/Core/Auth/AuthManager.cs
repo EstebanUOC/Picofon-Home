@@ -234,6 +234,10 @@ public class AuthManager : MonoBehaviour
 
         if (!_initializeData.LegalAccepted)
         {
+            PerformanceLog.Log(
+                $"Legal accepted: {_initializeData.LegalAccepted}, InitializeData: {_initializeData.Initialized}, CurrentUser: {_initializeData.CurrentUser}, FailedLogin: {_initializeData.FailedLogin}, FirebaseReady: {_initializeData.FirebaseReady}"
+            );
+
             ShowPanel(PanelEnum.Disclaimer);
             return;
         }
