@@ -90,11 +90,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 334462775836672
-    m_Localized: Continuar amb aquest infant
+    m_Localized: Seleccionar infant
     m_Metadata:
       m_Items: []
   - m_Id: 334624835354624
-    m_Localized: Registrar un nou infant
+    m_Localized: Registrar infant
     m_Metadata:
       m_Items: []
   - m_Id: 335638120480768

@@ -89,11 +89,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 334462775836672
-    m_Localized: "Continuar con este ni\xF1o"
+    m_Localized: Seleccionar infante
     m_Metadata:
       m_Items: []
   - m_Id: 334624835354624
-    m_Localized: "Registrar a un nuevo ni\xF1o"
+    m_Localized: "Registrar ni\xF1o"
     m_Metadata:
       m_Items: []
   - m_Id: 335638120480768
