@@ -5,9 +5,20 @@ using Google;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 
+public struct InitializeData
+{
+    public bool Initialized { get; set; }
+
+    public bool FirebaseReady { get; set; }
+
+    public bool FailedLogin { get; set; }
+
+    public bool LegalAccepted { get; set; }
+}
+
 public class AuthManager : MonoBehaviour
 {
-    private static bool _initialized;
+    private static InitializeData _initializeData;
 
     [SerializeField]
     private UIManager _uiManager;
@@ -23,12 +34,6 @@ public class AuthManager : MonoBehaviour
         "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
 
     private bool _existsConnection = false;
-
-    private bool _firebaseDependenciesChecked = false;
-
-    private bool _failedLogin = false;
-
-    private bool _legalAccepted = false;
 
     public void Start()
     {
@@ -91,14 +96,7 @@ public class AuthManager : MonoBehaviour
 
     private async UniTask InitializeApp()
     {
-        _initialized = true;
-
-        _existsConnection = await ApiConfig.Ping();
-
-        if (!_existsConnection)
-        {
-            return;
-        }
+        _initializeData = new InitializeData { Initialized = true };
 
         GoogleSignIn.Configuration = new GoogleSignInConfiguration
         {
@@ -129,9 +127,9 @@ public class AuthManager : MonoBehaviour
 
         CancellationToken ct = this.GetCancellationTokenOnDestroy();
 
-        _firebaseDependenciesChecked = await CheckFirebaseDependencies(ct);
+        _initializeData.FirebaseReady = await CheckFirebaseDependencies(ct);
 
-        if (!_firebaseDependenciesChecked)
+        if (!_initializeData.FirebaseReady)
         {
             return;
         }
@@ -154,7 +152,7 @@ public class AuthManager : MonoBehaviour
 
         if (!result.Success)
         {
-            _failedLogin = true;
+            _initializeData.FailedLogin = true;
             return;
         }
 
@@ -169,7 +167,7 @@ public class AuthManager : MonoBehaviour
             ProfileComplete = user.ProfileCompleted,
         };
 
-        _legalAccepted = user.LegalAccepted;
+        _initializeData.LegalAccepted = user.LegalAccepted;
     }
 
     private async UniTaskVoid CheckAppState()
@@ -194,7 +192,7 @@ public class AuthManager : MonoBehaviour
             return;
         }
 
-        if (!_firebaseDependenciesChecked)
+        if (!_initializeData.FirebaseReady)
         {
             await _uiManager.ShowModal(
                 new ModalData
@@ -209,7 +207,7 @@ public class AuthManager : MonoBehaviour
             Application.Quit();
         }
 
-        if (_failedLogin)
+        if (_initializeData.FailedLogin)
         {
             await _uiManager.ShowModal(
                 new ModalData
@@ -227,30 +225,43 @@ public class AuthManager : MonoBehaviour
 
         if (CurrentUser == null)
         {
-            _uiManager.Show(PanelEnum.Login, animate: false);
+            ShowPanel(PanelEnum.Login);
             return;
         }
 
-        if (!_legalAccepted)
+        if (!_initializeData.LegalAccepted)
         {
-            _uiManager.Show(PanelEnum.Disclaimer, animate: false);
+            ShowPanel(PanelEnum.Disclaimer);
             return;
         }
 
         if (CurrentUser.Role == UserRole.Invited)
         {
-            _uiManager.Show(PanelEnum.Role, animate: false);
+            ShowPanel(PanelEnum.Role);
             return;
         }
 
-        _uiManager.Show(PanelEnum.Children, animate: false);
+        ShowPanel(PanelEnum.Children);
+    }
+
+    private void ShowPanel(PanelEnum panel)
+    {
+        _uiManager.Show(panel, animate: false);
     }
 
     private async UniTaskVoid BootAppProcess()
     {
         _uiManager.SetLoadingState(true);
 
-        if (!_initialized)
+        _existsConnection = await ApiConfig.Ping();
+
+        if (!_existsConnection)
+        {
+            _ = CheckAppState();
+            return;
+        }
+
+        if (!_initializeData.Initialized)
         {
             await InitializeApp();
         }
