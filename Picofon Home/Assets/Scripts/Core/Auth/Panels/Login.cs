@@ -93,8 +93,6 @@ public class Login : MonoBehaviour
             firebaseIdToken
         );
 
-        PerformanceLog.Log($"Profile completed: {result.Data.User.ProfileCompleted}");
-
         if (result.Data.User.Role == UserRole.Therapist && !result.Data.User.ProfileCompleted)
         {
             ModalData modalData = new()
@@ -132,7 +130,7 @@ public class Login : MonoBehaviour
 
         if (!user.LegalAccepted)
         {
-            // _uiManager.ShowDisclaimer();
+            _uiManager.Show(PanelEnum.Disclaimer);
             return;
         }
 

@@ -13,8 +13,6 @@ public struct InitializeData
 
     public bool FailedLogin { get; set; }
 
-    public bool LegalAccepted { get; set; }
-
     public UserDataDTO CurrentUser { get; set; }
 }
 
@@ -63,6 +61,7 @@ public class AuthManager : MonoBehaviour
             Username = user.FirstName,
             ProfileComplete = user.ProfileCompleted,
             Role = user.Role,
+            LegalAccepted = user.LegalAccepted,
         };
     }
 
@@ -167,10 +166,8 @@ public class AuthManager : MonoBehaviour
             Username = user.FirstName,
             Role = user.Role,
             ProfileComplete = user.ProfileCompleted,
+            LegalAccepted = user.LegalAccepted,
         };
-
-        _initializeData.LegalAccepted = user.LegalAccepted;
-        PerformanceLog.Log($"Legal accepted: {_initializeData.LegalAccepted}");
     }
 
     private async UniTaskVoid CheckAppState()
@@ -232,10 +229,10 @@ public class AuthManager : MonoBehaviour
             return;
         }
 
-        if (!_initializeData.LegalAccepted)
+        if (!_initializeData.CurrentUser.LegalAccepted)
         {
             PerformanceLog.Log(
-                $"Legal accepted: {_initializeData.LegalAccepted}, InitializeData: {_initializeData.Initialized}, CurrentUser: {_initializeData.CurrentUser}, FailedLogin: {_initializeData.FailedLogin}, FirebaseReady: {_initializeData.FirebaseReady}"
+                $"Legal accepted: {_initializeData.CurrentUser.LegalAccepted}, InitializeData: {_initializeData.Initialized}, CurrentUser: {_initializeData.CurrentUser}, FailedLogin: {_initializeData.FailedLogin}, FirebaseReady: {_initializeData.FirebaseReady}"
             );
 
             ShowPanel(PanelEnum.Disclaimer);
