@@ -170,6 +170,7 @@ public class AuthManager : MonoBehaviour
         };
 
         _initializeData.LegalAccepted = user.LegalAccepted;
+        PerformanceLog.Log($"Legal accepted: {_initializeData.LegalAccepted}");
     }
 
     private async UniTaskVoid CheckAppState()
