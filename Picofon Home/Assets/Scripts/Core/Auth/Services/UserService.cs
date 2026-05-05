@@ -176,4 +176,6 @@ public class UserService
 
         return ApiResult.Ok();
     }
+
+    public async UniTask<ApiResult<CenterDTO[]>> GetCenters() { }
 }
