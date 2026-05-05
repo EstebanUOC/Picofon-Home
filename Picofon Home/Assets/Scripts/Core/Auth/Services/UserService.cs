@@ -1,3 +1,4 @@
+using System;
 using System.Text.Json;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -159,7 +160,7 @@ public class UserService
                 cancellationToken: token
             );
         }
-        catch (System.Exception)
+        catch (Exception)
         {
             return ApiResult.Fail("Network error occurred while registering child.");
         }
@@ -177,5 +178,9 @@ public class UserService
         return ApiResult.Ok();
     }
 
-    public async UniTask<ApiResult<CenterDTO[]>> GetCenters() { }
+    public async UniTask<ApiResult<CenterDTO[]>> GetCenters()
+    {
+        CenterDTO[] centers = Array.Empty<CenterDTO>();
+        return ApiResult<CenterDTO[]>.Ok(centers);
+    }
 }
