@@ -1,6 +1,7 @@
 using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using PrimeTween;
 using TMPro;
 using UnityEngine;
 using static TMPro.TMP_Dropdown;
@@ -41,10 +42,14 @@ public class UserChildren : MonoBehaviour
     private TMP_Dropdown _childrenDropdown;
 
     [SerializeField]
-    private CustomButton _selectButton;
+    private CustomButton _selectChildButton;
 
     [SerializeField]
     private CustomButton _registerButton;
+
+    [Space]
+    [SerializeField]
+    private RectTransform _prueba;
 
     private string _userId;
 
@@ -56,10 +61,13 @@ public class UserChildren : MonoBehaviour
 
     public void Start()
     {
-        _selectButton.OnClick += OnSelectChild;
-        _registerButton.OnClick += OnRegisterChild;
-
         _logoutButton.OnClick += OnLogout;
+
+        _selectCenterButton.OnClick += OnSelectCenter;
+
+        _selectChildButton.OnClick += OnSelectChild;
+
+        _registerButton.OnClick += OnRegisterChild;
 
         _panel = GetComponent<RectTransform>();
     }
@@ -75,21 +83,28 @@ public class UserChildren : MonoBehaviour
 
         if (role == UserRole.Therapist)
         {
+            _prueba.sizeDelta = new Vector2(_prueba.sizeDelta.x, 634);
+
             LoadCenters().Forget();
             return;
         }
 
+        _prueba.sizeDelta = new Vector2(_prueba.sizeDelta.x, 795);
         LoadChildren().Forget();
     }
 
-    private async UniTaskVoid LoadChildren()
+    private async UniTaskVoid LoadChildren(int centerId = -1)
     {
         UserService userService = _authManager.UserService;
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 
         _userId = _authManager.CurrentUser.Id;
 
-        ApiResult<ChildListItemDTO[]> result = await userService.GetUserChildren(_userId, token);
+        ApiResult<ChildListItemDTO[]> result = await userService.GetUserChildren(
+            userId: _userId,
+            token: token,
+            centerId: centerId
+        );
 
         if (!result.Success)
         {
@@ -108,16 +123,14 @@ public class UserChildren : MonoBehaviour
         if (result.Data.Length == 0)
         {
             _childrenDropdown.gameObject.SetActive(false);
-            _selectButton.gameObject.SetActive(false);
+            _selectChildButton.gameObject.SetActive(false);
+
+            _ = Tween.UISizeDelta(_prueba, new Vector2(_prueba.sizeDelta.x, 415), 0.5f);
+
             return;
         }
 
-        if (result.Data.Length == 1)
-        {
-            _childrenDropdown.gameObject.SetActive(false);
-            _selectButton.gameObject.SetActive(false);
-            return;
-        }
+        _ = Tween.UISizeDelta(_prueba, new Vector2(_prueba.sizeDelta.x, 795), 0.5f);
 
         _childrenIds = new string[result.Data.Length];
         _childrenDropdown.ClearOptions();
@@ -177,6 +190,8 @@ public class UserChildren : MonoBehaviour
             return;
         }
 
+        _centerIds = new int[result.Data.Length];
+
         if (result.Data.Length == 1)
         {
             _centerDropdown.gameObject.SetActive(false);
@@ -184,17 +199,21 @@ public class UserChildren : MonoBehaviour
 
             _centerLabel.SetText(result.Data[0].Center);
 
+            _centerIds[0] = 1;
+
             return;
         }
 
-        _centerIds = new int[result.Data.Length];
+        _labelObject.SetActive(false);
+        _centerDropdown.gameObject.SetActive(true);
+
         _centerDropdown.ClearOptions();
 
         for (int i = 0; i < result.Data.Length; i++)
         {
             _centerDropdown.options.Add(new OptionData(result.Data[i].Center));
 
-            _centerIds[i] = i;
+            _centerIds[i] = i + 1;
         }
 
         _centerDropdown.RefreshShownValue();
@@ -237,9 +256,25 @@ public class UserChildren : MonoBehaviour
         }
     }
 
+    private async UniTaskVoid OnSelectCenterAsync()
+    {
+        int selectedIndex = _centerDropdown.value;
+        int centerId = _centerIds[selectedIndex];
+
+        LoadChildren(centerId).Forget();
+
+        _centerContent.SetActive(false);
+        _childContent.SetActive(true);
+    }
+
     private void OnSelectChild()
     {
         OnSelectChildAsync().Forget();
+    }
+
+    private void OnSelectCenter()
+    {
+        OnSelectCenterAsync().Forget();
     }
 
     private void OnRegisterChild()

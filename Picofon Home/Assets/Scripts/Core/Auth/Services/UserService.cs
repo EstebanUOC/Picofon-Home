@@ -104,10 +104,20 @@ public class UserService
 
     public async UniTask<ApiResult<ChildListItemDTO[]>> GetUserChildren(
         string userId,
+        int centerId = -1,
         CancellationToken token = default
     )
     {
-        string url = $"{ChildrenURL}/user/{userId}";
+        string url;
+
+        if (centerId != -1)
+        {
+            url = $"{ChildrenURL}/user/{userId}/center/{centerId}";
+        }
+        else
+        {
+            url = $"{ChildrenURL}/user/{userId}";
+        }
 
         byte[] rawResponse;
 
