@@ -1,13 +1,19 @@
+using System;
 using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using static TMPro.TMP_Dropdown;
 
 public class UserChildren : MonoBehaviour
 {
+    private const int HeightCenter = 630;
+    private const int HeightChildren = 795;
+    private const int HeightNoChildren = 415;
+
     [SerializeField]
     private AuthManager _authManager;
 
@@ -49,7 +55,15 @@ public class UserChildren : MonoBehaviour
 
     [Space]
     [SerializeField]
-    private RectTransform _prueba;
+    private RectTransform _contentTransform;
+
+    [SerializeField]
+    private Image _overlay;
+
+    [SerializeField]
+    private RectTransform _overlayTransform;
+
+    private Action _onAlphaComplete;
 
     private string _userId;
 
@@ -58,6 +72,8 @@ public class UserChildren : MonoBehaviour
     private int[] _centerIds;
 
     private RectTransform _panel;
+
+    private bool _hasChildren;
 
     public void Start()
     {
@@ -70,30 +86,27 @@ public class UserChildren : MonoBehaviour
         _registerButton.OnClick += OnRegisterChild;
 
         _panel = GetComponent<RectTransform>();
+
+        _onAlphaComplete = () => _overlay.gameObject.SetActive(false);
     }
 
     public void OnEnable()
     {
         UserRole role = _authManager.CurrentUser.Role;
 
-        bool isTherapist = role == UserRole.Therapist;
-
-        _centerContent.SetActive(isTherapist);
-        _childContent.SetActive(!isTherapist);
+        _centerContent.SetActive(false);
+        _childContent.SetActive(false);
 
         if (role == UserRole.Therapist)
         {
-            _prueba.sizeDelta = new Vector2(_prueba.sizeDelta.x, 634);
-
             LoadCenters().Forget();
             return;
         }
 
-        _prueba.sizeDelta = new Vector2(_prueba.sizeDelta.x, 795);
         LoadChildren().Forget();
     }
 
-    private async UniTaskVoid LoadChildren(int centerId = -1)
+    private async UniTask LoadChildrenAsync(int centerId = -1)
     {
         UserService userService = _authManager.UserService;
         CancellationToken token = this.GetCancellationTokenOnDestroy();
@@ -125,12 +138,12 @@ public class UserChildren : MonoBehaviour
             _childrenDropdown.gameObject.SetActive(false);
             _selectChildButton.gameObject.SetActive(false);
 
-            _ = Tween.UISizeDelta(_prueba, new Vector2(_prueba.sizeDelta.x, 415), 0.5f);
+            _hasChildren = false;
 
             return;
         }
 
-        _ = Tween.UISizeDelta(_prueba, new Vector2(_prueba.sizeDelta.x, 795), 0.5f);
+        _hasChildren = true;
 
         _childrenIds = new string[result.Data.Length];
         _childrenDropdown.ClearOptions();
@@ -157,7 +170,41 @@ public class UserChildren : MonoBehaviour
         _childrenDropdown.RefreshShownValue();
     }
 
-    private async UniTaskVoid LoadCenters()
+    private async UniTaskVoid LoadChildren(int centerId = -1)
+    {
+        _overlay.gameObject.SetActive(true);
+        _contentTransform.sizeDelta = new Vector2(_contentTransform.sizeDelta.x, HeightCenter);
+
+        if (centerId != -1)
+        {
+            _ = Tween.Alpha(_overlay, startValue: 0f, endValue: 1f, duration: 0.3f);
+        }
+
+        await LoadChildrenAsync(centerId);
+
+        _centerContent.SetActive(false);
+
+        Vector2 target = new(_contentTransform.sizeDelta.x, HeightChildren);
+
+        if (!_hasChildren)
+        {
+            target.y = HeightNoChildren;
+        }
+
+        _ = Sequence
+            .Create()
+            .Group(Tween.UISizeDelta(_contentTransform, endValue: target, duration: 0.2f))
+            .Group(
+                Tween
+                    .UISizeDelta(_overlayTransform, endValue: target, duration: 0.2f)
+                    .OnComplete(target: _childContent, target => target.SetActive(true))
+            )
+            .Chain(
+                Tween.Alpha(_overlay, endValue: 0f, duration: 0.3f).OnComplete(_onAlphaComplete)
+            );
+    }
+
+    private async UniTask LoadCentersAsync()
     {
         UserService userService = _authManager.UserService;
         CancellationToken token = this.GetCancellationTokenOnDestroy();
@@ -219,6 +266,18 @@ public class UserChildren : MonoBehaviour
         _centerDropdown.RefreshShownValue();
     }
 
+    private async UniTaskVoid LoadCenters()
+    {
+        _contentTransform.sizeDelta = new Vector2(_contentTransform.sizeDelta.x, HeightCenter);
+
+        _centerContent.SetActive(true);
+        _overlay.gameObject.SetActive(true);
+
+        await LoadCentersAsync();
+
+        _ = Tween.Alpha(_overlay, endValue: 0f, duration: 0.5f).OnComplete(_onAlphaComplete);
+    }
+
     private async UniTaskVoid OnSelectChildAsync()
     {
         int selectedIndex = _childrenDropdown.value;
@@ -256,17 +315,6 @@ public class UserChildren : MonoBehaviour
         }
     }
 
-    private async UniTaskVoid OnSelectCenterAsync()
-    {
-        int selectedIndex = _centerDropdown.value;
-        int centerId = _centerIds[selectedIndex];
-
-        LoadChildren(centerId).Forget();
-
-        _centerContent.SetActive(false);
-        _childContent.SetActive(true);
-    }
-
     private void OnSelectChild()
     {
         OnSelectChildAsync().Forget();
@@ -274,7 +322,10 @@ public class UserChildren : MonoBehaviour
 
     private void OnSelectCenter()
     {
-        OnSelectCenterAsync().Forget();
+        int selectedIndex = _centerDropdown.value;
+        int centerId = _centerIds[selectedIndex];
+
+        LoadChildren(centerId).Forget();
     }
 
     private void OnRegisterChild()
