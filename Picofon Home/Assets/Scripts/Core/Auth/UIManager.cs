@@ -19,6 +19,13 @@ public enum ModalEnum : byte
     DebugMenu,
 }
 
+public enum LoadingEnum : byte
+{
+    Boot,
+    Map,
+    Normal,
+}
+
 public class UIManager : MonoBehaviour
 {
     [SerializeField]
@@ -72,7 +79,7 @@ public class UIManager : MonoBehaviour
         };
     }
 
-    public void Show(PanelEnum panel, bool animate = true)
+    public void ShowPanel(PanelEnum panel, bool animate = true)
     {
         int index = (int)panel;
 
@@ -88,21 +95,29 @@ public class UIManager : MonoBehaviour
         ChangePanel();
     }
 
+    public void ShowLoading(LoadingEnum loading)
+    {
+        _loadingPanel.Show(loading);
+    }
+
+    public void HideLoading(LoadingEnum loading)
+    {
+        _loadingPanel.Hide(loading);
+    }
+
+    public void PlayMapTransition()
+    {
+        _loadingPanel.ShowMapTransition();
+    }
+
+    public void ContinueMapTransition(bool success)
+    {
+        _loadingPanel.ContinueMapTransition(success);
+    }
+
     public async UniTask ShowModal(ModalData data)
     {
         await _modalPanel.Show(data);
-    }
-
-    public void SetLoadingState(bool isLoading)
-    {
-        if (isLoading)
-        {
-            _loadingPanel.Show();
-        }
-        else
-        {
-            _loadingPanel.Hide();
-        }
     }
 
     public void ShowModal(RectTransform panel, ModalEnum modal)

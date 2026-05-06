@@ -74,12 +74,12 @@ public class RegisterChild : MonoBehaviour
 
         if (result.Success)
         {
-            _uiManager.Show(PanelEnum.Children);
+            _uiManager.ShowPanel(PanelEnum.Children);
         }
     }
 
     private void HandleReturn()
     {
-        _uiManager.Show(PanelEnum.Children);
+        _uiManager.ShowPanel(PanelEnum.Children);
     }
 }

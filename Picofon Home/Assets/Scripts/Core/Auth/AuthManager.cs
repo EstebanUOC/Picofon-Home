@@ -49,7 +49,7 @@ public class AuthManager : MonoBehaviour
 
         _initializeData = new InitializeData();
 
-        _uiManager.Show(PanelEnum.Login);
+        _uiManager.ShowPanel(PanelEnum.Login);
     }
 
     public void SetCurrentUser(UserModel user)
@@ -84,7 +84,7 @@ public class AuthManager : MonoBehaviour
 
                 _initializeData.CurrentUser = user;
 
-                _uiManager.Show(PanelEnum.Children);
+                _uiManager.ShowPanel(PanelEnum.Children);
 
                 break;
             case DebugMenuResult.Map:
@@ -188,7 +188,7 @@ public class AuthManager : MonoBehaviour
 
         if (Application.isEditor)
         {
-            _uiManager.Show(PanelEnum.Login, animate: false);
+            _uiManager.ShowPanel(PanelEnum.Login, animate: false);
             return;
         }
 
@@ -246,14 +246,16 @@ public class AuthManager : MonoBehaviour
 
     private void ShowPanel(PanelEnum panel)
     {
-        _uiManager.Show(panel, animate: false);
+        _uiManager.ShowPanel(panel, animate: false);
     }
 
     private async UniTaskVoid BootAppProcess()
     {
-        _uiManager.SetLoadingState(true);
+        _uiManager.ShowLoading(LoadingEnum.Boot);
 
         _existsConnection = await ApiConfig.Ping();
+
+        await UniTask.WaitForSeconds(1f);
 
         if (!_existsConnection)
         {
@@ -271,7 +273,7 @@ public class AuthManager : MonoBehaviour
             await InitializeApp();
         }
 
-        _uiManager.SetLoadingState(false);
+        _uiManager.HideLoading(LoadingEnum.Boot);
 
         _ = CheckAppState();
     }

@@ -25,11 +25,11 @@ public class Disclaimer : MonoBehaviour
     {
         if (_authManager.CurrentUser.Role == UserRole.Invited)
         {
-            _uiManager.Show(PanelEnum.Role);
+            _uiManager.ShowPanel(PanelEnum.Role);
             return;
         }
 
-        _uiManager.Show(PanelEnum.Children);
+        _uiManager.ShowPanel(PanelEnum.Children);
     }
 
     private void OnDecline()

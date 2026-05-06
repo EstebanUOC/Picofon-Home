@@ -19,12 +19,6 @@ public class RolePanel : MonoBehaviour
     private RoleCard _parentCard;
 
     [SerializeField]
-    private GameObject _loading;
-
-    [SerializeField]
-    private RectTransform _loadingIcon;
-
-    [SerializeField]
     private SimpleButton _backButton;
 
     private RectTransform _panel;
@@ -38,7 +32,7 @@ public class RolePanel : MonoBehaviour
         _therapistCard.EventChannel = eventChannel;
         _parentCard.EventChannel = eventChannel;
 
-        _backButton.OnClick += () => _authManager.Logout();
+        _backButton.OnClick += _authManager.Logout;
 
         _panel = GetComponent<RectTransform>();
     }
@@ -50,15 +44,7 @@ public class RolePanel : MonoBehaviour
 
     private async UniTaskVoid OnRoleSelectedAsync(UserRole roleType)
     {
-        _loading.SetActive(true);
-        Tween rotation = Tween.EulerAngles(
-            _loadingIcon,
-            startValue: Vector3.zero,
-            endValue: Vector3.forward * 360,
-            duration: 1,
-            Ease.OutCubic,
-            cycles: -1
-        );
+        _uiManager.ShowLoading(LoadingEnum.Normal);
 
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 
@@ -68,7 +54,7 @@ public class RolePanel : MonoBehaviour
             token
         );
 
-        rotation.Complete();
+        _uiManager.HideLoading(LoadingEnum.Normal);
 
         if (!result.Success)
         {
@@ -109,6 +95,6 @@ public class RolePanel : MonoBehaviour
             return;
         }
 
-        _uiManager.Show(PanelEnum.Children);
+        _uiManager.ShowPanel(PanelEnum.Children);
     }
 }

@@ -3,6 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using static TMPro.TMP_Dropdown;
 
 public class UserChildren : MonoBehaviour
 {
@@ -14,26 +15,36 @@ public class UserChildren : MonoBehaviour
 
     [Space]
     [SerializeField]
-    private LoadingTransition _loadingTransition;
+    private SimpleButton _logoutButton;
 
-    [Space]
+    [Header("Center Selection")]
+    [SerializeField]
+    private TMP_Dropdown _centerDropdown;
+
+    [SerializeField]
+    private GameObject _labelObject;
+
+    [SerializeField]
+    private TMP_Text _centerLabel;
+
+    [SerializeField]
+    private CustomButton _selectCenterButton;
+
+    [Header("Child Selection")]
     [SerializeField]
     private TMP_Dropdown _childrenDropdown;
 
-    [Space]
     [SerializeField]
     private CustomButton _selectButton;
 
     [SerializeField]
     private CustomButton _registerButton;
 
-    [Space]
-    [SerializeField]
-    private SimpleButton _logoutButton;
+    private string _userId;
 
     private string[] _childrenIds;
 
-    private string _userId;
+    private int[] _centerIds;
 
     private RectTransform _panel;
 
@@ -44,13 +55,19 @@ public class UserChildren : MonoBehaviour
 
         _logoutButton.OnClick += OnLogout;
 
-        _userId = _authManager.CurrentUser.Id;
-
         _panel = GetComponent<RectTransform>();
     }
 
     public void OnEnable()
     {
+        UserRole role = _authManager.CurrentUser.Role;
+
+        if (role == UserRole.Therapist)
+        {
+            LoadCenters().Forget();
+            return;
+        }
+
         LoadChildren().Forget();
     }
 
@@ -71,7 +88,9 @@ public class UserChildren : MonoBehaviour
                 Message = "Could not load children. Please try again later.",
                 Panel = _panel,
             };
+
             await _uiManager.ShowModal(modalData);
+
             return;
         }
 
@@ -82,33 +101,92 @@ public class UserChildren : MonoBehaviour
             return;
         }
 
+        if (result.Data.Length == 1)
+        {
+            _childrenDropdown.gameObject.SetActive(false);
+            _selectButton.gameObject.SetActive(false);
+            return;
+        }
+
         _childrenIds = new string[result.Data.Length];
         _childrenDropdown.ClearOptions();
 
-        StringBuilder sb = new();
+        StringBuilder stringBuilder = new();
 
         for (int i = 0; i < result.Data.Length; i++)
         {
             ChildListItemDTO child = result.Data[i];
 
-            sb.Clear();
-            sb.Append(child.FirstName);
-            sb.Append(" ");
-            sb.Append(child.LastName);
+            stringBuilder.Clear();
+            stringBuilder.Append(child.FirstName);
+            stringBuilder.Append(" ");
+            stringBuilder.Append(child.LastName);
 
-            string fullName = sb.ToString();
+            string fullName = stringBuilder.ToString();
 
-            TMP_Dropdown.OptionData option = new(fullName);
+            OptionData option = new(fullName);
             _childrenDropdown.options.Add(option);
 
             _childrenIds[i] = child.Id;
         }
+
         _childrenDropdown.RefreshShownValue();
     }
 
-    private void OnSelectChild()
+    private async UniTaskVoid LoadCenters()
     {
-        OnSelectChildAsync().Forget();
+        UserService userService = _authManager.UserService;
+        CancellationToken token = this.GetCancellationTokenOnDestroy();
+
+        _userId = _authManager.CurrentUser.Id;
+
+        ApiResult<CenterDTO[]> result = await userService.GetCenters(_userId, token);
+
+        if (!result.Success)
+        {
+            ModalData modalData = new()
+            {
+                Title = "Error",
+                Message = "Could not load centers. Please try again later.",
+                Panel = _panel,
+            };
+
+            await _uiManager.ShowModal(modalData);
+
+            _selectCenterButton.Interactable = false;
+
+            return;
+        }
+
+        if (result.Data.Length == 0)
+        {
+            PerformanceLog.Log(
+                "No centers found for user. This should not happen as the user should be associated with at least one center."
+            );
+            return;
+        }
+
+        if (result.Data.Length == 1)
+        {
+            _centerDropdown.gameObject.SetActive(false);
+            _labelObject.SetActive(true);
+
+            _centerLabel.SetText(result.Data[0].Center);
+
+            return;
+        }
+
+        _centerIds = new int[result.Data.Length];
+        _centerDropdown.ClearOptions();
+
+        for (int i = 0; i < result.Data.Length; i++)
+        {
+            _centerDropdown.options.Add(new OptionData(result.Data[i].Center));
+
+            _centerIds[i] = i;
+        }
+
+        _centerDropdown.RefreshShownValue();
     }
 
     private async UniTaskVoid OnSelectChildAsync()
@@ -121,7 +199,7 @@ public class UserChildren : MonoBehaviour
 
         LevelDataStore instance = LevelDataStore.Instance;
 
-        _loadingTransition.PlayLoadingTransition();
+        _uiManager.PlayMapTransition();
 
         await instance.LoadPlans(childId);
 
@@ -130,7 +208,7 @@ public class UserChildren : MonoBehaviour
             await instance.CreateDefaultPlans(childId, _userId);
         }
 
-        _loadingTransition.Continue(success: instance.HasPlans() && instance.HasActivePlans());
+        _uiManager.ContinueMapTransition(success: instance.HasPlans() && instance.HasActivePlans());
 
         if (!instance.HasActivePlans())
         {
@@ -148,9 +226,14 @@ public class UserChildren : MonoBehaviour
         }
     }
 
+    private void OnSelectChild()
+    {
+        OnSelectChildAsync().Forget();
+    }
+
     private void OnRegisterChild()
     {
-        _uiManager.Show(PanelEnum.RegisterChild);
+        _uiManager.ShowPanel(PanelEnum.RegisterChild);
     }
 
     private void OnLogout()

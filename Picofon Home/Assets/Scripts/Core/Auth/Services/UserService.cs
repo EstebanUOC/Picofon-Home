@@ -1,4 +1,3 @@
-using System;
 using System.Text.Json;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -160,7 +159,7 @@ public class UserService
                 cancellationToken: token
             );
         }
-        catch (Exception)
+        catch (System.Exception)
         {
             return ApiResult.Fail("Network error occurred while registering child.");
         }
@@ -178,9 +177,41 @@ public class UserService
         return ApiResult.Ok();
     }
 
-    public async UniTask<ApiResult<CenterDTO[]>> GetCenters()
+    public async UniTask<ApiResult<CenterDTO[]>> GetCenters(
+        string userId,
+        CancellationToken token = default
+    )
     {
-        CenterDTO[] centers = Array.Empty<CenterDTO>();
-        return ApiResult<CenterDTO[]>.Ok(centers);
+        string url = $"{ApiConfig.BaseUrl}/centers/user/{userId}";
+
+        byte[] rawResponse;
+
+        try
+        {
+            rawResponse = await HttpClientUnity.GetAsyncBytes(
+                url: url,
+                timeoutSeconds: 5,
+                cancellationToken: token
+            );
+        }
+        catch (System.Exception e)
+        {
+            PerformanceLog.LogError(
+                $"Error fetching centers for user {userId}: {e.Message}, URL: {url}"
+            );
+            return ApiResult<CenterDTO[]>.Fail("Network error occurred while fetching centers.");
+        }
+
+        using JsonDocument doc = JsonDocument.Parse(rawResponse);
+        JsonElement root = doc.RootElement;
+
+        ApiResponseView<CenterDTO[]> responseView = new(root);
+
+        if (!responseView.Success)
+        {
+            return ApiResult<CenterDTO[]>.Fail(responseView.ErrorMessage);
+        }
+
+        return ApiResult<CenterDTO[]>.Ok(responseView.Data);
     }
 }

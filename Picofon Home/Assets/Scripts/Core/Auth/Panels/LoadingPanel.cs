@@ -1,47 +1,99 @@
-using PrimeTween;
 using UnityEngine;
 
 public class LoadingPanel : MonoBehaviour
 {
+    [Space]
     [SerializeField]
-    private CanvasGroup _canvasContent;
+    private GameObject _bootObject;
 
     [SerializeField]
-    private RectTransform _rectContent;
+    private GameObject _mapObject;
 
-    private CanvasGroup _canvasGroup;
+    [SerializeField]
+    private GameObject _normal;
 
-    public void Awake()
+    BootLoading _bootLoading;
+
+    NormalLoading _normalLoading;
+
+    MapLoading _mapLoading;
+
+    public void Show(LoadingEnum loading)
     {
-        _canvasGroup = GetComponent<CanvasGroup>();
-    }
-
-    public void Show()
-    {
-        if (!gameObject.activeSelf)
+        if (loading == LoadingEnum.Boot)
         {
-            gameObject.SetActive(true);
+            ShowBoot();
+            return;
         }
 
-        _canvasContent.alpha = 0f;
-        _rectContent.localScale = Vector3.zero;
-
-        Sequence seq = Sequence.Create();
-
-        Tween fadeIn = Tween.Alpha(_canvasContent, 1, 0.5f);
-        Tween scaleUp = Tween.Scale(_rectContent, 1f, 0.6f, Ease.OutBack);
-
-#if UNITY_ANDROID
-        seq.ChainDelay(1f);
-#endif
-
-        seq.Group(fadeIn).Group(scaleUp);
+        ShowNormal();
     }
 
-    public void Hide()
+    public void Hide(LoadingEnum loading)
     {
-        Tween
-            .Alpha(_canvasGroup, endValue: 0, duration: 0.5f, startDelay: 0.3f)
-            .OnComplete(target: gameObject, go => go.SetActive(false));
+        switch (loading)
+        {
+            case LoadingEnum.Boot:
+                _bootLoading.Hide();
+                break;
+            case LoadingEnum.Normal:
+                _normalLoading.Hide();
+                break;
+        }
+
+        if (loading == LoadingEnum.Boot)
+        {
+            _bootLoading.Hide();
+            return;
+        }
+
+        _normalLoading.Hide();
+    }
+
+    public void ShowMapTransition()
+    {
+        gameObject.SetActive(true);
+
+        _mapObject.SetActive(true);
+
+        if (_mapLoading == null)
+        {
+            _mapLoading = _mapObject.GetComponent<MapLoading>();
+        }
+
+        _mapLoading.Show();
+    }
+
+    public void ContinueMapTransition(bool success)
+    {
+        _mapLoading.Continue(success);
+    }
+
+    private void ShowNormal()
+    {
+        gameObject.SetActive(true);
+
+        _normal.SetActive(true);
+
+        if (_normalLoading == null)
+        {
+            _normalLoading = _normal.GetComponent<NormalLoading>();
+        }
+
+        _normalLoading.Show();
+    }
+
+    private void ShowBoot()
+    {
+        gameObject.SetActive(true);
+
+        _bootObject.SetActive(true);
+
+        if (_bootLoading == null)
+        {
+            _bootLoading = _bootObject.GetComponent<BootLoading>();
+        }
+
+        _bootLoading.Show();
     }
 }
