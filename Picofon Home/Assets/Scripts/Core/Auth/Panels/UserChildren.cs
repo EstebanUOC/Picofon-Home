@@ -103,6 +103,8 @@ public class UserChildren : MonoBehaviour
         _childrenDropdown.gameObject.SetActive(true);
         _selectChildButton.gameObject.SetActive(true);
 
+        _registerButton.gameObject.SetActive(true);
+
         if (_userRole == UserRole.Therapist)
         {
             LoadCenters().Forget();
