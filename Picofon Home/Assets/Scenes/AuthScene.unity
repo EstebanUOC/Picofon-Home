@@ -1214,6 +1214,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Inactive Overlay
       objectReference: {fileID: 0}
+    - target: {fileID: 5373166304374845315, guid: dc3d3d48be2d0e06bbbeb7f2a170d004, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -28602,7 +28606,7 @@ MonoBehaviour:
   _centerLabel: {fileID: 1153717990}
   _selectCenterButton: {fileID: 1395018501}
   _childContent: {fileID: 584621587}
-  _childrenDropdown: {fileID: 0}
+  _childrenDropdown: {fileID: 341550861}
   _selectButton: {fileID: 1525001743}
   _registerButton: {fileID: 292859110}
 --- !u!1 &2079871520
