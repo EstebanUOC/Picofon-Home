@@ -13,6 +13,7 @@ public class UserChildren : MonoBehaviour
     private const int HeightCenter = 630;
     private const int HeightChildren = 795;
     private const int HeightNoChildren = 415;
+    private const int HeightChildrenTherapist = 595;
 
     [SerializeField]
     private AuthManager _authManager;
@@ -75,6 +76,8 @@ public class UserChildren : MonoBehaviour
 
     private bool _hasChildren;
 
+    private UserRole _userRole;
+
     public void Start()
     {
         _logoutButton.OnClick += OnLogout;
@@ -92,12 +95,15 @@ public class UserChildren : MonoBehaviour
 
     public void OnEnable()
     {
-        UserRole role = _authManager.CurrentUser.Role;
+        _userRole = _authManager.CurrentUser.Role;
 
         _centerContent.SetActive(false);
         _childContent.SetActive(false);
 
-        if (role == UserRole.Therapist)
+        _childrenDropdown.gameObject.SetActive(true);
+        _selectChildButton.gameObject.SetActive(true);
+
+        if (_userRole == UserRole.Therapist)
         {
             LoadCenters().Forget();
             return;
@@ -186,6 +192,12 @@ public class UserChildren : MonoBehaviour
 
         Vector2 target = new(_contentTransform.sizeDelta.x, HeightChildren);
 
+        if (_userRole == UserRole.Therapist)
+        {
+            target.y = HeightChildrenTherapist;
+            _registerButton.gameObject.SetActive(false);
+        }
+
         if (!_hasChildren)
         {
             target.y = HeightNoChildren;
@@ -269,6 +281,7 @@ public class UserChildren : MonoBehaviour
     private async UniTaskVoid LoadCenters()
     {
         _contentTransform.sizeDelta = new Vector2(_contentTransform.sizeDelta.x, HeightCenter);
+        _overlayTransform.sizeDelta = new Vector2(_contentTransform.sizeDelta.x, HeightCenter);
 
         _centerContent.SetActive(true);
         _overlay.gameObject.SetActive(true);
