@@ -19,6 +19,9 @@ public class UserChildren : MonoBehaviour
 
     [Header("Center Selection")]
     [SerializeField]
+    private GameObject _centerContent;
+
+    [SerializeField]
     private TMP_Dropdown _centerDropdown;
 
     [SerializeField]
@@ -31,6 +34,9 @@ public class UserChildren : MonoBehaviour
     private CustomButton _selectCenterButton;
 
     [Header("Child Selection")]
+    [SerializeField]
+    private GameObject _childContent;
+
     [SerializeField]
     private TMP_Dropdown _childrenDropdown;
 
@@ -61,6 +67,11 @@ public class UserChildren : MonoBehaviour
     public void OnEnable()
     {
         UserRole role = _authManager.CurrentUser.Role;
+
+        bool isTherapist = role == UserRole.Therapist;
+
+        _centerContent.SetActive(isTherapist);
+        _childContent.SetActive(!isTherapist);
 
         if (role == UserRole.Therapist)
         {
