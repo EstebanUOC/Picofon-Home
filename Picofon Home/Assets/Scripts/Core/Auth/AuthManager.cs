@@ -79,7 +79,7 @@ public class AuthManager : MonoBehaviour
                     Id = "noXJSkWJnCW5iSEu32n5Kvofq5a2",
                     Email = "test@gmail.com",
                     Username = "Debug User",
-                    Role = UserRole.Therapist,
+                    Role = UserRole.Admin,
                 };
 
                 _initializeData.CurrentUser = user;

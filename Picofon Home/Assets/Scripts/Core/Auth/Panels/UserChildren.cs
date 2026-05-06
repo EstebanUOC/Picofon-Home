@@ -214,7 +214,9 @@ public class UserChildren : MonoBehaviour
                     .OnComplete(target: _childContent, target => target.SetActive(true))
             )
             .Chain(
-                Tween.Alpha(_overlay, endValue: 0f, duration: 0.3f).OnComplete(_onAlphaComplete)
+                Tween
+                    .Alpha(_overlay, startValue: 1f, endValue: 0f, duration: 0.3f)
+                    .OnComplete(_onAlphaComplete)
             );
     }
 
