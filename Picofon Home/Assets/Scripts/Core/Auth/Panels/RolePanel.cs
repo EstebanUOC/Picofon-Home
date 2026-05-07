@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using PrimeTween;
 using UnityEngine;
 
-public class RolePanel : Panel
+public class RolePanel : MonoBehaviour
 {
     [SerializeField]
     private UIManager _uiManager;
@@ -19,12 +19,6 @@ public class RolePanel : Panel
     private RoleCard _parentCard;
 
     [SerializeField]
-    private GameObject _loading;
-
-    [SerializeField]
-    private RectTransform _loadingIcon;
-
-    [SerializeField]
     private SimpleButton _backButton;
 
     private RectTransform _panel;
@@ -38,11 +32,9 @@ public class RolePanel : Panel
         _therapistCard.EventChannel = eventChannel;
         _parentCard.EventChannel = eventChannel;
 
-        OnHide += () => gameObject.SetActive(false);
+        _backButton.OnClick += _authManager.Logout;
 
         _panel = GetComponent<RectTransform>();
-
-        _backButton.OnClick += () => _authManager.Logout();
     }
 
     private void OnRoleSelected(UserRole roleType)
@@ -52,15 +44,7 @@ public class RolePanel : Panel
 
     private async UniTaskVoid OnRoleSelectedAsync(UserRole roleType)
     {
-        _loading.SetActive(true);
-        Tween rotation = Tween.EulerAngles(
-            _loadingIcon,
-            startValue: Vector3.zero,
-            endValue: Vector3.forward * 360,
-            duration: 1,
-            Ease.OutCubic,
-            cycles: -1
-        );
+        _uiManager.ShowLoading(LoadingEnum.Normal);
 
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 
@@ -70,7 +54,7 @@ public class RolePanel : Panel
             token
         );
 
-        rotation.Complete();
+        _uiManager.HideLoading(LoadingEnum.Normal);
 
         if (!result.Success)
         {
@@ -96,20 +80,21 @@ public class RolePanel : Panel
 
         if (!_authManager.CurrentUser.ProfileComplete)
         {
-            ModalData modalData = new()
-            {
-                Title = "Profile Incomplete",
-                Message =
-                    "Your profile is incomplete. Please complete your profile in the web portal to access the app.",
-                Panel = _panel,
-            };
-            await _uiManager.ShowModal(modalData);
+            await _uiManager.ShowModal(
+                new ModalData()
+                {
+                    Title = "Profile Incomplete",
+                    Message =
+                        "Your profile is incomplete. Please complete your profile in the web portal to access the app.",
+                    Panel = _panel,
+                }
+            );
 
             _authManager.Logout();
 
             return;
         }
 
-        _uiManager.ShowUserChildren();
+        _uiManager.ShowPanel(PanelEnum.Children);
     }
 }

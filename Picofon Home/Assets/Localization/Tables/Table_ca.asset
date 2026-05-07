@@ -90,11 +90,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 334462775836672
-    m_Localized: Continuar amb aquest infant
+    m_Localized: Seleccionar infant
     m_Metadata:
       m_Items: []
   - m_Id: 334624835354624
-    m_Localized: Registrar un nou infant
+    m_Localized: Registrar infant
     m_Metadata:
       m_Items: []
   - m_Id: 335638120480768
@@ -188,6 +188,26 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 1427275047354368
     m_Localized: "apr\xE8n m\xE9s"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9447846335070208
+    m_Localized: Selecciona un infant de la llista o registra'n un de nou.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9448604686204928
+    m_Localized: Trieu el centre on es troba el nen per continuar.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9449904178053120
+    m_Localized: Infants
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9449943478681600
+    m_Localized: Centres
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9450557654810624
+    m_Localized: Seleccionar centre
     m_Metadata:
       m_Items: []
   references:

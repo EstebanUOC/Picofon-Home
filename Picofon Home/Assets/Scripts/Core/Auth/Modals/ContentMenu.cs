@@ -12,7 +12,7 @@ public class ContentMenu : MonoBehaviour
     private TMP_Text _message;
 
     [SerializeField]
-    private CustomButtonBase _button;
+    private CustomButton _button;
 
     public GenericEventChannel EventChannel;
 

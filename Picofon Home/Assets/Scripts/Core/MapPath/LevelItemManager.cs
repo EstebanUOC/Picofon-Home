@@ -166,22 +166,38 @@ public sealed class LevelItemManager : MonoBehaviour
             _contentRect.sizeDelta.y
         );
 
-        int markerIndex = last >= 0 ? last : current;
-
-        RectTransform markerLevel = _container.GetChild(markerIndex).GetComponent<RectTransform>();
-        _marker.PositionMarker(markerLevel.anchoredPosition);
-
-        float targetX = markerLevel.anchoredPosition.x - _containerMiddle;
-
-        if (targetX > 0)
-        {
-            sequence.Chain(
-                Tween.UIAnchoredPositionX(_contentRect, -targetX, 1f, ease: Ease.OutCubic)
-            );
-        }
+        int markerIndex = current;
 
         if (last >= 0)
+        {
+            markerIndex = last;
+        }
+
+        RectTransform markerLevel = _container.GetChild(markerIndex).GetComponent<RectTransform>();
+
+        _marker.PositionMarker(markerLevel.anchoredPosition);
+
+        RectTransform targetLevel = markerLevel;
+
+        if (last >= 0)
+        {
+            targetLevel = _container.GetChild(current).GetComponent<RectTransform>();
             MoveMarkerToLevel(current, in sequence);
+        }
+
+        float targetPositionX = targetLevel.anchoredPosition.x - _containerMiddle;
+
+        if (targetPositionX > 0)
+        {
+            sequence.Group(
+                Tween.UIAnchoredPositionX(
+                    _contentRect,
+                    endValue: -targetPositionX,
+                    duration: 1f,
+                    ease: Ease.OutCubic
+                )
+            );
+        }
     }
 
     public void OnValidate()

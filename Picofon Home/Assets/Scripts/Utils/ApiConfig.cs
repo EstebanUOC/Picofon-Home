@@ -30,7 +30,7 @@ public static class ApiConfig
             return true;
         }
 
-        url = $"{PrimeUrl}health";
+        url = $"{FallbackUrl}health";
 
         try
         {

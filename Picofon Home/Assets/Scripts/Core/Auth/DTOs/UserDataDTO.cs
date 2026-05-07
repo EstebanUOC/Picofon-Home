@@ -8,5 +8,7 @@ public class UserDataDTO
 
     public bool ProfileComplete { get; set; }
 
+    public bool LegalAccepted { get; set; }
+
     public UserRole Role { get; set; }
 }

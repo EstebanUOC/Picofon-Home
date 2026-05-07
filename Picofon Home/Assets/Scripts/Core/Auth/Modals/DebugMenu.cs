@@ -4,8 +4,6 @@ public enum DebugMenuResult : byte
 {
     Map,
     Children,
-    Role,
-    Close,
 }
 
 public class DebugMenu : MonoBehaviour
@@ -15,16 +13,10 @@ public class DebugMenu : MonoBehaviour
 
     [Space]
     [SerializeField]
-    private CustomButtonBase _mapButton;
+    private CustomButton _mapButton;
 
     [SerializeField]
-    private CustomButtonBase _childrenButton;
-
-    [SerializeField]
-    private CustomButtonBase _closeButton;
-
-    [SerializeField]
-    private CustomButtonBase _roleButton;
+    private CustomButton _childrenButton;
 
     public GenericEventChannel EventChannel;
 
@@ -33,10 +25,6 @@ public class DebugMenu : MonoBehaviour
         _mapButton.OnClick += () => HandleClose(DebugMenuResult.Map);
 
         _childrenButton.OnClick += () => HandleClose(DebugMenuResult.Children);
-
-        _closeButton.OnClick += () => HandleClose(DebugMenuResult.Close);
-
-        _roleButton.OnClick += () => HandleClose(DebugMenuResult.Role);
     }
 
     public void Show()

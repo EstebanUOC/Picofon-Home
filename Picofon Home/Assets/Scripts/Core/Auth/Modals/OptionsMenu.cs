@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 
@@ -8,10 +9,10 @@ public class OptionsMenu : MonoBehaviour
     private ComboBox _languageComboBox;
 
     [SerializeField]
-    private CustomButtonRaised _saveButton;
+    private CustomButton _saveButton;
 
     [SerializeField]
-    private TMPro.TMP_Text _versionText;
+    private TMP_Text _versionText;
 
     public GenericEventChannel EventChannel;
 

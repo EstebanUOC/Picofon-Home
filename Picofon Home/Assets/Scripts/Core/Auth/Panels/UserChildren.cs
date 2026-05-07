@@ -1,73 +1,131 @@
+using System;
 using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using PrimeTween;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using static TMPro.TMP_Dropdown;
 
-public class UserChildren : Panel
+public class UserChildren : MonoBehaviour
 {
-    [SerializeField]
-    public AuthManager _authManager;
+    private const int HeightCenter = 630;
+    private const int HeightChildren = 795;
+    private const int HeightNoChildren = 415;
+    private const int HeightChildrenTherapist = 595;
 
     [SerializeField]
-    public UIManager _uiManager;
-
-    [Space]
-    [SerializeField]
-    private LoadingTransition _loadingTransition;
-
-    [Space]
-    [SerializeField]
-    private TMP_Dropdown _childrenDropdown;
-
-    [Space]
-    [SerializeField]
-    private GameObject _selectButton;
+    private AuthManager _authManager;
 
     [SerializeField]
-    private GameObject _registerButton;
+    private UIManager _uiManager;
 
     [Space]
     [SerializeField]
     private SimpleButton _logoutButton;
 
-    private string[] _childrenIds;
+    [Header("Center Selection")]
+    [SerializeField]
+    private GameObject _centerContent;
+
+    [SerializeField]
+    private TMP_Dropdown _centerDropdown;
+
+    [SerializeField]
+    private GameObject _labelObject;
+
+    [SerializeField]
+    private TMP_Text _centerLabel;
+
+    [SerializeField]
+    private CustomButton _selectCenterButton;
+
+    [Header("Child Selection")]
+    [SerializeField]
+    private GameObject _childContent;
+
+    [SerializeField]
+    private TMP_Dropdown _childrenDropdown;
+
+    [SerializeField]
+    private CustomButton _selectChildButton;
+
+    [SerializeField]
+    private CustomButton _registerButton;
+
+    [Space]
+    [SerializeField]
+    private RectTransform _contentTransform;
+
+    [SerializeField]
+    private Image _overlay;
+
+    [SerializeField]
+    private RectTransform _overlayTransform;
+
+    private Action _onAlphaComplete;
 
     private string _userId;
 
+    private string[] _childrenIds;
+
+    private int[] _centerIds;
+
     private RectTransform _panel;
+
+    private bool _hasChildren;
+
+    private UserRole _userRole;
 
     public void Start()
     {
-        OnHide += () => gameObject.SetActive(false);
-
-        CustomButtonBase selectButton = _selectButton.GetComponent<CustomButtonBase>();
-        CustomButtonBase registerButton = _registerButton.GetComponent<CustomButtonBase>();
-
-        selectButton.OnClick += OnSelectChild;
-        registerButton.OnClick += OnRegisterChild;
-
         _logoutButton.OnClick += OnLogout;
 
-        _userId = _authManager.CurrentUser.Id;
+        _selectCenterButton.OnClick += OnSelectCenter;
+
+        _selectChildButton.OnClick += OnSelectChild;
+
+        _registerButton.OnClick += OnRegisterChild;
 
         _panel = GetComponent<RectTransform>();
+
+        _onAlphaComplete = () => _overlay.gameObject.SetActive(false);
     }
 
-    public override void Show()
+    public void OnEnable()
     {
-        base.Show();
+        _userRole = _authManager.CurrentUser.Role;
+
+        _centerContent.SetActive(false);
+        _childContent.SetActive(false);
+
+        _childrenDropdown.gameObject.SetActive(true);
+        _selectChildButton.gameObject.SetActive(true);
+
+        _registerButton.gameObject.SetActive(true);
+
+        if (_userRole == UserRole.Therapist)
+        {
+            LoadCenters().Forget();
+            return;
+        }
+
         LoadChildren().Forget();
     }
 
-    private async UniTaskVoid LoadChildren()
+    private async UniTask LoadChildrenAsync(int centerId = -1)
     {
         UserService userService = _authManager.UserService;
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 
         _userId = _authManager.CurrentUser.Id;
 
-        ApiResult<ChildListItemDTO[]> result = await userService.GetUserChildren(_userId, token);
+        ApiResult<ChildListItemDTO[]> result = await userService.GetUserChildren(
+            userId: _userId,
+            token: token,
+            centerId: centerId
+        );
 
         if (!result.Success)
         {
@@ -77,44 +135,164 @@ public class UserChildren : Panel
                 Message = "Could not load children. Please try again later.",
                 Panel = _panel,
             };
+
             await _uiManager.ShowModal(modalData);
+
             return;
         }
 
         if (result.Data.Length == 0)
         {
             _childrenDropdown.gameObject.SetActive(false);
-            _selectButton.gameObject.SetActive(false);
+            _selectChildButton.gameObject.SetActive(false);
+
+            _hasChildren = false;
+
             return;
         }
+
+        _hasChildren = true;
 
         _childrenIds = new string[result.Data.Length];
         _childrenDropdown.ClearOptions();
 
-        StringBuilder sb = new();
+        StringBuilder stringBuilder = new();
 
         for (int i = 0; i < result.Data.Length; i++)
         {
             ChildListItemDTO child = result.Data[i];
 
-            sb.Clear();
-            sb.Append(child.FirstName);
-            sb.Append(" ");
-            sb.Append(child.LastName);
+            stringBuilder.Clear();
+            stringBuilder.Append(child.FirstName);
+            stringBuilder.Append(" ");
+            stringBuilder.Append(child.LastName);
 
-            string fullName = sb.ToString();
+            string fullName = stringBuilder.ToString();
 
-            TMP_Dropdown.OptionData option = new(fullName);
+            OptionData option = new(fullName);
             _childrenDropdown.options.Add(option);
 
             _childrenIds[i] = child.Id;
         }
+
         _childrenDropdown.RefreshShownValue();
     }
 
-    private void OnSelectChild()
+    private async UniTaskVoid LoadChildren(int centerId = -1)
     {
-        OnSelectChildAsync().Forget();
+        _overlay.gameObject.SetActive(true);
+        _contentTransform.sizeDelta = new Vector2(_contentTransform.sizeDelta.x, HeightCenter);
+
+        if (centerId != -1)
+        {
+            _ = Tween.Alpha(_overlay, startValue: 0f, endValue: 1f, duration: 0.3f);
+        }
+
+        await LoadChildrenAsync(centerId);
+
+        _centerContent.SetActive(false);
+
+        Vector2 target = new(_contentTransform.sizeDelta.x, HeightChildren);
+
+        if (_userRole == UserRole.Therapist)
+        {
+            target.y = HeightChildrenTherapist;
+            _registerButton.gameObject.SetActive(false);
+        }
+
+        if (!_hasChildren)
+        {
+            target.y = HeightNoChildren;
+        }
+
+        _ = Sequence
+            .Create()
+            .Group(Tween.UISizeDelta(_contentTransform, endValue: target, duration: 0.2f))
+            .Group(
+                Tween
+                    .UISizeDelta(_overlayTransform, endValue: target, duration: 0.2f)
+                    .OnComplete(target: _childContent, target => target.SetActive(true))
+            )
+            .Chain(
+                Tween
+                    .Alpha(_overlay, startValue: 1f, endValue: 0f, duration: 0.3f)
+                    .OnComplete(_onAlphaComplete)
+            );
+    }
+
+    private async UniTask LoadCentersAsync()
+    {
+        UserService userService = _authManager.UserService;
+        CancellationToken token = this.GetCancellationTokenOnDestroy();
+
+        _userId = _authManager.CurrentUser.Id;
+
+        ApiResult<CenterDTO[]> result = await userService.GetCenters(_userId, token);
+
+        if (!result.Success)
+        {
+            ModalData modalData = new()
+            {
+                Title = "Error",
+                Message = "Could not load centers. Please try again later.",
+                Panel = _panel,
+            };
+
+            await _uiManager.ShowModal(modalData);
+
+            _selectCenterButton.Interactable = false;
+
+            return;
+        }
+
+        if (result.Data.Length == 0)
+        {
+            PerformanceLog.Log(
+                "No centers found for user. This should not happen as the user should be associated with at least one center."
+            );
+            return;
+        }
+
+        _centerIds = new int[result.Data.Length];
+
+        if (result.Data.Length == 1)
+        {
+            _centerDropdown.gameObject.SetActive(false);
+            _labelObject.SetActive(true);
+
+            _centerLabel.SetText(result.Data[0].Center);
+
+            _centerIds[0] = 1;
+
+            return;
+        }
+
+        _labelObject.SetActive(false);
+        _centerDropdown.gameObject.SetActive(true);
+
+        _centerDropdown.ClearOptions();
+
+        for (int i = 0; i < result.Data.Length; i++)
+        {
+            _centerDropdown.options.Add(new OptionData(result.Data[i].Center));
+
+            _centerIds[i] = i + 1;
+        }
+
+        _centerDropdown.RefreshShownValue();
+    }
+
+    private async UniTaskVoid LoadCenters()
+    {
+        _contentTransform.sizeDelta = new Vector2(_contentTransform.sizeDelta.x, HeightCenter);
+        _overlayTransform.sizeDelta = new Vector2(_contentTransform.sizeDelta.x, HeightCenter);
+
+        _centerContent.SetActive(true);
+        _overlay.gameObject.SetActive(true);
+
+        await LoadCentersAsync();
+
+        _ = Tween.Alpha(_overlay, endValue: 0f, duration: 0.5f).OnComplete(_onAlphaComplete);
     }
 
     private async UniTaskVoid OnSelectChildAsync()
@@ -127,7 +305,7 @@ public class UserChildren : Panel
 
         LevelDataStore instance = LevelDataStore.Instance;
 
-        _loadingTransition.PlayLoadingTransition();
+        _uiManager.PlayMapTransition();
 
         await instance.LoadPlans(childId);
 
@@ -136,7 +314,7 @@ public class UserChildren : Panel
             await instance.CreateDefaultPlans(childId, _userId);
         }
 
-        _loadingTransition.Continue(success: instance.HasPlans() && instance.HasActivePlans());
+        _uiManager.ContinueMapTransition(success: instance.HasPlans() && instance.HasActivePlans());
 
         if (!instance.HasActivePlans())
         {
@@ -154,9 +332,22 @@ public class UserChildren : Panel
         }
     }
 
+    private void OnSelectChild()
+    {
+        OnSelectChildAsync().Forget();
+    }
+
+    private void OnSelectCenter()
+    {
+        int selectedIndex = _centerDropdown.value;
+        int centerId = _centerIds[selectedIndex];
+
+        LoadChildren(centerId).Forget();
+    }
+
     private void OnRegisterChild()
     {
-        _uiManager.ShowRegisterChild();
+        _uiManager.ShowPanel(PanelEnum.RegisterChild);
     }
 
     private void OnLogout()

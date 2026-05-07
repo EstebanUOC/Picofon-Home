@@ -89,11 +89,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 334462775836672
-    m_Localized: "Continuar con este ni\xF1o"
+    m_Localized: Seleccionar infante
     m_Metadata:
       m_Items: []
   - m_Id: 334624835354624
-    m_Localized: "Registrar a un nuevo ni\xF1o"
+    m_Localized: Registrar infante
     m_Metadata:
       m_Items: []
   - m_Id: 335638120480768
@@ -187,6 +187,26 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 1427275047354368
     m_Localized: "aprende m\xE1s"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9447846335070208
+    m_Localized: Selecciona un infante de la lista o registra uno nuevo.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9448604686204928
+    m_Localized: "Elige el centro donde se encuentra el ni\xF1o para continuar."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9449904178053120
+    m_Localized: Infantes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9449943478681600
+    m_Localized: Centros
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9450557654810624
+    m_Localized: Seleccionar centro
     m_Metadata:
       m_Items: []
   references:

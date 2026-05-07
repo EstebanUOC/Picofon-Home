@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LoadingTransition : MonoBehaviour
+public class MapLoading : MonoBehaviour
 {
     [SerializeField]
     private RectTransform _loading;
@@ -46,7 +46,7 @@ public class LoadingTransition : MonoBehaviour
         }
     }
 
-    public void PlayLoadingTransition()
+    public void Show()
     {
         if (!gameObject.activeSelf)
         {
@@ -154,6 +154,8 @@ public class LoadingTransition : MonoBehaviour
 
     private async UniTaskVoid ShowButton()
     {
+        const float duration = 0.3f;
+
         await UniTask.WaitForSeconds(0.5f);
 
         CanvasGroup animationCanvasGroup = _animation.GetComponent<CanvasGroup>();
@@ -161,8 +163,12 @@ public class LoadingTransition : MonoBehaviour
 
         _ = Sequence
             .Create()
-            .Group(Tween.Alpha(animationCanvasGroup, startValue: 1f, endValue: 0f, duration: 0.5f))
-            .Chain(Tween.Alpha(buttonCanvasGroup, startValue: 0f, endValue: 1f, duration: 0.5f));
+            .Group(
+                Tween.Alpha(animationCanvasGroup, startValue: 1f, endValue: 0f, duration: duration)
+            )
+            .Chain(
+                Tween.Alpha(buttonCanvasGroup, startValue: 0f, endValue: 1f, duration: duration)
+            );
     }
 
     private void OnOrientationChanged()

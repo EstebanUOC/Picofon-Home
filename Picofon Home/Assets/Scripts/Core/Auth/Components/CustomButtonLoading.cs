@@ -1,84 +1,121 @@
 using System;
-using Cysharp.Threading.Tasks;
 using PrimeTween;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class CustomButtonLoading : CustomButtonRaised
+public class CustomButtonLoading : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
+    [SerializeField]
+    private RectTransform _backgroundRect;
+
+    [SerializeField]
+    private RectTransform _contentRect;
+
+    [SerializeField]
+    private RectTransform _loadingRect;
+
     [Space]
-    public RectTransform LoadingRect;
-    public CanvasGroup InfoCanvasGroup;
-    public CanvasGroup LoadingCanvasGroup;
+    [SerializeField]
+    private GameObject _contentInfo;
 
-    public Func<UniTask> OnClickAsync;
+    [SerializeField]
+    private GameObject _contentLoading;
 
-    private bool Loading
+    [Space]
+    [SerializeField]
+    private GameObject _inactiveOverlay;
+
+    public event Action OnClick;
+
+    public bool Interactable
     {
-        get => _loading;
-        set
-        {
-            if (_loading == value)
-                return;
-
-            _loading = value;
-
-            if (_loading)
-            {
-                Interactable = false;
-                InfoCanvasGroup.alpha = 0;
-
-                AnimateFade(true);
-                AnimateLoading(true);
-            }
-            else
-            {
-                Interactable = true;
-                InfoCanvasGroup.alpha = 1;
-
-                AnimateFade(false);
-                AnimateLoading(false);
-            }
-        }
+        get => _interactable;
+        set => SetInteractable(value);
     }
 
-    private bool _loading = false;
-
+    private RectTransform _overlayRect;
     private Tween _loadingTween;
 
-    public override void OnPointerClick(PointerEventData eventData)
-    {
-        if (Loading || !Interactable)
-            return;
+    private float _defaultContentY;
+    private bool _interactable = true;
+    private bool _isLoading = false;
 
-        HandleClickAsync().Forget();
+    public void Awake()
+    {
+        _defaultContentY = _contentRect.anchoredPosition.y;
+
+        Color32 inactiveColor = _backgroundRect.gameObject.GetComponent<Image>().color;
+        inactiveColor.a = 130;
+
+        Image overlayImage = _inactiveOverlay.GetComponent<Image>();
+        overlayImage.color = inactiveColor;
+
+        _overlayRect = _inactiveOverlay.GetComponent<RectTransform>();
     }
 
-    private async UniTaskVoid HandleClickAsync()
+    public void OnPointerDown(PointerEventData eventData)
     {
-        Loading = true;
-        await (OnClickAsync?.Invoke() ?? UniTask.CompletedTask);
-        Loading = false;
-    }
-
-    private void AnimateFade(bool isHovering)
-    {
-        if (Loading)
+        if (!_interactable)
             return;
 
-        float contentAlpha = 1f;
-        float loadingAlpha = 0f;
+        Vector2 contentPos = (_defaultContentY - 11f) * Vector2.up;
+        Vector2 bgSize = 11f * Vector2.down;
+        Vector2 bgMoveY = 5.5f * Vector2.down;
 
-        if (isHovering)
-        {
-            contentAlpha = 0.6f;
-            loadingAlpha = 1f;
-        }
+        _contentRect.anchoredPosition = contentPos;
+        _backgroundRect.sizeDelta = bgSize;
+        _backgroundRect.anchoredPosition = bgMoveY;
 
-        Sequence
-            .Create()
-            .Group(Tween.Alpha(_contentCanvasGroup, contentAlpha, Duration))
-            .Group(Tween.Alpha(LoadingCanvasGroup, loadingAlpha, Duration));
+        _overlayRect.sizeDelta = bgSize;
+        _overlayRect.anchoredPosition = bgMoveY;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        if (_isLoading || !_interactable)
+            return;
+
+        Vector2 contentPos = _contentRect.anchoredPosition;
+        contentPos.y = _defaultContentY;
+
+        _contentRect.anchoredPosition = contentPos;
+        _backgroundRect.sizeDelta = Vector2.zero;
+        _backgroundRect.anchoredPosition = Vector2.zero;
+
+        _overlayRect.sizeDelta = Vector2.zero;
+        _overlayRect.anchoredPosition = Vector2.zero;
+
+        _contentInfo.SetActive(false);
+        _contentLoading.SetActive(true);
+
+        AnimateLoading(true);
+
+        Interactable = false;
+        _isLoading = true;
+
+        OnClick?.Invoke();
+    }
+
+    public void EndLoading()
+    {
+        _contentLoading.SetActive(false);
+        _contentInfo.SetActive(true);
+
+        AnimateLoading(false);
+
+        Interactable = true;
+        _isLoading = false;
+    }
+
+    private void SetInteractable(bool value)
+    {
+        if (_interactable == value)
+            return;
+
+        _interactable = value;
+
+        _inactiveOverlay.SetActive(!_interactable);
     }
 
     private void AnimateLoading(bool isLoading)
@@ -91,6 +128,12 @@ public class CustomButtonLoading : CustomButtonRaised
 
         Vector3 targetRotation = new(0, 0, -360);
 
-        _loadingTween = Tween.Rotation(LoadingRect, targetRotation, 1f, cycles: -1);
+        _loadingTween = Tween.EulerAngles(
+            _loadingRect,
+            startValue: Vector3.zero,
+            endValue: targetRotation,
+            duration: 1f,
+            cycles: -1
+        );
     }
 }

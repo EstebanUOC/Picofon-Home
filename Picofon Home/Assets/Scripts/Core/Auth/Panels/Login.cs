@@ -4,7 +4,7 @@ using Firebase.Auth;
 using Google;
 using UnityEngine;
 
-public class Login : Panel
+public class Login : MonoBehaviour
 {
     [SerializeField]
     public UIManager _uiManager;
@@ -14,10 +14,10 @@ public class Login : Panel
 
     [Space]
     [SerializeField]
-    private GameObject _loginButton;
+    private CustomButtonLoading _loginButton;
 
     [SerializeField]
-    private GameObject _debugButton;
+    private CustomButton _debugButton;
 
     [SerializeField]
     private SimpleButton _optionsButton;
@@ -26,19 +26,22 @@ public class Login : Panel
 
     public void Start()
     {
-        CustomButtonLoading loginButton = _loginButton.GetComponent<CustomButtonLoading>();
-        CustomButtonBase debugLoginButton = _debugButton.GetComponent<CustomButtonBase>();
+        _panel = GetComponent<RectTransform>();
 
-        loginButton.OnClickAsync += AuthenticateWithGoogle;
-        debugLoginButton.OnClick += ShowDebugMenu;
         _optionsButton.OnClick += ShowOptions;
 
-        OnHide += () => gameObject.SetActive(false);
+        _debugButton.OnClick += ShowDebugMenu;
 
-        _panel = GetComponent<RectTransform>();
+        if (Application.isEditor)
+        {
+            _loginButton.Interactable = false;
+            return;
+        }
+
+        _loginButton.OnClick += LoginWithGoogle;
     }
 
-    private async UniTask AuthenticateWithGoogle()
+    private async UniTaskVoid AuthenticateWithGoogle()
     {
         FirebaseAuth firebaseInstance = FirebaseAuth.DefaultInstance;
         GoogleSignIn googleInstance = GoogleSignIn.DefaultInstance;
@@ -90,8 +93,6 @@ public class Login : Panel
             firebaseIdToken
         );
 
-        PerformanceLog.Log($"Profile completed: {result.Data.User.ProfileCompleted}");
-
         if (result.Data.User.Role == UserRole.Therapist && !result.Data.User.ProfileCompleted)
         {
             ModalData modalData = new()
@@ -125,29 +126,35 @@ public class Login : Panel
     private void OnLoginSuccess(UserModel user)
     {
         _authManager.SetCurrentUser(user);
+        _loginButton.EndLoading();
 
         if (!user.LegalAccepted)
         {
-            _uiManager.ShowDisclaimer();
+            _uiManager.ShowPanel(PanelEnum.Disclaimer);
             return;
         }
 
         if (user.Role == UserRole.Invited)
         {
-            _uiManager.ShowRolePanel();
+            _uiManager.ShowPanel(PanelEnum.Role);
             return;
         }
 
-        _uiManager.ShowUserChildren();
+        _uiManager.ShowPanel(PanelEnum.Children);
+    }
+
+    private void LoginWithGoogle()
+    {
+        AuthenticateWithGoogle().Forget();
     }
 
     private void ShowOptions()
     {
-        _uiManager.ShowOptions(_panel);
+        _uiManager.ShowModal(_panel, ModalEnum.Options);
     }
 
     private void ShowDebugMenu()
     {
-        _uiManager.ShowDebugMenu(_panel);
+        _uiManager.ShowModal(_panel, ModalEnum.DebugMenu);
     }
 }

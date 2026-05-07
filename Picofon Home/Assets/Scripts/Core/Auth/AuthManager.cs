@@ -5,9 +5,23 @@ using Google;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 
+public struct InitializeData
+{
+    public bool Initialized { get; set; }
+
+    public bool FirebaseReady { get; set; }
+
+    public bool FailedLogin { get; set; }
+
+    public UserDataDTO CurrentUser { get; set; }
+}
+
 public class AuthManager : MonoBehaviour
 {
-    private static bool _initialized;
+    private const string GoogleClientId =
+        "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
+
+    private static InitializeData _initializeData;
 
     [SerializeField]
     private UIManager _uiManager;
@@ -15,20 +29,13 @@ public class AuthManager : MonoBehaviour
     [SerializeField]
     private RectTransform _panel;
 
-    public UserDataDTO CurrentUser { get; private set; }
+    public UserService UserService => _userService;
 
-    public UserService UserService { get; private set; }
+    public UserDataDTO CurrentUser => _initializeData.CurrentUser;
 
-    private const string GoogleClientId =
-        "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com";
+    private UserService _userService;
 
     private bool _existsConnection = false;
-
-    private bool _firebaseDependenciesChecked = false;
-
-    private bool _failedLogin = false;
-
-    private bool _legalAccepted = false;
 
     public void Start()
     {
@@ -40,20 +47,21 @@ public class AuthManager : MonoBehaviour
         FirebaseAuth.DefaultInstance.SignOut();
         GamePrefs.ClearAll();
 
-        CurrentUser = null;
+        _initializeData = new InitializeData();
 
-        _uiManager.ShowLogin();
+        _uiManager.ShowPanel(PanelEnum.Login);
     }
 
     public void SetCurrentUser(UserModel user)
     {
-        CurrentUser = new()
+        _initializeData.CurrentUser = new()
         {
             Id = user.Id,
             Email = user.Email,
             Username = user.FirstName,
             ProfileComplete = user.ProfileCompleted,
             Role = user.Role,
+            LegalAccepted = user.LegalAccepted,
         };
     }
 
@@ -71,26 +79,18 @@ public class AuthManager : MonoBehaviour
                     Id = "noXJSkWJnCW5iSEu32n5Kvofq5a2",
                     Email = "test@gmail.com",
                     Username = "Debug User",
-                    Role = UserRole.Therapist,
+                    Role = UserRole.Admin,
                 };
 
-                CurrentUser = user;
-                _uiManager.ShowUserChildren();
+                _initializeData.CurrentUser = user;
+
+                _uiManager.ShowPanel(PanelEnum.Children);
+
                 break;
             case DebugMenuResult.Map:
-                UnityEngine.SceneManagement.SceneManager.LoadScene("MapPathScene");
-                break;
-            case DebugMenuResult.Role:
-                user = new()
-                {
-                    Id = "STrmT4YxH2PiAObWJh9l0USKVZ53",
-                    Email = "test@gmail.com",
-                    Username = "Debug User",
-                    Role = UserRole.Invited,
-                };
 
-                CurrentUser = user;
-                _uiManager.ShowRolePanel();
+                UnityEngine.SceneManagement.SceneManager.LoadScene("MapPathScene");
+
                 break;
             default:
                 break;
@@ -99,14 +99,7 @@ public class AuthManager : MonoBehaviour
 
     private async UniTask InitializeApp()
     {
-        _initialized = true;
-
-        _existsConnection = await ApiConfig.Ping();
-
-        if (!_existsConnection)
-        {
-            return;
-        }
+        _initializeData = new InitializeData { Initialized = true };
 
         GoogleSignIn.Configuration = new GoogleSignInConfiguration
         {
@@ -114,8 +107,6 @@ public class AuthManager : MonoBehaviour
             RequestIdToken = true,
             RequestEmail = true,
         };
-
-        UserService = new UserService();
 
         string preferredLanguage = GamePrefs.PreferredLanguage;
 
@@ -137,9 +128,9 @@ public class AuthManager : MonoBehaviour
 
         CancellationToken ct = this.GetCancellationTokenOnDestroy();
 
-        _firebaseDependenciesChecked = await CheckFirebaseDependencies(ct);
+        _initializeData.FirebaseReady = await CheckFirebaseDependencies(ct);
 
-        if (!_firebaseDependenciesChecked)
+        if (!_initializeData.FirebaseReady)
         {
             return;
         }
@@ -162,22 +153,21 @@ public class AuthManager : MonoBehaviour
 
         if (!result.Success)
         {
-            _failedLogin = true;
+            _initializeData.FailedLogin = true;
             return;
         }
 
         UserModel user = result.Data.User;
 
-        CurrentUser = new UserDataDTO
+        _initializeData.CurrentUser = new UserDataDTO
         {
             Id = user.Id,
             Email = user.Email,
             Username = user.FirstName,
             Role = user.Role,
             ProfileComplete = user.ProfileCompleted,
+            LegalAccepted = user.LegalAccepted,
         };
-
-        _legalAccepted = user.LegalAccepted;
     }
 
     private async UniTaskVoid CheckAppState()
@@ -198,10 +188,11 @@ public class AuthManager : MonoBehaviour
 
         if (Application.isEditor)
         {
+            _uiManager.ShowPanel(PanelEnum.Login, animate: false);
             return;
         }
 
-        if (!_firebaseDependenciesChecked)
+        if (!_initializeData.FirebaseReady)
         {
             await _uiManager.ShowModal(
                 new ModalData
@@ -216,7 +207,7 @@ public class AuthManager : MonoBehaviour
             Application.Quit();
         }
 
-        if (_failedLogin)
+        if (_initializeData.FailedLogin)
         {
             await _uiManager.ShowModal(
                 new ModalData
@@ -232,37 +223,57 @@ public class AuthManager : MonoBehaviour
             return;
         }
 
-        if (CurrentUser == null)
+        if (_initializeData.CurrentUser == null)
         {
-            _uiManager.ShowLogin();
+            ShowPanel(PanelEnum.Login);
             return;
         }
 
-        if (!_legalAccepted)
+        if (!_initializeData.CurrentUser.LegalAccepted)
         {
-            _uiManager.ShowDisclaimer();
+            ShowPanel(PanelEnum.Disclaimer);
             return;
         }
 
-        if (CurrentUser.Role == UserRole.Invited)
+        if (_initializeData.CurrentUser.Role == UserRole.Invited)
         {
-            _uiManager.ShowRolePanel();
+            ShowPanel(PanelEnum.Role);
             return;
         }
 
-        _uiManager.ShowUserChildren();
+        ShowPanel(PanelEnum.Children);
+    }
+
+    private void ShowPanel(PanelEnum panel)
+    {
+        _uiManager.ShowPanel(panel, animate: false);
     }
 
     private async UniTaskVoid BootAppProcess()
     {
-        _uiManager.LoadingPanel.Show();
+        _uiManager.ShowLoading(LoadingEnum.Boot);
 
-        if (!_initialized)
+        _existsConnection = await ApiConfig.Ping();
+
+        await UniTask.WaitForSeconds(1f);
+
+        if (!_existsConnection)
+        {
+            _ = CheckAppState();
+
+            Logout();
+
+            return;
+        }
+
+        _userService = new UserService();
+
+        if (!_initializeData.Initialized)
         {
             await InitializeApp();
         }
 
-        _uiManager.LoadingPanel.Hide();
+        _uiManager.HideLoading(LoadingEnum.Boot);
 
         _ = CheckAppState();
     }

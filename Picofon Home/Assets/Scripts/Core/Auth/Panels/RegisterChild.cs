@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
-public class RegisterChild : Panel
+public class RegisterChild : MonoBehaviour
 {
     [SerializeField]
     private UIManager _uiManager;
@@ -29,18 +29,14 @@ public class RegisterChild : Panel
 
     public void Start()
     {
-        OnHide += () => gameObject.SetActive(false);
-
         _registerForm.OnSubmit += HandleSubmit;
         _returnButton.OnClick += HandleReturn;
 
         _panel = GetComponent<RectTransform>();
     }
 
-    public override void Show()
+    public void OnEnable()
     {
-        base.Show();
-
         UserDataDTO currentUser = _authManager.CurrentUser;
 
         _emailText.text = currentUser.Email;
@@ -78,12 +74,12 @@ public class RegisterChild : Panel
 
         if (result.Success)
         {
-            _uiManager.ShowUserChildren();
+            _uiManager.ShowPanel(PanelEnum.Children);
         }
     }
 
     private void HandleReturn()
     {
-        _uiManager.ShowUserChildren();
+        _uiManager.ShowPanel(PanelEnum.Children);
     }
 }
