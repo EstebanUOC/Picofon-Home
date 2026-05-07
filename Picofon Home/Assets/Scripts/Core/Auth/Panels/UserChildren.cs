@@ -190,6 +190,25 @@ public class UserChildren : MonoBehaviour
 
         await LoadChildrenAsync(centerId);
 
+        if (_userRole == UserRole.Therapist && !_hasChildren)
+        {
+            _ = Tween
+                .Alpha(_overlay, startValue: 1f, endValue: 0f, duration: 0.3f)
+                .OnComplete(_onAlphaComplete);
+
+            ModalData modalData = new()
+            {
+                Title = "No Children",
+                Message =
+                    "There are no children associated with the selected center. Please register a child on the web platform or choose another center.",
+                Panel = _panel,
+            };
+
+            _ = _uiManager.ShowModal(modalData);
+
+            return;
+        }
+
         _centerContent.SetActive(false);
 
         Vector2 target = new(_contentTransform.sizeDelta.x, HeightChildren);
@@ -260,7 +279,7 @@ public class UserChildren : MonoBehaviour
             _centerDropdown.gameObject.SetActive(false);
             _labelObject.SetActive(true);
 
-            _centerLabel.SetText(result.Data[0].Center);
+            _centerLabel.SetText(result.Data[0].CenterName);
 
             _centerIds[0] = 1;
 
@@ -274,9 +293,11 @@ public class UserChildren : MonoBehaviour
 
         for (int i = 0; i < result.Data.Length; i++)
         {
-            _centerDropdown.options.Add(new OptionData(result.Data[i].Center));
+            CenterDTO center = result.Data[i];
 
-            _centerIds[i] = i + 1;
+            _centerDropdown.options.Add(new OptionData(center.CenterName));
+
+            _centerIds[i] = center.CenterId;
         }
 
         _centerDropdown.RefreshShownValue();
