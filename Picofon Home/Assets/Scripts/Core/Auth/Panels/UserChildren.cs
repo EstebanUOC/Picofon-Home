@@ -64,19 +64,15 @@ public class UserChildren : MonoBehaviour
     [SerializeField]
     private RectTransform _overlayTransform;
 
-    private Action _onAlphaComplete;
-
     private string _userId;
+    private UserRole _userRole;
 
     private string[] _childrenIds;
-
     private int[] _centerIds;
-
-    private RectTransform _panel;
-
     private bool _hasChildren;
 
-    private UserRole _userRole;
+    private RectTransform _panel;
+    private Action _onAlphaComplete;
 
     public void Start()
     {
