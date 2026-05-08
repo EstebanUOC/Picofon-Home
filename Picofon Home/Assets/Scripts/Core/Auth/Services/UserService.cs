@@ -150,7 +150,7 @@ public class UserService
     }
 
     public async UniTask<ApiResult> RegisterChild(
-        ChildCreateDTO childCreateDTO,
+        CreateChildDTO childCreateDTO,
         CancellationToken token = default
     )
     {

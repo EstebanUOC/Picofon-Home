@@ -24,7 +24,7 @@ public class Form : MonoBehaviour
     public string ParentId { get; set; } = string.Empty;
     public UserRole Relationship { get; set; }
 
-    public event Func<ChildCreateDTO, UniTask> OnSubmit;
+    public event Func<CreateChildDTO, UniTask> OnSubmit;
 
     private readonly Dictionary<ChildFields, FormInput> _fields = new(9);
 
@@ -48,9 +48,9 @@ public class Form : MonoBehaviour
         _submitButton.OnClick += HandleClick;
     }
 
-    public ChildCreateDTO GatherChildData()
+    public CreateChildDTO GatherChildData()
     {
-        ChildCreateDTO child = new()
+        CreateChildDTO child = new()
         {
             UserId = ParentId,
             Relationship = Relationship,
@@ -70,7 +70,7 @@ public class Form : MonoBehaviour
 
     private async UniTask HandleSubmit()
     {
-        ChildCreateDTO data = GatherChildData();
+        CreateChildDTO data = GatherChildData();
 
         if (OnSubmit != null)
             await OnSubmit.Invoke(data);
