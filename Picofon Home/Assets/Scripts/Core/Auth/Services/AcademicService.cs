@@ -10,7 +10,7 @@ public readonly struct CountriesData
 
 public readonly struct CountryDTO
 {
-    public readonly int Id { get; init; }
+    public readonly byte Id { get; init; }
     public readonly string Name { get; init; }
 }
 
@@ -21,13 +21,13 @@ public readonly struct CentersData
 
 public readonly struct CenterRegisterDTO
 {
-    public readonly int Id { get; init; }
+    public readonly byte Id { get; init; }
     public readonly string Name { get; init; }
 }
 
 public readonly struct GradeDTO
 {
-    public readonly int Id { get; init; }
+    public readonly byte Id { get; init; }
     public readonly string LocalName { get; init; }
 }
 

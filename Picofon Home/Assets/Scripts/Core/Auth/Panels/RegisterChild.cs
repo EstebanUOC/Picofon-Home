@@ -50,13 +50,17 @@ public class RegisterChild : MonoBehaviour
 
     private CreateChildDTO _childData;
 
-    private int[] _indexes;
+    private byte[] _countryIndexes;
+    private byte[] _centerIndexes;
+    private byte[] _gradeIndexes;
 
     public void Start()
     {
         _panel = GetComponent<RectTransform>();
 
         _countryButton.OnClick += HandleCountrySelect;
+
+        _academicSubmitButton.OnClick += HandleCenterSelect;
     }
 
     public void OnEnable()
@@ -76,7 +80,7 @@ public class RegisterChild : MonoBehaviour
             return;
         }
 
-        _indexes = new int[result.Data.Records.Length];
+        _countryIndexes = new byte[result.Data.Records.Length];
 
         int i = 0;
         foreach (CountryDTO country in result.Data.Records)
@@ -84,7 +88,7 @@ public class RegisterChild : MonoBehaviour
             OptionData option = new(country.Name);
             _countryDropdown.options.Add(option);
 
-            _indexes[i] = country.Id;
+            _countryIndexes[i] = country.Id;
 
             i++;
         }
@@ -94,7 +98,7 @@ public class RegisterChild : MonoBehaviour
 
     private async UniTaskVoid LoadCenters()
     {
-        int countryId = _indexes[_countryDropdown.value];
+        int countryId = _countryIndexes[_countryDropdown.value];
 
         ApiResult<CentersData> centerResult = await _academicService.GetCenters(countryId);
 
@@ -112,16 +116,29 @@ public class RegisterChild : MonoBehaviour
             return;
         }
 
+        _centerIndexes = new byte[centerResult.Data.Records.Length];
+        _gradeIndexes = new byte[gradeResult.Data.Length];
+
+        int i = 0;
         foreach (CenterRegisterDTO center in centerResult.Data.Records)
         {
             OptionData option = new(center.Name);
             _centerDropdown.options.Add(option);
+
+            _centerIndexes[i] = center.Id;
+
+            i++;
         }
 
+        i = 0;
         foreach (GradeDTO grade in gradeResult.Data)
         {
             OptionData option = new(grade.LocalName);
             _gradeDropdown.options.Add(option);
+
+            _gradeIndexes[i] = grade.Id;
+
+            i++;
         }
 
         _centerDropdown.RefreshShownValue();
@@ -151,11 +168,12 @@ public class RegisterChild : MonoBehaviour
 
     private void HandleCenterSelect()
     {
-        _childData = new CreateChildDTO()
-        {
-            CenterId = _centerDropdown.value,
-            Grade = _gradeDropdown.value + 1,
-        };
+        int centerId = _centerIndexes[_centerDropdown.value];
+        int gradeId = _gradeIndexes[_gradeDropdown.value];
+
+        _childData = new CreateChildDTO() { CenterId = centerId, Grade = gradeId };
+
+        PerformanceLog.Log($"Selected Center ID: {centerId}, Grade ID: {gradeId}");
     }
 
     private async UniTask HandleSubmit(CreateChildDTO data)
