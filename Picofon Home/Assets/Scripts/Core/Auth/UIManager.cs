@@ -58,8 +58,6 @@ public class UIManager : MonoBehaviour
         {
             foreach (UIResponsiveTransform responsiveRect in _responsiveTransforms)
             {
-                PerformanceLog.Log($"Applying responsive layout for {responsiveRect.Target.name}");
-
                 responsiveRect.Target.localScale = responsiveRect.Scale;
             }
         }

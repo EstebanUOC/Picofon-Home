@@ -14,7 +14,13 @@ public class RegisterChild : MonoBehaviour
     [SerializeField]
     private AuthManager _authManager;
 
+    [SerializeField]
+    private RectTransform _contentTransform;
+
     [Header("Academic Information")]
+    [SerializeField]
+    private RectTransform _academicInfoGroup;
+
     [SerializeField]
     private RectTransform _countryTransform;
 
@@ -44,6 +50,20 @@ public class RegisterChild : MonoBehaviour
     [SerializeField]
     private RectTransform _overlayTransform;
 
+    [Header("Personal Information")]
+    [SerializeField]
+    private RectTransform _personalInfoGroup;
+
+    [SerializeField]
+    private CustomButton _personalSubmitButton;
+
+    [Header("Communitacion Information")]
+    [SerializeField]
+    private RectTransform _communicationInfoGroup;
+
+    [SerializeField]
+    private CustomButton _communicationSubmitButton;
+
     private RectTransform _panel;
 
     private AcademicService _academicService;
@@ -61,11 +81,22 @@ public class RegisterChild : MonoBehaviour
         _countryButton.OnClick += HandleCountrySelect;
 
         _academicSubmitButton.OnClick += HandleCenterSelect;
+
+        _personalSubmitButton.OnClick += HandlePersonalInfoSubmit;
     }
 
     public void OnEnable()
     {
         LoadCountries().Forget();
+
+        _overlayTransform.sizeDelta = _centerTransform.sizeDelta;
+        _overlayTransform.anchoredPosition = _centerTransform.anchoredPosition;
+
+        _contentTransform.sizeDelta = _academicInfoGroup.sizeDelta;
+
+        _academicInfoGroup.gameObject.SetActive(true);
+        _personalInfoGroup.gameObject.SetActive(false);
+        _communicationInfoGroup.gameObject.SetActive(false);
     }
 
     private async UniTaskVoid LoadCountries()
@@ -173,7 +204,26 @@ public class RegisterChild : MonoBehaviour
 
         _childData = new CreateChildDTO() { CenterId = centerId, Grade = gradeId };
 
-        PerformanceLog.Log($"Selected Center ID: {centerId}, Grade ID: {gradeId}");
+        PerformanceLog.Log(
+            $"Selected Center ID: {_childData.CenterId}, Grade ID: {_childData.Grade}"
+        );
+
+        _contentTransform.sizeDelta = _personalInfoGroup.sizeDelta;
+
+        _academicInfoGroup.gameObject.SetActive(false);
+        _personalInfoGroup.gameObject.SetActive(true);
+    }
+
+    private void HandlePersonalInfoSubmit()
+    {
+        PerformanceLog.Log(
+            $"Selected Center ID: {_childData.CenterId}, Grade ID: {_childData.Grade}"
+        );
+
+        _contentTransform.sizeDelta = _communicationInfoGroup.sizeDelta;
+
+        _personalInfoGroup.gameObject.SetActive(false);
+        _communicationInfoGroup.gameObject.SetActive(true);
     }
 
     private async UniTask HandleSubmit(CreateChildDTO data)
