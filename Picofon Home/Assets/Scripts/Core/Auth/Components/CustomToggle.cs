@@ -32,7 +32,6 @@ public class CustomToggle : MonoBehaviour, IPointerClickHandler
     private Sprite _defaultSprite;
 
     private bool _isSelected = false;
-    private bool _wasSelected = true;
 
     private Color _defaultBackgroundColor;
 
@@ -49,25 +48,26 @@ public class CustomToggle : MonoBehaviour, IPointerClickHandler
         if (_isSelectedByDefault)
         {
             Toggle();
-            _group.SelectToggle(this);
+
+            _group?.SelectToggle(this);
         }
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         Toggle();
-        _group.SelectToggle(this);
+
+        _group?.SelectToggle(this);
     }
 
     public void Toggle()
     {
-        if (_wasSelected == _isSelected)
+        if (_group?.ShouldToggle(this) == false)
         {
             return;
         }
 
         _isSelected = !_isSelected;
-        _wasSelected = _isSelected;
 
         OnToggle?.Invoke(_isSelected);
 
@@ -98,7 +98,6 @@ public class CustomToggle : MonoBehaviour, IPointerClickHandler
         OnToggle?.Invoke(false);
 
         _isSelected = false;
-        _wasSelected = true;
 
         _selectedBackground.color = Color.clear;
 

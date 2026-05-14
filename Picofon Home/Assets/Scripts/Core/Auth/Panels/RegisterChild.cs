@@ -22,7 +22,7 @@ public class RegisterChild : MonoBehaviour
     private RectTransform _academicInfoGroup;
 
     [SerializeField]
-    private RectTransform _countryTransform;
+    private CustomToggle _noCenterToggle;
 
     [SerializeField]
     private TMP_Dropdown _countryDropdown;
@@ -30,10 +30,7 @@ public class RegisterChild : MonoBehaviour
     [SerializeField]
     private CustomButtonLoading _countryButton;
 
-    [Space(5)]
-    [SerializeField]
-    private RectTransform _centerTransform;
-
+    [Space]
     [SerializeField]
     private TMP_Dropdown _centerDropdown;
 
@@ -45,10 +42,10 @@ public class RegisterChild : MonoBehaviour
 
     [Space]
     [SerializeField]
-    private Image _overlayImage;
+    private Image _overlayCountryImage;
 
     [SerializeField]
-    private RectTransform _overlayTransform;
+    private Image _overlayCenterImage;
 
     [Header("Personal Information")]
     [SerializeField]
@@ -90,8 +87,8 @@ public class RegisterChild : MonoBehaviour
     {
         LoadCountries().Forget();
 
-        _overlayTransform.sizeDelta = _centerTransform.sizeDelta;
-        _overlayTransform.anchoredPosition = _centerTransform.anchoredPosition;
+        _overlayCountryImage.gameObject.SetActive(false);
+        _overlayCenterImage.gameObject.SetActive(true);
 
         _contentTransform.sizeDelta = _academicInfoGroup.sizeDelta;
 
@@ -176,21 +173,22 @@ public class RegisterChild : MonoBehaviour
         _centerDropdown.RefreshShownValue();
         _gradeDropdown.RefreshShownValue();
 
+        _overlayCountryImage.gameObject.SetActive(true);
+
         _countryButton.EndLoading();
         _countryButton.Interactable = false;
 
         _ = Sequence
             .Create()
-            .Group(Tween.Alpha(_overlayImage, endValue: 0f, duration: 0.3f))
-            .ChainCallback(
-                target: _overlayTransform,
+            .Group(Tween.Alpha(_overlayCountryImage, startValue: 0, endValue: 0.7f, duration: 0.3f))
+            .Group(Tween.Alpha(_overlayCenterImage, startValue: 0.7f, endValue: 0f, duration: 0.3f))
+            .OnComplete(
+                target: _overlayCenterImage.gameObject,
                 target =>
                 {
-                    target.sizeDelta = _countryTransform.sizeDelta;
-                    target.anchoredPosition = _countryTransform.anchoredPosition;
+                    target.SetActive(false);
                 }
-            )
-            .Chain(Tween.Alpha(_overlayImage, endValue: 0.7f, duration: 0.3f));
+            );
     }
 
     private void HandleCountrySelect()
@@ -205,18 +203,26 @@ public class RegisterChild : MonoBehaviour
 
         _childData = new CreateChildDTO()
         {
-            CenterId = centerId,
             Grade = gradeId,
             Relationship = UserRole.Parent,
             UserId = _authManager.CurrentUser.Id,
         };
+
+        if (!_noCenterToggle.IsSelected)
+        {
+            _childData.CenterId = centerId;
+        }
 
         if (_countryDropdown.options[_countryDropdown.value].text == "España")
         {
             _personalContent.SetIsSpain(true);
         }
 
-        _contentTransform.sizeDelta = _personalInfoGroup.sizeDelta;
+        Tween.UISizeDelta(
+            _contentTransform,
+            endValue: _personalInfoGroup.sizeDelta,
+            duration: 0.2f
+        );
 
         _academicInfoGroup.gameObject.SetActive(false);
         _personalInfoGroup.gameObject.SetActive(true);
@@ -226,7 +232,11 @@ public class RegisterChild : MonoBehaviour
     {
         _personalContent.SetData(_childData);
 
-        _contentTransform.sizeDelta = _communicationInfoGroup.sizeDelta;
+        Tween.UISizeDelta(
+            _contentTransform,
+            endValue: _communicationInfoGroup.sizeDelta,
+            duration: 0.2f
+        );
 
         _personalInfoGroup.gameObject.SetActive(false);
         _communicationInfoGroup.gameObject.SetActive(true);

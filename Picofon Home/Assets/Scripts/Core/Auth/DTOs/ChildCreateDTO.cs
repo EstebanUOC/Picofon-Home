@@ -16,7 +16,7 @@ public class CreateChildDTO
 
     public int Grade { get; set; }
 
-    public int CenterId { get; set; }
+    public int? CenterId { get; set; } = null;
 
     public string UserId { get; set; }
 

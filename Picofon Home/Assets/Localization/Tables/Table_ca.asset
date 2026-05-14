@@ -210,6 +210,86 @@ MonoBehaviour:
     m_Localized: Seleccionar centre
     m_Metadata:
       m_Items: []
+  - m_Id: 12667436712181760
+    m_Localized: Registrar infant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12667702865936384
+    m_Localized: "Completa la informaci\xF3 per registrar un nou infant."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12667909552848896
+    m_Localized: "Informaci\xF3 acad\xE8mica"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12668273765236736
+    m_Localized: "Pa\xEDs de resid\xE8ncia"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12668496562470912
+    m_Localized: Centre institucional
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12668676292591616
+    m_Localized: Curs
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12669032246394880
+    m_Localized: "Informaci\xF3 personal"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12670364894216192
+    m_Localized: "Identificaci\xF3"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12670480929636352
+    m_Localized: Nom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12670604951011328
+    m_Localized: Cognom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12670736790568960
+    m_Localized: Data de naixement
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12673230258159616
+    m_Localized: "Comunicaci\xF3 i llenguatge"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12673406037245952
+    m_Localized: Idioma preferit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12673644386959360
+    m_Localized: Espanyol
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12673684786495488
+    m_Localized: "Catal\xE0"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12673905075535872
+    m_Localized: Trastorn de la parla
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12674014093885440
+    m_Localized: Trastorn Especifico del Llenguatge
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12674180091854848
+    m_Localized: Trastorn de l'Espectre Autista
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12674337302757376
+    m_Localized: "Trastorn per d\xE8ficit d'atenci\xF3"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12674425412501504
+    m_Localized: Altres
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

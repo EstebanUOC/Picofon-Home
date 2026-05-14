@@ -28,4 +28,9 @@ public class CustomToggleGroup : MonoBehaviour
     {
         return _selectedToggle.Index;
     }
+
+    public bool ShouldToggle(CustomToggle toggle)
+    {
+        return toggle != _selectedToggle;
+    }
 }
