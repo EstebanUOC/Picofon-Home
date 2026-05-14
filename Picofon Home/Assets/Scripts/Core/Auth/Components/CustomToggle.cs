@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -8,16 +9,25 @@ public class CustomToggle : MonoBehaviour, IPointerClickHandler
     private bool _isSelectedByDefault = false;
 
     [SerializeField]
+    private int _index;
+
+    [SerializeField]
     private Image _target;
 
     [SerializeField]
     private Sprite _selectedSprite;
 
+    [Space]
     [SerializeField]
     private Image _selectedBackground;
 
     [SerializeField]
     private CustomToggleGroup _group;
+
+    public event Action<bool> OnToggle;
+
+    public bool IsSelected => _isSelected;
+    public int Index => _index;
 
     private Sprite _defaultSprite;
 
@@ -28,7 +38,10 @@ public class CustomToggle : MonoBehaviour, IPointerClickHandler
 
     public void Awake()
     {
-        _defaultSprite = _target.sprite;
+        if (_target is not null)
+        {
+            _defaultSprite = _target.sprite;
+        }
 
         _defaultBackgroundColor = _selectedBackground.color;
         _selectedBackground.color = Color.clear;
@@ -56,14 +69,25 @@ public class CustomToggle : MonoBehaviour, IPointerClickHandler
         _isSelected = !_isSelected;
         _wasSelected = _isSelected;
 
-        Sprite sprite = _defaultSprite;
+        OnToggle?.Invoke(_isSelected);
 
         _selectedBackground.color = Color.clear;
 
         if (_isSelected)
         {
-            sprite = _selectedSprite;
             _selectedBackground.color = _defaultBackgroundColor;
+        }
+
+        if (_target is null)
+        {
+            return;
+        }
+
+        Sprite sprite = _defaultSprite;
+
+        if (_isSelected)
+        {
+            sprite = _selectedSprite;
         }
 
         _target.sprite = sprite;
@@ -71,10 +95,18 @@ public class CustomToggle : MonoBehaviour, IPointerClickHandler
 
     public void ToggleOff()
     {
+        OnToggle?.Invoke(false);
+
         _isSelected = false;
         _wasSelected = true;
 
-        _target.sprite = _defaultSprite;
         _selectedBackground.color = Color.clear;
+
+        if (_target is null)
+        {
+            return;
+        }
+
+        _target.sprite = _defaultSprite;
     }
 }

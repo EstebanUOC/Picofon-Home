@@ -23,4 +23,9 @@ public class CustomToggleGroup : MonoBehaviour
         _someSelected = true;
         _selectedToggle = toggle;
     }
+
+    public int GetSelectedIndex()
+    {
+        return _selectedToggle.Index;
+    }
 }

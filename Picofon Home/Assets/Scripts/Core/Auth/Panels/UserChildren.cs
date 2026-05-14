@@ -275,7 +275,7 @@ public class UserChildren : MonoBehaviour
             _centerDropdown.gameObject.SetActive(false);
             _labelObject.SetActive(true);
 
-            _centerLabel.SetText(result.Data[0].CenterName);
+            _centerLabel.SetText(result.Data[0].Name);
 
             _centerIds[0] = 1;
 
@@ -291,9 +291,9 @@ public class UserChildren : MonoBehaviour
         {
             CenterDTO center = result.Data[i];
 
-            _centerDropdown.options.Add(new OptionData(center.CenterName));
+            _centerDropdown.options.Add(new OptionData(center.Name));
 
-            _centerIds[i] = center.CenterId;
+            _centerIds[i] = center.Id;
         }
 
         _centerDropdown.RefreshShownValue();

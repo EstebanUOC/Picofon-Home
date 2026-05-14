@@ -55,14 +55,14 @@ public class RegisterChild : MonoBehaviour
     private RectTransform _personalInfoGroup;
 
     [SerializeField]
-    private CustomButton _personalSubmitButton;
+    private PersonalContent _personalContent;
 
     [Header("Communitacion Information")]
     [SerializeField]
     private RectTransform _communicationInfoGroup;
 
     [SerializeField]
-    private CustomButton _communicationSubmitButton;
+    private CommunicationContent _communicationContent;
 
     private RectTransform _panel;
 
@@ -82,7 +82,8 @@ public class RegisterChild : MonoBehaviour
 
         _academicSubmitButton.OnClick += HandleCenterSelect;
 
-        _personalSubmitButton.OnClick += HandlePersonalInfoSubmit;
+        _personalContent.OnValidationSuccess += HandlePersonalInfoSubmit;
+        _communicationContent.OnValidationSuccess += HandleSubmit;
     }
 
     public void OnEnable()
@@ -202,11 +203,18 @@ public class RegisterChild : MonoBehaviour
         int centerId = _centerIndexes[_centerDropdown.value];
         int gradeId = _gradeIndexes[_gradeDropdown.value];
 
-        _childData = new CreateChildDTO() { CenterId = centerId, Grade = gradeId };
+        _childData = new CreateChildDTO()
+        {
+            CenterId = centerId,
+            Grade = gradeId,
+            Relationship = UserRole.Parent,
+            UserId = _authManager.CurrentUser.Id,
+        };
 
-        PerformanceLog.Log(
-            $"Selected Center ID: {_childData.CenterId}, Grade ID: {_childData.Grade}"
-        );
+        if (_countryDropdown.options[_countryDropdown.value].text == "España")
+        {
+            _personalContent.SetIsSpain(true);
+        }
 
         _contentTransform.sizeDelta = _personalInfoGroup.sizeDelta;
 
@@ -216,9 +224,7 @@ public class RegisterChild : MonoBehaviour
 
     private void HandlePersonalInfoSubmit()
     {
-        PerformanceLog.Log(
-            $"Selected Center ID: {_childData.CenterId}, Grade ID: {_childData.Grade}"
-        );
+        _personalContent.SetData(_childData);
 
         _contentTransform.sizeDelta = _communicationInfoGroup.sizeDelta;
 
@@ -226,12 +232,12 @@ public class RegisterChild : MonoBehaviour
         _communicationInfoGroup.gameObject.SetActive(true);
     }
 
-    private async UniTask HandleSubmit(CreateChildDTO data)
+    private async UniTaskVoid HandleSubmitAsync()
     {
         UserService userService = _authManager.UserService;
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 
-        ApiResult result = await userService.RegisterChild(data, token);
+        ApiResult result = await userService.RegisterChild(_childData, token);
 
         string message;
 
@@ -251,12 +257,25 @@ public class RegisterChild : MonoBehaviour
             Panel = _panel,
         };
 
+        _communicationContent.EndLoading();
+
         await _uiManager.ShowModal(modalData);
 
         if (result.Success)
         {
             _uiManager.ShowPanel(PanelEnum.Children);
         }
+    }
+
+    private void HandleSubmit()
+    {
+        _communicationContent.SetData(_childData);
+
+        // PerformanceLog.Log(
+        //     $"Final Child Data: Center ID: {_childData.CenterId}, Grade ID: {_childData.Grade}, Name: {_childData.FirstName}, Last Name: {_childData.LastName}, Birth Date: {_childData.BirthDate}, Language Preference: {_childData.LanguagePreference}, Disorder: {_childData.Disorder}"
+        // );
+
+        HandleSubmitAsync().Forget();
     }
 
     private void HandleReturn()
