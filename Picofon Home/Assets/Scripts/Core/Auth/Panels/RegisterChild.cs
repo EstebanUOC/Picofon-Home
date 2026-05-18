@@ -279,7 +279,17 @@ public class RegisterChild : MonoBehaviour
         UserService userService = _authManager.UserService;
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 
-        ApiResult result = await userService.RegisterChild(_childData, token);
+        ApiResult result;
+
+        if (IsUpdate)
+        {
+            ChildService childService = new();
+            result = await childService.UpdateChild(_childData.Id, _childData, token);
+        }
+        else
+        {
+            result = await userService.RegisterChild(_childData, token);
+        }
 
         string message;
 
@@ -294,7 +304,7 @@ public class RegisterChild : MonoBehaviour
 
         ModalData modalData = new()
         {
-            Title = "Registre de nen",
+            Title = "Detalls del registre",
             Message = message,
             Panel = _panel,
         };
