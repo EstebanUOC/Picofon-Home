@@ -3,11 +3,14 @@ using Cysharp.Threading.Tasks;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 using static TMPro.TMP_Dropdown;
 
 public class RegisterChild : MonoBehaviour
 {
+    public static bool IsUpdate { get; set; }
+
     [SerializeField]
     private UIManager _uiManager;
 
@@ -16,6 +19,12 @@ public class RegisterChild : MonoBehaviour
 
     [SerializeField]
     private RectTransform _contentTransform;
+
+    [SerializeField]
+    private TMP_Text _titleText;
+
+    [SerializeField]
+    private TMP_Text _subtitleText;
 
     [Header("Academic Information")]
     [SerializeField]
@@ -95,6 +104,29 @@ public class RegisterChild : MonoBehaviour
         _academicInfoGroup.gameObject.SetActive(true);
         _personalInfoGroup.gameObject.SetActive(false);
         _communicationInfoGroup.gameObject.SetActive(false);
+
+        if (IsUpdate)
+        {
+            _titleText.SetText(
+                LocalizationSettings.StringDatabase.GetLocalizedString("UI", "REG-TITLE-UP")
+            );
+
+            _subtitleText.SetText(
+                LocalizationSettings.StringDatabase.GetLocalizedString("UI", "REG-SUB-UP")
+            );
+
+            _personalContent.SetUpdateData(_authManager.CurrentChild);
+
+            return;
+        }
+
+        _titleText.SetText(
+            LocalizationSettings.StringDatabase.GetLocalizedString("UI", "REG-TITLE-REG")
+        );
+
+        _subtitleText.SetText(
+            LocalizationSettings.StringDatabase.GetLocalizedString("UI", "REG-SUB-REG")
+        );
     }
 
     private async UniTaskVoid LoadCountries()

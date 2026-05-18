@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
-  m_Name: Table_ca
+  m_Name: UI_ca
   m_EditorClassIdentifier: 
   m_LocaleId:
     m_Code: ca
@@ -288,6 +288,22 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 12674425412501504
     m_Localized: Altres
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14102677192556544
+    m_Localized: Registrar infant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14102815466176512
+    m_Localized: "Completa la informaci\xF3 per registrar un nou infant."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14103015282819072
+    m_Localized: Actualitzar infant
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14103137559363584
+    m_Localized: "Completa la informaci\xF3 per actualitzar l'infant seleccionat."
     m_Metadata:
       m_Items: []
   references:

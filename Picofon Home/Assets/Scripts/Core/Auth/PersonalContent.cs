@@ -46,6 +46,25 @@ public class PersonalContent : MonoBehaviour
         _nameInput.onEndEdit.AddListener(ValidateInputs);
         _lastNameInput.onEndEdit.AddListener(ValidateInputs);
         _ageInput.onEndEdit.AddListener(ValidateInputs);
+
+        OnEnable();
+    }
+
+    public void SetUpdateData(ChildDataDTO data)
+    {
+        _idInput.text = data.Id;
+        _nameInput.text = data.FirstName;
+        _lastNameInput.text = data.LastName;
+        _ageInput.text = DateTime.Parse(data.BirthDate).ToString("dd/MM/yyyy");
+    }
+
+    public void OnEnable()
+    {
+        if (RegisterChild.IsUpdate)
+        {
+            _idInput.interactable = false;
+            _submit.Interactable = true;
+        }
     }
 
     public void OnDisable()
@@ -54,7 +73,6 @@ public class PersonalContent : MonoBehaviour
         _nameInput.text = string.Empty;
         _lastNameInput.text = string.Empty;
         _ageInput.text = string.Empty;
-        _submit.Interactable = false;
     }
 
     public void SetIsSpain(bool isSpain)
