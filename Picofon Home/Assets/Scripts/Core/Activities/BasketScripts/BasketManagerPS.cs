@@ -9,7 +9,7 @@ public class BasketManagerPS : MonoBehaviour
 {
     [Space]
     [SerializeField]
-    private CanvasUI _canvasUI;
+    private FeedbackController _feedbackController;
 
     [SerializeField]
     private ModalGame _modalGame;
@@ -67,13 +67,13 @@ public class BasketManagerPS : MonoBehaviour
         if (@params.ChildId is null)
         {
             skill = ActivitySkill.Initial;
-            language = LanguageID.Spanish;
+            language = LanguageID.Catalan;
             @params = new ActivityRequestParams { PlanId = 113, ChildId = "12345678Z" };
             PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
         }
 # endif
 
-        _canvasUI.Init(skill);
+        _feedbackController.Init(skill);
 
         AudioEntry<ResponseAudioID>[] audioEntries = Array.Empty<AudioEntry<ResponseAudioID>>();
 
@@ -237,16 +237,16 @@ public class BasketManagerPS : MonoBehaviour
         _progressBar.SetProgress(progress: _currentActivityIndex, correct: isCorrect);
         _counter.AddScore(correct: isCorrect);
 
-        InitCount(isCorrect).Forget();
+        InitCount(isCorrect, hoopIndex).Forget();
     }
 
-    private async UniTaskVoid InitCount(bool isCorrect)
+    private async UniTaskVoid InitCount(bool isCorrect, int correctIndex)
     {
         FeedbackType feedbackType = isCorrect ? FeedbackType.Positive : FeedbackType.Neutral;
 
         await UniTask.WaitForSeconds(2f);
 
-        await _canvasUI.ShowFeedback(feedbackType);
+        await _feedbackController.ShowSL(feedbackType, correctIndex);
 
         ChangeActivity();
 
@@ -279,7 +279,7 @@ public class BasketManagerPS : MonoBehaviour
         AnswerDTO answer = new(answers);
         _hoopManager.SetHoopStates(in answer);
 
-        ViewContentDTO content = new(_icons, _texts);
+        ViewContentDTO content = new(_icons, _texts, false);
 
         _uiManager.SetViewContent(in content);
 
@@ -287,9 +287,9 @@ public class BasketManagerPS : MonoBehaviour
 
         _uiManager.SetAudioClips(_audioItems);
 
-        ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords);
+        ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords, _texts);
 
-        _canvasUI.SetFeedbackContent(in feedbackContent);
+        _feedbackController.SetItemsContent(in feedbackContent);
 
         ResetActivity();
     }

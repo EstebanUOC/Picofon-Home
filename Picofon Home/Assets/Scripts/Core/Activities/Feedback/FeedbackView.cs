@@ -10,7 +10,7 @@ public enum FeedbackType
 
 public class FeedbackView : MonoBehaviour
 {
-    [Space(15)]
+    [Space]
     public GameObject FeedbackPositive;
     public GameObject FeedbackNeutral;
 

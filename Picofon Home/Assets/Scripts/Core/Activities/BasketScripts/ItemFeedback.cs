@@ -9,8 +9,10 @@ public class ItemFeedback : MonoBehaviour
     private TMP_Text _text;
 
     private string _syllabifiedWord;
+    private string _word;
 
     public string SyllabifiedWord => _syllabifiedWord;
+    public string Word => _word;
 
     public void Awake()
     {
@@ -20,9 +22,10 @@ public class ItemFeedback : MonoBehaviour
         _image = _item.Icon.GetComponent<Image>();
     }
 
-    public void SetItemContent(Sprite sprite, string syllabifiedWord)
+    public void SetItemContent(Sprite sprite, string syllabifiedWord, string word)
     {
         _syllabifiedWord = syllabifiedWord;
+        _word = word;
         _image.sprite = sprite;
     }
 
@@ -30,5 +33,11 @@ public class ItemFeedback : MonoBehaviour
     {
         _text.color = color;
         _text.SetText(builder);
+    }
+
+    public void ConfigureItem(string text, Color32 color)
+    {
+        _text.color = color;
+        _text.SetText(text);
     }
 }

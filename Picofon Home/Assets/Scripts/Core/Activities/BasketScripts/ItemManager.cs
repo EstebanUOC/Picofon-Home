@@ -66,7 +66,7 @@ public class ItemManager : MonoBehaviour
         for (int i = 0; i < _items.Length; i++)
         {
             ItemView view = _items[i].GetComponent<ItemView>();
-            view.SetContent(content.Icons[i], content.Texts[i]);
+            view.SetContent(content.Icons[i], content.Words[i]);
         }
     }
 

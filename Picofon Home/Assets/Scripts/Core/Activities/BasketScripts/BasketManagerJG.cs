@@ -21,7 +21,7 @@ public class BasketGameManagerJG : MonoBehaviour
 {
     [Space]
     [SerializeField]
-    private CanvasUI _canvasUI;
+    private FeedbackController _feedbackController;
 
     [SerializeField]
     private ModalGame _modalGame;
@@ -90,7 +90,7 @@ public class BasketGameManagerJG : MonoBehaviour
         }
 # endif
 
-        _canvasUI.Init(skill);
+        _feedbackController.Init(skill);
 
         LoadActivities(@params: @params, skill: skill, language: language).Forget();
     }
@@ -255,7 +255,7 @@ public class BasketGameManagerJG : MonoBehaviour
 
         await UniTask.WaitForSeconds(2f);
 
-        await _canvasUI.ShowFeedback(feedbackType);
+        await _feedbackController.Show(feedbackType);
 
         ChangeActivity();
 
@@ -287,7 +287,7 @@ public class BasketGameManagerJG : MonoBehaviour
         AnswerDTO answer = new(answers);
         _hoopManager.SetHoopStates(in answer);
 
-        ViewContentDTO content = new(_icons, _texts);
+        ViewContentDTO content = new(_icons, _texts, false);
 
         _uiManager.SetViewContent(in content);
 
@@ -295,9 +295,9 @@ public class BasketGameManagerJG : MonoBehaviour
 
         _uiManager.SetAudioClips(_audioItems);
 
-        ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords);
+        ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords, true);
 
-        _canvasUI.SetFeedbackContent(in feedbackContent);
+        _feedbackController.SetItemsContent(in feedbackContent);
 
         ResetActivity();
     }
