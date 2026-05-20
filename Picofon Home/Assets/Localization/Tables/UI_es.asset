@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
-  m_Name: Table_es
+  m_Name: UI_es
   m_EditorClassIdentifier: 
   m_LocaleId:
     m_Code: es
@@ -207,6 +207,102 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 9450557654810624
     m_Localized: Seleccionar centro
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12667436712181760
+    m_Localized: Registrar infante
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12667702865936384
+    m_Localized: "Completa la informaci\xF3n para registrar un nuevo infante."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12667909552848896
+    m_Localized: "Informaci\xF3n acad\xE9mica"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12668273765236736
+    m_Localized: "Pa\xEDs de residencia"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12668496562470912
+    m_Localized: Centro institucional
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12668676292591616
+    m_Localized: Curso
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12669032246394880
+    m_Localized: "Informaci\xF3n personal"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12670364894216192
+    m_Localized: "Identificaci\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12670480929636352
+    m_Localized: Nombre
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12670604951011328
+    m_Localized: Apellido
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12670736790568960
+    m_Localized: Fecha de nacimiento
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12673230258159616
+    m_Localized: "Comunicaci\xF3n y lenguaje"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12673406037245952
+    m_Localized: Idioma preferido
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12673644386959360
+    m_Localized: "Espa\xF1ol"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12673684786495488
+    m_Localized: "Catal\xE1n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12673905075535872
+    m_Localized: Trastorno del habla
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12674014093885440
+    m_Localized: Trastorno Especifico del Lenguaje
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12674180091854848
+    m_Localized: Trastorno del Espectro Autista
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12674337302757376
+    m_Localized: "Trastorno por D\xE9ficit de Atenci\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12674425412501504
+    m_Localized: Otros
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14102677192556544
+    m_Localized: Registrar infante
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14102815466176512
+    m_Localized: "Completa la informaci\xF3n para registrar un nuevo infante."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14103015282819072
+    m_Localized: Actualizar infante
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14103137559363584
+    m_Localized: "Completa la informaci\xF3n para actualizar al infante seleccionado."
     m_Metadata:
       m_Items: []
   references:

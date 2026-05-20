@@ -18,7 +18,10 @@ public static class SceneOrientationHelper
 
         if (dpi == 0)
         {
-            isTablet = Mathf.Min(Screen.width, Screen.height) >= 1200;
+            int minSide = Mathf.Min(Screen.width, Screen.height);
+            float aspect = (float)Mathf.Max(Screen.width, Screen.height) / minSide;
+
+            isTablet = minSide >= 700 && aspect < 2.1f;
 
             _deviceType = isTablet ? DeviceType.Tablet : DeviceType.Mobile;
             return isTablet;

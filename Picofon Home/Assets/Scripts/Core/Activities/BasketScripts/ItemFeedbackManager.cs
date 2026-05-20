@@ -1,5 +1,6 @@
 using System.Text;
 using BasketResponses;
+using Cysharp.Threading.Tasks.Triggers;
 using UnityEngine;
 
 public enum ActivitySkill : byte
@@ -30,12 +31,26 @@ public class ItemFeedbackManager : MonoBehaviour
         _skill = skill;
     }
 
-    public void SetItemsContent(in ViewContentDTO content)
+    public void SetItemsContent(in ViewContentDTO content, int length = 0)
     {
-        for (int i = 0; i < _items.Length; i++)
+        int count = _items.Length;
+
+        if (length > 0)
         {
+            count = length;
+        }
+
+        for (int i = 0; i < count; i++)
+        {
+            string word = null;
+
+            if (content.Words.Length > 0)
+            {
+                word = content.Words[i];
+            }
+
             ItemFeedback feedback = _items[i].GetComponent<ItemFeedback>();
-            feedback.SetItemContent(content.Icons[i], content.Texts[i]);
+            feedback.SetItemContent(content.Icons[i], content.SyllabifiedWords[i], word);
         }
     }
 
@@ -50,48 +65,38 @@ public class ItemFeedbackManager : MonoBehaviour
 
             _builder.Clear();
 
-            switch (_skill)
+            BuildWord(word, feedbackType);
+
+            item.ConfigureItem(_builder, textColor);
+        }
+    }
+
+    public void ConfigureItemsByTypeSL(FeedbackType feedbackType, int correctIndex)
+    {
+        Color32 textColor = feedbackType == FeedbackType.Positive ? _positiveColor : _negativeColor;
+
+        for (int i = 0; i < _items.Length; i++)
+        {
+            ItemFeedback item = _items[i].GetComponent<ItemFeedback>();
+            string word = item.Word;
+
+            if (feedbackType == FeedbackType.Neutral)
             {
-                case ActivitySkill.Initial:
-                {
-                    int sep = word.IndexOf('#');
-                    ColorWord(word, 0, sep, feedbackType);
-                    _builder.Append(word, sep + 1, word.Length - sep - 1);
-                    break;
-                }
-                case ActivitySkill.Medial:
-                {
-                    int firstSep = word.IndexOf('#');
-                    int lastSep = word.LastIndexOf('#');
-
-                    _builder.Append(word, 0, firstSep);
-                    ColorWord(word, firstSep + 1, lastSep - firstSep - 1, feedbackType);
-                    _builder.Append(word, lastSep + 1, word.Length - lastSep - 1);
-                    break;
-                }
-                case ActivitySkill.Final:
-                {
-                    CountSyllables(word, out int syllablesCount);
-
-                    int firstSep = word.IndexOf('#');
-                    int lastSep = word.LastIndexOf('#');
-
-                    _builder.Append(word, 0, firstSep);
-
-                    if (syllablesCount > 2)
-                    {
-                        _builder.Append(word, firstSep + 1, lastSep - firstSep - 1);
-                    }
-
-                    ColorWord(
-                        word,
-                        startIndex: lastSep + 1,
-                        length: word.Length - lastSep - 1,
-                        feedbackType
-                    );
-                    break;
-                }
+                item.ConfigureItem(word, textColor);
+                continue;
             }
+
+            if (i != correctIndex)
+            {
+                item.ConfigureItem(word, textColor);
+                continue;
+            }
+
+            word = item.SyllabifiedWord;
+
+            _builder.Clear();
+
+            BuildWord(word, feedbackType);
 
             item.ConfigureItem(_builder, textColor);
         }
@@ -106,6 +111,52 @@ public class ItemFeedbackManager : MonoBehaviour
             if (word[i] == '#')
             {
                 syllablesCount++;
+            }
+        }
+    }
+
+    private void BuildWord(string word, FeedbackType feedbackType)
+    {
+        switch (_skill)
+        {
+            case ActivitySkill.Initial:
+            {
+                int sep = word.IndexOf('#');
+                ColorWord(word, 0, sep, feedbackType);
+                _builder.Append(word, sep + 1, word.Length - sep - 1);
+                break;
+            }
+            case ActivitySkill.Medial:
+            {
+                int firstSep = word.IndexOf('#');
+                int lastSep = word.LastIndexOf('#');
+
+                _builder.Append(word, 0, firstSep);
+                ColorWord(word, firstSep + 1, lastSep - firstSep - 1, feedbackType);
+                _builder.Append(word, lastSep + 1, word.Length - lastSep - 1);
+                break;
+            }
+            case ActivitySkill.Final:
+            {
+                CountSyllables(word, out int syllablesCount);
+
+                int firstSep = word.IndexOf('#');
+                int lastSep = word.LastIndexOf('#');
+
+                _builder.Append(word, 0, firstSep);
+
+                if (syllablesCount > 2)
+                {
+                    _builder.Append(word, firstSep + 1, lastSep - firstSep - 1);
+                }
+
+                ColorWord(
+                    word,
+                    startIndex: lastSep + 1,
+                    length: word.Length - lastSep - 1,
+                    feedbackType
+                );
+                break;
             }
         }
     }

@@ -11,7 +11,7 @@ using static TMPro.TMP_Dropdown;
 public class UserChildren : MonoBehaviour
 {
     private const int HeightCenter = 630;
-    private const int HeightChildren = 795;
+    private const int HeightChildren = 955;
     private const int HeightNoChildren = 415;
     private const int HeightChildrenTherapist = 595;
 
@@ -52,7 +52,10 @@ public class UserChildren : MonoBehaviour
     private CustomButton _selectChildButton;
 
     [SerializeField]
-    private CustomButton _registerButton;
+    private CustomButton _registerChildButton;
+
+    [SerializeField]
+    private CustomButtonLoading _updateChildButton;
 
     [Space]
     [SerializeField]
@@ -64,19 +67,15 @@ public class UserChildren : MonoBehaviour
     [SerializeField]
     private RectTransform _overlayTransform;
 
-    private Action _onAlphaComplete;
-
     private string _userId;
+    private UserRole _userRole;
 
     private string[] _childrenIds;
-
     private int[] _centerIds;
-
-    private RectTransform _panel;
-
     private bool _hasChildren;
 
-    private UserRole _userRole;
+    private RectTransform _panel;
+    private Action _onAlphaComplete;
 
     public void Start()
     {
@@ -86,7 +85,9 @@ public class UserChildren : MonoBehaviour
 
         _selectChildButton.OnClick += OnSelectChild;
 
-        _registerButton.OnClick += OnRegisterChild;
+        _registerChildButton.OnClick += OnRegisterChild;
+
+        _updateChildButton.OnClick += OnUpdateChild;
 
         _panel = GetComponent<RectTransform>();
 
@@ -103,7 +104,7 @@ public class UserChildren : MonoBehaviour
         _childrenDropdown.gameObject.SetActive(true);
         _selectChildButton.gameObject.SetActive(true);
 
-        _registerButton.gameObject.SetActive(true);
+        _registerChildButton.gameObject.SetActive(true);
 
         if (_userRole == UserRole.Therapist)
         {
@@ -190,6 +191,25 @@ public class UserChildren : MonoBehaviour
 
         await LoadChildrenAsync(centerId);
 
+        if (_userRole == UserRole.Therapist && !_hasChildren)
+        {
+            _ = Tween
+                .Alpha(_overlay, startValue: 1f, endValue: 0f, duration: 0.3f)
+                .OnComplete(_onAlphaComplete);
+
+            ModalData modalData = new()
+            {
+                Title = "No Children",
+                Message =
+                    "There are no children associated with the selected center. Please register a child on the web platform or choose another center.",
+                Panel = _panel,
+            };
+
+            _ = _uiManager.ShowModal(modalData);
+
+            return;
+        }
+
         _centerContent.SetActive(false);
 
         Vector2 target = new(_contentTransform.sizeDelta.x, HeightChildren);
@@ -197,7 +217,9 @@ public class UserChildren : MonoBehaviour
         if (_userRole == UserRole.Therapist)
         {
             target.y = HeightChildrenTherapist;
-            _registerButton.gameObject.SetActive(false);
+
+            _registerChildButton.gameObject.SetActive(false);
+            _updateChildButton.gameObject.SetActive(false);
         }
 
         if (!_hasChildren)
@@ -260,7 +282,7 @@ public class UserChildren : MonoBehaviour
             _centerDropdown.gameObject.SetActive(false);
             _labelObject.SetActive(true);
 
-            _centerLabel.SetText(result.Data[0].Center);
+            _centerLabel.SetText(result.Data[0].Name);
 
             _centerIds[0] = 1;
 
@@ -274,9 +296,11 @@ public class UserChildren : MonoBehaviour
 
         for (int i = 0; i < result.Data.Length; i++)
         {
-            _centerDropdown.options.Add(new OptionData(result.Data[i].Center));
+            CenterDTO center = result.Data[i];
 
-            _centerIds[i] = i + 1;
+            _centerDropdown.options.Add(new OptionData(center.Name));
+
+            _centerIds[i] = center.Id;
         }
 
         _centerDropdown.RefreshShownValue();
@@ -347,7 +371,45 @@ public class UserChildren : MonoBehaviour
 
     private void OnRegisterChild()
     {
+        RegisterChild.IsUpdate = false;
+
         _uiManager.ShowPanel(PanelEnum.RegisterChild);
+    }
+
+    private async UniTaskVoid OnUpdateChildAsync()
+    {
+        string childId = _childrenIds[_childrenDropdown.value];
+
+        ChildService childService = new();
+
+        ApiResult<ChildDataDTO> result = await childService.GetChild(childId);
+
+        _updateChildButton.EndLoading();
+
+        if (!result.Success)
+        {
+            ModalData modalData = new()
+            {
+                Title = "Error",
+                Message = "Could not load child data. Please try again later.",
+                Panel = _panel,
+            };
+
+            await _uiManager.ShowModal(modalData);
+
+            return;
+        }
+
+        _authManager.SetCurrentChild(result.Data);
+
+        RegisterChild.IsUpdate = true;
+
+        _uiManager.ShowPanel(PanelEnum.RegisterChild);
+    }
+
+    private void OnUpdateChild()
+    {
+        OnUpdateChildAsync().Forget();
     }
 
     private void OnLogout()

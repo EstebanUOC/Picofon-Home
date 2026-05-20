@@ -74,12 +74,29 @@ namespace BasketResponses
     public readonly ref struct ViewContentDTO
     {
         public readonly Sprite[] Icons;
-        public readonly string[] Texts;
+        public readonly string[] SyllabifiedWords;
+        public readonly string[] Words;
 
-        public ViewContentDTO(Sprite[] icons, string[] texts)
+        public ViewContentDTO(Sprite[] icons, string[] syllabifiedWords, string[] words)
         {
             Icons = icons;
-            Texts = texts;
+            SyllabifiedWords = syllabifiedWords;
+            Words = words;
+        }
+
+        public ViewContentDTO(Sprite[] icons, string[] words, bool isSyllabified)
+        {
+            Icons = icons;
+
+            if (isSyllabified)
+            {
+                SyllabifiedWords = words;
+                Words = Array.Empty<string>();
+                return;
+            }
+
+            SyllabifiedWords = Array.Empty<string>();
+            Words = words;
         }
     }
 

@@ -972,7 +972,6 @@ GameObject:
   - component: {fileID: 127598251}
   - component: {fileID: 127598253}
   - component: {fileID: 127598252}
-  - component: {fileID: 127598250}
   m_Layer: 5
   m_Name: Canvas UI
   m_TagString: Untagged
@@ -1005,19 +1004,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &127598250
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 127598248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29c6b989033b02b1c90757cfe846dec8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _feedback: {fileID: 1650781392}
 --- !u!223 &127598251
 Canvas:
   m_ObjectHideFlags: 0
@@ -3371,7 +3357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e48d1bf037de15031ac8e80916a26d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canvasUI: {fileID: 127598250}
+  _feedbackController: {fileID: 1650781394}
   _modalGame: {fileID: 129436212645371840}
   _ballController: {fileID: 1628458931}
   _progressBar: {fileID: 487504268}

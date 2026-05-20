@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class FeedbackController : MonoBehaviour
 {
-    [Space(10)]
     [SerializeField]
     private FeedbackView _feedbackView;
 
@@ -43,9 +42,20 @@ public class FeedbackController : MonoBehaviour
         return await _taskCompletion.Task;
     }
 
-    public void SetItemsContent(in ViewContentDTO content)
+    public async UniTask<bool> ShowSL(FeedbackType feedbackType, int correctIndex)
     {
-        _itemManager.SetItemsContent(in content);
+        gameObject.SetActive(true);
+        _feedbackView.DisplayFeedbackType(feedbackType);
+        _itemManager.ConfigureItemsByTypeSL(feedbackType, correctIndex);
+
+        _taskCompletion.Reset();
+
+        return await _taskCompletion.Task;
+    }
+
+    public void SetItemsContent(in ViewContentDTO content, int length = 0)
+    {
+        _itemManager.SetItemsContent(in content, length);
     }
 
     private void OnContinueButtonClicked()

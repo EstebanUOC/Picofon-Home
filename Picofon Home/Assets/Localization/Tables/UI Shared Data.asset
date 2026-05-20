@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
-  m_Name: Table Shared Data
+  m_Name: UI Shared Data
   m_EditorClassIdentifier: 
-  m_TableCollectionName: Table
+  m_TableCollectionName: UI
   m_TableCollectionNameGuidString: 9218e6ba46a99bc4bbfb36d6b92602f6
   m_Entries:
   - m_Id: 26655811813376
@@ -189,6 +189,102 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 9450557654810624
     m_Key: UC-SEL-CENTER
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12667436712181760
+    m_Key: REG-TITLE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12667702865936384
+    m_Key: REG-SUB
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12667909552848896
+    m_Key: REG-IA-TITLE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12668273765236736
+    m_Key: REG-IA-C
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12668496562470912
+    m_Key: REG-IA-CENTRE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12668676292591616
+    m_Key: REG-IA-CURSO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12669032246394880
+    m_Key: REG-IP-TITLE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12670364894216192
+    m_Key: REG-IP-ID
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12670480929636352
+    m_Key: REG-IP-NOM
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12670604951011328
+    m_Key: REG-IP-LASTNAME
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12670736790568960
+    m_Key: REG-IP-BIRTH
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12673230258159616
+    m_Key: REG-COM-TITLE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12673406037245952
+    m_Key: REG-COM-LANG
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12673644386959360
+    m_Key: REG-COM-LANG-1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12673684786495488
+    m_Key: REG-COM-LANG-2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12673905075535872
+    m_Key: REG-COM-DIS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12674014093885440
+    m_Key: REG-COM-DIS-1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12674180091854848
+    m_Key: REG-COM-DIS-2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12674337302757376
+    m_Key: REG-COM-DIS-3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12674425412501504
+    m_Key: REG-COM-DIS-4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14102677192556544
+    m_Key: REG-TITLE-REG
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14102815466176512
+    m_Key: REG-SUB-REG
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14103015282819072
+    m_Key: REG-TITLE-UP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14103137559363584
+    m_Key: REG-SUB-UP
     m_Metadata:
       m_Items: []
   m_Metadata:

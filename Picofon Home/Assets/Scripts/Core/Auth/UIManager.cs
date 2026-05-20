@@ -34,6 +34,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private RectTransform[] _panels;
 
+    [SerializeField]
+    private UIResponsiveTransform[] _responsiveTransforms;
+
     [Space]
     [SerializeField]
     private LoadingPanel _loadingPanel;
@@ -51,6 +54,14 @@ public class UIManager : MonoBehaviour
 
     public void Awake()
     {
+        if (SceneOrientationHelper.IsTablet())
+        {
+            foreach (UIResponsiveTransform responsiveRect in _responsiveTransforms)
+            {
+                responsiveRect.Target.localScale = responsiveRect.Scale;
+            }
+        }
+
         SceneOrientationHelper.LockToPortrait();
 
         foreach (RectTransform panel in _panels)

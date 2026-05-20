@@ -1,37 +1,83 @@
-using System;
-using System.Collections;
-using UnityEngine;
-using UnityEngine.Networking;
+using System.Text.Json;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using Picofon.Core.Network;
 
-public class ChildService
+public readonly struct ChildService
 {
-    private const string url = "https://ehc-picofon2.techlab.uoc.edu/api/children/";
-
-    public IEnumerator SendChildData(ChildModel childData, Action<bool> onComplete)
+    public async UniTask<ApiResult<ChildDataDTO>> GetChild(
+        string childId,
+        CancellationToken token = default
+    )
     {
-        string jsonData = childData.ToJson();
+        string url = $"{ApiConfig.BaseUrl}/children/{childId}";
 
-        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+        byte[] rawResponse;
 
-        using UnityWebRequest req = new(url, "POST");
-
-        req.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        req.downloadHandler = new DownloadHandlerBuffer();
-        req.SetRequestHeader("Content-Type", "application/json");
-
-        yield return req.SendWebRequest();
-
-        if (req.result == UnityWebRequest.Result.Success)
+        try
         {
-            Debug.Log("Child data sent successfully!");
-            Debug.Log(req.downloadHandler.text); // backend response
-            onComplete?.Invoke(true);
-        }
-        else
-        {
-            Debug.LogError(
-                "Child API error: " + req.error + "\nResponse: " + req.downloadHandler.text
+            rawResponse = await HttpClientUnity.GetAsyncBytes(
+                url: url,
+                timeoutSeconds: 5,
+                cancellationToken: token
             );
         }
+        catch (System.Exception)
+        {
+            return ApiResult<ChildDataDTO>.Fail(
+                "Network error occurred while fetching activities."
+            );
+        }
+
+        using JsonDocument doc = JsonDocument.Parse(rawResponse);
+        JsonElement root = doc.RootElement;
+
+        ApiResponseView<ChildDataDTO> responseView = new(root);
+
+        if (!responseView.Success)
+        {
+            return ApiResult<ChildDataDTO>.Fail(responseView.ErrorMessage);
+        }
+
+        return ApiResult<ChildDataDTO>.Ok(responseView.Data);
+    }
+
+    public async UniTask<ApiResult> UpdateChild(
+        string childId,
+        CreateChildDTO updateData,
+        CancellationToken token = default
+    )
+    {
+        string url = $"{ApiConfig.BaseUrl}/children/{childId}";
+
+        byte[] rawResponse;
+
+        byte[] jsonRequest = JsonHelper.ToBytes(updateData);
+
+        try
+        {
+            rawResponse = await HttpClientUnity.PatchAsyncBytes(
+                url: url,
+                data: jsonRequest,
+                timeoutSeconds: 5,
+                cancellationToken: token
+            );
+        }
+        catch (System.Exception)
+        {
+            return ApiResult.Fail("Network error occurred while fetching activities.");
+        }
+
+        using JsonDocument doc = JsonDocument.Parse(rawResponse);
+        JsonElement root = doc.RootElement;
+
+        ApiResponseView responseView = new(root);
+
+        if (!responseView.Success)
+        {
+            return ApiResult.Fail(responseView.ErrorMessage);
+        }
+
+        return ApiResult.Ok();
     }
 }

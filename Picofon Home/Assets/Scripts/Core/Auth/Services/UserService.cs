@@ -150,7 +150,7 @@ public class UserService
     }
 
     public async UniTask<ApiResult> RegisterChild(
-        ChildCreateDTO childCreateDTO,
+        CreateChildDTO childCreateDTO,
         CancellationToken token = default
     )
     {
@@ -169,8 +169,11 @@ public class UserService
                 cancellationToken: token
             );
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
+            PerformanceLog.LogError(
+                $"Error registering child: {e.Message}, URL: {url}, Payload: {childCreateDTO}"
+            );
             return ApiResult.Fail("Network error occurred while registering child.");
         }
 

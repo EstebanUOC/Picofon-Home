@@ -52,6 +52,10 @@ public class Modal : MonoBehaviour, IPointerClickHandler
 
     public void Awake()
     {
+        _contentObject.SetActive(false);
+        _debugMenuObject.SetActive(false);
+        _optionsMenuObject.SetActive(false);
+
         _eventChannel = new GenericEventChannel();
 
         _eventChannel.OnRaised += HandleClose;

@@ -21,7 +21,7 @@ public class BasketManagerRE : MonoBehaviour
     private Fade _fade;
 
     [SerializeField]
-    private CanvasUI _canvasUI;
+    private FeedbackController _feedbackController;
 
     [SerializeField]
     private ModalGame _modalGame;
@@ -87,7 +87,7 @@ public class BasketManagerRE : MonoBehaviour
             _camera.transform.position = new Vector3(0f, 0.6f, -10f);
         }
 
-        _canvasUI.Init(skill);
+        _feedbackController.Init(skill);
 
         AudioEntry<ResponseAudioID>[] audioEntries = Array.Empty<AudioEntry<ResponseAudioID>>();
 
@@ -245,6 +245,16 @@ public class BasketManagerRE : MonoBehaviour
         _progressBar.SetProgress(progress: _currentActivityIndex, correct: isCorrect);
         _counter.AddScore(correct: isCorrect);
 
+        _icons[0] = LoadSprite(_currentActivity.MainWord.Path);
+        _syllabifiedWords[0] = _currentActivity.MainWord.SyllabifiedWord;
+
+        _icons[1] = LoadSprite(currentWord.Path);
+        _syllabifiedWords[1] = currentWord.SyllabifiedWord;
+
+        ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords, isSyllabified: true);
+
+        _feedbackController.SetItemsContent(in feedbackContent, length: 2);
+
         InitCount(isCorrect).Forget();
     }
 
@@ -254,7 +264,7 @@ public class BasketManagerRE : MonoBehaviour
 
         await UniTask.WaitForSeconds(2f);
 
-        await _canvasUI.ShowFeedback(feedbackType);
+        await _feedbackController.Show(feedbackType);
 
         ChangeActivity();
 
@@ -291,17 +301,13 @@ public class BasketManagerRE : MonoBehaviour
         AnswerDTO answer = new(answers);
         _hoopManager.SetHoopStates(in answer);
 
-        ViewContentDTO content = new(_icons, _texts);
+        ViewContentDTO content = new(_icons, _texts, false);
 
         _uiManager.SetViewContent(in content);
 
         AudioManager.Instance.GetAudios(_currentActivityIndex, 5, _audioItems);
 
         _uiManager.SetAudioClips(_audioItems);
-
-        ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords);
-
-        _canvasUI.SetFeedbackContent(in feedbackContent);
 
         ResetActivity();
     }

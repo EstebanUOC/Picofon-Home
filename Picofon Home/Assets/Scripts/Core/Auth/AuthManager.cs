@@ -16,6 +16,17 @@ public struct InitializeData
     public UserDataDTO CurrentUser { get; set; }
 }
 
+public class ChildDataDTO
+{
+    public string Id { get; set; }
+
+    public string FirstName { get; set; }
+
+    public string LastName { get; set; }
+
+    public string BirthDate { get; set; }
+}
+
 public class AuthManager : MonoBehaviour
 {
     private const string GoogleClientId =
@@ -32,6 +43,8 @@ public class AuthManager : MonoBehaviour
     public UserService UserService => _userService;
 
     public UserDataDTO CurrentUser => _initializeData.CurrentUser;
+
+    public ChildDataDTO CurrentChild { get; private set; }
 
     private UserService _userService;
 
@@ -62,6 +75,17 @@ public class AuthManager : MonoBehaviour
             ProfileComplete = user.ProfileCompleted,
             Role = user.Role,
             LegalAccepted = user.LegalAccepted,
+        };
+    }
+
+    public void SetCurrentChild(ChildDataDTO child)
+    {
+        CurrentChild = new()
+        {
+            Id = child.Id,
+            FirstName = child.FirstName,
+            LastName = child.LastName,
+            BirthDate = child.BirthDate,
         };
     }
 

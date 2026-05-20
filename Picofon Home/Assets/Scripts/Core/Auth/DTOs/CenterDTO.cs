@@ -1,4 +1,8 @@
 public readonly struct CenterDTO
 {
-    public readonly string Center { get; init; }
+    public readonly int Id { get; init; }
+
+    public readonly string Name { get; init; }
+
+    public readonly int CountryId { get; init; }
 }

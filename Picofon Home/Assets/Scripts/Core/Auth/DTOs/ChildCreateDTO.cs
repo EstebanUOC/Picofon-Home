@@ -1,14 +1,24 @@
-public readonly struct ChildCreateDTO
+public class CreateChildDTO
 {
-    public readonly string Id { get; init; }
-    public readonly string FirstName { get; init; }
-    public readonly string LastName { get; init; }
-    public readonly string BirthDate { get; init; }
-    public readonly string Disorder { get; init; }
-    public readonly string School { get; init; }
-    public readonly int LanguagePreference { get; init; }
-    public readonly int Grade { get; init; }
-    public readonly int CenterId { get; init; }
-    public readonly string UserId { get; init; }
-    public readonly UserRole Relationship { get; init; }
+    public string Id { get; set; }
+
+    public string FirstName { get; set; }
+
+    public string LastName { get; set; }
+
+    public string BirthDate { get; set; }
+
+    public string Disorder { get; set; }
+
+    public string School { get; set; }
+
+    public int LanguagePreference { get; set; }
+
+    public int Grade { get; set; }
+
+    public int? CenterId { get; set; } = null;
+
+    public string UserId { get; set; }
+
+    public UserRole Relationship { get; set; }
 }
