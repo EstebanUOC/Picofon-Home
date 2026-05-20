@@ -284,7 +284,7 @@ public class UserChildren : MonoBehaviour
 
             _centerLabel.SetText(result.Data[0].Name);
 
-            _centerIds[0] = 1;
+            _centerIds[0] = result.Data[0].Id;
 
             return;
         }
