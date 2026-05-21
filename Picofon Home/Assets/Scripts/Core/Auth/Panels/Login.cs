@@ -102,6 +102,9 @@ public class Login : MonoBehaviour
                     "Your profile is incomplete. Please complete your profile in the web portal to access the app.",
                 Panel = _panel,
             };
+
+            _loginButton.EndLoading();
+
             await _uiManager.ShowModal(modalData);
 
             _authManager.Logout();
@@ -116,9 +119,15 @@ public class Login : MonoBehaviour
                 Message = "Could not log in. Please try again later.",
                 Panel = _panel,
             };
+
+            _loginButton.EndLoading();
+
             await _uiManager.ShowModal(modalData);
+
             return;
         }
+
+        _loginButton.EndLoading();
 
         OnLoginSuccess(result.Data.User);
     }
