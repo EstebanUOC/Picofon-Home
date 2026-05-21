@@ -38,11 +38,8 @@ public class UserService
                 cancellationToken: token
             );
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
-            PerformanceLog.LogError(
-                $"Error during login with Firebase token: {e.Message}, URL: {url}, Payload: {loginRequest}"
-            );
             return ApiResult<LoginData>.Fail("Network error occurred while logging in.");
         }
 
@@ -53,9 +50,6 @@ public class UserService
 
         if (!responseView.Success)
         {
-            PerformanceLog.LogError(
-                $"Login failed: {responseView.ErrorMessage}, URL: {url}, Payload: {loginRequest}"
-            );
             return ApiResult<LoginData>.Fail(responseView.ErrorMessage);
         }
 
