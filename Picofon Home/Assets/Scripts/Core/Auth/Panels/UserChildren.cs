@@ -142,11 +142,13 @@ public class UserChildren : MonoBehaviour
             return;
         }
 
-        if (result.Data.Length == 0)
-        {
-            _childrenDropdown.gameObject.SetActive(false);
-            _selectChildButton.gameObject.SetActive(false);
+        bool noChildren = result.Data.Length == 0;
 
+        _childrenDropdown.gameObject.SetActive(!noChildren);
+        _selectChildButton.gameObject.SetActive(!noChildren);
+
+        if (noChildren)
+        {
             _hasChildren = false;
 
             return;
