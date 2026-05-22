@@ -106,7 +106,8 @@ public class LevelDataStore : MonoBehaviour
 
     private async UniTask GetPlans(string childId)
     {
-        _service = new();
+        _service = new(0);
+
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 
         ApiResult<TherapyData> result = await _service.GetAllPlans<TherapyData>(childId, token);

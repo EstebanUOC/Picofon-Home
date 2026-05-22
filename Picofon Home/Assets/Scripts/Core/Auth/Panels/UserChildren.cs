@@ -71,6 +71,7 @@ public class UserChildren : MonoBehaviour
     private UserRole _userRole;
 
     private string[] _childrenIds;
+    private bool[] _hasIAEnabled;
     private int[] _centerIds;
     private bool _hasChildren;
 
@@ -159,6 +160,8 @@ public class UserChildren : MonoBehaviour
         _childrenIds = new string[result.Data.Length];
         _childrenDropdown.ClearOptions();
 
+        _hasIAEnabled = new bool[result.Data.Length];
+
         StringBuilder stringBuilder = new();
 
         for (int i = 0; i < result.Data.Length; i++)
@@ -176,6 +179,7 @@ public class UserChildren : MonoBehaviour
             _childrenDropdown.options.Add(option);
 
             _childrenIds[i] = child.Id;
+            _hasIAEnabled[i] = child.IsAiPersonalizationEnabled;
         }
 
         _childrenDropdown.RefreshShownValue();
@@ -328,6 +332,7 @@ public class UserChildren : MonoBehaviour
 
         MapPathPayload.ChildId = childId;
         MapPathPayload.ConductedById = _authManager.CurrentUser.Id;
+        MapPathPayload.IsAIEnabled = _hasIAEnabled[selectedIndex];
 
         LevelDataStore instance = LevelDataStore.Instance;
 
@@ -342,20 +347,28 @@ public class UserChildren : MonoBehaviour
 
         _uiManager.ContinueMapTransition(success: instance.HasPlans() && instance.HasActivePlans());
 
-        if (!instance.HasActivePlans())
+        if (instance.HasActivePlans())
         {
-            await UniTask.WaitForSeconds(2.5f);
-            await _uiManager.ShowModal(
-                new ModalData
-                {
-                    Title = "No Active Plans",
-                    Message =
-                        "There are no active therapy plans for the selected child. Choose another child",
-                    Panel = _panel,
-                }
-            );
             return;
         }
+
+        PerformanceLog.Log("Has IA enabled: " + _hasIAEnabled[selectedIndex]);
+
+        LearningRateService service = new();
+
+        await service.GetLearningRate(childId);
+
+        await UniTask.WaitForSeconds(2.5f);
+
+        await _uiManager.ShowModal(
+            new ModalData
+            {
+                Title = "No Active Plans",
+                Message =
+                    "There are no active therapy plans for the selected child. Choose another child",
+                Panel = _panel,
+            }
+        );
     }
 
     private void OnSelectChild()

@@ -100,10 +100,10 @@ public class AuthManager : MonoBehaviour
             case DebugMenuResult.Children:
                 user = new()
                 {
-                    Id = "3YL5Ut6wibbdOg0xjsDjPsCO4a52",
+                    Id = "noXJSkWJnCW5iSEu32n5Kvofq5a2",
                     Email = "test@gmail.com",
                     Username = "Debug User",
-                    Role = UserRole.Therapist,
+                    Role = UserRole.Admin,
                 };
 
                 _initializeData.CurrentUser = user;
