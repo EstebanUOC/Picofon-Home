@@ -130,6 +130,13 @@ public class BasketManagerRE : MonoBehaviour
             _fade.Load();
             await UniTask.WaitForSeconds(1f);
 
+            TherapyPlanService therapyPlanService = new(0);
+
+            await therapyPlanService.ChangePlanStatus(
+                id: @params.PlanId,
+                status: TherapyStatus.Cancelled
+            );
+
             _ = _fade.Stop(onComplete: () => SceneManager.LoadScene("MapPathScene"));
 
             return;

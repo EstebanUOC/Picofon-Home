@@ -20,16 +20,21 @@ public readonly struct CreateDefaultPlansRequest
     public string AssignedById { get; init; }
 }
 
-public sealed class TherapyPlanService
+public readonly struct TherapyPlanService
 {
-    private readonly string BaseURL = ApiConfig.BaseUrl + "therapy";
+    private readonly string baseURL;
+
+    public TherapyPlanService(byte _)
+    {
+        baseURL = ApiConfig.BaseUrl + "therapy";
+    }
 
     public async UniTask<ApiResult<T>> GetAllPlans<T>(
         string childId,
         CancellationToken token = default
     )
     {
-        string url = $"{BaseURL}/child/{childId}";
+        string url = $"{baseURL}/child/{childId}";
 
         byte[] rawResponse;
 
@@ -48,7 +53,9 @@ public sealed class TherapyPlanService
                 return ApiResult<T>.Fail("Network error occurred while fetching therapy plans.");
             }
 
-            Debug.LogWarning("Network request failed. Falling back to local data in Debug Mode.");
+            PerformanceLog.LogWarning(
+                "Network request failed. Falling back to local data in Debug Mode."
+            );
 
             string streamingPath = System.IO.Path.Combine(
                 Application.streamingAssetsPath,
@@ -82,7 +89,7 @@ public sealed class TherapyPlanService
         CancellationToken token = default
     )
     {
-        string url = $"{BaseURL}/default";
+        string url = $"{baseURL}/default";
 
         byte[] rawResponse;
 
@@ -126,15 +133,19 @@ public sealed class TherapyPlanService
         return ApiResult<T>.Ok(responseView.Data);
     }
 
-    public async UniTask<ApiResult> CompletePlan(int id, CancellationToken token = default)
+    public async UniTask<ApiResult> ChangePlanStatus(
+        int id,
+        TherapyStatus status,
+        CancellationToken token = default
+    )
     {
-        string url = $"{BaseURL}/{id}";
+        string url = $"{baseURL}/{id}";
 
         byte[] rawResponse;
 
-        TherapyPlanStatus status = new() { Status = TherapyStatus.Completed };
+        TherapyPlanStatus req = new() { Status = status };
 
-        byte[] jsonRequest = JsonHelper.ToBytes(in status);
+        byte[] jsonRequest = JsonHelper.ToBytes(in req);
 
         try
         {
@@ -147,7 +158,7 @@ public sealed class TherapyPlanService
         }
         catch (System.Exception)
         {
-            return ApiResult.Fail("Network error occurred while fetching therapy plans.");
+            return ApiResult.Fail("Network error occurred while completing the therapy plan.");
         }
 
         using JsonDocument doc = JsonDocument.Parse(rawResponse);
