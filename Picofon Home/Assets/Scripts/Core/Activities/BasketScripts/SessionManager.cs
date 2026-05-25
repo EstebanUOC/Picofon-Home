@@ -81,6 +81,14 @@ public class SessionManager : MonoBehaviour
             id: _sessionInfo.TherapyPlanId,
             status: TherapyStatus.Completed
         );
+
         await sessionService.CreateTherapySession(_sessionInfo, _sessionResults);
+
+        LearningRateService learningRateService = new();
+
+        await learningRateService.CalculateLearningRate(
+            childId: _sessionInfo.ChildId,
+            therapyPlan: _sessionInfo.TherapyPlanId
+        );
     }
 }
