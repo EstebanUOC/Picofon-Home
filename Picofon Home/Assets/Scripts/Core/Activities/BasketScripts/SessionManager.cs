@@ -84,7 +84,7 @@ public class SessionManager : MonoBehaviour
 
         await sessionService.CreateTherapySession(_sessionInfo, _sessionResults);
 
-        LearningRateService learningRateService = new();
+        LearningRateService learningRateService = new(0);
 
         await learningRateService.CalculateLearningRate(
             childId: _sessionInfo.ChildId,

@@ -3,6 +3,22 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Picofon.Core.Network;
 
+public sealed class TherapyPlanBulkData
+{
+    public string ChildId { get; init; }
+
+    public string AssignedById { get; init; }
+
+    public char Vowel { get; init; }
+
+    public JsonElement Levels { get; init; }
+}
+
+public sealed class LearningRateData
+{
+    public JsonElement Levels { get; init; }
+}
+
 public readonly struct CalculateLearningRateRequest
 {
     public readonly string ChildId { get; init; }
@@ -63,14 +79,14 @@ public readonly struct LearningRateService
         return ApiResult.Ok();
     }
 
-    public async UniTask<ApiResult> GetLearningRate(
+    public async UniTask<ApiResult<LearningRateData>> GetLearningRate(
         string childId,
         int therapyPlan,
         CancellationToken token = default
     )
     {
         string url =
-            $"{baseURL}/get-next-level-params?child_id={childId}&therapy_plan_id={therapyPlan}";
+            $"{baseURL}/generate-next-level-params?child_id={childId}&therapy_plan_id={therapyPlan}";
 
         byte[] rawResponse;
 
@@ -82,20 +98,63 @@ public readonly struct LearningRateService
                 cancellationToken: token
             );
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
-            return ApiResult.Fail("Network error occurred while fetching activities.");
+            PerformanceLog.Log($"Error fetching learning rate: {e.Message}, URL: {url}");
+            return ApiResult<LearningRateData>.Fail(
+                "Network error occurred while fetching activities."
+            );
         }
 
         using JsonDocument doc = JsonDocument.Parse(rawResponse);
         JsonElement root = doc.RootElement;
 
-        PerformanceLog.Log($"Get learning rate response \nURL: {url} \nRoot: {root}");
-
-        ApiResponseView responseView = new(root);
+        ApiResponseView<LearningRateData> responseView = new(root);
 
         if (!responseView.Success)
         {
+            return ApiResult<LearningRateData>.Fail(responseView.ErrorMessage);
+        }
+
+        return ApiResult<LearningRateData>.Ok(responseView.Data);
+    }
+
+    public async UniTask<ApiResult> CreateTherapyPlanBulk(
+        TherapyPlanBulkData payload,
+        CancellationToken token = default
+    )
+    {
+        string url = $"{ApiConfig.BaseUrl}/therapy/bulk";
+
+        byte[] jsonRequest = JsonHelper.ToBytes(in payload);
+
+        byte[] rawResponse;
+
+        try
+        {
+            rawResponse = await HttpClientUnity.PostAsyncBytes(
+                url: url,
+                data: jsonRequest,
+                timeoutSeconds: 5,
+                cancellationToken: token
+            );
+        }
+        catch (System.Exception e)
+        {
+            PerformanceLog.Log(
+                $"Error creating therapy plan bulk: {e.Message}, URL: {url}, Payload stirng: {JsonHelper.ToJson(payload)}"
+            );
+            return ApiResult.Fail("Network error occurred while creating therapy plan bulk.");
+        }
+
+        using JsonDocument doc = JsonDocument.Parse(rawResponse);
+        JsonElement root = doc.RootElement;
+
+        ApiResponseView<LearningRateData> responseView = new(root);
+
+        if (!responseView.Success)
+        {
+            PerformanceLog.Log($"Error creating therapy plan bulk: {responseView.ErrorMessage}");
             return ApiResult.Fail(responseView.ErrorMessage);
         }
 

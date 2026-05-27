@@ -345,30 +345,106 @@ public class UserChildren : MonoBehaviour
             await instance.CreateDefaultPlans(childId, _userId);
         }
 
-        _uiManager.ContinueMapTransition(success: instance.HasPlans() && instance.HasActivePlans());
-
         if (instance.HasActivePlans())
         {
+            _uiManager.ContinueMapTransition(success: true);
             return;
         }
 
-        PerformanceLog.Log("Has IA enabled: " + _hasIAEnabled[selectedIndex]);
+        if (!_hasIAEnabled[selectedIndex])
+        {
+            _uiManager.ContinueMapTransition(success: false);
 
-        LearningRateService service = new();
+            await UniTask.WaitForSeconds(2.5f);
 
-        await service.GetLearningRate(childId);
+            await _uiManager.ShowModal(
+                new ModalData
+                {
+                    Title = "No Active Plans",
+                    Message =
+                        "There are no active therapy plans for the selected child. Choose another child",
+                    Panel = _panel,
+                }
+            );
 
-        await UniTask.WaitForSeconds(2.5f);
+            return;
+        }
 
-        await _uiManager.ShowModal(
-            new ModalData
-            {
-                Title = "No Active Plans",
-                Message =
-                    "There are no active therapy plans for the selected child. Choose another child",
-                Panel = _panel,
-            }
+        TherapyPlan lastPlan = instance.GetLastPlan();
+
+        if (lastPlan is null)
+        {
+            _uiManager.ContinueMapTransition(success: false);
+
+            await UniTask.WaitForSeconds(2.5f);
+
+            await _uiManager.ShowModal(
+                new ModalData
+                {
+                    Title = "Error",
+                    Message =
+                        "Could not found any valid therapy plan for the selected child. Please try again later or choose another child.",
+                    Panel = _panel,
+                }
+            );
+
+            return;
+        }
+
+        LearningRateService service = new(0);
+
+        ApiResult<LearningRateData> result = await service.GetLearningRate(
+            childId,
+            lastPlan.TherapyPlanId
         );
+
+        if (!result.Success)
+        {
+            _uiManager.ContinueMapTransition(success: false);
+
+            await _uiManager.ShowModal(
+                new ModalData
+                {
+                    Title = "Error",
+                    Message =
+                        "An error occurred while calculating the learning rate for the selected child. Please try again later or choose another child.",
+                    Panel = _panel,
+                }
+            );
+
+            return;
+        }
+
+        TherapyPlanBulkData data = new()
+        {
+            ChildId = childId,
+            AssignedById = _userId,
+            Vowel = lastPlan.Vowel,
+            Levels = result.Data.Levels,
+        };
+
+        ApiResult resultCreate = await service.CreateTherapyPlanBulk(data);
+
+        if (!resultCreate.Success)
+        {
+            _uiManager.ContinueMapTransition(success: false);
+
+            await _uiManager.ShowModal(
+                new ModalData
+                {
+                    Title = "Error",
+                    Message =
+                        "An error occurred while creating the therapy plan for the selected child. Please try again later or choose another child.",
+                    Panel = _panel,
+                }
+            );
+
+            return;
+        }
+
+        await instance.LoadPlans(childId);
+
+        _uiManager.ContinueMapTransition(success: true);
     }
 
     private void OnSelectChild()

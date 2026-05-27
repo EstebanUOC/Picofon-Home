@@ -12,6 +12,8 @@ public class TherapyPlan
 
     public int TherapyPlanId { get; init; }
 
+    public char Vowel { get; init; }
+
     public TherapyStatus Status { get; init; }
 
     public TherapyTemplate TherapyTemplate { get; init; }
