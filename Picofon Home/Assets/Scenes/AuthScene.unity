@@ -23996,7 +23996,7 @@ MonoBehaviour:
     Scale: {x: 0.94, y: 0.94, z: 1}
   _loadingPanel: {fileID: 93977541}
   _modalPanel: {fileID: 444273589}
-  VersionNumber: 0.9
+  VersionNumber: 0.91
 --- !u!1 &1619191839
 GameObject:
   m_ObjectHideFlags: 0
