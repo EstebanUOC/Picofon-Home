@@ -35,6 +35,8 @@ public class Capsule : MonoBehaviour
 
         _currentFloatItem = _floatItem2;
         _currentFloatItem.SetFloating(true);
+
+        _sineTime = Mathf.PI;
     }
 
     public void FixedUpdate()
