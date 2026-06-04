@@ -11,6 +11,9 @@ public class Capsule : MonoBehaviour
     [SerializeField]
     private FloatItem _floatItem2;
 
+    [SerializeField]
+    private FloatItem _currentFloat;
+
     private float _targetY;
 
     private float _startY;
@@ -33,7 +36,7 @@ public class Capsule : MonoBehaviour
     {
         _startY = transform.position.y;
 
-        _currentFloatItem = _floatItem2;
+        _currentFloatItem = _currentFloat;
         _currentFloatItem.SetFloating(true);
 
         _sineTime = Mathf.PI;
