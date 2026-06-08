@@ -22,7 +22,7 @@ public sealed class LearningRateData
 public readonly struct CalculateLearningRateRequest
 {
     public readonly string ChildId { get; init; }
-    public readonly int TherapyPlan { get; init; }
+    public readonly int TherapyPlanId { get; init; }
 }
 
 public readonly struct LearningRateService
@@ -47,7 +47,7 @@ public readonly struct LearningRateService
         CalculateLearningRateRequest request = new()
         {
             ChildId = childId,
-            TherapyPlan = therapyPlan,
+            TherapyPlanId = therapyPlan,
         };
 
         byte[] jsonRequest = JsonHelper.ToBytes(in request);
@@ -61,8 +61,9 @@ public readonly struct LearningRateService
                 cancellationToken: token
             );
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
+            PerformanceLog.Log($"Error calculating learning rate: {e.Message}, URL: {url}");
             return ApiResult.Fail("Network error occurred while calculating learning rate.");
         }
 
