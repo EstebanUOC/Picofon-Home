@@ -35,9 +35,6 @@ public class LevelDataStore : MonoBehaviour
 
     public async UniTask LoadPlans(string id)
     {
-        if (HasPlans() && _lastId == id)
-            return;
-
         _lastId = id;
         _someActivePlanFound = false;
 
@@ -104,9 +101,19 @@ public class LevelDataStore : MonoBehaviour
         return null;
     }
 
+    public TherapyPlan GetLastPlan()
+    {
+        if (HasPlans())
+        {
+            return _cachedPlans[^1];
+        }
+
+        return null;
+    }
+
     private async UniTask GetPlans(string childId)
     {
-        _service = new(0);
+        _service = new TherapyPlanService(0);
 
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 

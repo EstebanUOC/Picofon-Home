@@ -10,4 +10,10 @@ public static class LevelPayload
     public static LanguageID Language { get; set; }
 
     public static bool TaskCompleted { get; set; }
+
+    public static bool IsFinalLevel { get; set; }
+
+    public static bool IsAIEnabled { get; set; }
+
+    public static char Vowel { get; set; }
 }

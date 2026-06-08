@@ -106,9 +106,17 @@ public class MapManager : MonoBehaviour
 
         LevelPayload.Skill = (ActivitySkill)template.SkillId;
         LevelPayload.Language = (LanguageID)plan.LanguageId;
+
+        LevelPayload.IsFinalLevel =
+            LevelDataStore.Instance.GetLastPlan().TherapyPlanId == plan.TherapyPlanId;
+
+        LevelPayload.Vowel = plan.Vowel;
+
         ActivityType type = (ActivityType)template.TaskTypeId;
 
         LevelPayload.TaskCompleted = plan.Status == TherapyStatus.Completed;
+
+        LevelPayload.IsAIEnabled = MapPathPayload.IsAIEnabled;
 
         string suffix = type switch
         {

@@ -315,12 +315,32 @@ public class BasketGameManagerJG : MonoBehaviour
         await _modalGame.ShowSummary();
 
         _fade.Load();
+
         LevelDataStore.Instance?.LevelCompleted();
 
         await _sessionManager.EndSession();
-        await UniTask.WaitForSeconds(1f);
 
-        AsyncOperation loadOperation = SceneManager.LoadSceneAsync("MapPathScene");
+        if (LevelPayload.IsFinalLevel)
+        {
+            await CalculateLearningRate();
+        }
+        else
+        {
+            await UniTask.WaitForSeconds(1f);
+        }
+
+        await LoadScene("MapPathScene");
+    }
+
+    private void ResetActivity()
+    {
+        _uiManager.Reset();
+        _ballController.Reset();
+    }
+
+    private async UniTask LoadScene(string sceneName)
+    {
+        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneName);
         loadOperation.allowSceneActivation = false;
 
         await UniTask.WaitUntil(() => loadOperation.progress >= 0.9f);
@@ -331,10 +351,55 @@ public class BasketGameManagerJG : MonoBehaviour
         );
     }
 
-    private void ResetActivity()
+    private async UniTask CalculateLearningRate()
     {
-        _uiManager.Reset();
-        _ballController.Reset();
+        if (!LevelPayload.IsAIEnabled)
+        {
+            await _modalGame.ShowFinal("Has completat tots els nivells, felicitats!");
+
+            await LoadScene("AuthScene");
+
+            return;
+        }
+
+        LearningRateService service = new(0);
+
+        string childId = LevelPayload.Params.ChildId;
+
+        int planId = LevelPayload.Params.PlanId;
+
+        ApiResult<LearningRateData> result = await service.GetLearningRate(
+            childId: childId,
+            therapyPlan: planId
+        );
+
+        if (!result.Success)
+        {
+            await _modalGame.ShowFinal("No s'han pogut carregar els nivells següents.");
+
+            await LoadScene("AuthScene");
+
+            return;
+        }
+
+        TherapyPlanBulkData data = new()
+        {
+            ChildId = childId,
+            AssignedById = LevelPayload.Params.ConductedById,
+            Vowel = LevelPayload.Vowel,
+            Levels = result.Data.Levels,
+        };
+
+        ApiResult resultCreate = await service.CreateTherapyPlanBulk(data);
+
+        if (!resultCreate.Success)
+        {
+            await _modalGame.ShowFinal("No s'han pogut carregar els nivells següents.");
+
+            await LoadScene("AuthScene");
+
+            return;
+        }
     }
 
     private Sprite LoadSprite(string p)

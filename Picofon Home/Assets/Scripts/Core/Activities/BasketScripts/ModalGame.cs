@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 public class ModalGame : MonoBehaviour
@@ -10,10 +11,20 @@ public class ModalGame : MonoBehaviour
     private SimpleButton _buttonWarning;
 
     [SerializeField]
+    private SimpleButton _buttonFinal;
+
+    [SerializeField]
     private GameObject _summary;
 
     [SerializeField]
     private GameObject _warning;
+
+    [Space]
+    [SerializeField]
+    private GameObject _final;
+
+    [SerializeField]
+    private TMP_Text _finalText;
 
     private ReusableCompletionSource<bool> _taskCompletion;
 
@@ -23,6 +34,31 @@ public class ModalGame : MonoBehaviour
 
         _buttonSummary.OnClick += OnButtonClicked;
         _buttonWarning.OnClick += OnButtonClicked;
+        _buttonFinal.OnClick += OnButtonClicked;
+
+        _summary.SetActive(false);
+        _warning.SetActive(false);
+        _final.SetActive(false);
+    }
+
+    public async UniTask<bool> ShowFinal(string text)
+    {
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+
+        _finalText.text = text;
+
+        _final.SetActive(true);
+
+        bool result = await _taskCompletion.Task;
+
+        _final.SetActive(false);
+
+        _taskCompletion.Reset();
+
+        return result;
     }
 
     public async UniTask<bool> ShowSummary()
