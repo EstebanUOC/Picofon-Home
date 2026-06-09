@@ -169,9 +169,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2534b7493122f4f0db4629b2ef9d801f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _capsule: {fileID: 1256833978}
   _standFloat: {fileID: 480910496}
   _floatItem1: {fileID: 497496818}
   _floatItem2: {fileID: 1512691585}
+  _floats: {fileID: 3302765}
+  _items: {fileID: 525967448}
 --- !u!1 &39703520
 GameObject:
   m_ObjectHideFlags: 0

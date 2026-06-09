@@ -1,7 +1,11 @@
+using PrimeTween;
 using UnityEngine;
 
 public class FloatManager : MonoBehaviour
 {
+    [SerializeField]
+    private Capsule _capsule;
+
     [SerializeField]
     private FloatItem _standFloat;
 
@@ -10,6 +14,12 @@ public class FloatManager : MonoBehaviour
 
     [SerializeField]
     private FloatItem _floatItem2;
+
+    [SerializeField]
+    private Transform _floats;
+
+    [SerializeField]
+    private Transform _items;
 
     public void Start()
     {
@@ -25,6 +35,8 @@ public class FloatManager : MonoBehaviour
 
         _standFloat = floatItem;
 
+        _capsule.JumpTo(floatItem);
+
         FloatItem other = _floatItem1;
 
         if (other == floatItem)
@@ -32,7 +44,9 @@ public class FloatManager : MonoBehaviour
             other = _floatItem2;
         }
 
-        _standFloat.SetFloating(true);
         other.HideCheap();
+
+        Tween.LocalPositionX(_floats, endValue: -9.5f, duration: 0.5f);
+        Tween.LocalPositionX(_items, endValue: -9.5f, duration: 0.5f);
     }
 }
