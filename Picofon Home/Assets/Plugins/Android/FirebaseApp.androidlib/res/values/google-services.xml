@@ -6,7 +6,7 @@
   <string name="project_id" translatable="false">picofon-282d8</string>
   <string name="google_api_key" translatable="false">AIzaSyCvx7jVToL-JYnA6Avq3DV5KIJvLIP5-JU</string>
   <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCvx7jVToL-JYnA6Avq3DV5KIJvLIP5-JU</string>
-  <string name="google_app_id" translatable="false">1:1068789468608:android:0b9689ccf1ab3950280c25</string>
-  <string name="default_android_client_id" translatable="false">1068789468608-a84aqo0j9sbqndp73l97qsd6ljq5c8h7.apps.googleusercontent.com</string>
+  <string name="google_app_id" translatable="false">1:1068789468608:android:bda023a25a8bc240280c25</string>
+  <string name="default_android_client_id" translatable="false">1068789468608-1p1a33ij18umv0pcgvl4s7hk8v9e6aub.apps.googleusercontent.com</string>
   <string name="default_web_client_id" translatable="false">1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com</string>
 </resources>

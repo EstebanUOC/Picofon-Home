@@ -1,65 +1,125 @@
 {
-    "project_info": {
-        "project_number": "1068789468608",
-        "firebase_url": "https://picofon-282d8-default-rtdb.europe-west1.firebasedatabase.app",
-        "project_id": "picofon-282d8",
-        "storage_bucket": "picofon-282d8.firebasestorage.app"
-    },
-    "client": [
-        {
-            "client_info": {
-                "mobilesdk_app_id": "1:1068789468608:android:0b9689ccf1ab3950280c25",
-                "android_client_info": {
-                    "package_name": "com.Language4Kids.Picofon"
-                }
-            },
-            "oauth_client": [
-                {
-                    "client_id": "1068789468608-a84aqo0j9sbqndp73l97qsd6ljq5c8h7.apps.googleusercontent.com",
-                    "client_type": 1,
-                    "android_info": {
-                        "package_name": "com.Language4Kids.Picofon",
-                        "certificate_hash": "0f7a21e193eed2ec8ddf2d4d82864077b9d469a9"
-                    }
-                },
-                {
-                    "client_id": "1068789468608-itlpdkh9gf9oqfu6tm7ts1acunobta0s.apps.googleusercontent.com",
-                    "client_type": 1,
-                    "android_info": {
-                        "package_name": "com.Language4Kids.Picofon",
-                        "certificate_hash": "175ca0a5c3a97475194b49556498be6827ac63f5"
-                    }
-                },
-                {
-                    "client_id": "1068789468608-m2n9s2k8htlqmoqa3ket72hattcc8je4.apps.googleusercontent.com",
-                    "client_type": 1,
-                    "android_info": {
-                        "package_name": "com.Language4Kids.Picofon",
-                        "certificate_hash": "f736335561454c334c44be65e74c9fe99c4186f6"
-                    }
-                },
-                {
-                    "client_id": "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com",
-                    "client_type": 3
-                }
-            ],
-            "api_key": [
-                {
-                    "current_key": "AIzaSyCvx7jVToL-JYnA6Avq3DV5KIJvLIP5-JU"
-                }
-            ],
-            "services": {
-                "appinvite_service": {
-                    "other_platform_oauth_client": [
-                        {
-                            "client_id": "1068789468608-fo3h7bl6gh34fm11d8920546a8om4vtf.apps.googleusercontent.com",
-                            "client_type": 3
-                        }
-                    ]
-                }
-            }
+  "project_info": {
+    "project_number": "1068789468608",
+    "firebase_url": "https://picofon-282d8-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "picofon-282d8",
+    "storage_bucket": "picofon-282d8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068789468608:android:0b9689ccf1ab3950280c25",
+        "android_client_info": {
+          "package_name": "com.Language4Kids.Picofon"
         }
-    ],
-    "configuration_version": "1"
+      },
+      "oauth_client": [
+        {
+          "client_id": "1068789468608-a84aqo0j9sbqndp73l97qsd6ljq5c8h7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Language4Kids.Picofon",
+            "certificate_hash": "0f7a21e193eed2ec8ddf2d4d82864077b9d469a9"
+          }
+        },
+        {
+          "client_id": "1068789468608-itlpdkh9gf9oqfu6tm7ts1acunobta0s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Language4Kids.Picofon",
+            "certificate_hash": "175ca0a5c3a97475194b49556498be6827ac63f5"
+          }
+        },
+        {
+          "client_id": "1068789468608-m2n9s2k8htlqmoqa3ket72hattcc8je4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Language4Kids.Picofon",
+            "certificate_hash": "f736335561454c334c44be65e74c9fe99c4186f6"
+          }
+        },
+        {
+          "client_id": "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvx7jVToL-JYnA6Avq3DV5KIJvLIP5-JU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1068789468608-fo3h7bl6gh34fm11d8920546a8om4vtf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068789468608:android:bda023a25a8bc240280c25",
+        "android_client_info": {
+          "package_name": "com.language4kids.picofon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1068789468608-1p1a33ij18umv0pcgvl4s7hk8v9e6aub.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.language4kids.picofon",
+            "certificate_hash": "f736335561454c334c44be65e74c9fe99c4186f6"
+          }
+        },
+        {
+          "client_id": "1068789468608-68e4q0cd7pkepufb69f6d4f75q265qpi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.language4kids.picofon",
+            "certificate_hash": "b6760688206670ae4a8421a891aa658a314f84d0"
+          }
+        },
+        {
+          "client_id": "1068789468608-fo7gj310f1kel0i3of0oengmbrjglguc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.language4kids.picofon",
+            "certificate_hash": "175ca0a5c3a97475194b49556498be6827ac63f5"
+          }
+        },
+        {
+          "client_id": "1068789468608-hs5rga5h62gv25gr8077a9cbpc2ed3et.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.language4kids.picofon",
+            "certificate_hash": "0f7a21e193eed2ec8ddf2d4d82864077b9d469a9"
+          }
+        },
+        {
+          "client_id": "1068789468608-otkna5ad1hgh9qqn0vt67630k67ri69r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvx7jVToL-JYnA6Avq3DV5KIJvLIP5-JU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1068789468608-fo3h7bl6gh34fm11d8920546a8om4vtf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
 }
-
