@@ -76,6 +76,14 @@
           }
         },
         {
+          "client_id": "1068789468608-2qvb6e5fn1b9id5fki9gnjo8elkspo73.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.language4kids.picofon",
+            "certificate_hash": "946f65f1b93a3d42f66fe584ab7f0742da87e17b"
+          }
+        },
+        {
           "client_id": "1068789468608-68e4q0cd7pkepufb69f6d4f75q265qpi.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
