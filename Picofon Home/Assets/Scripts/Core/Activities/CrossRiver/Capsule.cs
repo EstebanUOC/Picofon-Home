@@ -14,6 +14,7 @@ public class Capsule : MonoBehaviour
     private float _sineTime;
 
     private bool _isJumping = false;
+    private bool _isLanding = false;
 
     private FloatItem _currentFloatItem;
 
@@ -32,44 +33,6 @@ public class Capsule : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (_isJumping)
-        {
-            _jumpTime += Time.deltaTime;
-            float t = _jumpTime / _jumpDuration;
-
-            if (t >= 1f)
-            {
-                _isJumping = false;
-                _jumpTime = 0f;
-
-                transform.position = new Vector3(
-                    transform.position.x,
-                    _targetY,
-                    transform.position.z
-                );
-
-                _startY = transform.position.y;
-                _sineTime = Mathf.PI;
-
-                _currentFloatItem.SetFloating(true);
-                return;
-            }
-
-            float a = _compensation * _jumpHeight;
-
-            float targetY = _targetY - _startY;
-
-            float b = a + targetY;
-
-            float height = -a * (t * t) + b * t;
-
-            transform.position = new Vector3(
-                transform.position.x,
-                _startY + height,
-                transform.position.z
-            );
-        }
-
         if (!_isJumping)
         {
             _sineTime += Time.deltaTime;
@@ -81,7 +44,46 @@ public class Capsule : MonoBehaviour
                 _startY + offset,
                 transform.position.z
             );
+
+            return;
         }
+
+        if (_isLanding)
+        {
+            return;
+        }
+
+        _jumpTime += Time.deltaTime;
+        float t = _jumpTime / _jumpDuration;
+
+        if (t >= 1f)
+        {
+            _isJumping = false;
+            _isLanding = true;
+            _jumpTime = 0f;
+
+            transform.position = new Vector3(transform.position.x, _targetY, transform.position.z);
+
+            _startY = transform.position.y;
+            _sineTime = Mathf.PI;
+
+            _currentFloatItem.SetFloating(true);
+            return;
+        }
+
+        float a = _compensation * _jumpHeight;
+
+        float targetY = _targetY - _startY;
+
+        float b = a + targetY;
+
+        float height = -a * (t * t) + b * t;
+
+        transform.position = new Vector3(
+            transform.position.x,
+            _startY + height,
+            transform.position.z
+        );
     }
 
     public void JumpTo(FloatItem floatItem)

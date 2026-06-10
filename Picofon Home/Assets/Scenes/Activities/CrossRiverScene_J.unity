@@ -175,6 +175,7 @@ MonoBehaviour:
   _floatItem2: {fileID: 1512691585}
   _floats: {fileID: 3302765}
   _items: {fileID: 525967448}
+  _background: {fileID: 1780170627}
 --- !u!1 &39703520
 GameObject:
   m_ObjectHideFlags: 0

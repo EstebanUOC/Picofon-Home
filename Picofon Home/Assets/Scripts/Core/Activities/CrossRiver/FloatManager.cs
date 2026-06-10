@@ -21,6 +21,9 @@ public class FloatManager : MonoBehaviour
     [SerializeField]
     private Transform _items;
 
+    [SerializeField]
+    private Transform _background;
+
     public void Start()
     {
         _floatItem1.SetFloating(false);
@@ -48,5 +51,6 @@ public class FloatManager : MonoBehaviour
 
         Tween.LocalPositionX(_floats, endValue: -9.5f, duration: 0.5f);
         Tween.LocalPositionX(_items, endValue: -9.5f, duration: 0.5f);
+        Tween.LocalPositionX(_background, endValue: -9.5f, duration: 0.5f);
     }
 }
