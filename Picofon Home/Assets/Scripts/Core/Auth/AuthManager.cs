@@ -46,6 +46,10 @@ public class AuthManager : MonoBehaviour
 
     public ChildDataDTO CurrentChild { get; private set; }
 
+    public string NewUserFirebaseToken { get; internal set; }
+
+    public bool IsNewUser { get; internal set; }
+
     private UserService _userService;
 
     private bool _existsConnection = false;

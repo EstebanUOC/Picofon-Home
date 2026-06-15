@@ -1,8 +1,8 @@
+using PrimeTween;
 using UnityEngine;
 
 public class Capsule : MonoBehaviour
 {
-    [SerializeField]
     private float _jumpDuration = 0.5f;
 
     private float _targetY;
@@ -33,6 +33,46 @@ public class Capsule : MonoBehaviour
 
     public void FixedUpdate()
     {
+        if (_isLanding)
+        {
+            _sineTime += Time.deltaTime;
+
+            float offset = Mathf.Sin(_sineTime * _speed) * _amplitude;
+
+            if (offset >= 0)
+            {
+                transform.position = new Vector3(
+                    transform.position.x,
+                    _startY,
+                    transform.position.z
+                );
+
+                _startY = transform.position.y;
+
+                Tween.Delay(
+                    target: _currentFloatItem,
+                    duration: 2,
+                    target =>
+                    {
+                        _isLanding = false;
+                        _jumpTime = 0f;
+                        _sineTime = Mathf.PI;
+
+                        target.SetFloating(true);
+                    }
+                );
+                return;
+            }
+
+            transform.position = new Vector3(
+                transform.position.x,
+                _startY + offset,
+                transform.position.z
+            );
+
+            return;
+        }
+
         if (!_isJumping)
         {
             _sineTime += Time.deltaTime;
@@ -45,11 +85,6 @@ public class Capsule : MonoBehaviour
                 transform.position.z
             );
 
-            return;
-        }
-
-        if (_isLanding)
-        {
             return;
         }
 

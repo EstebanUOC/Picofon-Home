@@ -1,6 +1,5 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using PrimeTween;
 using UnityEngine;
 
 public class RolePanel : MonoBehaviour
@@ -45,6 +44,32 @@ public class RolePanel : MonoBehaviour
     private async UniTaskVoid OnRoleSelectedAsync(UserRole roleType)
     {
         _uiManager.ShowLoading(LoadingEnum.Normal);
+
+        if (_authManager.IsNewUser && roleType == UserRole.Therapist)
+        {
+            _uiManager.HideLoading(LoadingEnum.Normal);
+
+            await _uiManager.ShowModal(
+                new ModalData()
+                {
+                    Title = "Therapist Account Creation",
+                    Message =
+                        "Therapist accounts must be created through the web portal. Please create an account on the web portal and log in to the app.",
+                    Panel = _panel,
+                }
+            );
+
+            return;
+        }
+
+        if (_authManager.IsNewUser && roleType != UserRole.Therapist)
+        {
+            _uiManager.HideLoading(LoadingEnum.Normal);
+
+            _uiManager.ShowPanel(PanelEnum.Disclaimer);
+
+            return;
+        }
 
         CancellationToken token = this.GetCancellationTokenOnDestroy();
 
