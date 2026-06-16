@@ -8,8 +8,6 @@ public class LevelDataStore : MonoBehaviour
 
     private TherapyPlan[] _cachedPlans;
 
-    private string _lastId;
-
     private int _currentLevel = 0;
     private int _lastLevel = -1;
 
@@ -35,7 +33,6 @@ public class LevelDataStore : MonoBehaviour
 
     public async UniTask LoadPlans(string id)
     {
-        _lastId = id;
         _someActivePlanFound = false;
 
         await GetPlans(id);

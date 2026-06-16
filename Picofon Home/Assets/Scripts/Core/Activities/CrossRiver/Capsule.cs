@@ -5,12 +5,6 @@ public class Capsule : MonoBehaviour
     [SerializeField]
     private float _jumpDuration = 0.5f;
 
-    [SerializeField]
-    private FloatItem _floatItem1;
-
-    [SerializeField]
-    private FloatItem _floatItem2;
-
     private float _targetY;
 
     private float _startY;
@@ -23,7 +17,7 @@ public class Capsule : MonoBehaviour
 
     private FloatItem _currentFloatItem;
 
-    private const float _offset = 1f;
+    // private const float _offset = 1f;
     private const float _compensation = 4f; // Normaliza la parábola para que el máximo sea exactamente jumpHeight
 
     private const float _speed = 5f;
@@ -33,8 +27,7 @@ public class Capsule : MonoBehaviour
     {
         _startY = transform.position.y;
 
-        _currentFloatItem = _floatItem2;
-        _currentFloatItem.SetFloating(true);
+        _sineTime = Mathf.PI;
     }
 
     public void FixedUpdate()
@@ -91,45 +84,45 @@ public class Capsule : MonoBehaviour
         }
     }
 
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A) && !_isJumping)
-        {
-            _currentFloatItem.SetFloating(false);
-
-            _isJumping = true;
-            _targetY = 1.3f + _offset;
-
-            _jumpHeight = 3f;
-
-            if (_targetY == _startY)
-            {
-                _jumpHeight = 1f;
-            }
-
-            _currentFloatItem = _floatItem1;
-        }
-
-        if (Input.GetKeyDown(KeyCode.B) && !_isJumping)
-        {
-            _currentFloatItem.SetFloating(false);
-
-            _isJumping = true;
-            _targetY = -3.4f + _offset;
-
-            _jumpHeight = 3f;
-
-            if (_targetY == _startY)
-            {
-                _jumpHeight = 1f;
-            }
-
-            _currentFloatItem = _floatItem2;
-        }
-
-        if (Input.GetKeyDown(KeyCode.C) && !_isJumping)
-        {
-            transform.position = new Vector3(transform.position.x, _startY, transform.position.z);
-        }
-    }
+    // public void Update()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.A) && !_isJumping)
+    //     {
+    //         _currentFloatItem.SetFloating(false);
+    //
+    //         _isJumping = true;
+    //         _targetY = 1.3f + _offset;
+    //
+    //         _jumpHeight = 3f;
+    //
+    //         if (_targetY == _startY)
+    //         {
+    //             _jumpHeight = 1f;
+    //         }
+    //
+    //         _currentFloatItem = _floatItem1;
+    //     }
+    //
+    //     if (Input.GetKeyDown(KeyCode.B) && !_isJumping)
+    //     {
+    //         _currentFloatItem.SetFloating(false);
+    //
+    //         _isJumping = true;
+    //         _targetY = -3.4f + _offset;
+    //
+    //         _jumpHeight = 3f;
+    //
+    //         if (_targetY == _startY)
+    //         {
+    //             _jumpHeight = 1f;
+    //         }
+    //
+    //         _currentFloatItem = _floatItem2;
+    //     }
+    //
+    //     if (Input.GetKeyDown(KeyCode.C) && !_isJumping)
+    //     {
+    //         transform.position = new Vector3(transform.position.x, _startY, transform.position.z);
+    //     }
+    // }
 }
