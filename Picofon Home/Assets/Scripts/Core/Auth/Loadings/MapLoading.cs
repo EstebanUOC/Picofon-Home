@@ -30,22 +30,6 @@ public class MapLoading : MonoBehaviour
 
     private Tween _loadingTween;
 
-    public void Start()
-    {
-        enabled = false;
-    }
-
-    public void FixedUpdate()
-    {
-        bool changeOrientation = SceneOrientationHelper.ChangeOrientation();
-
-        if (changeOrientation)
-        {
-            OnOrientationChanged();
-            enabled = false;
-        }
-    }
-
     public void Show()
     {
         if (!gameObject.activeSelf)
@@ -147,8 +131,8 @@ public class MapLoading : MonoBehaviour
             )
             .OnComplete(() =>
             {
-                SceneOrientationHelper.UnlockPortrait();
-                enabled = true;
+                SceneOrientationHelper.LockToLandscape();
+                OnOrientationChanged();
             });
     }
 

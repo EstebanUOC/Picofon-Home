@@ -32,11 +32,11 @@ public class Login : MonoBehaviour
 
         _debugButton.OnClick += ShowDebugMenu;
 
-        // if (Application.isEditor)
-        // {
-        //     _loginButton.Interactable = false;
-        //     return;
-        // }
+        if (Application.isEditor)
+        {
+            _loginButton.Interactable = false;
+            return;
+        }
 
         _loginButton.OnClick += LoginWithGoogle;
     }
