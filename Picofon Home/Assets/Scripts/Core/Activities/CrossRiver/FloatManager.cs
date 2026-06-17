@@ -1,18 +1,12 @@
-<<<<<<< HEAD
-=======
 using PrimeTween;
->>>>>>> origin/feature/cross-river
 using UnityEngine;
 
 public class FloatManager : MonoBehaviour
 {
     [SerializeField]
-<<<<<<< HEAD
-=======
     private Capsule _capsule;
 
     [SerializeField]
->>>>>>> origin/feature/cross-river
     private FloatItem _standFloat;
 
     [SerializeField]
@@ -21,8 +15,6 @@ public class FloatManager : MonoBehaviour
     [SerializeField]
     private FloatItem _floatItem2;
 
-<<<<<<< HEAD
-=======
     [SerializeField]
     private Transform _floats;
 
@@ -32,7 +24,6 @@ public class FloatManager : MonoBehaviour
     [SerializeField]
     private Transform _background;
 
->>>>>>> origin/feature/cross-river
     public void Start()
     {
         _floatItem1.SetFloating(false);
@@ -47,11 +38,8 @@ public class FloatManager : MonoBehaviour
 
         _standFloat = floatItem;
 
-<<<<<<< HEAD
-=======
         _capsule.JumpTo(floatItem);
 
->>>>>>> origin/feature/cross-river
         FloatItem other = _floatItem1;
 
         if (other == floatItem)
@@ -59,15 +47,10 @@ public class FloatManager : MonoBehaviour
             other = _floatItem2;
         }
 
-<<<<<<< HEAD
-        _standFloat.SetFloating(true);
-        other.HideCheap();
-=======
         other.HideCheap();
 
         Tween.LocalPositionX(_floats, endValue: -9.5f, duration: 0.5f);
         Tween.LocalPositionX(_items, endValue: -9.5f, duration: 0.5f);
         Tween.LocalPositionX(_background, endValue: -9.5f, duration: 0.5f);
->>>>>>> origin/feature/cross-river
     }
 }
