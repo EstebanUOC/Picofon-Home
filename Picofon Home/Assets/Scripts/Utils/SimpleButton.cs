@@ -12,10 +12,14 @@ public class SimpleButton : MonoBehaviour, IPointerClickHandler
     public bool Interactable
     {
         get => _interactable;
+        set => _interactable = value;
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (!_interactable)
+            return;
+
         OnClick?.Invoke();
     }
 }

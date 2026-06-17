@@ -57,6 +57,12 @@ public class UserChildren : MonoBehaviour
     [SerializeField]
     private CustomButtonLoading _updateChildButton;
 
+    [SerializeField]
+    private SimpleButton _backButton;
+
+    [SerializeField]
+    private Image _backButtonImage;
+
     [Space]
     [SerializeField]
     private RectTransform _contentTransform;
@@ -93,10 +99,34 @@ public class UserChildren : MonoBehaviour
         _panel = GetComponent<RectTransform>();
 
         _onAlphaComplete = () => _overlay.gameObject.SetActive(false);
+
+        _backButton.OnClick += () =>
+        {
+            _backButton.Interactable = false;
+
+            _ = Tween
+                .Alpha(_backButtonImage, startValue: 0f, endValue: 1f, duration: 0.2f)
+                .OnComplete(() =>
+                {
+                    _centerContent.SetActive(true);
+                    _childContent.SetActive(false);
+                });
+
+            Vector2 target = new(_contentTransform.sizeDelta.x, HeightCenter);
+
+            Sequence
+                .Create()
+                .Group(Tween.UISizeDelta(_contentTransform, endValue: target, duration: 0.2f))
+                .Group(Tween.UISizeDelta(_overlayTransform, endValue: target, duration: 0.2f));
+        };
     }
 
     public void OnEnable()
     {
+        Color color = _backButtonImage.color;
+
+        _backButtonImage.color = new Color(color.r, color.g, color.b, 1f);
+
         _userRole = _authManager.CurrentUser.Role;
 
         _centerContent.SetActive(false);
@@ -220,12 +250,18 @@ public class UserChildren : MonoBehaviour
 
         Vector2 target = new(_contentTransform.sizeDelta.x, HeightChildren);
 
-        if (_userRole == UserRole.Therapist)
+        bool isTherapist = _userRole == UserRole.Therapist;
+
+        _backButton.Interactable = isTherapist;
+
+        if (isTherapist)
         {
             target.y = HeightChildrenTherapist;
 
             _registerChildButton.gameObject.SetActive(false);
             _updateChildButton.gameObject.SetActive(false);
+
+            _ = Tween.Alpha(_backButtonImage, startValue: 1f, endValue: 0f, duration: 0.2f);
         }
 
         if (!_hasChildren)
