@@ -93,6 +93,35 @@ public class Login : MonoBehaviour
             firebaseIdToken
         );
 
+        if (!result.Success)
+        {
+            ModalData modalData = new()
+            {
+                Title = "Error",
+                Message = "Could not log in. Please try again later.",
+                Panel = _panel,
+            };
+
+            _loginButton.EndLoading();
+
+            await _uiManager.ShowModal(modalData);
+
+            return;
+        }
+
+        if (result.Data.IsNewUser)
+        {
+            _uiManager.ShowPanel(PanelEnum.Role);
+
+            _authManager.IsNewUser = true;
+
+            _authManager.NewUserFirebaseToken = firebaseIdToken;
+
+            return;
+        }
+
+        _authManager.IsNewUser = false;
+
         if (result.Data.User.Role == UserRole.Therapist && !result.Data.User.ProfileCompleted)
         {
             ModalData modalData = new()
@@ -108,22 +137,6 @@ public class Login : MonoBehaviour
             await _uiManager.ShowModal(modalData);
 
             _authManager.Logout();
-            return;
-        }
-
-        if (!result.Success)
-        {
-            ModalData modalData = new()
-            {
-                Title = "Error",
-                Message = "Could not log in. Please try again later.",
-                Panel = _panel,
-            };
-
-            _loginButton.EndLoading();
-
-            await _uiManager.ShowModal(modalData);
-
             return;
         }
 

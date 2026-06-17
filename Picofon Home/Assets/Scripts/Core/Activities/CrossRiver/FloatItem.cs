@@ -16,6 +16,7 @@ public class FloatItem : MonoBehaviour
     private FloatManager _manager;
 
     private bool _isFloating = false;
+    private bool _isLanding = false;
 
     private float _startY;
 
@@ -38,6 +39,36 @@ public class FloatItem : MonoBehaviour
 
     public void FixedUpdate()
     {
+        if (_isLanding)
+        {
+            _time += Time.deltaTime;
+
+            float offsetLanding = Mathf.Sin(_time * _speed) * _amplitude;
+
+            if (offsetLanding >= 0)
+            {
+                _time = 0;
+
+                transform.position = new Vector3(
+                    transform.position.x,
+                    _startY,
+                    transform.position.z
+                );
+
+                _startY = transform.position.y;
+
+                return;
+            }
+
+            transform.position = new Vector3(
+                transform.position.x,
+                _startY + offsetLanding,
+                transform.position.z
+            );
+
+            return;
+        }
+
         if (!_isFloating)
             return;
 
@@ -54,13 +85,12 @@ public class FloatItem : MonoBehaviour
 
     public void SetFloating(bool isFloating)
     {
-        _isFloating = isFloating;
-
         _time = Mathf.PI;
 
         if (isFloating)
         {
             HideCheap();
+            _isLanding = true;
             return;
         }
 

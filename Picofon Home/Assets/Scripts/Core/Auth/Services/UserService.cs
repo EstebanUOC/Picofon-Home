@@ -5,6 +5,8 @@ using Picofon.Core.Network;
 
 public readonly struct LoginData
 {
+    public readonly bool IsNewUser { get; init; }
+
     public readonly UserModel User { get; init; }
 }
 
@@ -13,9 +15,68 @@ public readonly struct UpdateUserRoleRequest
     public readonly UserRole Role { get; init; }
 }
 
+public readonly struct RegisterRequest
+{
+    public readonly string FirebaseIdToken { get; init; }
+
+    public bool LegalAccepted { get; init; }
+
+    public UserRole Role { get; init; }
+}
+
 public class UserService
 {
     private readonly string ChildrenURL = ApiConfig.BaseUrl + "children/";
+
+    public async UniTask<ApiResult> Register(
+        string firebaseToken,
+        bool disclaimerAccepted,
+        UserRole role,
+        CancellationToken token = default
+    )
+    {
+        string url = $"{ApiConfig.BaseUrl}auth/register";
+
+        byte[] rawResponse;
+
+        RegisterRequest request = new()
+        {
+            FirebaseIdToken = firebaseToken,
+            LegalAccepted = disclaimerAccepted,
+            Role = role,
+        };
+
+        byte[] jsonRequest = JsonHelper.ToBytes(in request);
+
+        try
+        {
+            rawResponse = await HttpClientUnity.PostAsyncBytes(
+                url: url,
+                data: jsonRequest,
+                timeoutSeconds: 5,
+                cancellationToken: token
+            );
+        }
+        catch (System.Exception e)
+        {
+            PerformanceLog.LogError(
+                $"Error registering user: {e.Message}, URL: {url}, Payload: {request}"
+            );
+            return ApiResult.Fail("Network error occurred while registering.");
+        }
+
+        using JsonDocument doc = JsonDocument.Parse(rawResponse);
+        JsonElement root = doc.RootElement;
+
+        ApiResponseView responseView = new(root);
+
+        if (!responseView.Success)
+        {
+            return ApiResult.Fail(responseView.ErrorMessage);
+        }
+
+        return ApiResult.Ok();
+    }
 
     public async UniTask<ApiResult<LoginData>> LoginWithFirebaseToken(
         string firebaseToken,
@@ -27,6 +88,7 @@ public class UserService
         byte[] rawResponse;
 
         LoginRequest loginRequest = new() { FirebaseIdToken = firebaseToken };
+
         byte[] jsonRequest = JsonHelper.ToBytes(in loginRequest);
 
         try
@@ -37,6 +99,15 @@ public class UserService
                 timeoutSeconds: 5,
                 cancellationToken: token
             );
+        }
+        catch (UnityWebRequestException e)
+        {
+            if (e.ResponseCode != 404)
+                return ApiResult<LoginData>.Fail("Network error occurred while logging in.");
+
+            LoginData newUserData = new() { IsNewUser = true };
+
+            return ApiResult<LoginData>.Ok(newUserData);
         }
         catch (System.Exception)
         {
