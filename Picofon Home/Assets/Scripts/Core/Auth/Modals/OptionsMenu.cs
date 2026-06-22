@@ -6,10 +6,16 @@ using UnityEngine.Localization.Settings;
 public class OptionsMenu : MonoBehaviour
 {
     [SerializeField]
+    private Modal _modal;
+
+    [SerializeField]
     private ComboBox _languageComboBox;
 
     [SerializeField]
     private CustomButton _saveButton;
+
+    [SerializeField]
+    private CustomButton _creditsButton;
 
     [SerializeField]
     private TMP_Text _versionText;
@@ -18,7 +24,9 @@ public class OptionsMenu : MonoBehaviour
 
     public void Awake()
     {
-        _saveButton.OnClick += HandleClick;
+        _saveButton.OnClick += HandleSave;
+
+        _creditsButton.OnClick += HandleCredits;
 
         string preferredLanguage = GamePrefs.PreferredLanguage;
 
@@ -41,7 +49,7 @@ public class OptionsMenu : MonoBehaviour
         _versionText.text = version.ToString("0.00");
     }
 
-    private void HandleClick()
+    private void HandleSave()
     {
         GamePrefs.PreferredLanguage = _languageComboBox.GetSelectedLanguage().ToString();
 
@@ -55,5 +63,12 @@ public class OptionsMenu : MonoBehaviour
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
 
         EventChannel.Raise();
+    }
+
+    private void HandleCredits()
+    {
+        EventChannel.Raise();
+
+        _modal.ShowCredits();
     }
 }

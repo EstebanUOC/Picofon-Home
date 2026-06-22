@@ -25,6 +25,9 @@ public class Modal : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private GameObject _optionsMenuObject;
 
+    [SerializeField]
+    private GameObject _creditsMenuObject;
+
     [Space]
     [SerializeField]
     private Image _background;
@@ -167,6 +170,24 @@ public class Modal : MonoBehaviour, IPointerClickHandler
         }
 
         _debugMenu.Show();
+    }
+
+    public void ShowCredits()
+    {
+        Tween.Delay(
+            Duration,
+            () =>
+            {
+                gameObject.SetActive(true);
+
+                _creditsMenuObject.SetActive(true);
+
+                _currentMenuObject = _creditsMenuObject;
+                _currentContent = _creditsMenuObject.GetComponent<RectTransform>();
+
+                AnimateOpen();
+            }
+        );
     }
 
     private void AnimateOpen()
