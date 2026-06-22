@@ -86,7 +86,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 334195409928192
-    m_Localized: Infants
+    m_Localized: Els meus infants
     m_Metadata:
       m_Items: []
   - m_Id: 334462775836672
@@ -94,7 +94,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 334624835354624
-    m_Localized: Registrar infant
+    m_Localized: Crear infant
     m_Metadata:
       m_Items: []
   - m_Id: 335638120480768
@@ -290,20 +290,16 @@ MonoBehaviour:
     m_Localized: Altres
     m_Metadata:
       m_Items: []
-  - m_Id: 14102677192556544
-    m_Localized: Registrar infant
-    m_Metadata:
-      m_Items: []
-  - m_Id: 14102815466176512
-    m_Localized: "Completa la informaci\xF3 per registrar un nou infant."
-    m_Metadata:
-      m_Items: []
   - m_Id: 14103015282819072
     m_Localized: Actualitzar infant
     m_Metadata:
       m_Items: []
   - m_Id: 14103137559363584
     m_Localized: "Completa la informaci\xF3 per actualitzar l'infant seleccionat."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26832257762312192
+    m_Localized: Actualitzar infant
     m_Metadata:
       m_Items: []
   references:
