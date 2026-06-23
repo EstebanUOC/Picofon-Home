@@ -302,6 +302,10 @@ MonoBehaviour:
     m_Localized: Actualitzar infant
     m_Metadata:
       m_Items: []
+  - m_Id: 27172348351332352
+    m_Localized: "M\xEDnim 9 car\xE0cters"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

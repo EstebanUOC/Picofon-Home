@@ -301,6 +301,10 @@ MonoBehaviour:
     m_Localized: "Actualizar ni\xF1a/o"
     m_Metadata:
       m_Items: []
+  - m_Id: 27172348351332352
+    m_Localized: "M\xEDnimo 9 caracteres"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

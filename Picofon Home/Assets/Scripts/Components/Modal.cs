@@ -58,6 +58,7 @@ public class Modal : MonoBehaviour, IPointerClickHandler
         _contentObject.SetActive(false);
         _debugMenuObject.SetActive(false);
         _optionsMenuObject.SetActive(false);
+        _creditsMenuObject.SetActive(false);
 
         _eventChannel = new GenericEventChannel();
 
