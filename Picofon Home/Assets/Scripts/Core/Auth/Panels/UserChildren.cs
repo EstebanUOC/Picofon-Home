@@ -376,13 +376,6 @@ public class UserChildren : MonoBehaviour
 
         await instance.LoadPlans(childId);
 
-        if (!instance.HasPlans())
-        {
-            // await instance.CreateDefaultPlans(childId, _userId);
-            PerformanceLog.LogError("No therapy plans found, loading default plans...");
-            return;
-        }
-
         if (instance.HasActivePlans())
         {
             _uiManager.ContinueMapTransition(success: true);
