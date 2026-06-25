@@ -121,11 +121,11 @@ public class RegisterChild : MonoBehaviour
         }
 
         _titleText.SetText(
-            LocalizationSettings.StringDatabase.GetLocalizedString("UI", "REG-TITLE-REG")
+            LocalizationSettings.StringDatabase.GetLocalizedString("UI", "REG-TITLE")
         );
 
         _subtitleText.SetText(
-            LocalizationSettings.StringDatabase.GetLocalizedString("UI", "REG-SUB-REG")
+            LocalizationSettings.StringDatabase.GetLocalizedString("UI", "REG-SUB")
         );
     }
 

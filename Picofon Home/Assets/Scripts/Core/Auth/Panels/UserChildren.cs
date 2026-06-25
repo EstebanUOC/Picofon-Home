@@ -378,7 +378,9 @@ public class UserChildren : MonoBehaviour
 
         if (!instance.HasPlans())
         {
-            await instance.CreateDefaultPlans(childId, _userId);
+            // await instance.CreateDefaultPlans(childId, _userId);
+            PerformanceLog.LogError("No therapy plans found, loading default plans...");
+            return;
         }
 
         if (instance.HasActivePlans())

@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -72,6 +73,11 @@ public class LevelDataStore : MonoBehaviour
         return _cachedPlans != null && _cachedPlans.Length > 0;
     }
 
+    public bool HasNoPlans()
+    {
+        return _cachedPlans == null || _cachedPlans.Length == 0;
+    }
+
     public bool HasActivePlans()
     {
         return HasPlans() && _someActivePlanFound;
@@ -122,11 +128,15 @@ public class LevelDataStore : MonoBehaviour
             return;
         }
 
-        TherapyPlan[] plans = result.Data.Plans;
+        // TherapyPlan[] plans = result.Data.Plans;
+        TherapyPlan[] plans = Array.Empty<TherapyPlan>();
 
         if (plans is null || plans.Length == 0)
         {
             PerformanceLog.LogError("No therapy plans found for the child.");
+
+            _cachedPlans = Array.Empty<TherapyPlan>();
+
             return;
         }
 

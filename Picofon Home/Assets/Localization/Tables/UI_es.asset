@@ -47,7 +47,7 @@ MonoBehaviour:
       continuar, usted confirma que es el padre, la madre o el/la tutor/a legal del
       ni\xF1o y autoriza el uso de Picofon con fines exclusivamente educativos y
       de investigaci\xF3n.\nLos datos que se recogen a trav\xE9s de la aplicaci\xF3n
-      son tratados de forma segura y confidencial. \xA1S\xF3lo un peque\xF1o conjunto
+      son tratados de forma segura y confidencial. \xA1Solo un peque\xF1o conjunto
       de estos datos podr\xE1 ser utilizado por los profesionales del grupo GRECIL!
       para:\n\n\u2022 Hacer un seguimiento del progreso del ni\xF1o, y/o\n\u2022
       Fines cient\xEDficos o terap\xE9uticos, siempre de forma an\xF3nima y agregada.\n\nEn
@@ -85,15 +85,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 334195409928192
-    m_Localized: Infantes
+    m_Localized: "Mis ni\xF1as y ni\xF1os"
     m_Metadata:
       m_Items: []
   - m_Id: 334462775836672
-    m_Localized: Seleccionar infante
+    m_Localized: "Seleccionar ni\xF1a/o"
     m_Metadata:
       m_Items: []
   - m_Id: 334624835354624
-    m_Localized: Registrar infante
+    m_Localized: "Crear ni\xF1a/o"
     m_Metadata:
       m_Items: []
   - m_Id: 335638120480768
@@ -190,11 +190,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 9447846335070208
-    m_Localized: Selecciona un infante de la lista o registra uno nuevo.
+    m_Localized: "Selecciona un ni\xF1a/o de la lista o crea uno nuevo."
     m_Metadata:
       m_Items: []
   - m_Id: 9448604686204928
-    m_Localized: "Elige el centro donde se encuentra el ni\xF1o para continuar."
+    m_Localized: "Elige el centro donde se encuentra la ni\xF1a/o para continuar."
     m_Metadata:
       m_Items: []
   - m_Id: 9449904178053120
@@ -210,11 +210,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12667436712181760
-    m_Localized: Registrar infante
+    m_Localized: "Registrar ni\xF1a/o"
     m_Metadata:
       m_Items: []
   - m_Id: 12667702865936384
-    m_Localized: "Completa la informaci\xF3n para registrar un nuevo infante."
+    m_Localized: "Completa la informaci\xF3n para registrar un nuevo ni\xF1a/o."
     m_Metadata:
       m_Items: []
   - m_Id: 12667909552848896
@@ -289,20 +289,20 @@ MonoBehaviour:
     m_Localized: Otros
     m_Metadata:
       m_Items: []
-  - m_Id: 14102677192556544
-    m_Localized: Registrar infante
-    m_Metadata:
-      m_Items: []
-  - m_Id: 14102815466176512
-    m_Localized: "Completa la informaci\xF3n para registrar un nuevo infante."
-    m_Metadata:
-      m_Items: []
   - m_Id: 14103015282819072
-    m_Localized: Actualizar infante
+    m_Localized: "Actualizar ni\xF1a/o"
     m_Metadata:
       m_Items: []
   - m_Id: 14103137559363584
-    m_Localized: "Completa la informaci\xF3n para actualizar al infante seleccionado."
+    m_Localized: "Completa la informaci\xF3n para actualizar a la ni\xF1a/o seleccionado."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26832257762312192
+    m_Localized: "Actualizar ni\xF1a/o"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27172348351332352
+    m_Localized: "M\xEDnimo 9 caracteres"
     m_Metadata:
       m_Items: []
   references:
