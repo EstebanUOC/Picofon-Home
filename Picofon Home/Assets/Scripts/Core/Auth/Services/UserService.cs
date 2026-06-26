@@ -258,6 +258,53 @@ public class UserService
             return ApiResult.Fail(responseView.ErrorMessage);
         }
 
+        PerformanceLog.Log(
+            $"Child registered successfully: {childCreateDTO.FirstName} {childCreateDTO.LastName}, ID: {childCreateDTO.Id}"
+        );
+
+        // After successfully registering the child, create default therapy plans for the child
+
+        url = $"{ApiConfig.BaseUrl}/therapy/default";
+
+        CreateDefaultPlansRequest request = new()
+        {
+            ChildId = childCreateDTO.Id,
+            AssignedById = childCreateDTO.UserId,
+        };
+
+        jsonRequest = JsonHelper.ToBytes(in request);
+
+        try
+        {
+            rawResponse = await HttpClientUnity.PostAsyncBytes(
+                url: url,
+                data: jsonRequest,
+                timeoutSeconds: 5,
+                cancellationToken: token
+            );
+        }
+        catch (System.Exception e)
+        {
+            PerformanceLog.LogError(
+                $"Error creating default therapy plans for child {childCreateDTO.Id}: {e.Message}, URL: {url}, Payload: {request}"
+            );
+            return ApiResult.Fail("Network error occurred while creating default therapy plans.");
+        }
+
+        using JsonDocument planDoc = JsonDocument.Parse(rawResponse);
+        JsonElement planRoot = planDoc.RootElement;
+
+        ApiResponseView planResponseView = new(planRoot);
+
+        if (!planResponseView.Success)
+        {
+            return ApiResult.Fail(planResponseView.ErrorMessage);
+        }
+
+        PerformanceLog.Log(
+            $"Default therapy plans created successfully for child ID: {childCreateDTO.Id}"
+        );
+
         return ApiResult.Ok();
     }
 

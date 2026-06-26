@@ -267,6 +267,8 @@ public class UserChildren : MonoBehaviour
         if (!_hasChildren)
         {
             target.y = HeightNoChildren;
+
+            _updateChildButton.gameObject.SetActive(false);
         }
 
         _ = Sequence
@@ -375,13 +377,6 @@ public class UserChildren : MonoBehaviour
         _uiManager.PlayMapTransition();
 
         await instance.LoadPlans(childId);
-
-        if (!instance.HasPlans())
-        {
-            // await instance.CreateDefaultPlans(childId, _userId);
-            PerformanceLog.LogError("No therapy plans found, loading default plans...");
-            return;
-        }
 
         if (instance.HasActivePlans())
         {

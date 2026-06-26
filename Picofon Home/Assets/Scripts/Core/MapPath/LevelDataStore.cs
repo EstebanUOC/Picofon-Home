@@ -58,11 +58,6 @@ public class LevelDataStore : MonoBehaviour
         }
     }
 
-    public async UniTask CreateDefaultPlans(string id, string assignedById)
-    {
-        await CreatePlans(id, assignedById);
-    }
-
     public void SavePlans(TherapyPlan[] plans)
     {
         _cachedPlans = plans;
@@ -128,8 +123,7 @@ public class LevelDataStore : MonoBehaviour
             return;
         }
 
-        // TherapyPlan[] plans = result.Data.Plans;
-        TherapyPlan[] plans = Array.Empty<TherapyPlan>();
+        TherapyPlan[] plans = result.Data.Plans;
 
         if (plans is null || plans.Length == 0)
         {
@@ -137,33 +131,6 @@ public class LevelDataStore : MonoBehaviour
 
             _cachedPlans = Array.Empty<TherapyPlan>();
 
-            return;
-        }
-
-        SavePlans(plans);
-    }
-
-    private async UniTask CreatePlans(string childId, string assignedById)
-    {
-        CancellationToken token = this.GetCancellationTokenOnDestroy();
-
-        ApiResult<TherapyData> result = await _service.CreateDefaultPlans<TherapyData>(
-            childId,
-            assignedById,
-            token: token
-        );
-
-        if (!result.Success)
-        {
-            PerformanceLog.LogError($"Error loading activities: {result.Message}");
-            return;
-        }
-
-        TherapyPlan[] plans = result.Data.Plans;
-
-        if (plans is null || plans.Length == 0)
-        {
-            PerformanceLog.LogError("No therapy plans found for the child.");
             return;
         }
 
