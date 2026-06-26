@@ -267,6 +267,8 @@ public class UserChildren : MonoBehaviour
         if (!_hasChildren)
         {
             target.y = HeightNoChildren;
+
+            _updateChildButton.gameObject.SetActive(false);
         }
 
         _ = Sequence
