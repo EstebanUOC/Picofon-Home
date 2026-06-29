@@ -107,12 +107,13 @@ public class AuthManager : MonoBehaviour
                     Id = "noXJSkWJnCW5iSEu32n5Kvofq5a2",
                     Email = "test@gmail.com",
                     Username = "Debug User",
-                    Role = UserRole.Admin,
+                    Role = UserRole.Invited,
+                    ProfileComplete = true,
                 };
 
                 _initializeData.CurrentUser = user;
 
-                _uiManager.ShowPanel(PanelEnum.Children);
+                _uiManager.ShowPanel(PanelEnum.Role);
 
                 break;
             case DebugMenuResult.Map:

@@ -82,6 +82,6 @@ public class Disclaimer : MonoBehaviour
             }
         );
 
-        _uiManager.ShowPanel(PanelEnum.Children);
+        _authManager.Logout();
     }
 }
