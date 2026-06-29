@@ -111,11 +111,13 @@ public class Login : MonoBehaviour
 
         if (result.Data.IsNewUser)
         {
-            _uiManager.ShowPanel(PanelEnum.Role);
-
             _authManager.IsNewUser = true;
 
             _authManager.NewUserFirebaseToken = firebaseIdToken;
+
+            _loginButton.EndLoading();
+
+            _uiManager.ShowPanel(PanelEnum.Role);
 
             return;
         }

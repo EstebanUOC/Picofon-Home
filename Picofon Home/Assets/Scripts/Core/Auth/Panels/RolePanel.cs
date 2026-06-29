@@ -120,6 +120,8 @@ public class RolePanel : MonoBehaviour
             return;
         }
 
+        _authManager.CurrentUser.Role = roleType;
+
         _uiManager.ShowPanel(PanelEnum.Children);
     }
 }

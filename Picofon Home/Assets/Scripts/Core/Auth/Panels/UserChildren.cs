@@ -386,6 +386,9 @@ public class UserChildren : MonoBehaviour
 
         if (!_hasIAEnabled[selectedIndex])
         {
+            PerformanceLog.Log(
+                "Child does not have AI enabled and has no active plans. Showing modal to inform the user."
+            );
             _uiManager.ContinueMapTransition(success: false);
 
             await UniTask.WaitForSeconds(2.5f);
