@@ -233,6 +233,7 @@ public class BasketManagerPS : MonoBehaviour
         {
             IsCorrect = isCorrect,
             TaskIndex = _currentActivityIndex,
+            MainAttributeWs = _currentActivity.Words[0].Id,
             SelectedAttributeWs = currentWord.Id,
             CorrectAttributeWs = correctWordId,
         };
