@@ -7085,7 +7085,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &444273586
 RectTransform:
   m_ObjectHideFlags: 0
@@ -30084,8 +30084,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<b>Gestor del proyecto:</b> Luis Esteban Pe\xF1aherrera\n<b>Director Cient\xEDfico:</b>
-    Dr.Lloren\xE7 Andreu \n<b>Desarrollador</b>: Daniel Alexander Luisa"
+  m_text: "<b>Gestor del proyecto:</b> Dr. Luis Esteban Pe\xF1aherrera\n<b>Director
+    Cient\xEDfico:</b> Dr.Lloren\xE7 Andreu \n<b>Desarrollador</b>: Daniel Alexander
+    Luisa"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c9fee1c54bcaee4099e5b14c562842c, type: 2}
   m_sharedMaterial: {fileID: 4011702492835129195, guid: 6c9fee1c54bcaee4099e5b14c562842c, type: 2}
