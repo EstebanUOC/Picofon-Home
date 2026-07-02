@@ -49,6 +49,27 @@ public class Capsule : MonoBehaviour
         _sineTime = Mathf.PI;
     }
 
+    public void FixedUpdate()
+    {
+        _stateMachine.Update();
+    }
+
+    public void JumpTo(FloatItem floatItem)
+    {
+        _stateMachine.ForceState(_stateJump);
+
+        _targetY = floatItem.transform.position.y + _offset;
+
+        _jumpHeight = 3f;
+
+        if (_currentFloatItem is null || _currentFloatItem == floatItem)
+        {
+            _jumpHeight = 1f;
+        }
+
+        _currentFloatItem = floatItem;
+    }
+
     private int IdleUpdate()
     {
         _sineTime += Time.deltaTime;
@@ -134,26 +155,5 @@ public class Capsule : MonoBehaviour
         );
 
         return _stateLanding;
-    }
-
-    public void FixedUpdate()
-    {
-        _stateMachine.Update();
-    }
-
-    public void JumpTo(FloatItem floatItem)
-    {
-        _stateMachine.ForceState(_stateJump);
-
-        _targetY = floatItem.transform.position.y + _offset;
-
-        _jumpHeight = 3f;
-
-        if (_currentFloatItem is null || _currentFloatItem == floatItem)
-        {
-            _jumpHeight = 1f;
-        }
-
-        _currentFloatItem = floatItem;
     }
 }

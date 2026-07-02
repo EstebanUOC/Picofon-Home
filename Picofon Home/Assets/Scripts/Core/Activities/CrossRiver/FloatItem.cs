@@ -3,6 +3,19 @@ using UnityEngine;
 
 public class FloatItem : MonoBehaviour
 {
+    #region Constants
+
+    private const int _stateIdle = 0;
+    private const int _stateFloating = 1;
+    private const int _stateLanding = 2;
+
+    private const float _speed = 5f;
+    private const float _amplitude = 0.05f;
+
+    #endregion
+
+    #region Fields
+
     [SerializeField]
     private Transform _cheap;
 
@@ -15,20 +28,27 @@ public class FloatItem : MonoBehaviour
     [SerializeField]
     private FloatManager _manager;
 
-    private bool _isFloating = false;
-    private bool _isLanding = false;
+    #endregion
 
     private float _startY;
-
     private float _time;
-
-    private const float _speed = 5f;
-    private const float _amplitude = 0.05f;
 
     private Sequence _cheapSeq;
 
+    private StateMachine _stateMachine;
+
     public void Start()
     {
+        _stateMachine = new StateMachine(3);
+
+        _stateMachine.SetCallback(_stateIdle, IdleUpdate);
+
+        _stateMachine.SetCallback(_stateFloating, FloatingUpdate);
+
+        _stateMachine.SetCallback(_stateLanding, LandingUpdate);
+
+        _stateMachine.ForceState(_stateIdle);
+
         _startY = transform.position.y;
 
         _selectable.OnClick += OnClick;
@@ -39,48 +59,7 @@ public class FloatItem : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (_isLanding)
-        {
-            _time += Time.deltaTime;
-
-            float offsetLanding = Mathf.Sin(_time * _speed) * _amplitude;
-
-            if (offsetLanding >= 0)
-            {
-                _time = 0;
-
-                transform.position = new Vector3(
-                    transform.position.x,
-                    _startY,
-                    transform.position.z
-                );
-
-                _startY = transform.position.y;
-
-                return;
-            }
-
-            transform.position = new Vector3(
-                transform.position.x,
-                _startY + offsetLanding,
-                transform.position.z
-            );
-
-            return;
-        }
-
-        if (!_isFloating)
-            return;
-
-        _time += Time.deltaTime;
-
-        float offset = Mathf.Sin(_time * _speed) * _amplitude;
-
-        transform.position = new Vector3(
-            transform.position.x,
-            _startY + offset,
-            transform.position.z
-        );
+        _stateMachine.Update();
     }
 
     public void SetFloating(bool isFloating)
@@ -90,7 +69,9 @@ public class FloatItem : MonoBehaviour
         if (isFloating)
         {
             HideCheap();
-            _isLanding = true;
+
+            _stateMachine.ForceState(_stateFloating);
+
             return;
         }
 
@@ -134,9 +115,55 @@ public class FloatItem : MonoBehaviour
         }
     }
 
+    private int IdleUpdate()
+    {
+        return _stateIdle;
+    }
+
+    private int FloatingUpdate()
+    {
+        _time += Time.deltaTime;
+
+        float offset = Mathf.Sin(_time * _speed) * _amplitude;
+
+        transform.position = new Vector3(
+            transform.position.x,
+            _startY + offset,
+            transform.position.z
+        );
+
+        return _stateFloating;
+    }
+
+    private int LandingUpdate()
+    {
+        _time += Time.deltaTime;
+
+        float offsetLanding = Mathf.Sin(_time * _speed) * _amplitude;
+
+        if (offsetLanding >= 0)
+        {
+            _time = 0;
+
+            transform.position = new Vector3(transform.position.x, _startY, transform.position.z);
+
+            _startY = transform.position.y;
+
+            return _stateFloating;
+        }
+
+        transform.position = new Vector3(
+            transform.position.x,
+            _startY + offsetLanding,
+            transform.position.z
+        );
+
+        return _stateLanding;
+    }
+
     private void OnClick()
     {
-        if (_isFloating)
+        if (_stateMachine.State == _stateLanding)
         {
             PerformanceLog.Log("Clicked on floating item, ignoring.");
             return;
