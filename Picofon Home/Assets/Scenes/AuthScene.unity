@@ -7104,7 +7104,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 24, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &444273589
@@ -30084,8 +30084,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<b>Gestor del proyecto:</b> Luis Esteban Pe\xF1aherrera\n<b>Director Cient\xEDfico:</b>
-    Dr.Lloren\xE7 Andreu \n<b>Desarrollador</b>: Daniel Alexander Luisa"
+  m_text: "<b>Gestor del proyecto:</b> Dr. Luis Esteban Pe\xF1aherrera\n<b>Director
+    Cient\xEDfico:</b> Dr.Lloren\xE7 Andreu \n<b>Desarrollador</b>: Daniel Alexander
+    Luisa"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6c9fee1c54bcaee4099e5b14c562842c, type: 2}
   m_sharedMaterial: {fileID: 4011702492835129195, guid: 6c9fee1c54bcaee4099e5b14c562842c, type: 2}

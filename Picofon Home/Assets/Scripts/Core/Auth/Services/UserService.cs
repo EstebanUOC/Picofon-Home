@@ -24,11 +24,16 @@ public readonly struct RegisterRequest
     public UserRole Role { get; init; }
 }
 
+public readonly struct RegisterResponse
+{
+    public readonly UserModel User { get; init; }
+}
+
 public class UserService
 {
     private readonly string ChildrenURL = ApiConfig.BaseUrl + "children/";
 
-    public async UniTask<ApiResult> Register(
+    public async UniTask<ApiResult<RegisterResponse>> Register(
         string firebaseToken,
         bool disclaimerAccepted,
         UserRole role,
@@ -62,20 +67,20 @@ public class UserService
             PerformanceLog.LogError(
                 $"Error registering user: {e.Message}, URL: {url}, Payload: {request}"
             );
-            return ApiResult.Fail("Network error occurred while registering.");
+            return ApiResult<RegisterResponse>.Fail("Network error occurred while registering.");
         }
 
         using JsonDocument doc = JsonDocument.Parse(rawResponse);
         JsonElement root = doc.RootElement;
 
-        ApiResponseView responseView = new(root);
+        ApiResponseView<RegisterResponse> responseView = new(root);
 
         if (!responseView.Success)
         {
-            return ApiResult.Fail(responseView.ErrorMessage);
+            return ApiResult<RegisterResponse>.Fail(responseView.ErrorMessage);
         }
 
-        return ApiResult.Ok();
+        return ApiResult<RegisterResponse>.Ok(responseView.Data);
     }
 
     public async UniTask<ApiResult<LoginData>> LoginWithFirebaseToken(

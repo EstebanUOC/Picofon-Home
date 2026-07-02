@@ -233,6 +233,7 @@ public class BasketManagerPS : MonoBehaviour
         {
             IsCorrect = isCorrect,
             TaskIndex = _currentActivityIndex,
+            MainAttributeWs = _currentActivity.Words[0].Id,
             SelectedAttributeWs = currentWord.Id,
             CorrectAttributeWs = correctWordId,
         };
@@ -391,6 +392,10 @@ public class BasketManagerPS : MonoBehaviour
 
             return;
         }
+
+        await _modalGame.ShowFinal("Niveles cargados correctamente, ¡a jugar!");
+
+        await LoadScene("MapPathScene");
     }
 
     private Sprite LoadSprite(string p)

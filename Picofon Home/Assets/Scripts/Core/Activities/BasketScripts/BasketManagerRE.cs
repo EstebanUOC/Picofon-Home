@@ -409,6 +409,10 @@ public class BasketManagerRE : MonoBehaviour
 
             return;
         }
+
+        await _modalGame.ShowFinal("Niveles cargados correctamente, ¡a jugar!");
+
+        await LoadScene("MapPathScene");
     }
 
     private Sprite LoadSprite(string p)
