@@ -48,7 +48,7 @@ public class Disclaimer : MonoBehaviour
 
         UserService service = _authManager.UserService;
 
-        ApiResult result = await service.Register(
+        ApiResult<RegisterResponse> result = await service.Register(
             firebaseToken: _authManager.NewUserFirebaseToken,
             disclaimerAccepted: true,
             role: UserRole.Parent
@@ -72,16 +72,17 @@ public class Disclaimer : MonoBehaviour
             return;
         }
 
+        _authManager.SetCurrentUser(result.Data.User);
+
         await _uiManager.ShowModal(
             new ModalData()
             {
                 Title = "Account Created",
-                Message =
-                    "Your account has been created successfully. You can now log in to the app.",
+                Message = "Your account has been created successfully.",
                 Panel = _panel,
             }
         );
 
-        _authManager.Logout();
+        _uiManager.ShowPanel(PanelEnum.Children);
     }
 }
