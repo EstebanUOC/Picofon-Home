@@ -12,6 +12,9 @@ public class Login : MonoBehaviour
     [SerializeField]
     public AuthManager _authManager;
 
+    [SerializeField]
+    public RectTransform _contentPanel;
+
     [Space]
     [SerializeField]
     private CustomButtonLoading _loginButton;
@@ -31,6 +34,12 @@ public class Login : MonoBehaviour
         _optionsButton.OnClick += ShowOptions;
 
         _debugButton.OnClick += ShowDebugMenu;
+
+        if (!Debug.isDebugBuild)
+        {
+            _contentPanel.sizeDelta = new Vector2(_contentPanel.sizeDelta.x, 480);
+            _debugButton.gameObject.SetActive(false);
+        }
 
         if (Application.isEditor)
         {
