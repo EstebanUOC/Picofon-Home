@@ -21,4 +21,6 @@ public class CreateChildDTO
     public string UserId { get; set; }
 
     public UserRole Relationship { get; set; }
+
+    public bool IsAiPersonalizationEnabled { get; set; } = true;
 }

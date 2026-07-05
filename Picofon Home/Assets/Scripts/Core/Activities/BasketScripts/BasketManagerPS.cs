@@ -212,20 +212,27 @@ public class BasketManagerPS : MonoBehaviour
         AudioManager.Instance.PlayVoice(_audioClips[audioIndex]);
 
         int correctWordId = 0;
+        int correctIndex = 0;
 
         if (isCorrect)
         {
             correctWordId = currentWord.Id;
+            correctIndex = hoopIndex;
         }
         else
         {
+            int i = 0;
+
             foreach (var word in _currentActivity.Words)
             {
                 if (word.Answer)
                 {
                     correctWordId = word.Id;
+                    correctIndex = i;
                     break;
                 }
+
+                i++;
             }
         }
 
@@ -245,7 +252,7 @@ public class BasketManagerPS : MonoBehaviour
         _progressBar.SetProgress(progress: _currentActivityIndex, correct: isCorrect);
         _counter.AddScore(correct: isCorrect);
 
-        InitCount(isCorrect, hoopIndex).Forget();
+        InitCount(isCorrect, correctIndex).Forget();
     }
 
     private async UniTaskVoid InitCount(bool isCorrect, int correctIndex)

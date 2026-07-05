@@ -1,6 +1,5 @@
 using System.Text;
 using BasketResponses;
-using Cysharp.Threading.Tasks.Triggers;
 using UnityEngine;
 
 public enum ActivitySkill : byte
@@ -78,16 +77,32 @@ public class ItemFeedbackManager : MonoBehaviour
         for (int i = 0; i < _items.Length; i++)
         {
             ItemFeedback item = _items[i].GetComponent<ItemFeedback>();
-            string word = item.Word;
+            string word = item.SyllabifiedWord;
 
             if (feedbackType == FeedbackType.Neutral)
             {
-                item.ConfigureItem(word, textColor);
+                if (i == correctIndex)
+                {
+                    word = item.Word;
+
+                    item.ConfigureItem(word, textColor);
+
+                    continue;
+                }
+
+                _builder.Clear();
+
+                BuildWord(word, feedbackType);
+
+                item.ConfigureItem(_builder, textColor);
+
                 continue;
             }
 
             if (i != correctIndex)
             {
+                word = item.Word;
+
                 item.ConfigureItem(word, textColor);
                 continue;
             }
@@ -122,7 +137,9 @@ public class ItemFeedbackManager : MonoBehaviour
             case ActivitySkill.Initial:
             {
                 int sep = word.IndexOf('#');
+
                 ColorWord(word, 0, sep, feedbackType);
+
                 _builder.Append(word, sep + 1, word.Length - sep - 1);
                 break;
             }

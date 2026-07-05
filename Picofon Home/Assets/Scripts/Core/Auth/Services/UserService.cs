@@ -245,11 +245,8 @@ public class UserService
                 cancellationToken: token
             );
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
-            PerformanceLog.LogError(
-                $"Error registering child: {e.Message}, URL: {url}, Payload: {childCreateDTO}"
-            );
             return ApiResult.Fail("Network error occurred while registering child.");
         }
 
