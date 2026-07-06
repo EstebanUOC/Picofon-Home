@@ -5925,6 +5925,14 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d95b35c2e50fb27bc9d15548e9012502
+    m_Address: SP-MO-SY-ISF-S-GE-T-N
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - select
+    - skill-final
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d96ab9668baa2d90190f4900e7612a57
     m_Address: SP-pared
     m_ReadOnly: 0
@@ -6379,14 +6387,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ea9fcb75d74b5d07ebc070ca0d74c1a9
-    m_Address: Assets/Audio/SFX/Voice/Activities/Spanish/Final/Judge/SP-MO-SY-ISF-J-BA-T-I.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - judge
-    - lang-es
-    - skill-final
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eaa30c6e0b110a759ad3edfd218562ed
     m_Address: SP-panza
     m_ReadOnly: 0
@@ -6550,14 +6550,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ef4d2ace653d18938b7085e48f233612
-    m_Address: SP-MO-SY-ISF-S-GE-T-N
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-es
-    - select
-    - skill-final
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ef5a3ccd618ec218d911fd1a08897b34
     m_Address: SP-arrestar
     m_ReadOnly: 0
@@ -6697,6 +6689,14 @@ MonoBehaviour:
     m_Address: SP-membrillo
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f555c815dbae0245ba64fc43ffb649b1
+    m_Address: SP-MO-SY-ISF-J-BA-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f6533611687f1f7db81df6c1acc93ef2
     m_Address: SP-corzo
