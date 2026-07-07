@@ -1,3 +1,4 @@
+using System;
 using PrimeTween;
 using UnityEngine;
 
@@ -14,13 +15,16 @@ public class Capsule : MonoBehaviour
     private const int _stateIdle = 0;
     private const int _stateJump = 1;
     private const int _stateLanding = 2;
+    private const int _stateMoving = 3;
 
     #endregion
 
+    [SerializeField]
+    private FloatManager _floatManager;
+
     // Times
 
-    private float _jumpTime;
-    private float _sineTime;
+    private float _time;
 
     private float _jumpDuration = 0.5f;
     private float _jumpHeight;
@@ -28,13 +32,15 @@ public class Capsule : MonoBehaviour
     private float _targetY;
     private float _startY;
 
-    private FloatItem _currentFloatItem;
-
     private StateMachine _stateMachine;
+
+    // Actions
+
+    private Action _onMovingComplete;
 
     public void Start()
     {
-        _stateMachine = new StateMachine(3);
+        _stateMachine = new StateMachine(4);
 
         _stateMachine.SetCallback(_stateIdle, IdleUpdate);
 
@@ -42,11 +48,22 @@ public class Capsule : MonoBehaviour
 
         _stateMachine.SetCallback(_stateLanding, LandingUpdate);
 
+        _stateMachine.SetCallback(_stateMoving, MovingUpdate, begin: BeginMoving);
+
         _stateMachine.ForceState(_stateIdle);
 
         _startY = transform.position.y;
 
-        _sineTime = Mathf.PI;
+        _time = 0;
+
+        _onMovingComplete = () =>
+        {
+            _startY = transform.position.y;
+
+            _stateMachine.ForceState(_stateIdle);
+
+            _floatManager.NotifyMovingComplete();
+        };
     }
 
     public void FixedUpdate()
@@ -58,23 +75,28 @@ public class Capsule : MonoBehaviour
     {
         _stateMachine.ForceState(_stateJump);
 
+        _time = 0f;
+
         _targetY = floatItem.transform.position.y + _offset;
 
         _jumpHeight = 3f;
+    }
 
-        if (_currentFloatItem is null || _currentFloatItem == floatItem)
-        {
-            _jumpHeight = 1f;
-        }
+    private void BeginMoving()
+    {
+        Tween.LocalPositionY(transform, endValue: -0.7f, duration: 1).OnComplete(_onMovingComplete);
+    }
 
-        _currentFloatItem = floatItem;
+    private int MovingUpdate()
+    {
+        return _stateMoving;
     }
 
     private int IdleUpdate()
     {
-        _sineTime += Time.deltaTime;
+        _time += Time.deltaTime;
 
-        float offset = Mathf.Sin(_sineTime * _speed) * _amplitude;
+        float offset = Mathf.Sin(_time * _speed) * _amplitude;
 
         transform.position = new Vector3(
             transform.position.x,
@@ -87,19 +109,17 @@ public class Capsule : MonoBehaviour
 
     private int JumpUpdate()
     {
-        _jumpTime += Time.deltaTime;
-        float t = _jumpTime / _jumpDuration;
+        _time += Time.deltaTime;
+        float t = _time / _jumpDuration;
 
         if (t >= 1f)
         {
-            _jumpTime = 0f;
-
             transform.position = new Vector3(transform.position.x, _targetY, transform.position.z);
 
             _startY = transform.position.y;
-            _sineTime = Mathf.PI;
+            _time = Mathf.PI;
 
-            _currentFloatItem.SetFloating(true);
+            _floatManager.NotifyLanding();
 
             return _stateLanding;
         }
@@ -123,29 +143,19 @@ public class Capsule : MonoBehaviour
 
     private int LandingUpdate()
     {
-        _sineTime += Time.deltaTime;
+        _time += Time.deltaTime;
 
-        float offset = Mathf.Sin(_sineTime * _speed) * _amplitude;
+        float offset = Mathf.Sin(_time * 5) * 0.3f;
 
         if (offset >= 0)
         {
+            _time = 0;
+
             transform.position = new Vector3(transform.position.x, _startY, transform.position.z);
 
             _startY = transform.position.y;
 
-            Tween.Delay(
-                target: _currentFloatItem,
-                duration: 2,
-                target =>
-                {
-                    _jumpTime = 0f;
-                    _sineTime = Mathf.PI;
-
-                    target.SetFloating(true);
-                }
-            );
-
-            return _stateIdle;
+            return _stateMoving;
         }
 
         transform.position = new Vector3(
