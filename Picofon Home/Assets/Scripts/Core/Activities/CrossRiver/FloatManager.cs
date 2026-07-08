@@ -12,10 +12,10 @@ public class FloatManager : MonoBehaviour
     private FloatItem[] _floats;
 
     [SerializeField]
-    private Transform _items;
+    private Transform _background;
 
     [SerializeField]
-    private Transform _background;
+    private FrameManager _frameManager;
 
     private int _currentFloatIndex;
 
@@ -77,6 +77,8 @@ public class FloatManager : MonoBehaviour
 
             _floats[index].Revive();
         }
+
+        _frameManager.ShowFrames();
     }
 
     public void OnFloatItemClicked(FloatItem floatItem)
@@ -115,7 +117,8 @@ public class FloatManager : MonoBehaviour
             );
         }
 
-        Tween.LocalPositionX(_items, endValue: -9.5f, duration: 0.5f);
+        _frameManager.HideFrames();
+
         Tween.LocalPositionX(_background, endValue: -9.5f, duration: 0.5f);
 
         _capsule.JumpTo(floatItem);
