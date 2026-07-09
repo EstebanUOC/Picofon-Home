@@ -17,10 +17,15 @@ public class FloatManager : MonoBehaviour
     [SerializeField]
     private FrameManager _frameManager;
 
+    [SerializeField]
+    private ParticleSystem _jumpParticles;
+
     private int _currentFloatIndex;
 
     public void Start()
     {
+        SceneOrientationHelper.LockToLandscape();
+
         CalledDefered().Forget();
 
         _floats[1].gameObject.SetActive(true);
@@ -121,6 +126,7 @@ public class FloatManager : MonoBehaviour
 
         Tween.LocalPositionX(_background, endValue: -9.5f, duration: 0.5f);
 
+        _jumpParticles.Play();
         _capsule.JumpTo(floatItem);
     }
 }
