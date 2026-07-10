@@ -305,6 +305,58 @@ MonoBehaviour:
     m_Localized: "M\xEDnimo 9 caracteres"
     m_Metadata:
       m_Items: []
+  - m_Id: 33325655464820736
+    m_Localized: "Contin\xFAa con Google"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33326841379110912
+    m_Localized: Iniciar con correo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33331978705256448
+    m_Localized: "Inicia sesi\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33332506231259136
+    m_Localized: "Contin\xFAa con tus credenciales."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33333943375970304
+    m_Localized: "Correo electr\xF3nico"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33334453139095552
+    m_Localized: "Contrase\xF1a"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33334887706738688
+    m_Localized: "Iniciar sesi\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33335228867231744
+    m_Localized: No tengo cuenta
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33336420729044992
+    m_Localized: Crear cuenta
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33337025937752064
+    m_Localized: Registra nuevas credenciales.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33337377420427264
+    m_Localized: "Confirmar contrase\xF1a"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33337599131336704
+    m_Localized: Registrar cuenta
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33337809110777856
+    m_Localized: Ya tengo una cuenta
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

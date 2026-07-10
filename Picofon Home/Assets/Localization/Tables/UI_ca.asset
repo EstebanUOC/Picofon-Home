@@ -306,6 +306,58 @@ MonoBehaviour:
     m_Localized: "M\xEDnim 9 car\xE0cters"
     m_Metadata:
       m_Items: []
+  - m_Id: 33325655464820736
+    m_Localized: Continua amb Google
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33326841379110912
+    m_Localized: Iniciar amb correu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33331978705256448
+    m_Localized: "Inicia sessi\xF3"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33332506231259136
+    m_Localized: Continua amb les teves credencials.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33333943375970304
+    m_Localized: "Correu electr\xF2nic"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33334453139095552
+    m_Localized: Contrasenya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33334887706738688
+    m_Localized: "Iniciar sessi\xF3"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33335228867231744
+    m_Localized: No tinc compte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33336420729044992
+    m_Localized: Crear compte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33337025937752064
+    m_Localized: Registra noves credencials.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33337377420427264
+    m_Localized: Confirmar contrasenya
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33337599131336704
+    m_Localized: Registrar compte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33337809110777856
+    m_Localized: Ja tinc un compte
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

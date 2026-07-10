@@ -10,10 +10,14 @@ using static TMPro.TMP_Dropdown;
 
 public class UserChildren : MonoBehaviour
 {
+    #region Constants
+
     private const int HeightCenter = 630;
     private const int HeightChildren = 955;
     private const int HeightNoChildren = 415;
     private const int HeightChildrenTherapist = 595;
+
+    #endregion
 
     [SerializeField]
     private AuthManager _authManager;
