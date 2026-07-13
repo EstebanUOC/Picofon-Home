@@ -15,15 +15,18 @@ public class Login : MonoBehaviour
     [SerializeField]
     public RectTransform _contentPanel;
 
+    [SerializeField]
+    private SimpleButton _optionsButton;
+
     [Space]
     [SerializeField]
     private CustomButtonLoading _loginButton;
 
     [SerializeField]
-    private CustomButton _debugButton;
+    private CustomButton _loginMailButton;
 
     [SerializeField]
-    private SimpleButton _optionsButton;
+    private CustomButton _debugButton;
 
     private RectTransform _panel;
 
@@ -47,10 +50,30 @@ public class Login : MonoBehaviour
             return;
         }
 
-        _loginButton.OnClick += LoginWithGoogle;
+        _loginButton.OnClick += AuthenticateWithGoogle;
     }
 
-    private async UniTaskVoid AuthenticateWithGoogle()
+    private void OnLoginSuccess(UserModel user)
+    {
+        _authManager.SetCurrentUser(user);
+        _loginButton.EndLoading();
+
+        if (!user.LegalAccepted)
+        {
+            _uiManager.ShowPanel(PanelEnum.Disclaimer);
+            return;
+        }
+
+        if (user.Role == UserRole.Invited)
+        {
+            _uiManager.ShowPanel(PanelEnum.Role);
+            return;
+        }
+
+        _uiManager.ShowPanel(PanelEnum.Children);
+    }
+
+    private async UniTaskVoid AuthenticateWithGoogleAsync()
     {
         FirebaseAuth firebaseInstance = FirebaseAuth.DefaultInstance;
         GoogleSignIn googleInstance = GoogleSignIn.DefaultInstance;
@@ -156,29 +179,9 @@ public class Login : MonoBehaviour
         OnLoginSuccess(result.Data.User);
     }
 
-    private void OnLoginSuccess(UserModel user)
+    private void AuthenticateWithGoogle()
     {
-        _authManager.SetCurrentUser(user);
-        _loginButton.EndLoading();
-
-        if (!user.LegalAccepted)
-        {
-            _uiManager.ShowPanel(PanelEnum.Disclaimer);
-            return;
-        }
-
-        if (user.Role == UserRole.Invited)
-        {
-            _uiManager.ShowPanel(PanelEnum.Role);
-            return;
-        }
-
-        _uiManager.ShowPanel(PanelEnum.Children);
-    }
-
-    private void LoginWithGoogle()
-    {
-        AuthenticateWithGoogle().Forget();
+        AuthenticateWithGoogleAsync().Forget();
     }
 
     private void ShowOptions()
