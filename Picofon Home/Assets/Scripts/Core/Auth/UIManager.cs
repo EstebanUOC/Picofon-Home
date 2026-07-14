@@ -11,6 +11,7 @@ public enum PanelEnum : byte
     Role,
     Children,
     RegisterChild,
+    RegisterParent,
 }
 
 public enum ModalEnum : byte

@@ -357,6 +357,38 @@ MonoBehaviour:
     m_Localized: Ya tengo una cuenta
     m_Metadata:
       m_Items: []
+  - m_Id: 34451304985247744
+    m_Localized: "El correo electr\xF3nico no es v\xE1lido."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34453893957140480
+    m_Localized: "La contrase\xF1a no puede estar vac\xEDa."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34468129160675328
+    m_Localized: "Error al iniciar sesi\xF3n. Verifica tus credenciales."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34468340104806400
+    m_Localized: "Se produjo un error de red al iniciar sesi\xF3n."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34763634452414464
+    m_Localized: "La contrase\xF1a no puede estar vac\xEDa o tener menos de 6 caracteres"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34764255318458368
+    m_Localized: "Las contrase\xF1as no coinciden."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34791044925308928
+    m_Localized: Se ha producido un error de red al registrar el usuario.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34791403248893952
+    m_Localized: Este correo ya tiene una cuenta asociada.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

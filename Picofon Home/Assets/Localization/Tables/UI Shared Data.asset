@@ -339,6 +339,38 @@ MonoBehaviour:
     m_Key: LOG-REG-LOG
     m_Metadata:
       m_Items: []
+  - m_Id: 34451304985247744
+    m_Key: LOG-LOG-CORR-ERR
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34453893957140480
+    m_Key: LOG-LOG-PASS-NULL-ERR
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34468129160675328
+    m_Key: INVALID_LOGIN_CREDENTIALS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34468340104806400
+    m_Key: NET_ERR_LOGIN_MAIL_CREDENTIALS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34763634452414464
+    m_Key: LOG-REG-PASS-NULL-ERR
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34764255318458368
+    m_Key: LOG-REG-PASS-NOT-MATCH-ERR
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34791044925308928
+    m_Key: NET_ERR_REG_MAIL_CREDENTIALS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34791403248893952
+    m_Key: EMAIL_EXISTS
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

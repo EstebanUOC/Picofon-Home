@@ -358,6 +358,38 @@ MonoBehaviour:
     m_Localized: Ja tinc un compte
     m_Metadata:
       m_Items: []
+  - m_Id: 34451304985247744
+    m_Localized: "El correu electr\xF2nic no \xE9s v\xE0lid."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34453893957140480
+    m_Localized: La contrasenya no pot estar buida.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34468129160675328
+    m_Localized: "Error en iniciar sessi\xF3. Verifica les teves credencials."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34468340104806400
+    m_Localized: "S'ha produ\xEFt un error de xarxa en iniciar sessi\xF3."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34763634452414464
+    m_Localized: "La contrasenya no pot estar buida o tenir menys de 6 car\xE0cters"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34764255318458368
+    m_Localized: Les contrasenyes no coincideixen.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34791044925308928
+    m_Localized: "S'ha produ\xC3\xAFt un error de xarxa en registrar l'usuari."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34791403248893952
+    m_Localized: "Aquest correu ja t\xE9 una compte associat."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
