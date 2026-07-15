@@ -42,7 +42,7 @@ public class Login : MonoBehaviour
 
         if (!Debug.isDebugBuild)
         {
-            _contentPanel.sizeDelta = new Vector2(_contentPanel.sizeDelta.x, 480);
+            _contentPanel.sizeDelta = new Vector2(_contentPanel.sizeDelta.x, 700);
             _debugButton.gameObject.SetActive(false);
         }
 

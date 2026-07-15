@@ -367,7 +367,9 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 34468129160675328
-    m_Localized: "Error en iniciar sessi\xF3. Verifica les teves credencials."
+    m_Localized: "Credencials incorrectes. Revisa les teves dades o inicia sessi\xF3
+      amb el mateix m\xE8tode amb qu\xE8 vas crear el teu compte. Si encara no tens
+      un compte, registra't."
     m_Metadata:
       m_Items: []
   - m_Id: 34468340104806400

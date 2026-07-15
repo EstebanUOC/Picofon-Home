@@ -29,6 +29,9 @@ public class RegisterUser : MonoBehaviour
     [SerializeField]
     private RectTransform _panel;
 
+    [SerializeField]
+    private SimpleButton _returnButton;
+
     // Login
 
     [SerializeField]
@@ -78,6 +81,8 @@ public class RegisterUser : MonoBehaviour
 
     public void Start()
     {
+        _returnButton.OnClick += () => _uiManager.ShowPanel(PanelEnum.Login);
+
         _loginButton.OnClick += Login;
         _goRegisterButton.OnClick += ShowRegister;
 
