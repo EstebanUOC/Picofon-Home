@@ -1,7 +1,6 @@
 #nullable enable
 
 using System.Text.Json;
-using UnityEngine;
 
 namespace Picofon.Core.Network
 {
@@ -41,13 +40,15 @@ namespace Picofon.Core.Network
             {
                 if (!_root.TryGetProperty(ApiJsonKeys.Message, out var msg))
                 {
-                    Debug.Log("[Debug] 'message' property not found in JSON response.");
+                    PerformanceLog.Log("[Debug] 'message' property not found in JSON response.");
                     return null;
                 }
 
                 if (!msg.TryGetProperty(ApiJsonKeys.Content, out var content))
                 {
-                    Debug.Log("[Debug] 'content' property not found in 'message' JSON object.");
+                    PerformanceLog.Log(
+                        "[Debug] 'content' property not found in 'message' JSON object."
+                    );
                     return null;
                 }
 
@@ -71,7 +72,7 @@ namespace Picofon.Core.Network
             {
                 if (!_root.TryGetProperty(ApiJsonKeys.Success, out var success))
                 {
-                    Debug.Log("[Debug] 'success' property not found in JSON response.");
+                    PerformanceLog.Log("[Debug] 'success' property not found in JSON response.");
                     return false;
                 }
                 return success.GetBoolean();
@@ -84,13 +85,15 @@ namespace Picofon.Core.Network
             {
                 if (!_root.TryGetProperty(ApiJsonKeys.Message, out var msg))
                 {
-                    Debug.Log("[Debug] 'message' property not found in JSON response.");
+                    PerformanceLog.Log("[Debug] 'message' property not found in JSON response.");
                     return null;
                 }
 
                 if (!msg.TryGetProperty(ApiJsonKeys.Content, out var content))
                 {
-                    Debug.Log("[Debug] 'content' property not found in 'message' JSON object.");
+                    PerformanceLog.Log(
+                        "[Debug] 'content' property not found in 'message' JSON object."
+                    );
                     return null;
                 }
 
@@ -104,7 +107,7 @@ namespace Picofon.Core.Network
             {
                 if (!_root.TryGetProperty(ApiJsonKeys.Data, out var dataElement))
                 {
-                    Debug.Log("[Debug] 'data' property not found in JSON response.");
+                    PerformanceLog.Log("[Debug] 'data' property not found in JSON response.");
                     return default;
                 }
 

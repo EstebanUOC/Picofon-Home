@@ -48,7 +48,7 @@ public class Disclaimer : MonoBehaviour
 
         UserService service = _authManager.UserService;
 
-        ApiResult<RegisterResponse> result = await service.Register(
+        ApiResult<RegisterResponse> result = await service.RegisterWithFirebaseToken(
             firebaseToken: _authManager.NewUserFirebaseToken,
             disclaimerAccepted: true,
             role: UserRole.Parent

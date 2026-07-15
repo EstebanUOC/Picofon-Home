@@ -36,6 +36,8 @@ public class Login : MonoBehaviour
 
         _optionsButton.OnClick += ShowOptions;
 
+        _loginMailButton.OnClick += () => _uiManager.ShowPanel(PanelEnum.RegisterParent);
+
         _debugButton.OnClick += ShowDebugMenu;
 
         if (!Debug.isDebugBuild)

@@ -10,6 +10,11 @@ public readonly struct LoginData
     public readonly UserModel User { get; init; }
 }
 
+public readonly struct LoginMailData
+{
+    public readonly string IdToken { get; init; }
+}
+
 public readonly struct UpdateUserRoleRequest
 {
     public readonly UserRole Role { get; init; }
@@ -33,7 +38,7 @@ public class UserService
 {
     private readonly string ChildrenURL = ApiConfig.BaseUrl + "children/";
 
-    public async UniTask<ApiResult<RegisterResponse>> Register(
+    public async UniTask<ApiResult<RegisterResponse>> RegisterWithFirebaseToken(
         string firebaseToken,
         bool disclaimerAccepted,
         UserRole role,
@@ -67,7 +72,7 @@ public class UserService
             PerformanceLog.LogError(
                 $"Error registering user: {e.Message}, URL: {url}, Payload: {request}"
             );
-            return ApiResult<RegisterResponse>.Fail("Network error occurred while registering.");
+            return ApiResult<RegisterResponse>.Fail("NET_ERR_REG_MAIL_CREDENTIALS");
         }
 
         using JsonDocument doc = JsonDocument.Parse(rawResponse);
@@ -83,6 +88,76 @@ public class UserService
         return ApiResult<RegisterResponse>.Ok(responseView.Data);
     }
 
+    public async UniTask<ApiResult<RegisterResponse>> RegisterCredentials(
+        string email,
+        string password,
+        CancellationToken token = default
+    )
+    {
+        string url =
+            "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCguAf29FXSGYB73ZPNb0uCBBdymzSrerc";
+
+        byte[] rawResponse;
+
+        FirebaseRequest request = new()
+        {
+            Email = email,
+            Password = password,
+            ReturnSecureToken = true,
+        };
+
+        byte[] jsonRequest = JsonHelper.ToBytes(in request);
+
+        try
+        {
+            rawResponse = await HttpClientUnity.PostAsyncBytes(
+                url: url,
+                data: jsonRequest,
+                timeoutSeconds: 5,
+                cancellationToken: token
+            );
+        }
+        catch (UnityWebRequestException e)
+        {
+            if (e.ResponseCode != 400)
+                return ApiResult<RegisterResponse>.Fail("NET_ERR_REG_MAIL_CREDENTIALS");
+
+            using JsonDocument errorDoc = JsonDocument.Parse(e.Text);
+            JsonElement errorRoot = errorDoc.RootElement;
+
+            if (!errorRoot.TryGetProperty("error", out var errorElement))
+            {
+                return ApiResult<RegisterResponse>.Fail("NET_ERR_REG_MAIL_CREDENTIALS");
+            }
+
+            return ApiResult<RegisterResponse>.Fail(
+                errorElement.GetProperty("message").GetString()
+            );
+        }
+
+        using JsonDocument doc = JsonDocument.Parse(rawResponse);
+        JsonElement root = doc.RootElement;
+
+        if (!root.TryGetProperty("idToken", out var dataElement))
+        {
+            return ApiResult<RegisterResponse>.Fail("NET_ERR_REG_MAIL_CREDENTIALS");
+        }
+
+        ApiResult<RegisterResponse> result = await RegisterWithFirebaseToken(
+            firebaseToken: dataElement.GetString(),
+            disclaimerAccepted: true,
+            UserRole.Parent,
+            token
+        );
+
+        if (!result.Success)
+        {
+            return ApiResult<RegisterResponse>.Fail(result.Message);
+        }
+
+        return ApiResult<RegisterResponse>.Ok(result.Data);
+    }
+
     public async UniTask<ApiResult<LoginData>> LoginWithFirebaseToken(
         string firebaseToken,
         CancellationToken token = default
@@ -92,7 +167,7 @@ public class UserService
 
         byte[] rawResponse;
 
-        LoginRequest loginRequest = new() { FirebaseIdToken = firebaseToken };
+        LoginFirebaseRequest loginRequest = new() { FirebaseIdToken = firebaseToken };
 
         byte[] jsonRequest = JsonHelper.ToBytes(in loginRequest);
 
@@ -108,7 +183,12 @@ public class UserService
         catch (UnityWebRequestException e)
         {
             if (e.ResponseCode != 404)
+            {
+                PerformanceLog.LogError(
+                    $"Error logging in user with Firebase token: {firebaseToken}\n"
+                );
                 return ApiResult<LoginData>.Fail("Network error occurred while logging in.");
+            }
 
             LoginData newUserData = new() { IsNewUser = true };
 
@@ -130,6 +210,69 @@ public class UserService
         }
 
         return ApiResult<LoginData>.Ok(responseView.Data);
+    }
+
+    public async UniTask<ApiResult<LoginData>> LoginWithCredentials(
+        string email,
+        string password,
+        CancellationToken token = default
+    )
+    {
+        string url =
+            "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCguAf29FXSGYB73ZPNb0uCBBdymzSrerc";
+
+        byte[] rawResponse;
+
+        FirebaseRequest request = new()
+        {
+            Email = email,
+            Password = password,
+            ReturnSecureToken = true,
+        };
+
+        byte[] jsonRequest = JsonHelper.ToBytes(in request);
+
+        try
+        {
+            rawResponse = await HttpClientUnity.PostAsyncBytes(
+                url: url,
+                data: jsonRequest,
+                timeoutSeconds: 5,
+                cancellationToken: token
+            );
+        }
+        catch (UnityWebRequestException e)
+        {
+            if (e.ResponseCode != 400)
+                return ApiResult<LoginData>.Fail("NET_ERR_LOGIN_MAIL_CREDENTIALS");
+
+            using JsonDocument errorDoc = JsonDocument.Parse(e.Text);
+            JsonElement errorRoot = errorDoc.RootElement;
+
+            if (!errorRoot.TryGetProperty("error", out var errorElement))
+            {
+                return ApiResult<LoginData>.Fail("NET_ERR_LOGIN_MAIL_CREDENTIALS");
+            }
+
+            return ApiResult<LoginData>.Fail(errorElement.GetProperty("message").GetString());
+        }
+
+        using JsonDocument doc = JsonDocument.Parse(rawResponse);
+        JsonElement root = doc.RootElement;
+
+        if (!root.TryGetProperty("idToken", out var dataElement))
+        {
+            return ApiResult<LoginData>.Fail("NET_ERR_LOGIN_MAIL_CREDENTIALS");
+        }
+
+        ApiResult<LoginData> result = await LoginWithFirebaseToken(dataElement.GetString(), token);
+
+        if (!result.Success)
+        {
+            return ApiResult<LoginData>.Fail(result.Message);
+        }
+
+        return ApiResult<LoginData>.Ok(result.Data);
     }
 
     public async UniTask<ApiResult> UpdateUserRole(
