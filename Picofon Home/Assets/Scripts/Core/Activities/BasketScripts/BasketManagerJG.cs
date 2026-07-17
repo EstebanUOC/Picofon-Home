@@ -82,9 +82,7 @@ public class BasketGameManagerJG : MonoBehaviour
             language = LanguageID.Catalan;
             @params = new ActivityRequestParams { PlanId = 112, ChildId = "12345678Z" };
 
-            // skill = ActivitySkill.Initial;
-            // language = LanguageID.Spanish;
-            // @params = new ActivityRequestParams { PlanId = 124, ChildId = "88345678A" };
+            GamePrefs.DebugMode = true;
 
             PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
         }
@@ -118,7 +116,12 @@ public class BasketGameManagerJG : MonoBehaviour
 
         if (!result.Success)
         {
-            Debug.LogError($"Error loading activities: {result.Message}");
+            PerformanceLog.LogError($"Error loading activities: {result.Message}");
+
+            _fade.StopAndZoom();
+
+            await _modalGame.ShowWarning();
+
             return;
         }
 

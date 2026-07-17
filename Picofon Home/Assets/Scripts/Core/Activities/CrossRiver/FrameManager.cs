@@ -9,6 +9,9 @@ public class FrameManager : MonoBehaviour
     [SerializeField]
     private Transform _container;
 
+    [SerializeField]
+    private Fade _fade;
+
     // Variables
 
     public void Start()
@@ -23,11 +26,17 @@ public class FrameManager : MonoBehaviour
             PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
         }
 # endif
+
+        Prueba().Forget();
     }
 
     private async UniTaskVoid Prueba()
     {
-        await UniTask.Delay(100);
+        _fade.FirstLoad();
+
+        await UniTask.WaitForSeconds(1.5f);
+
+        _fade.StopAndZoom();
     }
 
     public void HideFrames()
