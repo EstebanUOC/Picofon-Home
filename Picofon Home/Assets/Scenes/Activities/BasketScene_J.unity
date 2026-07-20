@@ -3350,6 +3350,9 @@ MonoBehaviour:
   _answerManager: {fileID: 1932736848}
   _uiManager: {fileID: 94296185}
   _sessionManager: {fileID: 699825655}
+  _progressBarTransform: {fileID: 487504267}
+  _counterTransform: {fileID: 1197125588}
+  _menuTransform: {fileID: 90741978}
 --- !u!1 &1075156704
 GameObject:
   m_ObjectHideFlags: 0
