@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class FloatManager : MonoBehaviour
 {
+    public event Action<int> OnFloatClicked;
+
+    #region References
+
     [SerializeField]
     private Capsule _capsule;
 
@@ -20,16 +24,16 @@ public class FloatManager : MonoBehaviour
     [SerializeField]
     private ParticleSystem _jumpParticles;
 
+    #endregion
+
+    // Variables
+
     private int _currentFloatIndex;
+    private bool _interactable;
 
     public void Start()
     {
-        SceneOrientationHelper.LockToLandscape();
-
         CalledDefered().Forget();
-
-        _floats[1].gameObject.SetActive(true);
-        _floats[1].gameObject.SetActive(false);
 
         _floats[2].ShowCheap();
         _floats[3].ShowCheap();
@@ -41,6 +45,16 @@ public class FloatManager : MonoBehaviour
 
         _currentFloatIndex = 0;
         _floats[_currentFloatIndex].Floating();
+    }
+
+    public void EnableInteraction()
+    {
+        _interactable = true;
+    }
+
+    public void DisableInteraction()
+    {
+        _interactable = false;
     }
 
     public void NotifyLanding()
@@ -65,20 +79,20 @@ public class FloatManager : MonoBehaviour
 
         foreach (int index in moved)
         {
-            Vector3 oldTransform = _floats[index].transform.position;
+            Vector3 pos = _floats[index].transform.position;
 
-            oldTransform.x = 5.5f;
+            pos.x = 5.5f;
 
             if ((index & 1) == 0)
             {
-                oldTransform.y = 0;
+                pos.y = 0;
             }
             else
             {
-                oldTransform.y = -3.4f;
+                pos.y = -3.4f;
             }
 
-            _floats[index].transform.localPosition = oldTransform;
+            _floats[index].transform.localPosition = pos;
 
             _floats[index].Revive();
         }
@@ -88,24 +102,26 @@ public class FloatManager : MonoBehaviour
 
     public void OnFloatItemClicked(FloatItem floatItem)
     {
-        Span<int> drowned = stackalloc int[2];
+        if (!_interactable) return;
+
+        int clickedIndex = -1;
 
         for (int i = 0; i < _floats.Length; i++)
         {
-            if (_floats[i] != floatItem)
-            {
-                continue;
-            }
+            if (_floats[i] != floatItem) continue;
 
-            drowned[0] = _currentFloatIndex;
-
-            bool isPair = (i & 1) == 0;
-
-            drowned[1] = i + (isPair ? 1 : -1);
-
-            _currentFloatIndex = i;
+            clickedIndex = i;
             break;
         }
+
+        if (clickedIndex < 0) return;
+
+        Span<int> drowned = stackalloc int[2];
+        drowned[0] = _currentFloatIndex;
+        drowned[1] = (clickedIndex & 1) == 0 ? clickedIndex + 1 : clickedIndex - 1;
+        _currentFloatIndex = clickedIndex;
+
+        OnFloatClicked?.Invoke(clickedIndex);
 
         Tween.LocalPositionX(_floats[_currentFloatIndex].transform, endValue: -4, duration: 0.5f);
 

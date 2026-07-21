@@ -1,50 +1,36 @@
-using Cysharp.Threading.Tasks;
 using PrimeTween;
+using TMPro;
 using UnityEngine;
 
 public class FrameManager : MonoBehaviour
 {
-    // References
+    #region References
 
     [SerializeField]
     private Transform _container;
 
     [SerializeField]
+    private TMP_Text _leftWordText;
+
+    [SerializeField]
+    private SpriteRenderer _leftWordIcon;
+
+    [SerializeField]
+    private TMP_Text _rightWordText;
+
+    [SerializeField]
+    private SpriteRenderer _rightWordIcon;
+
+    [SerializeField]
     private Fade _fade;
 
-    // Variables
-
-    public void Start()
-    {
-        ActivityRequestParams @params = LevelPayload.Params;
-
-#if DEBUG
-        if (@params.ChildId is null)
-        {
-            @params = new ActivityRequestParams { PlanId = 112, ChildId = "12345678Z" };
-
-            PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
-        }
-# endif
-
-        Prueba().Forget();
-    }
-
-    private async UniTaskVoid Prueba()
-    {
-        _fade.FirstLoad();
-
-        await UniTask.WaitForSeconds(1.5f);
-
-        _fade.StopAndZoom();
-    }
+    #endregion
 
     public void HideFrames()
     {
         float duration = 0.5f;
 
         Tween.LocalPositionY(_container, endValue: 5, duration, ease: Ease.InBack);
-
         Tween.LocalPositionX(_container, endValue: -9.5f, duration: duration);
     }
 
@@ -55,5 +41,15 @@ public class FrameManager : MonoBehaviour
         float duration = 0.5f;
 
         Tween.LocalPositionY(_container, endValue: 0, duration, ease: Ease.OutBack);
+    }
+
+    public void ShowLeftFrame(string word, Sprite icon)
+    {
+        _leftWordIcon.sprite = icon;
+    }
+
+    public void ShowRightFrame(string word, Sprite icon)
+    {
+        _rightWordIcon.sprite = icon;
     }
 }
