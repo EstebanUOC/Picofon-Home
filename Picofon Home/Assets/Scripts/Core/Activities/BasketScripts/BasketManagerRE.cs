@@ -1,12 +1,15 @@
 using System;
 using BasketResponses;
 using Cysharp.Threading.Tasks;
+using PrimeTween;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using ActivitiesResult = ApiResult<ActivitiesData<BasketResponses.RelateActivity>>;
 
 public class BasketManagerRE : MonoBehaviour
 {
+    #region References
+
     [Space]
     [SerializeField]
     private BallController _ballController;
@@ -42,11 +45,19 @@ public class BasketManagerRE : MonoBehaviour
     [SerializeField]
     private Camera _camera;
 
-    private bool _taskCompleted = false;
-    private int _currentActivityIndex = 0;
+    [Space]
+    [SerializeField]
+    private RectTransform _progressBarTransform;
 
-    private RelateActivity[] _activities;
-    private RelateActivity _currentActivity;
+    [SerializeField]
+    private RectTransform _counterTransform;
+
+    [SerializeField]
+    private RectTransform _menuTransform;
+
+    #endregion
+
+    // Readonly fields
 
     private readonly Sprite[] _icons = new Sprite[5];
     private readonly string[] _texts = new string[5];
@@ -55,6 +66,18 @@ public class BasketManagerRE : MonoBehaviour
     private readonly AudioClip[] _audioClips = new AudioClip[3];
 
     private readonly AudioClip[] _audioItems = new AudioClip[5];
+
+    // Variables
+
+    private bool _taskCompleted = false;
+    private int _currentActivityIndex = 0;
+
+    private RelateActivity[] _activities;
+    private RelateActivity _currentActivity;
+
+    private float _defaultMenuX;
+    private float _defaultCounterX;
+    private float _defaultProgressBarValue;
 
     public void Start()
     {
@@ -69,10 +92,6 @@ public class BasketManagerRE : MonoBehaviour
 #if DEBUG
         if (@params.ChildId is null)
         {
-            // skill = ActivitySkill.Final;
-            // language = LanguageID.Catalan;
-            // @params = new ActivityRequestParams { PlanId = 114, ChildId = "12345678Z" };
-
             skill = ActivitySkill.Initial;
             language = LanguageID.Spanish;
             @params = new ActivityRequestParams { PlanId = 126, ChildId = "88345678A" };
@@ -108,6 +127,7 @@ public class BasketManagerRE : MonoBehaviour
         BasketService basketService = new();
 
         _fade.FirstLoad();
+        PositionMenu();
 
         ActivitiesResult result = await basketService.GetActivities<ActivitiesData<RelateActivity>>(
             @params
@@ -191,6 +211,7 @@ public class BasketManagerRE : MonoBehaviour
         ChangeActivity();
 
         _fade.StopAndZoom();
+        AnimateUI().Forget();
 
         int introIndex = (int)ResponseAudioID.Intro;
         AudioClip introClip = _audioClips[introIndex];
@@ -201,6 +222,77 @@ public class BasketManagerRE : MonoBehaviour
         await AudioManager.Instance.WaitVoiceToEnd();
 
         _sessionManager.StartTime();
+    }
+
+    private void PositionMenu()
+    {
+        _defaultMenuX = _menuTransform.anchoredPosition.x;
+        _defaultCounterX = _counterTransform.anchoredPosition.x;
+
+        _menuTransform.anchoredPosition = new Vector2(-200, _menuTransform.anchoredPosition.y);
+        _counterTransform.anchoredPosition = new Vector2(400, _counterTransform.anchoredPosition.y);
+
+        if (_progressBarTransform.rotation.z == 0)
+        {
+            _defaultProgressBarValue = _progressBarTransform.anchoredPosition.y;
+
+            _progressBarTransform.anchoredPosition = new Vector2(
+                _progressBarTransform.anchoredPosition.x,
+                700
+            );
+        }
+        else
+        {
+            _defaultProgressBarValue = _progressBarTransform.anchoredPosition.x;
+
+            _progressBarTransform.anchoredPosition = new Vector2(
+                -100,
+                _progressBarTransform.anchoredPosition.y
+            );
+        }
+    }
+
+    private async UniTaskVoid AnimateUI()
+    {
+        await UniTask.WaitForSeconds(1f);
+
+        _ = Sequence
+            .Create()
+            .Group(
+                Tween.UIAnchoredPositionX(
+                    target: _menuTransform,
+                    endValue: _defaultMenuX,
+                    duration: 0.5f,
+                    ease: Ease.OutCubic
+                )
+            )
+            .Group(
+                Tween.UIAnchoredPositionX(
+                    target: _counterTransform,
+                    endValue: _defaultCounterX,
+                    duration: 0.5f,
+                    ease: Ease.OutCubic
+                )
+            );
+
+        if (_progressBarTransform.rotation.z == 0)
+        {
+            _ = Tween.UIAnchoredPositionY(
+                target: _progressBarTransform,
+                endValue: _defaultProgressBarValue,
+                duration: 0.5f,
+                ease: Ease.OutCubic
+            );
+        }
+        else
+        {
+            _ = Tween.UIAnchoredPositionX(
+                target: _progressBarTransform,
+                endValue: _defaultProgressBarValue,
+                duration: 0.5f,
+                ease: Ease.OutCubic
+            );
+        }
     }
 
     private void HandleHoopSelected(int hoopIndex)

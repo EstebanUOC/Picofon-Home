@@ -5,17 +5,6 @@
         "displayable": true
     },
     "data": {
-        "general_data": {
-            "audio_Intro_Basket": "CA-MO-SY-ISI-J-BA-T-I.wav",
-            "audio_Intro_PopSea": "CA-MO-SY-ISI-J-PS-T-I.wav",
-            "audio_Intro_PopParty": "CA-MO-SY-ISI-J-PP-T-I.wav",
-            "audio_Intro_CrossRiver": "CA-MO-SY-ISI-J-CR-T-I.wav",
-            "feedback_positive_yes": "CA-MO-SY-ISI-J-GE-T-PS.wav",
-            "feedback_positive_no": "CA-MO-SY-ISI-J-GE-T-PN.wav",
-            "feedback_neutral_yes": "CA-MO-SY-ISI-J-GE-T-NS.wav",
-            "feedback_neutral_no": "CA-MO-SY-ISI-J-GE-T-NN.wav",
-            "feedback_no_answer": "audio_AN.wav"
-        },
         "activities": [
             {
                 "words": [

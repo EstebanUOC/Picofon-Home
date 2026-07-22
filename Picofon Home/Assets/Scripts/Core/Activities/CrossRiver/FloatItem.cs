@@ -16,7 +16,7 @@ public class FloatItem : MonoBehaviour
 
     #endregion
 
-    #region Fields
+    #region References
 
     [SerializeField]
     private Transform _cheap;
@@ -31,6 +31,8 @@ public class FloatItem : MonoBehaviour
     private FloatManager _manager;
 
     #endregion
+
+    // Variables
 
     private float _startY;
     private float _time;
@@ -48,11 +50,8 @@ public class FloatItem : MonoBehaviour
         _stateMachine = new StateMachine(4);
 
         _stateMachine.SetCallback(_stateIdle, IdleUpdate);
-
         _stateMachine.SetCallback(_stateFloating, FloatingUpdate);
-
         _stateMachine.SetCallback(_stateLanding, LandingUpdate);
-
         _stateMachine.SetCallback(_stateMoving, MovingUpdate, begin: BeginMoving);
 
         _stateMachine.ForceState(_stateIdle);
@@ -92,8 +91,6 @@ public class FloatItem : MonoBehaviour
         HideCheap();
 
         _stateMachine.ForceState(_stateFloating);
-
-        return;
     }
 
     public void Drown()

@@ -6,23 +6,20 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using ActivitiesResult = ApiResult<ActivitiesData<BasketResponses.JudgeActivity>>;
 
-public enum HoopType
-{
-    Si,
-    No,
-}
-
-public enum AnswerEvaluation
-{
-    Correct,
-    Incorrect,
-}
-
-public class BasketGameManagerJG : MonoBehaviour
+public class CrossRiverJudgeManager : MonoBehaviour
 {
     #region References
 
     [Space]
+    [SerializeField]
+    private FrameManager _frameManager;
+
+    [SerializeField]
+    private FloatManager _floatManager;
+
+    [SerializeField]
+    private Fade _fade;
+
     [SerializeField]
     private FeedbackController _feedbackController;
 
@@ -30,26 +27,10 @@ public class BasketGameManagerJG : MonoBehaviour
     private ModalGame _modalGame;
 
     [SerializeField]
-    private BallController _ballController;
-
-    [SerializeField]
     private ProgressBar _progressBar;
 
     [SerializeField]
     private Counter _counter;
-
-    [SerializeField]
-    private Fade _fade;
-
-    [Space]
-    [SerializeField]
-    private HoopManager _hoopManager;
-
-    [SerializeField]
-    private AnswerManagerJG _answerManager;
-
-    [SerializeField]
-    private BasketUIManager _uiManager;
 
     [SerializeField]
     private SessionManager _sessionManager;
@@ -68,34 +49,41 @@ public class BasketGameManagerJG : MonoBehaviour
 
     // Readonly fields
 
+    private readonly AudioClip[] _feedbackClips = new AudioClip[5];
+    private readonly AudioClip[] _wordClips = new AudioClip[2];
+
     private readonly Sprite[] _icons = new Sprite[2];
     private readonly string[] _texts = new string[2];
     private readonly string[] _syllabifiedWords = new string[2];
 
     // Variables
 
-    private bool _taskCompleted = false;
-    private int _currentActivityIndex = 0;
+    private DataManager _dataManager;
 
-    private JudgeActivity[] _activities;
     private JudgeActivity _currentActivity;
 
-    private readonly AudioClip[] _audioClips = new AudioClip[5];
-
-    private readonly AudioClip[] _audioItems = new AudioClip[2];
+    private bool _taskCompleted;
 
     private float _defaultMenuX;
     private float _defaultCounterX;
     private float _defaultProgressBarValue;
 
-    public void Start()
+    public void Awake()
     {
-        _answerManager.OnAnswerSelected += HandleAnswerSelected;
+        _dataManager = new DataManager();
+        _floatManager.OnFloatClicked += HandleFloatClicked;
+    }
 
+    public void OnDestroy()
+    {
+        AudioManager.Instance?.UnloadAudios();
+    }
+
+    public async void Start()
+    {
         ActivityRequestParams @params = LevelPayload.Params;
         ActivitySkill skill = LevelPayload.Skill;
         LanguageID language = LevelPayload.Language;
-
         _taskCompleted = LevelPayload.TaskCompleted;
 
 #if DEBUG
@@ -104,39 +92,27 @@ public class BasketGameManagerJG : MonoBehaviour
             skill = ActivitySkill.Initial;
             language = LanguageID.Catalan;
             @params = new ActivityRequestParams { PlanId = 112, ChildId = "12345678Z" };
-
-            GamePrefs.DebugMode = true;
-
             PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
         }
-# endif
+#endif
 
+        SceneOrientationHelper.LockToLandscape();
         _feedbackController.Init(skill);
 
-        LoadActivities(@params: @params, skill: skill, language: language).Forget();
+        await LoadActivities(@params, skill, language);
     }
 
-    public void OnDestroy()
-    {
-        _answerManager.OnAnswerSelected -= HandleAnswerSelected;
-
-        AudioManager.Instance.UnloadAudios();
-    }
-
-    private async UniTaskVoid LoadActivities(
+    private async UniTask LoadActivities(
         ActivityRequestParams @params,
         ActivitySkill skill,
         LanguageID language
     )
     {
-        BasketService basketService = new();
-
-        PositionMenu();
         _fade.FirstLoad();
 
-        ActivitiesResult result = await basketService.GetActivities<ActivitiesData<JudgeActivity>>(
-            @params
-        );
+        PositionMenu();
+
+        ActivitiesResult result = await _dataManager.LoadActivities(@params);
 
         if (!result.Success)
         {
@@ -145,20 +121,15 @@ public class BasketGameManagerJG : MonoBehaviour
             _fade.StopAndZoom();
 
             await _modalGame.ShowWarning();
-
             return;
         }
 
-        _activities = result.Data.Activities;
-
-        if (_activities is null || _activities.Length == 0)
+        if (!_dataManager.HasActivities())
         {
             _fade.StopAndZoom();
-
             await _modalGame.ShowWarning();
 
             _fade.Load();
-
             await UniTask.WaitForSeconds(1f);
 
             TherapyPlanService therapyPlanService = new(0);
@@ -169,22 +140,10 @@ public class BasketGameManagerJG : MonoBehaviour
             );
 
             _ = _fade.Stop(onComplete: () => SceneManager.LoadScene("MapPathScene"));
-
             return;
         }
 
-        string[] audioPaths = new string[_activities.Length * 2];
-
-        for (int i = 0; i < _activities.Length; i++)
-        {
-            JudgeActivity activity = _activities[i];
-
-            for (int j = 0; j < activity.Words.Length; j++)
-            {
-                string word = activity.Words[j].Word;
-                audioPaths[i * 2 + j] = word;
-            }
-        }
+        string[] audioPaths = BuildAudioPaths();
 
         ActivityLabels labels = new()
         {
@@ -194,12 +153,13 @@ public class BasketGameManagerJG : MonoBehaviour
         };
 
         await AudioManager.Instance.LoadAudios(audioPaths, labels);
-
-        AudioManager.Instance.GetIntroAudios(_audioClips);
+        AudioManager.Instance.GetIntroAudios(_feedbackClips);
 
         if (!_taskCompleted)
         {
-            TherapySessionDTO[] sessions = new TherapySessionDTO[_activities.Length];
+            int count = _dataManager.GetActivityCount();
+
+            TherapySessionDTO[] sessions = new TherapySessionDTO[count];
 
             GeneralSessionDTO sessionInfo = new()
             {
@@ -209,33 +169,26 @@ public class BasketGameManagerJG : MonoBehaviour
                 ConductedById = @params.ConductedById,
             };
 
-            _sessionManager.InitializeSession(
-                sessionInfo: sessionInfo,
-                sessionResults: sessions,
-                completed: _taskCompleted
-            );
+            _sessionManager.InitializeSession(sessionInfo, sessions, _taskCompleted);
         }
 
-        _progressBar.Initialize(parts: _activities.Length, completed: _taskCompleted);
-
-        ChangeActivity();
-
-        _answerManager.DisableAnswers();
+        SetupRound();
+        _progressBar.Initialize(_dataManager.GetActivityCount(), _taskCompleted);
 
         _fade.StopAndZoom();
         AnimateUI().Forget();
 
-        int introIndex = (int)ResponseAudioID.Intro;
-        AudioClip introClip = _audioClips[introIndex];
+        _currentActivity = _dataManager.GetCurrentActivity();
 
-        _uiManager.SetIntroAudio(introClip);
-        AudioManager.Instance.PlayVoice(clip: introClip);
+        int introIndex = (int)ResponseAudioID.Intro;
+        AudioClip introClip = _feedbackClips[introIndex];
+
+        AudioManager.Instance.PlayVoice(introClip);
 
         await AudioManager.Instance.WaitVoiceToEnd();
 
         _sessionManager.StartTime();
-
-        _answerManager.EnableAnswers();
+        _floatManager.EnableInteraction();
     }
 
     private void PositionMenu()
@@ -309,104 +262,103 @@ public class BasketGameManagerJG : MonoBehaviour
         }
     }
 
-    private void HandleAnswerSelected(HoopType hoopType)
+    private string[] BuildAudioPaths()
     {
-        int hoopIndex = (int)hoopType;
-        Transform hoopTransform = _hoopManager.GetHoopTransform(hoopIndex);
+        JudgeActivity[] activities = _dataManager.GetActivities();
 
-        _ballController.LaunchBall(hoopTransform);
+        if (activities == null || activities.Length == 0)
+            return Array.Empty<string>();
 
-        bool isPositive = hoopType == HoopType.Si;
-        bool isCorrect = _currentActivity.Answer == isPositive;
+        int wordCount = 2;
+        string[] paths = new string[activities.Length * wordCount];
 
-        AnswerEvaluation answerResult = AnswerEvaluation.Correct;
-
-        int variant = 0;
-
-        if (!isCorrect)
+        for (int i = 0; i < activities.Length; i++)
         {
-            variant = 2;
-            answerResult = AnswerEvaluation.Incorrect;
+            WordInfo[] words = activities[i].Words;
+
+            for (int j = 0; j < wordCount && j < words.Length; j++)
+            {
+                paths[i * wordCount + j] = words[j].Word;
+            }
         }
 
-        int audioIndex = (int)hoopType + 1 + variant;
-
-        AudioManager.Instance.PlayVoice(_audioClips[audioIndex]);
-
-        TaskInfo taskInfo = new()
-        {
-            IsCorrect = isCorrect,
-            TaskIndex = _currentActivityIndex,
-            SelectedButton = isPositive,
-            MainAttributeWs = _currentActivity.Words[0].Id,
-        };
-
-        _sessionManager.RecordActivityResult(in taskInfo);
-
-        _currentActivityIndex++;
-
-        _progressBar.SetProgress(progress: _currentActivityIndex, correct: isCorrect);
-        _counter.AddScore(correct: isCorrect);
-
-        InitCount(answerResult).Forget();
+        return paths;
     }
 
-    private async UniTaskVoid InitCount(AnswerEvaluation result)
+    private void SetupRound()
     {
-        FeedbackType feedbackType = FeedbackType.Positive;
+        _currentActivity = _dataManager.GetCurrentActivity();
 
-        if (result == AnswerEvaluation.Incorrect)
-        {
-            feedbackType = FeedbackType.Neutral;
-        }
+        WordInfo word0 = _currentActivity.Words[0];
+        WordInfo word1 = _currentActivity.Words[1];
 
-        await UniTask.WaitForSeconds(2f);
+        _icons[0] = LoadSprite(word0.Path);
+        _icons[1] = LoadSprite(word1.Path);
 
-        await _feedbackController.Show(feedbackType);
+        _syllabifiedWords[0] = word0.SyllabifiedWord;
+        _syllabifiedWords[1] = word1.SyllabifiedWord;
 
-        ChangeActivity();
+        // Configure frames
 
-        _sessionManager.StartTime();
-    }
+        _frameManager.ShowLeftFrame(word0.Word, _icons[0]);
+        _frameManager.ShowRightFrame(word1.Word, _icons[1]);
 
-    private void ChangeActivity()
-    {
-        if (_currentActivityIndex >= _activities.Length)
-        {
-            EndActivity().Forget();
-            return;
-        }
-
-        _currentActivity = _activities[_currentActivityIndex];
-
-        for (int i = 0; i < _texts.Length; i++)
-        {
-            _texts[i] = _currentActivity.Words[i].Word;
-            _icons[i] = LoadSprite(_currentActivity.Words[i].Path);
-            _syllabifiedWords[i] = _currentActivity.Words[i].SyllabifiedWord;
-        }
-
-        bool leftAnswer = _currentActivity.Answer;
-        bool rightAnswer = !leftAnswer;
-
-        Span<bool> answers = stackalloc bool[2] { leftAnswer, rightAnswer };
-
-        AnswerDTO answer = new(answers);
-        _hoopManager.SetHoopStates(in answer);
-
-        ViewContentDTO content = new(_icons, _texts, false);
-
-        _uiManager.SetViewContent(in content);
-
-        AudioManager.Instance.GetAudios(_currentActivityIndex, 2, _audioItems);
-
-        _uiManager.SetAudioClips(_audioItems);
+        // Configure feedback
 
         ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords, true);
 
         _feedbackController.SetItemsContent(in feedbackContent);
 
-        ResetActivity();
+        AudioManager.Instance.GetAudios(_dataManager.GetCurrentIndex(), 2, _wordClips);
+    }
+
+    private void HandleFloatClicked(int floatIndex)
+    {
+        _floatManager.DisableInteraction();
+
+        bool isPositive = (floatIndex & 1) == 0;
+        bool isCorrect = _currentActivity.Answer == isPositive;
+
+        WordInfo word = _currentActivity.Words[0];
+
+        ResponseAudioID id = isCorrect ? ResponseAudioID.Correct : ResponseAudioID.Incorrect;
+
+        AudioManager.Instance.PlayVoice(_feedbackClips[(int)id]);
+
+        TaskInfo taskInfo = new()
+        {
+            IsCorrect = isCorrect,
+            TaskIndex = _dataManager.GetCurrentIndex(),
+            MainAttributeWs = word?.Id,
+            SelectedButton = isPositive,
+        };
+
+        _sessionManager.RecordActivityResult(taskInfo);
+
+        _progressBar.SetProgress(_dataManager.GetCurrentIndex() + 1, isCorrect);
+        _counter.AddScore(isCorrect);
+
+        ShowRoundResult(isCorrect).Forget();
+    }
+
+    private async UniTaskVoid ShowRoundResult(bool isCorrect)
+    {
+        FeedbackType feedbackType = isCorrect ? FeedbackType.Positive : FeedbackType.Neutral;
+
+        await UniTask.WaitForSeconds(1.5f);
+
+        await _feedbackController.Show(feedbackType);
+
+        if (_dataManager.MoveNext())
+        {
+            SetupRound();
+            _sessionManager.StartTime();
+            _floatManager.EnableInteraction();
+        }
+        else
+        {
+            EndActivity().Forget();
+        }
     }
 
     private async UniTaskVoid EndActivity()
@@ -431,12 +383,6 @@ public class BasketGameManagerJG : MonoBehaviour
         await LoadScene("MapPathScene");
     }
 
-    private void ResetActivity()
-    {
-        _uiManager.Reset();
-        _ballController.Reset();
-    }
-
     private async UniTask LoadScene(string sceneName)
     {
         AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneName);
@@ -455,29 +401,20 @@ public class BasketGameManagerJG : MonoBehaviour
         if (!LevelPayload.IsAIEnabled)
         {
             await _modalGame.ShowFinal("Has completat tots els nivells, felicitats!");
-
             await LoadScene("AuthScene");
-
             return;
         }
 
         LearningRateService service = new(0);
-
         string childId = LevelPayload.Params.ChildId;
-
         int planId = LevelPayload.Params.PlanId;
 
-        ApiResult<LearningRateData> result = await service.GetLearningRate(
-            childId: childId,
-            therapyPlan: planId
-        );
+        ApiResult<LearningRateData> result = await service.GetLearningRate(childId, planId);
 
         if (!result.Success)
         {
             await _modalGame.ShowFinal("No s'han pogut carregar els nivells següents.");
-
             await LoadScene("AuthScene");
-
             return;
         }
 
@@ -489,30 +426,26 @@ public class BasketGameManagerJG : MonoBehaviour
             Levels = result.Data.Levels,
         };
 
-        ApiResult resultCreate = await service.CreateTherapyPlanBulk(data);
+        ApiResult createResult = await service.CreateTherapyPlanBulk(data);
 
-        if (!resultCreate.Success)
+        if (!createResult.Success)
         {
             await _modalGame.ShowFinal("No s'han pogut carregar els nivells següents.");
-
             await LoadScene("AuthScene");
-
             return;
         }
 
         await _modalGame.ShowFinal("Niveles cargados correctamente, ¡a jugar!");
-
         await LoadScene("MapPathScene");
     }
 
-    private Sprite LoadSprite(string p)
+    private Sprite LoadSprite(string path)
     {
-        string file = System.IO.Path.GetFileNameWithoutExtension(p);
-        Sprite s = Resources.Load<Sprite>($"Images/ImgButtons/{file}");
+        if (string.IsNullOrEmpty(path))
+            return null;
 
-        if (!s)
-            Debug.LogWarning($"No se encontró sprite: {file}");
+        string file = System.IO.Path.GetFileNameWithoutExtension(path);
 
-        return s;
+        return Resources.Load<Sprite>($"Images/ImgButtons/{file}");
     }
 }
