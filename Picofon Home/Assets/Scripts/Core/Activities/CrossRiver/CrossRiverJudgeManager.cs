@@ -108,6 +108,8 @@ public class CrossRiverJudgeManager : MonoBehaviour
         LanguageID language
     )
     {
+        await UniTask.WaitForEndOfFrame(this);
+
         _fade.FirstLoad();
 
         PositionMenu();
@@ -188,7 +190,9 @@ public class CrossRiverJudgeManager : MonoBehaviour
         await AudioManager.Instance.WaitVoiceToEnd();
 
         _sessionManager.StartTime();
+
         _floatManager.EnableInteraction();
+        _floatManager.ReviveInitialFloats();
     }
 
     private void PositionMenu()
@@ -353,6 +357,7 @@ public class CrossRiverJudgeManager : MonoBehaviour
         {
             SetupRound();
             _sessionManager.StartTime();
+
             _floatManager.EnableInteraction();
         }
         else
