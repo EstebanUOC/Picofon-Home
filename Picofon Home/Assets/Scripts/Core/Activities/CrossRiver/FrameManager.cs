@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
@@ -10,19 +11,22 @@ public class FrameManager : MonoBehaviour
     private Transform _container;
 
     [SerializeField]
+    private Transform _leftLabel;
+
+    [SerializeField]
     private TMP_Text _leftWordText;
 
     [SerializeField]
     private SpriteRenderer _leftWordIcon;
 
     [SerializeField]
+    private Transform _rightLabel;
+
+    [SerializeField]
     private TMP_Text _rightWordText;
 
     [SerializeField]
     private SpriteRenderer _rightWordIcon;
-
-    [SerializeField]
-    private Fade _fade;
 
     #endregion
 
@@ -46,10 +50,34 @@ public class FrameManager : MonoBehaviour
     public void ShowLeftFrame(string word, Sprite icon)
     {
         _leftWordIcon.sprite = icon;
+        _leftWordText.text = word;
     }
 
     public void ShowRightFrame(string word, Sprite icon)
     {
         _rightWordIcon.sprite = icon;
+        _rightWordText.text = word;
+    }
+
+    public void ShowLabels()
+    {
+        _leftLabel.gameObject.SetActive(true);
+        _rightLabel.gameObject.SetActive(true);
+
+        Tween.EulerAngles(
+            _leftLabel,
+            startValue: new Vector3(-90, 0, 0),
+            endValue: new Vector3(0, 0, 0),
+            duration: 0.5f,
+            ease: Ease.OutBack
+        );
+
+        Tween.EulerAngles(
+            _rightLabel,
+            startValue: new Vector3(-90, 0, 0),
+            endValue: new Vector3(0, 0, 0),
+            duration: 0.5f,
+            ease: Ease.OutBack
+        );
     }
 }
