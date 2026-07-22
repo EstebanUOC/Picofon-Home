@@ -15,6 +15,9 @@ public class CrossRiverJudgeManager : MonoBehaviour
     private FrameManager _frameManager;
 
     [SerializeField]
+    private CrossRiverUIManager _uiManager;
+
+    [SerializeField]
     private FloatManager _floatManager;
 
     [SerializeField]
@@ -53,7 +56,6 @@ public class CrossRiverJudgeManager : MonoBehaviour
     private readonly AudioClip[] _wordClips = new AudioClip[2];
 
     private readonly Sprite[] _icons = new Sprite[2];
-    private readonly string[] _texts = new string[2];
     private readonly string[] _syllabifiedWords = new string[2];
 
     // Variables
@@ -184,6 +186,8 @@ public class CrossRiverJudgeManager : MonoBehaviour
 
         int introIndex = (int)ResponseAudioID.Intro;
         AudioClip introClip = _feedbackClips[introIndex];
+
+        _uiManager.SetIntroAudio(introClip);
 
         AudioManager.Instance.PlayVoice(introClip);
 

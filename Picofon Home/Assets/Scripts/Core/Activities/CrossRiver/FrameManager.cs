@@ -30,6 +30,12 @@ public class FrameManager : MonoBehaviour
 
     #endregion
 
+    public void Awake()
+    {
+        _leftLabel.localEulerAngles = new Vector3(-90, 0, 0);
+        _rightLabel.localEulerAngles = new Vector3(-90, 0, 0);
+    }
+
     public void HideFrames()
     {
         float duration = 0.5f;
@@ -61,9 +67,6 @@ public class FrameManager : MonoBehaviour
 
     public void ShowLabels()
     {
-        _leftLabel.gameObject.SetActive(true);
-        _rightLabel.gameObject.SetActive(true);
-
         Tween.EulerAngles(
             _leftLabel,
             startValue: new Vector3(-90, 0, 0),
@@ -78,6 +81,23 @@ public class FrameManager : MonoBehaviour
             endValue: new Vector3(0, 0, 0),
             duration: 0.5f,
             ease: Ease.OutBack
+        );
+    }
+
+    public void HideLabels()
+    {
+        Tween.EulerAngles(
+            _leftLabel,
+            startValue: new Vector3(0, 0, 0),
+            endValue: new Vector3(-90, 0, 0),
+            duration: 0.2f
+        );
+
+        Tween.EulerAngles(
+            _rightLabel,
+            startValue: new Vector3(0, 0, 0),
+            endValue: new Vector3(-90, 0, 0),
+            duration: 0.2f
         );
     }
 }
