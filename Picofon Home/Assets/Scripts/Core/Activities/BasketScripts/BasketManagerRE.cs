@@ -178,6 +178,7 @@ public class BasketManagerRE : MonoBehaviour
 
         ActivityLabels labels = new()
         {
+            Mechanic = MechanicID.Basket,
             Language = language,
             Skill = skill,
             Activity = "relate",

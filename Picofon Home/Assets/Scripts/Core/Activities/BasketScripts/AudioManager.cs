@@ -60,7 +60,7 @@ public class AudioManager : MonoBehaviour
 
     public void GetIntroAudios(AudioClip[] clips)
     {
-        _audioLoader.GetIntroAudios(clips);
+        _audioLoader.GetFeedbackAudios(clips);
     }
 
     public void PlayVoice(AudioClip clip, float volume = 1f)

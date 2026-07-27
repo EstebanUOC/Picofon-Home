@@ -68,6 +68,10 @@ public class BasketGameManagerJG : MonoBehaviour
 
     // Readonly fields
 
+    private readonly AudioClip[] _audioClips = new AudioClip[5];
+
+    private readonly AudioClip[] _audioItems = new AudioClip[2];
+
     private readonly Sprite[] _icons = new Sprite[2];
     private readonly string[] _texts = new string[2];
     private readonly string[] _syllabifiedWords = new string[2];
@@ -79,10 +83,6 @@ public class BasketGameManagerJG : MonoBehaviour
 
     private JudgeActivity[] _activities;
     private JudgeActivity _currentActivity;
-
-    private readonly AudioClip[] _audioClips = new AudioClip[5];
-
-    private readonly AudioClip[] _audioItems = new AudioClip[2];
 
     private float _defaultMenuX;
     private float _defaultCounterX;
@@ -188,6 +188,7 @@ public class BasketGameManagerJG : MonoBehaviour
 
         ActivityLabels labels = new()
         {
+            Mechanic = MechanicID.Basket,
             Language = language,
             Skill = skill,
             Activity = "judge",
@@ -329,7 +330,7 @@ public class BasketGameManagerJG : MonoBehaviour
             answerResult = AnswerEvaluation.Incorrect;
         }
 
-        int audioIndex = (int)hoopType + 1 + variant;
+        int audioIndex = hoopIndex + 1 + variant;
 
         AudioManager.Instance.PlayVoice(_audioClips[audioIndex]);
 

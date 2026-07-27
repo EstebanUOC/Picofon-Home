@@ -48,6 +48,9 @@ public class CrossRiverJudgeManager : MonoBehaviour
     [SerializeField]
     private RectTransform _menuTransform;
 
+    [SerializeField]
+    private Transform _backgroundTransform;
+
     #endregion
 
     // Readonly fields
@@ -91,7 +94,7 @@ public class CrossRiverJudgeManager : MonoBehaviour
 #if DEBUG
         if (@params.ChildId is null)
         {
-            skill = ActivitySkill.Initial;
+            skill = ActivitySkill.Final;
             language = LanguageID.Catalan;
             @params = new ActivityRequestParams { PlanId = 112, ChildId = "12345678Z" };
             PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
@@ -151,12 +154,14 @@ public class CrossRiverJudgeManager : MonoBehaviour
 
         ActivityLabels labels = new()
         {
+            Mechanic = MechanicID.CrossRiver,
             Language = language,
             Skill = skill,
             Activity = "judge",
         };
 
         await AudioManager.Instance.LoadAudios(audioPaths, labels);
+
         AudioManager.Instance.GetIntroAudios(_feedbackClips);
 
         if (!_taskCompleted)
@@ -318,6 +323,8 @@ public class CrossRiverJudgeManager : MonoBehaviour
         _feedbackController.SetItemsContent(in feedbackContent);
 
         AudioManager.Instance.GetAudios(_dataManager.GetCurrentIndex(), 2, _wordClips);
+
+        _uiManager.SetWordClips(_wordClips);
     }
 
     private void HandleFloatClicked(int floatIndex)
@@ -329,9 +336,16 @@ public class CrossRiverJudgeManager : MonoBehaviour
 
         WordInfo word = _currentActivity.Words[0];
 
-        ResponseAudioID id = isCorrect ? ResponseAudioID.Correct : ResponseAudioID.Incorrect;
+        int variant = 0;
 
-        AudioManager.Instance.PlayVoice(_feedbackClips[(int)id]);
+        if (!isCorrect)
+        {
+            variant = 2;
+        }
+
+        int audioIndex = (floatIndex & 1) + 1 + variant;
+
+        AudioManager.Instance.PlayVoice(_feedbackClips[audioIndex]);
 
         TaskInfo taskInfo = new()
         {
@@ -347,6 +361,8 @@ public class CrossRiverJudgeManager : MonoBehaviour
         _counter.AddScore(isCorrect);
 
         ShowRoundResult(isCorrect).Forget();
+
+        Tween.LocalPositionX(_backgroundTransform, endValue: -9.5f, duration: 0.5f);
     }
 
     private async UniTaskVoid ShowRoundResult(bool isCorrect)
@@ -372,6 +388,13 @@ public class CrossRiverJudgeManager : MonoBehaviour
 
     private async UniTaskVoid EndActivity()
     {
+        _ = Tween.LocalPositionX(_backgroundTransform, endValue: -19.5f, duration: 0.3f);
+
+        _frameManager.HideFrames();
+        _floatManager.DrownFinalFloats();
+
+        await UniTask.WaitForSeconds(0.5f);
+
         await _modalGame.ShowSummary();
 
         _fade.Load();

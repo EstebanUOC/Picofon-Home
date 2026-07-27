@@ -56,6 +56,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISI-J-GE-T-SP
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-ca
     - skill-initial
@@ -109,6 +110,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISF-R-GE-T-N
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-ca
     - relate
     - skill-final
@@ -412,6 +414,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISF-J-GE-T-NP
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-ca
     - skill-final
@@ -887,6 +890,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - judge
     - lang-ca
+    - mecha-basket
     - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 23be4e17a9a74ad0198c2a33429ffd35
@@ -1304,6 +1308,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - lang-ca
+    - mecha-basket
     - select
     - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
@@ -1436,6 +1441,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISM-R-GE-T-P
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-ca
     - relate
     - skill-medial
@@ -1695,6 +1701,15 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3d5adbac5881ab053ab1de301d7f72b7
+    m_Address: CA-MO-SY-ISF-J-CR-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - mecha-cross
+    - skill-final
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3d78a12691defcd76aa6a73d63a9ab7a
     m_Address: CA-violi
     m_ReadOnly: 0
@@ -1795,6 +1810,15 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 406f06056f255c6ae9cac5b1ea3c190e
+    m_Address: CA-MO-SY-ISI-J-CR-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - mecha-cross
+    - skill-initial
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4080bb3274c0860fc99a710f4adc0b06
     m_Address: CA-pintura
     m_ReadOnly: 0
@@ -1854,6 +1878,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISM-J-GE-T-NN
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-ca
     - skill-medial
@@ -1958,6 +1983,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - lang-ca
+    - mecha-basket
     - relate
     - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
@@ -2420,6 +2446,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISM-S-GE-T-P
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-ca
     - select
     - skill-medial
@@ -2658,6 +2685,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISI-S-GE-T-P
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-ca
     - select
     - skill-initial
@@ -3136,6 +3164,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISF-J-GE-T-NN
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-ca
     - skill-final
@@ -3609,6 +3638,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISF-J-GE-T-SP
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-ca
     - skill-final
@@ -3627,6 +3657,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISI-R-GE-T-N
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-ca
     - relate
     - skill-initial
@@ -4327,12 +4358,14 @@ MonoBehaviour:
     m_SerializedLabels:
     - judge
     - lang-ca
+    - mecha-basket
     - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9d3e3591f18a788d88b6fe6c3d11a934
     m_Address: CA-MO-SY-ISM-J-GE-T-SP
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-ca
     - skill-medial
@@ -4393,9 +4426,10 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9efffebc621affb0a9dda43354738ab6
-    m_Address: CA-MO-SY-ISI-J-GE-T-SN
+    m_Address: CA-MO-SY-ISI-J-GE-T-NN
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-ca
     - skill-initial
@@ -4449,6 +4483,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISI-R-GE-T-P
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-ca
     - relate
     - skill-initial
@@ -4553,6 +4588,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - lang-ca
+    - mecha-basket
     - select
     - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
@@ -4565,6 +4601,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISM-R-GE-T-N
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-ca
     - relate
     - skill-medial
@@ -4679,6 +4716,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - lang-ca
+    - mecha-basket
     - select
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
@@ -4868,11 +4906,12 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: af7fc18e6930e4c8397afc15f498bfaa
-    m_Address: Assets/Audio/SFX/Voice/Activities/Catalan/Final/Judge/CA-MO-SY-ISF-J-BA-T-I.ogg
+    m_Address: CA-MO-SY-ISF-J-BA-T-I
     m_ReadOnly: 0
     m_SerializedLabels:
     - judge
     - lang-ca
+    - mecha-basket
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: afce1511343633627a9c538669a430c0
@@ -5110,6 +5149,15 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ba8eddbfc5bb754c7b441002c57dfb77
+    m_Address: CA-MO-SY-ISM-J-CR-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-ca
+    - mecha-cross
+    - skill-medial
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bad6696e8aaf225cebda5faa8fe720df
     m_Address: CA-autobus
     m_ReadOnly: 0
@@ -5219,6 +5267,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISI-S-GE-T-N
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-ca
     - select
     - skill-initial
@@ -5227,6 +5276,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISM-J-GE-T-SN
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-ca
     - skill-medial
@@ -5315,6 +5365,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISM-S-GE-T-N
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-ca
     - select
     - skill-medial
@@ -5765,9 +5816,10 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cf45cbb152fb92d83b86ccb50e65d023
-    m_Address: CA-MO-SY-ISI-J-GE-T-NN
+    m_Address: CA-MO-SY-ISI-J-GE-T-SN
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-ca
     - skill-initial
@@ -5776,6 +5828,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISF-J-GE-T-SN
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-ca
     - skill-final
@@ -6024,6 +6077,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISF-S-GE-T-P
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-ca
     - select
     - skill-final
@@ -6173,6 +6227,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - lang-ca
+    - mecha-basket
     - relate
     - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
@@ -6216,6 +6271,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - lang-ca
+    - mecha-basket
     - relate
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
@@ -6528,6 +6584,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISI-J-GE-T-NP
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-ca
     - skill-initial
@@ -6546,6 +6603,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISF-R-GE-T-P
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-ca
     - relate
     - skill-final
@@ -6629,6 +6687,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISF-S-GE-T-N
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-ca
     - select
     - skill-final
@@ -6637,6 +6696,7 @@ MonoBehaviour:
     m_Address: CA-MO-SY-ISM-J-GE-T-NP
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-ca
     - skill-medial

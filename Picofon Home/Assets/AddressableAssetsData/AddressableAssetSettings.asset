@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 5e0ce1ae4241231a09b42a1dbbd54185
   m_currentHash:
     serializedVersion: 2
-    Hash: bb3fd93f78a913b6eaf6addd4807d039
+    Hash: 0c2915d4da564f43e0555227f26ea4fd
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -105,6 +105,9 @@ MonoBehaviour:
     - relate
     - select
     - Preload
+    - mecha-cross
+    - mecha-basket
+    - feedback
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 412d2df340d0dbedeb456d5185fbd7ec, type: 2}

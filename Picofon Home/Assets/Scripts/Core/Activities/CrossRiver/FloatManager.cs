@@ -16,13 +16,13 @@ public class FloatManager : MonoBehaviour
     private FloatItem[] _floats;
 
     [SerializeField]
-    private Transform _background;
-
-    [SerializeField]
     private FrameManager _frameManager;
 
     [SerializeField]
     private ParticleSystem _jumpParticles;
+
+    [SerializeField]
+    private AudioClip _splash;
 
     #endregion
 
@@ -62,6 +62,8 @@ public class FloatManager : MonoBehaviour
     public void NotifyLanding()
     {
         _floats[_currentFloatIndex].Landing();
+
+        AudioManager.Instance.PlaySFX(_splash, volume: 0.2f);
     }
 
     public void NotifyMovingComplete()
@@ -145,8 +147,6 @@ public class FloatManager : MonoBehaviour
 
         _frameManager.HideFrames();
 
-        Tween.LocalPositionX(_background, endValue: -9.5f, duration: 0.5f);
-
         _jumpParticles.Play();
         _capsule.JumpTo(floatItem);
     }
@@ -157,5 +157,21 @@ public class FloatManager : MonoBehaviour
 
         _floats[2].Revive();
         _floats[3].Revive();
+    }
+
+    public void DrownFinalFloats()
+    {
+        _interactable = false;
+
+        if (_currentFloatIndex > 1)
+        {
+            _floats[0].gameObject.SetActive(false);
+            _floats[1].gameObject.SetActive(false);
+        }
+        else
+        {
+            _floats[2].gameObject.SetActive(false);
+            _floats[3].gameObject.SetActive(false);
+        }
     }
 }

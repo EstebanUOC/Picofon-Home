@@ -1,10 +1,12 @@
-using Cysharp.Threading.Tasks;
+using System;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
 
 public class FrameManager : MonoBehaviour
 {
+    public event Action<int> OnFrameClicked;
+
     #region References
 
     [SerializeField]
@@ -14,13 +16,20 @@ public class FrameManager : MonoBehaviour
     private Transform _leftLabel;
 
     [SerializeField]
+    private FloatSelectable _leftSelectable;
+
+    [SerializeField]
     private TMP_Text _leftWordText;
 
     [SerializeField]
     private SpriteRenderer _leftWordIcon;
 
+    [Space]
     [SerializeField]
     private Transform _rightLabel;
+
+    [SerializeField]
+    private FloatSelectable _rightSelectable;
 
     [SerializeField]
     private TMP_Text _rightWordText;
@@ -34,6 +43,9 @@ public class FrameManager : MonoBehaviour
     {
         _leftLabel.localEulerAngles = new Vector3(-90, 0, 0);
         _rightLabel.localEulerAngles = new Vector3(-90, 0, 0);
+
+        _leftSelectable.OnClick += () => OnFrameClicked?.Invoke(0);
+        _rightSelectable.OnClick += () => OnFrameClicked?.Invoke(1);
     }
 
     public void HideFrames()

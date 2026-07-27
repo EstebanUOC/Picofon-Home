@@ -11,10 +11,20 @@ public enum AudioID
     Negative,
 }
 
+public enum MechanicID
+{
+    CrossRiver,
+    Basket,
+}
+
 public readonly struct ActivityLabels
 {
+    public readonly MechanicID Mechanic { get; init; }
+
     public readonly LanguageID Language { get; init; }
+
     public readonly ActivitySkill Skill { get; init; }
+
     public readonly string Activity { get; init; }
 }
 
@@ -22,7 +32,9 @@ public class AudioLoader
 {
     private AsyncOperationHandle<AudioClip>[] _audioHandles;
 
-    private AsyncOperationHandle<IList<AudioClip>> _introHandle;
+    private AsyncOperationHandle<AudioClip> _introHandle;
+
+    private AsyncOperationHandle<IList<AudioClip>> _feedbackHandle;
 
     private AudioClip _clip;
 
@@ -45,17 +57,38 @@ public class AudioLoader
             _ => string.Empty,
         };
 
-        IEnumerable<string> keys = new string[] { languageLabel, skillLabel, labels.Activity };
+        string mechanicLabel = labels.Mechanic switch
+        {
+            MechanicID.CrossRiver => "mecha-cross",
+            MechanicID.Basket => "mecha-basket",
+            _ => string.Empty,
+        };
 
-        _introHandle = Addressables.LoadAssetsAsync<AudioClip>(
-            keys,
+        string[] keys = new string[] { languageLabel, skillLabel, labels.Activity, mechanicLabel };
+
+        IEnumerable<string> introEnumerable = keys;
+
+        var introHandle = Addressables.LoadResourceLocationsAsync(
+            introEnumerable,
+            Addressables.MergeMode.Intersection
+        );
+
+        _introHandle = Addressables.LoadAssetAsync<AudioClip>(introHandle.Result[0]);
+
+        await _introHandle.Task.AsUniTask();
+
+        keys[^1] = "feedback";
+        IEnumerable<string> feedbackEnumerable = keys;
+
+        _feedbackHandle = Addressables.LoadAssetsAsync<AudioClip>(
+            feedbackEnumerable,
             null,
             Addressables.MergeMode.Intersection
         );
 
-        await _introHandle.Task.AsUniTask();
+        await _feedbackHandle.Task.AsUniTask();
 
-        foreach (var clip in _introHandle.Result)
+        foreach (var clip in _feedbackHandle.Result)
         {
             clip.LoadAudioData();
 
@@ -68,6 +101,8 @@ public class AudioLoader
             LanguageID.Spanish => "SP-",
             _ => string.Empty,
         };
+
+        // Load the image audio clips for the activity
 
         for (int i = 0; i < audioPaths.Length; i++)
         {
@@ -95,18 +130,24 @@ public class AudioLoader
 
     public void UnloadAudios()
     {
-        if (_audioHandles == null)
-            return;
-
         if (_introHandle.IsValid())
         {
-            foreach (var clip in _introHandle.Result)
+            _introHandle.Result.UnloadAudioData();
+            Addressables.Release(_introHandle);
+        }
+
+        if (_feedbackHandle.IsValid())
+        {
+            foreach (var clip in _feedbackHandle.Result)
             {
                 clip.UnloadAudioData();
             }
 
-            Addressables.Release(_introHandle);
+            Addressables.Release(_feedbackHandle);
         }
+
+        if (_audioHandles == null)
+            return;
 
         for (int i = 0; i < _audioHandles.Length; i++)
         {
@@ -134,21 +175,17 @@ public class AudioLoader
         }
     }
 
-    public void GetIntroAudios(AudioClip[] clips)
+    public void GetFeedbackAudios(AudioClip[] clips)
     {
-        IList<AudioClip> introClips = _introHandle.Result;
+        IList<AudioClip> feedbackClips = _feedbackHandle.Result;
 
-        for (int i = 0; i < introClips.Count; i++)
+        clips[0] = _introHandle.Result;
+
+        for (int i = 0; i < feedbackClips.Count; i++)
         {
-            char lastChar = introClips[i].name[^1];
+            char lastChar = feedbackClips[i].name[^1];
 
-            if (lastChar == 'I')
-            {
-                clips[0] = introClips[i];
-                continue;
-            }
-
-            char secondLastChar = introClips[i].name[^2];
+            char secondLastChar = feedbackClips[i].name[^2];
 
             int variant = 0;
 
@@ -160,7 +197,7 @@ public class AudioLoader
             switch (lastChar)
             {
                 case 'P':
-                    clips[1 + variant] = introClips[i];
+                    clips[1 + variant] = feedbackClips[i];
                     break;
                 case 'N':
                     if (secondLastChar != '-')
@@ -168,7 +205,7 @@ public class AudioLoader
                         variant++;
                     }
 
-                    clips[2 + variant] = introClips[i];
+                    clips[2 + variant] = feedbackClips[i];
                     break;
             }
         }
