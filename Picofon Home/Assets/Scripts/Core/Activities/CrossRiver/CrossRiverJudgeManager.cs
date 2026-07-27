@@ -94,7 +94,7 @@ public class CrossRiverJudgeManager : MonoBehaviour
 #if DEBUG
         if (@params.ChildId is null)
         {
-            skill = ActivitySkill.Final;
+            skill = ActivitySkill.Initial;
             language = LanguageID.Catalan;
             @params = new ActivityRequestParams { PlanId = 112, ChildId = "12345678Z" };
             PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");

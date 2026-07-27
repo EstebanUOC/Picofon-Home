@@ -73,6 +73,8 @@ public class AudioLoader
             Addressables.MergeMode.Intersection
         );
 
+        await introHandle.Task.AsUniTask();
+
         _introHandle = Addressables.LoadAssetAsync<AudioClip>(introHandle.Result[0]);
 
         await _introHandle.Task.AsUniTask();
