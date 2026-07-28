@@ -1,10 +1,11 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Localization.Settings;
 
 public class OptionsMenu : MonoBehaviour
 {
+    # region References
+
     [SerializeField]
     private Modal _modal;
 
@@ -19,6 +20,8 @@ public class OptionsMenu : MonoBehaviour
 
     [SerializeField]
     private TMP_Text _versionText;
+
+    # endregion
 
     public GenericEventChannel EventChannel;
 
@@ -52,15 +55,6 @@ public class OptionsMenu : MonoBehaviour
     private void HandleSave()
     {
         GamePrefs.PreferredLanguage = _languageComboBox.GetSelectedLanguage().ToString();
-
-        int index = 0;
-
-        if (GamePrefs.PreferredLanguage[0] != 'C')
-        {
-            index = 1;
-        }
-
-        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
 
         EventChannel.Raise();
     }

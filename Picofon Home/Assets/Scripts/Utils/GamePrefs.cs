@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 
 public static class GamePrefs
 {
@@ -7,8 +8,60 @@ public static class GamePrefs
         get => PlayerPrefs.GetString(nameof(PreferredLanguage), "CA");
         set
         {
+            if (PreferredLanguage == value)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(value))
+            {
+                return;
+            }
+
+            int index = 0;
+
+            if (value[0] != 'C')
+            {
+                index = 1;
+            }
+
+            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[
+                index
+            ];
+
             PlayerPrefs.SetString(nameof(PreferredLanguage), value);
             Save();
+        }
+    }
+
+    public static LanguageID PreferredLanguageID
+    {
+        get
+        {
+            string language = PreferredLanguage;
+
+            if (language[0] != 'C')
+            {
+                return LanguageID.Spanish;
+            }
+
+            return LanguageID.Catalan;
+        }
+        set
+        {
+            if (PreferredLanguageID == value)
+            {
+                return;
+            }
+
+            if (value == LanguageID.Catalan)
+            {
+                PreferredLanguage = "CA";
+            }
+            else
+            {
+                PreferredLanguage = "ES";
+            }
         }
     }
 
