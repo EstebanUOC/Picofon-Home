@@ -54,7 +54,7 @@ public class MapManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(childId))
         {
-            childId = "88345678A";
+            childId = "12345678Z";
             PerformanceLog.LogWarning("Using default ChildId for testing in Unity Editor.");
         }
 
