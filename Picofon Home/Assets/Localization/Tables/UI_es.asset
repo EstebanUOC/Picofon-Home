@@ -391,6 +391,11 @@ MonoBehaviour:
     m_Localized: Este correo ya tiene una cuenta asociada.
     m_Metadata:
       m_Items: []
+  - m_Id: 40204140486443008
+    m_Localized: "\xA1Muy bien! Has terminado todas las actividades. \n\xA1Lo has
+      hecho genial!"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
