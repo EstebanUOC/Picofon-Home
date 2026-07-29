@@ -19,6 +19,8 @@ public class UserChildren : MonoBehaviour
 
     #endregion
 
+    #region References
+
     [SerializeField]
     private AuthManager _authManager;
 
@@ -77,16 +79,23 @@ public class UserChildren : MonoBehaviour
     [SerializeField]
     private RectTransform _overlayTransform;
 
+    #endregion
+
+    // Actions
+    private Action _onAlphaComplete;
+
+    // Variables
+
     private string _userId;
     private UserRole _userRole;
 
-    private string[] _childrenIds;
-    private bool[] _hasIAEnabled;
+    private ChildListItemDTO[] _children;
+
     private int[] _centerIds;
+
     private bool _hasChildren;
 
     private RectTransform _panel;
-    private Action _onAlphaComplete;
 
     public void Start()
     {
@@ -189,12 +198,11 @@ public class UserChildren : MonoBehaviour
             return;
         }
 
+        _children = result.Data;
+
         _hasChildren = true;
 
-        _childrenIds = new string[result.Data.Length];
         _childrenDropdown.ClearOptions();
-
-        _hasIAEnabled = new bool[result.Data.Length];
 
         StringBuilder stringBuilder = new();
 
@@ -211,9 +219,6 @@ public class UserChildren : MonoBehaviour
 
             OptionData option = new(fullName);
             _childrenDropdown.options.Add(option);
-
-            _childrenIds[i] = child.Id;
-            _hasIAEnabled[i] = child.IsAiPersonalizationEnabled;
         }
 
         _childrenDropdown.RefreshShownValue();
@@ -370,11 +375,13 @@ public class UserChildren : MonoBehaviour
     private async UniTaskVoid OnSelectChildAsync()
     {
         int selectedIndex = _childrenDropdown.value;
-        string childId = _childrenIds[selectedIndex];
+
+        string childId = _children[selectedIndex].Id;
 
         MapPathPayload.ChildId = childId;
         MapPathPayload.ConductedById = _authManager.CurrentUser.Id;
-        MapPathPayload.IsAIEnabled = _hasIAEnabled[selectedIndex];
+        MapPathPayload.IsAIEnabled = _children[selectedIndex].IsAiPersonalizationEnabled;
+        MapPathPayload.LanguageId = (LanguageID)_children[selectedIndex].LanguagePreference;
 
         LevelDataStore instance = LevelDataStore.Instance;
 
@@ -388,7 +395,7 @@ public class UserChildren : MonoBehaviour
             return;
         }
 
-        if (!_hasIAEnabled[selectedIndex])
+        if (!_children[selectedIndex].IsAiPersonalizationEnabled)
         {
             _uiManager.ContinueMapTransition(success: false);
 
@@ -506,7 +513,7 @@ public class UserChildren : MonoBehaviour
 
     private async UniTaskVoid OnUpdateChildAsync()
     {
-        string childId = _childrenIds[_childrenDropdown.value];
+        string childId = _children[_childrenDropdown.value].Id;
 
         ChildService childService = new();
 

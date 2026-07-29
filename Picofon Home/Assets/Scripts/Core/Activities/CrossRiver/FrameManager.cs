@@ -1,13 +1,22 @@
+using System;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
 
 public class FrameManager : MonoBehaviour
 {
+    public event Action<int> OnFrameClicked;
+
     #region References
 
     [SerializeField]
     private Transform _container;
+
+    [SerializeField]
+    private Transform _leftLabel;
+
+    [SerializeField]
+    private FloatSelectable _leftSelectable;
 
     [SerializeField]
     private TMP_Text _leftWordText;
@@ -15,16 +24,29 @@ public class FrameManager : MonoBehaviour
     [SerializeField]
     private SpriteRenderer _leftWordIcon;
 
+    [Space]
+    [SerializeField]
+    private Transform _rightLabel;
+
+    [SerializeField]
+    private FloatSelectable _rightSelectable;
+
     [SerializeField]
     private TMP_Text _rightWordText;
 
     [SerializeField]
     private SpriteRenderer _rightWordIcon;
 
-    [SerializeField]
-    private Fade _fade;
-
     #endregion
+
+    public void Awake()
+    {
+        _leftLabel.localEulerAngles = new Vector3(-90, 0, 0);
+        _rightLabel.localEulerAngles = new Vector3(-90, 0, 0);
+
+        _leftSelectable.OnClick += () => OnFrameClicked?.Invoke(0);
+        _rightSelectable.OnClick += () => OnFrameClicked?.Invoke(1);
+    }
 
     public void HideFrames()
     {
@@ -46,10 +68,48 @@ public class FrameManager : MonoBehaviour
     public void ShowLeftFrame(string word, Sprite icon)
     {
         _leftWordIcon.sprite = icon;
+        _leftWordText.text = word;
     }
 
     public void ShowRightFrame(string word, Sprite icon)
     {
         _rightWordIcon.sprite = icon;
+        _rightWordText.text = word;
+    }
+
+    public void ShowLabels()
+    {
+        Tween.EulerAngles(
+            _leftLabel,
+            startValue: new Vector3(-90, 0, 0),
+            endValue: new Vector3(0, 0, 0),
+            duration: 0.5f,
+            ease: Ease.OutBack
+        );
+
+        Tween.EulerAngles(
+            _rightLabel,
+            startValue: new Vector3(-90, 0, 0),
+            endValue: new Vector3(0, 0, 0),
+            duration: 0.5f,
+            ease: Ease.OutBack
+        );
+    }
+
+    public void HideLabels()
+    {
+        Tween.EulerAngles(
+            _leftLabel,
+            startValue: new Vector3(0, 0, 0),
+            endValue: new Vector3(-90, 0, 0),
+            duration: 0.2f
+        );
+
+        Tween.EulerAngles(
+            _rightLabel,
+            startValue: new Vector3(0, 0, 0),
+            endValue: new Vector3(-90, 0, 0),
+            duration: 0.2f
+        );
     }
 }

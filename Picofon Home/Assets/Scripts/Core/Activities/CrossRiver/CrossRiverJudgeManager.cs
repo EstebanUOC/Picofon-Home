@@ -15,6 +15,9 @@ public class CrossRiverJudgeManager : MonoBehaviour
     private FrameManager _frameManager;
 
     [SerializeField]
+    private CrossRiverUIManager _uiManager;
+
+    [SerializeField]
     private FloatManager _floatManager;
 
     [SerializeField]
@@ -45,6 +48,9 @@ public class CrossRiverJudgeManager : MonoBehaviour
     [SerializeField]
     private RectTransform _menuTransform;
 
+    [SerializeField]
+    private Transform _backgroundTransform;
+
     #endregion
 
     // Readonly fields
@@ -53,7 +59,6 @@ public class CrossRiverJudgeManager : MonoBehaviour
     private readonly AudioClip[] _wordClips = new AudioClip[2];
 
     private readonly Sprite[] _icons = new Sprite[2];
-    private readonly string[] _texts = new string[2];
     private readonly string[] _syllabifiedWords = new string[2];
 
     // Variables
@@ -108,6 +113,8 @@ public class CrossRiverJudgeManager : MonoBehaviour
         LanguageID language
     )
     {
+        await UniTask.WaitForEndOfFrame(this);
+
         _fade.FirstLoad();
 
         PositionMenu();
@@ -147,12 +154,14 @@ public class CrossRiverJudgeManager : MonoBehaviour
 
         ActivityLabels labels = new()
         {
+            Mechanic = MechanicID.CrossRiver,
             Language = language,
             Skill = skill,
             Activity = "judge",
         };
 
         await AudioManager.Instance.LoadAudios(audioPaths, labels);
+
         AudioManager.Instance.GetIntroAudios(_feedbackClips);
 
         if (!_taskCompleted)
@@ -183,12 +192,16 @@ public class CrossRiverJudgeManager : MonoBehaviour
         int introIndex = (int)ResponseAudioID.Intro;
         AudioClip introClip = _feedbackClips[introIndex];
 
+        _uiManager.SetIntroAudio(introClip);
+
         AudioManager.Instance.PlayVoice(introClip);
 
         await AudioManager.Instance.WaitVoiceToEnd();
 
         _sessionManager.StartTime();
+
         _floatManager.EnableInteraction();
+        _floatManager.ReviveInitialFloats();
     }
 
     private void PositionMenu()
@@ -310,6 +323,8 @@ public class CrossRiverJudgeManager : MonoBehaviour
         _feedbackController.SetItemsContent(in feedbackContent);
 
         AudioManager.Instance.GetAudios(_dataManager.GetCurrentIndex(), 2, _wordClips);
+
+        _uiManager.SetWordClips(_wordClips);
     }
 
     private void HandleFloatClicked(int floatIndex)
@@ -321,9 +336,16 @@ public class CrossRiverJudgeManager : MonoBehaviour
 
         WordInfo word = _currentActivity.Words[0];
 
-        ResponseAudioID id = isCorrect ? ResponseAudioID.Correct : ResponseAudioID.Incorrect;
+        int variant = 0;
 
-        AudioManager.Instance.PlayVoice(_feedbackClips[(int)id]);
+        if (!isCorrect)
+        {
+            variant = 2;
+        }
+
+        int audioIndex = (floatIndex & 1) + 1 + variant;
+
+        AudioManager.Instance.PlayVoice(_feedbackClips[audioIndex]);
 
         TaskInfo taskInfo = new()
         {
@@ -339,6 +361,8 @@ public class CrossRiverJudgeManager : MonoBehaviour
         _counter.AddScore(isCorrect);
 
         ShowRoundResult(isCorrect).Forget();
+
+        Tween.LocalPositionX(_backgroundTransform, endValue: -9.5f, duration: 0.5f);
     }
 
     private async UniTaskVoid ShowRoundResult(bool isCorrect)
@@ -353,6 +377,7 @@ public class CrossRiverJudgeManager : MonoBehaviour
         {
             SetupRound();
             _sessionManager.StartTime();
+
             _floatManager.EnableInteraction();
         }
         else
@@ -363,6 +388,13 @@ public class CrossRiverJudgeManager : MonoBehaviour
 
     private async UniTaskVoid EndActivity()
     {
+        _ = Tween.LocalPositionX(_backgroundTransform, endValue: -19.5f, duration: 0.3f);
+
+        _frameManager.HideFrames();
+        _floatManager.DrownFinalFloats();
+
+        await UniTask.WaitForSeconds(0.5f);
+
         await _modalGame.ShowSummary();
 
         _fade.Load();

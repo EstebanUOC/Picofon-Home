@@ -16,7 +16,16 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 5e0ce1ae4241231a09b42a1dbbd54185
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: eaaeb31c4f99dd1aeba85bac9ded0920
+    m_Address: SP-MO-SY-ISM-J-CR-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - mecha-cross
+    - skill-medial
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 6405bf6c4ff9eb802bed9986fbbf8cec, type: 2}
   m_SchemaSet:

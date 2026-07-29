@@ -16,13 +16,13 @@ public class FloatManager : MonoBehaviour
     private FloatItem[] _floats;
 
     [SerializeField]
-    private Transform _background;
-
-    [SerializeField]
     private FrameManager _frameManager;
 
     [SerializeField]
     private ParticleSystem _jumpParticles;
+
+    [SerializeField]
+    private AudioClip _splash;
 
     #endregion
 
@@ -35,8 +35,10 @@ public class FloatManager : MonoBehaviour
     {
         CalledDefered().Forget();
 
-        _floats[2].ShowCheap();
-        _floats[3].ShowCheap();
+        _interactable = false;
+
+        _floats[2].Drown();
+        _floats[3].Drown();
     }
 
     private async UniTaskVoid CalledDefered()
@@ -60,6 +62,8 @@ public class FloatManager : MonoBehaviour
     public void NotifyLanding()
     {
         _floats[_currentFloatIndex].Landing();
+
+        AudioManager.Instance.PlaySFX(_splash, volume: 0.2f);
     }
 
     public void NotifyMovingComplete()
@@ -102,19 +106,22 @@ public class FloatManager : MonoBehaviour
 
     public void OnFloatItemClicked(FloatItem floatItem)
     {
-        if (!_interactable) return;
+        if (!_interactable)
+            return;
 
         int clickedIndex = -1;
 
         for (int i = 0; i < _floats.Length; i++)
         {
-            if (_floats[i] != floatItem) continue;
+            if (_floats[i] != floatItem)
+                continue;
 
             clickedIndex = i;
             break;
         }
 
-        if (clickedIndex < 0) return;
+        if (clickedIndex < 0)
+            return;
 
         Span<int> drowned = stackalloc int[2];
         drowned[0] = _currentFloatIndex;
@@ -140,9 +147,31 @@ public class FloatManager : MonoBehaviour
 
         _frameManager.HideFrames();
 
-        Tween.LocalPositionX(_background, endValue: -9.5f, duration: 0.5f);
-
         _jumpParticles.Play();
         _capsule.JumpTo(floatItem);
+    }
+
+    public void ReviveInitialFloats()
+    {
+        _interactable = true;
+
+        _floats[2].Revive();
+        _floats[3].Revive();
+    }
+
+    public void DrownFinalFloats()
+    {
+        _interactable = false;
+
+        if (_currentFloatIndex > 1)
+        {
+            _floats[0].gameObject.SetActive(false);
+            _floats[1].gameObject.SetActive(false);
+        }
+        else
+        {
+            _floats[2].gameObject.SetActive(false);
+            _floats[3].gameObject.SetActive(false);
+        }
     }
 }

@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class CustomToggle : MonoBehaviour, IPointerClickHandler
 {
+    # region References
+
     [SerializeField]
     private bool _isSelectedByDefault = false;
 
@@ -24,16 +26,24 @@ public class CustomToggle : MonoBehaviour, IPointerClickHandler
     [SerializeField]
     private CustomToggleGroup _group;
 
-    public event Action<bool> OnToggle;
+    #endregion
+
+    // Properties
 
     public bool IsSelected => _isSelected;
     public int Index => _index;
 
+    // Events
+
+    public event Action<bool> OnToggle;
+
+    // Variables
+
+    private Color _defaultBackgroundColor;
+
     private Sprite _defaultSprite;
 
     private bool _isSelected = false;
-
-    private Color _defaultBackgroundColor;
 
     public void Awake()
     {

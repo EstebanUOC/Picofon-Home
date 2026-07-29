@@ -642,6 +642,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fade
       objectReference: {fileID: 0}
+    - target: {fileID: 93526216575339936, guid: 405e0ce3bd46f15d9aad23d7dfe9f4ac, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 640525889696329681, guid: 405e0ce3bd46f15d9aad23d7dfe9f4ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1308,7 +1312,7 @@ MonoBehaviour:
     m_TableReference:
       m_TableCollectionName: GUID:9218e6ba46a99bc4bbfb36d6b92602f6
     m_TableEntryReference:
-      m_KeyId: 1427275047354368
+      m_KeyId: 39874476798754816
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -2335,12 +2339,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e414f8b67d91912bb85db5477927bdcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scene: 0
   _configurations:
-  - {fileID: 11400000, guid: 56283927979d952819c59e97de7a91e7, type: 2}
-  - {fileID: 11400000, guid: fae657f77d1e37042a5270d30f612e8d, type: 2}
   - {fileID: 11400000, guid: 9dd758d6931039803b4276764db2c9af, type: 2}
   - {fileID: 11400000, guid: 7a656f238dd5b4598a6cf964633fb258, type: 2}
+  - {fileID: 11400000, guid: 56283927979d952819c59e97de7a91e7, type: 2}
+  - {fileID: 11400000, guid: fae657f77d1e37042a5270d30f612e8d, type: 2}
   _canvas: {fileID: 1805974928}
   _levelPrefab: {fileID: 5802726018472738063, guid: efa43f099012534e9b7c52325476378b, type: 3}
   _marker: {fileID: 1969754793}

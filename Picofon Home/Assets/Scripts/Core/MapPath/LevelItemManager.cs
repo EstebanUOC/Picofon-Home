@@ -6,24 +6,31 @@ using UnityEngine;
 public enum LevelScene
 {
     BasketScene,
+    CrossRiverScene,
     BalloonPopSeaScene,
     BalloonPopParty,
-    CrossRiverScene,
 }
 
 public readonly ref struct LevelData
 {
     public readonly int Id { get; init; }
+
     public readonly LevelConfig Config { get; init; }
+
     public readonly LevelType Type { get; init; }
+
     public readonly LevelState State { get; init; }
 }
 
 public sealed class LevelItemManager : MonoBehaviour
 {
-    [Space]
-    [SerializeField]
-    private LevelScene _scene;
+    # region Constants
+
+    private const int Rows = 2;
+
+    # endregion
+
+    # region References
 
     [SerializeField]
     private LevelConfig[] _configurations;
@@ -51,10 +58,14 @@ public sealed class LevelItemManager : MonoBehaviour
     [SerializeField]
     private Vector2 _spacing = new(1000, 320);
 
-    private int _rows = 2;
-    private RectTransform _container;
+    # endregion
+
+
+    // Variables
 
     private float _containerMiddle;
+
+    private RectTransform _container;
 
     public void Awake()
     {
@@ -81,7 +92,7 @@ public sealed class LevelItemManager : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             int col = i;
-            int row = i % _rows;
+            int row = i % Rows;
             float x = _startPos + (col * _spacing.x);
             float y = spacingMiddle * (row == 0 ? -1 : 1);
             Vector2 position = new(x, y);
@@ -106,23 +117,9 @@ public sealed class LevelItemManager : MonoBehaviour
 
             bool locked = i > current;
 
-            LevelConfig config = _configurations[i % _configurations.Length];
+            LevelConfig config = _configurations[i & 1];
 
-            // TODO: TEMP code (delete this later) (add #if UNITY_EDITOR)
-            if (true)
-            // if (i == 0)
-            {
-                foreach (var cnf in _configurations)
-                {
-                    if (cnf.SceneName == _scene.ToString())
-                    {
-                        config = cnf;
-                        break;
-                    }
-                }
-            }
-
-            LevelType type = i % 2 == 0 ? LevelType.Syllable : LevelType.Phoneme;
+            LevelType type = (i & 1) == 0 ? LevelType.Syllable : LevelType.Phoneme;
 
             LevelState state = LevelState.Unlocked;
 
@@ -212,7 +209,7 @@ public sealed class LevelItemManager : MonoBehaviour
 
         for (int i = 0; i < childCount; i++)
         {
-            int col = i % _rows;
+            int col = i % Rows;
             int row = i;
             float x = containerMiddle - spacingMiddle + (col * _spacing.x);
             float y = _startPos + (row * _spacing.y);

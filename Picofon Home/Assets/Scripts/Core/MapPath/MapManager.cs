@@ -1,6 +1,8 @@
 using Cysharp.Threading.Tasks;
 using PrimeTween;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 
 public enum ActivityType : byte
 {
@@ -17,6 +19,8 @@ public enum LanguageID : byte
 
 public class MapManager : MonoBehaviour
 {
+    #region References
+
     [SerializeField]
     private LevelSelectEventChannel _eventChannel;
 
@@ -31,26 +35,35 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     private Counter _counter;
 
+    #endregion
+
+    // Variables
+
     private string _conductedById;
 
     public void Start()
     {
+        GamePrefs.PreferredLanguageID = MapPathPayload.LanguageId;
+
         string childId = MapPathPayload.ChildId;
         _conductedById = MapPathPayload.ConductedById;
 
         _transition.Active();
 
 #if DEBUG
+
         if (string.IsNullOrEmpty(childId))
         {
-            childId = "88345678A";
-            Debug.LogWarning("Using default ChildId for testing in Unity Editor.");
+            childId = "12345678Z";
+            PerformanceLog.LogWarning("Using default ChildId for testing in Unity Editor.");
         }
+
         if (string.IsNullOrEmpty(_conductedById))
         {
             _conductedById = "noXJSkWJnCW5iSEu32n5Kvofq5a2";
-            Debug.LogWarning("Using default ConductedById for testing in Unity Editor.");
+            PerformanceLog.LogWarning("Using default ConductedById for testing in Unity Editor.");
         }
+
 # endif
 
         LoadPlans(childId).Forget();

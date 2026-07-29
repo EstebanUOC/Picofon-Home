@@ -72,6 +72,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - lang-es
+    - mecha-basket
     - relate
     - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
@@ -280,6 +281,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - lang-es
+    - mecha-basket
     - select
     - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
@@ -332,6 +334,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISM-S-GE-T-P
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-es
     - select
     - skill-medial
@@ -520,6 +523,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISF-R-GE-T-N
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-es
     - relate
     - skill-final
@@ -929,6 +933,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - lang-es
+    - mecha-basket
     - relate
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
@@ -996,6 +1001,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISI-R-GE-T-P
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-es
     - relate
     - skill-initial
@@ -1736,12 +1742,14 @@ MonoBehaviour:
     m_SerializedLabels:
     - judge
     - lang-es
+    - mecha-basket
     - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3ddcf7ebb84f3514d927c50ecfbad745
     m_Address: SP-MO-SY-ISF-R-GE-T-P
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-es
     - relate
     - skill-final
@@ -2095,6 +2103,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISF-J-GE-T-SN
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-es
     - skill-final
@@ -2108,6 +2117,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISM-J-GE-T-NN
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-es
     - skill-medial
@@ -2197,6 +2207,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - lang-es
+    - mecha-basket
     - select
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
@@ -2519,6 +2530,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISF-J-GE-T-SP
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-es
     - skill-final
@@ -2607,6 +2619,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISM-R-GE-T-P
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-es
     - relate
     - skill-medial
@@ -2615,6 +2628,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISI-S-GE-T-P
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-es
     - select
     - skill-initial
@@ -2864,6 +2878,15 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 689296c27f1490a369ca78c8e90dadd3
+    m_Address: SP-MO-SY-ISI-J-CR-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - mecha-cross
+    - skill-initial
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 68b2318fffb97da6990fb6234012e830
     m_Address: "SP-pu\xF1o"
     m_ReadOnly: 0
@@ -2883,6 +2906,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISF-J-GE-T-NN
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-es
     - skill-final
@@ -3076,6 +3100,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISI-J-GE-T-SN
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-es
     - skill-initial
@@ -3129,6 +3154,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISI-R-GE-T-N
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-es
     - relate
     - skill-initial
@@ -3347,6 +3373,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISI-J-GE-T-NP
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-es
     - skill-initial
@@ -3545,6 +3572,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISM-J-GE-T-NP
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-es
     - skill-medial
@@ -3628,6 +3656,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISI-S-GE-T-N
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-es
     - select
     - skill-initial
@@ -3981,6 +4010,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISI-J-GE-T-NN
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-es
     - skill-initial
@@ -4019,6 +4049,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISF-J-GE-T-NP
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-es
     - skill-final
@@ -4317,6 +4348,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISM-J-GE-T-SP
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-es
     - skill-medial
@@ -4390,6 +4422,15 @@ MonoBehaviour:
     m_Address: SP-pato
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ebf62d0327a30d509ad6d13cad6714c
+    m_Address: SP-MO-SY-ISF-J-CR-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - judge
+    - lang-es
+    - mecha-cross
+    - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9f1d67cd89672ea7cba616bad7deb43c
     m_Address: SP-pasamano
@@ -4685,6 +4726,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISI-J-GE-T-SP
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-es
     - skill-initial
@@ -4938,6 +4980,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISM-R-GE-T-N
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-es
     - relate
     - skill-medial
@@ -5641,6 +5684,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISM-J-GE-T-SN
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - judge
     - lang-es
     - skill-medial
@@ -5929,6 +5973,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISF-S-GE-T-N
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-es
     - select
     - skill-final
@@ -6122,6 +6167,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISF-S-GE-T-P
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-es
     - select
     - skill-final
@@ -6177,6 +6223,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - judge
     - lang-es
+    - mecha-basket
     - skill-initial
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e2675c66d75621a7089e750ba9994404
@@ -6193,6 +6240,7 @@ MonoBehaviour:
     m_Address: SP-MO-SY-ISM-S-GE-T-N
     m_ReadOnly: 0
     m_SerializedLabels:
+    - feedback
     - lang-es
     - select
     - skill-medial
@@ -6437,6 +6485,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - lang-es
+    - mecha-basket
     - select
     - skill-medial
     FlaggedDuringContentUpdateRestriction: 0
@@ -6696,6 +6745,7 @@ MonoBehaviour:
     m_SerializedLabels:
     - judge
     - lang-es
+    - mecha-basket
     - skill-final
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f6533611687f1f7db81df6c1acc93ef2
@@ -6813,6 +6863,7 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - lang-es
+    - mecha-basket
     - relate
     - skill-initial
     FlaggedDuringContentUpdateRestriction: 0

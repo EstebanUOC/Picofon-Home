@@ -11,6 +11,8 @@ public class RegisterChild : MonoBehaviour
 {
     public static bool IsUpdate { get; set; }
 
+    #region References
+
     [SerializeField]
     private UIManager _uiManager;
 
@@ -69,6 +71,10 @@ public class RegisterChild : MonoBehaviour
 
     [SerializeField]
     private CommunicationContent _communicationContent;
+
+    #endregion
+
+    // Variables
 
     private RectTransform _panel;
 
@@ -323,15 +329,6 @@ public class RegisterChild : MonoBehaviour
     {
         _communicationContent.SetData(_childData);
 
-        // PerformanceLog.Log(
-        //     $"Final Child Data: Center ID: {_childData.CenterId}, Grade ID: {_childData.Grade}, Name: {_childData.FirstName}, Last Name: {_childData.LastName}, Birth Date: {_childData.BirthDate}, Language Preference: {_childData.LanguagePreference}, Disorder: {_childData.Disorder}"
-        // );
-
         HandleSubmitAsync().Forget();
-    }
-
-    private void HandleReturn()
-    {
-        _uiManager.ShowPanel(PanelEnum.Children);
     }
 }

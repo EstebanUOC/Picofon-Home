@@ -6,5 +6,7 @@ public readonly struct ChildListItemDTO
 
     public readonly string LastName { get; init; }
 
+    public readonly int LanguagePreference { get; init; }
+
     public readonly bool IsAiPersonalizationEnabled { get; init; }
 }
