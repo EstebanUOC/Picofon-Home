@@ -396,6 +396,15 @@ MonoBehaviour:
     m_Localized: "Molt b\xE9! Has acabat totes les activitats. \nHo has fet genial!"
     m_Metadata:
       m_Items: []
+  - m_Id: 40206888057552896
+    m_Localized: "No hi ha plans de ter\xE0pia actius per al nen seleccionat. Trieu
+      un altre nen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40207061835956224
+    m_Localized: No hi ha plans actius
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

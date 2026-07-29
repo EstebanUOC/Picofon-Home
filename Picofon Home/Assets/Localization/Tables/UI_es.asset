@@ -396,6 +396,15 @@ MonoBehaviour:
       hecho genial!"
     m_Metadata:
       m_Items: []
+  - m_Id: 40206888057552896
+    m_Localized: "No hay planes de terapia activos para el ni\xF1o seleccionado.
+      Elija otro ni\xF1o."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40207061835956224
+    m_Localized: No hay planes activos
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

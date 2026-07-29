@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 using static TMPro.TMP_Dropdown;
 
@@ -404,9 +405,14 @@ public class UserChildren : MonoBehaviour
             await _uiManager.ShowModal(
                 new ModalData
                 {
-                    Title = "No Active Plans",
-                    Message =
-                        "There are no active therapy plans for the selected child. Choose another child",
+                    Title = LocalizationSettings.StringDatabase.GetLocalizedString(
+                        "UI",
+                        "NO_ACTIVE_PLANS_TITLE"
+                    ),
+                    Message = LocalizationSettings.StringDatabase.GetLocalizedString(
+                        "UI",
+                        "NO_ACTIVE_PLANS_MESSAGE"
+                    ),
                     Panel = _panel,
                 }
             );

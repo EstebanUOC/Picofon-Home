@@ -104,7 +104,8 @@ public class AuthManager : MonoBehaviour
             case DebugMenuResult.Children:
                 user = new()
                 {
-                    Id = "noXJSkWJnCW5iSEu32n5Kvofq5a2",
+                    // Id = "noXJSkWJnCW5iSEu32n5Kvofq5a2",
+                    Id = "vraMinvYwmcaiaTuVgSxrBCNMA93",
                     Email = "test@gmail.com",
                     Username = "Debug User",
                     Role = UserRole.Parent,
