@@ -14,7 +14,7 @@ public readonly struct TaskInfo
 
     public readonly int? SelectedAttributeWs { get; init; }
 
-    public readonly bool SelectedButton { get; init; }
+    public readonly int? SelectedButton { get; init; }
 }
 
 public class SessionManager : MonoBehaviour

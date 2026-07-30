@@ -63,7 +63,10 @@ public readonly struct LearningRateService
         }
         catch (System.Exception e)
         {
-            PerformanceLog.Log($"Error calculating learning rate: {e.Message}, URL: {url}");
+            PerformanceLog.Log(
+                $"Error calculating learning rate: {e.Message}, URL: {url}, Payload string: {JsonHelper.ToJson(request)}"
+            );
+
             return ApiResult.Fail("Network error occurred while calculating learning rate.");
         }
 
@@ -71,6 +74,10 @@ public readonly struct LearningRateService
         JsonElement root = doc.RootElement;
 
         ApiResponseView responseView = new(root);
+
+        PerformanceLog.Log(
+            $"CalculateLearningRate response: {root}, URL: {url}, Payload string: {JsonHelper.ToJson(request)}"
+        );
 
         if (!responseView.Success)
         {
