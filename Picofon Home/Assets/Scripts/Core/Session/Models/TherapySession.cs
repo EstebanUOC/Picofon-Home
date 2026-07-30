@@ -27,7 +27,7 @@ public readonly struct TherapySessionDTO
 
     public readonly int? SelectedAttributeWs { get; init; }
 
-    public readonly bool SelectedButton { get; init; }
+    public readonly int? SelectedButton { get; init; }
 }
 
 public readonly struct TherapySessionCreateRequest
