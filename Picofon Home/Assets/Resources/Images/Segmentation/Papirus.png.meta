@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a78f9ffecf02980e28f9b992aefa8022
+guid: e655e34bc51a68abaa7d2f2d4abcaa0a
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -108,7 +108,49 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Papirus_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 265
+        width: 512
+        height: 247
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20d564bbd8a071d43885d534b5be03ab
+      internalID: -2109087789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Papirus_1
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 95
+        width: 288
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25f17133fd831a6c889f19f625da6c25
+      internalID: 2026038007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -119,7 +161,9 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Papirus_0: -2109087789
+      Papirus_1: 2026038007
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
