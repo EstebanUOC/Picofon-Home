@@ -1,27 +1,30 @@
-using UnityEngine;
-
-public class ColorSwapUtil : MonoBehaviour
+namespace Picofon.Utils
 {
-    public Color originalColor = Color.white;
-    public Color targetColor = Color.red;
+    using UnityEngine;
 
-    private MaterialPropertyBlock propertyBlock;
-
-    public void OnValidate()
+    public class ColorSwapUtil : MonoBehaviour
     {
-        propertyBlock ??= new MaterialPropertyBlock();
+        public Color originalColor = Color.white;
+        public Color targetColor = Color.red;
 
-        Renderer renderer = GetComponent<Renderer>();
-        renderer.GetPropertyBlock(propertyBlock);
+        private MaterialPropertyBlock propertyBlock;
 
-        propertyBlock.SetColor("_OriginalColor", originalColor);
-        propertyBlock.SetColor("_TargetColor", targetColor);
+        public void OnValidate()
+        {
+            propertyBlock ??= new MaterialPropertyBlock();
 
-        renderer.SetPropertyBlock(propertyBlock);
-    }
+            Renderer renderer = GetComponent<Renderer>();
+            renderer.GetPropertyBlock(propertyBlock);
 
-    public void Start()
-    {
-        OnValidate();
+            propertyBlock.SetColor("_OriginalColor", originalColor);
+            propertyBlock.SetColor("_TargetColor", targetColor);
+
+            renderer.SetPropertyBlock(propertyBlock);
+        }
+
+        public void Start()
+        {
+            OnValidate();
+        }
     }
 }

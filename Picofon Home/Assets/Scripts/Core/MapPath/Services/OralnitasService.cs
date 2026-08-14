@@ -1,54 +1,61 @@
-using System.Text.Json;
-using System.Threading;
-using Cysharp.Threading.Tasks;
 using Picofon.Core.Network;
+using Picofon.Utils;
 
-public readonly struct OralnitasData
+namespace Picofon.Core.MapPath.Services
 {
-    public readonly int CorrectAnswers { get; init; }
-}
+    using System.Text.Json;
+    using System.Threading;
+    using Cysharp.Threading.Tasks;
 
-public readonly struct OralnitasService
-{
-    private readonly string _url;
-
-    public OralnitasService(byte _)
+    public readonly struct OralnitasData
     {
-        _url = ApiConfig.BaseUrl + "therapy-task-result/child";
+        public readonly int CorrectAnswers { get; init; }
     }
 
-    public async UniTask<ApiResult<OralnitasData>> GetOralnitas(
-        string childId,
-        CancellationToken token = default
-    )
+    public readonly struct OralnitasService
     {
-        string url = $"{_url}/{childId}/correct-answers";
+        private readonly string _url;
 
-        byte[] rawResponse;
-
-        try
+        public OralnitasService(byte _)
         {
-            rawResponse = await HttpClientUnity.GetAsyncBytes(
-                url: url,
-                timeoutSeconds: 5,
-                cancellationToken: token
-            );
-        }
-        catch (System.Exception)
-        {
-            return ApiResult<OralnitasData>.Fail("Network error while fetching Oralnitas data.");
+            _url = ApiConfig.BaseUrl + "therapy-task-result/child";
         }
 
-        using JsonDocument doc = JsonDocument.Parse(rawResponse);
-        JsonElement root = doc.RootElement;
-
-        ApiResponseView<OralnitasData> responseView = new(root);
-
-        if (!responseView.Success)
+        public async UniTask<ApiResult<OralnitasData>> GetOralnitas(
+            string childId,
+            CancellationToken token = default
+        )
         {
-            return ApiResult<OralnitasData>.Fail(responseView.ErrorMessage);
-        }
+            string url = $"{_url}/{childId}/correct-answers";
 
-        return ApiResult<OralnitasData>.Ok(responseView.Data);
+            byte[] rawResponse;
+
+            try
+            {
+                rawResponse = await HttpClientUnity.GetAsyncBytes(
+                    url: url,
+                    timeoutSeconds: 5,
+                    cancellationToken: token
+                );
+            }
+            catch (System.Exception)
+            {
+                return ApiResult<OralnitasData>.Fail(
+                    "Network error while fetching Oralnitas data."
+                );
+            }
+
+            using JsonDocument doc = JsonDocument.Parse(rawResponse);
+            JsonElement root = doc.RootElement;
+
+            ApiResponseView<OralnitasData> responseView = new(root);
+
+            if (!responseView.Success)
+            {
+                return ApiResult<OralnitasData>.Fail(responseView.ErrorMessage);
+            }
+
+            return ApiResult<OralnitasData>.Ok(responseView.Data);
+        }
     }
 }

@@ -1,17 +1,23 @@
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
-using UnityEngine;
+using Picofon.Core.Auth.Models;
+using Picofon.Utils;
 
-public class UserChildrenCountResponse : MonoBehaviour
+namespace Picofon.Core.Auth.Models.ChildrenCount
 {
-    [JsonInclude]
-    public bool Success { get; set; } = false;
+    using System.Collections.Generic;
+    using System.Text.Json.Serialization;
+    using UnityEngine;
 
-    [JsonInclude]
-    public List<ChildModel> Data { get; set; }
-
-    public static UserChildrenCountResponse FromJson(string json)
+    public class UserChildrenCountResponse : MonoBehaviour
     {
-        return JsonHelper.FromJson<UserChildrenCountResponse>(json);
+        [JsonInclude]
+        public bool Success { get; set; } = false;
+
+        [JsonInclude]
+        public List<ChildModel> Data { get; set; }
+
+        public static UserChildrenCountResponse FromJson(string json)
+        {
+            return JsonHelper.FromJson<UserChildrenCountResponse>(json);
+        }
     }
 }

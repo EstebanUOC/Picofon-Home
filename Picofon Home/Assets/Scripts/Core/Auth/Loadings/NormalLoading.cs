@@ -1,29 +1,32 @@
-using PrimeTween;
-using UnityEngine;
-
-public class NormalLoading : MonoBehaviour
+namespace Picofon.Core.Auth.Loadings
 {
-    [SerializeField]
-    private RectTransform _loadingIcon;
+    using PrimeTween;
+    using UnityEngine;
 
-    private Tween _rotation;
-
-    public void Show()
+    public class NormalLoading : MonoBehaviour
     {
-        _rotation = Tween.EulerAngles(
-            _loadingIcon,
-            startValue: Vector3.zero,
-            endValue: Vector3.forward * 360,
-            duration: 1,
-            ease: Ease.OutCubic,
-            cycles: -1
-        );
-    }
+        [SerializeField]
+        private RectTransform _loadingIcon;
 
-    public void Hide()
-    {
-        _rotation.Complete();
+        private Tween _rotation;
 
-        gameObject.SetActive(false);
+        public void Show()
+        {
+            _rotation = Tween.EulerAngles(
+                _loadingIcon,
+                startValue: Vector3.zero,
+                endValue: Vector3.forward * 360,
+                duration: 1,
+                ease: Ease.OutCubic,
+                cycles: -1
+            );
+        }
+
+        public void Hide()
+        {
+            _rotation.Complete();
+
+            gameObject.SetActive(false);
+        }
     }
 }

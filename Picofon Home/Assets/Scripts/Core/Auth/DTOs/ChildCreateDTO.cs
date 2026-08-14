@@ -1,26 +1,31 @@
-public class CreateChildDTO
+using Picofon.Utils;
+
+namespace Picofon.Core.Auth.DTOs
 {
-    public string Id { get; set; }
+    public class CreateChildDTO
+    {
+        public string Id { get; set; }
 
-    public string FirstName { get; set; }
+        public string FirstName { get; set; }
 
-    public string LastName { get; set; }
+        public string LastName { get; set; }
 
-    public string BirthDate { get; set; }
+        public string BirthDate { get; set; }
 
-    public string Disorder { get; set; }
+        public string Disorder { get; set; }
 
-    public string School { get; set; }
+        public string School { get; set; }
 
-    public int LanguagePreference { get; set; }
+        public int LanguagePreference { get; set; }
 
-    public int Grade { get; set; }
+        public int Grade { get; set; }
 
-    public int? CenterId { get; set; } = null;
+        public int? CenterId { get; set; } = null;
 
-    public string UserId { get; set; }
+        public string UserId { get; set; }
 
-    public UserRole Relationship { get; set; }
+        public UserRole Relationship { get; set; }
 
-    public bool IsAiPersonalizationEnabled { get; set; } = true;
+        public bool IsAiPersonalizationEnabled { get; set; } = true;
+    }
 }

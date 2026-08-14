@@ -1,25 +1,28 @@
-using System;
-using UnityEngine;
-using UnityEngine.EventSystems;
-
-public class SimpleButton : MonoBehaviour, IPointerClickHandler
+namespace Picofon.Utils
 {
-    [SerializeField]
-    private bool _interactable = true;
+    using System;
+    using UnityEngine;
+    using UnityEngine.EventSystems;
 
-    public event Action OnClick;
-
-    public bool Interactable
+    public class SimpleButton : MonoBehaviour, IPointerClickHandler
     {
-        get => _interactable;
-        set => _interactable = value;
-    }
+        [SerializeField]
+        private bool _interactable = true;
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (!_interactable)
-            return;
+        public event Action OnClick;
 
-        OnClick?.Invoke();
+        public bool Interactable
+        {
+            get => _interactable;
+            set => _interactable = value;
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (!_interactable)
+                return;
+
+            OnClick?.Invoke();
+        }
     }
 }

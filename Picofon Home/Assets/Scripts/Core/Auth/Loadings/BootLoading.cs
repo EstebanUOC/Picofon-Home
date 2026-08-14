@@ -1,29 +1,32 @@
-using PrimeTween;
-using UnityEngine;
-
-public class BootLoading : MonoBehaviour
+namespace Picofon.Core.Auth.Loadings
 {
-    [SerializeField]
-    private RectTransform _rectContent;
+    using PrimeTween;
+    using UnityEngine;
 
-    private CanvasGroup _canvasGroup;
-
-    public void Awake()
+    public class BootLoading : MonoBehaviour
     {
-        _canvasGroup = GetComponent<CanvasGroup>();
-    }
+        [SerializeField]
+        private RectTransform _rectContent;
 
-    public void Show()
-    {
-        _rectContent.localScale = Vector3.zero;
+        private CanvasGroup _canvasGroup;
 
-        Tween.Scale(_rectContent, 1f, 0.6f, Ease.OutBack);
-    }
+        public void Awake()
+        {
+            _canvasGroup = GetComponent<CanvasGroup>();
+        }
 
-    public void Hide()
-    {
-        Tween
-            .Alpha(_canvasGroup, endValue: 0, duration: 0.5f, startDelay: 0.3f)
-            .OnComplete(target: gameObject, go => go.SetActive(false));
+        public void Show()
+        {
+            _rectContent.localScale = Vector3.zero;
+
+            Tween.Scale(_rectContent, 1f, 0.6f, Ease.OutBack);
+        }
+
+        public void Hide()
+        {
+            Tween
+                .Alpha(_canvasGroup, endValue: 0, duration: 0.5f, startDelay: 0.3f)
+                .OnComplete(target: gameObject, go => go.SetActive(false));
+        }
     }
 }

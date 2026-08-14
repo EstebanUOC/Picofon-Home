@@ -1,46 +1,49 @@
-using Cysharp.Threading.Tasks;
-
-public static class ApiConfig
+namespace Picofon.Utils
 {
-    public static string BaseUrl = PrimeUrl + "api/";
+    using Cysharp.Threading.Tasks;
 
-    // TODO: Switch URLs before building for production
-    // public const string PrimeUrl = "https://ehc-picofon.techlab.uoc.edu/";
-    // public const string FallbackUrl = "https://picofonlab.com/";
-
-    public const string FallbackUrl = "https://ehc-picofon.techlab.uoc.edu/";
-    public const string PrimeUrl = "https://picofonlab.com/";
-
-    public static async UniTask<bool> Ping()
+    public static class ApiConfig
     {
-        string url = $"{PrimeUrl}health";
+        public static string BaseUrl = PrimeUrl + "api/";
 
-        bool primaryUrlReachable = false;
+        // TODO: Switch URLs before building for production
+        // public const string PrimeUrl = "https://ehc-picofon.techlab.uoc.edu/";
+        // public const string FallbackUrl = "https://picofonlab.com/";
 
-        try
+        public const string FallbackUrl = "https://ehc-picofon.techlab.uoc.edu/";
+        public const string PrimeUrl = "https://picofonlab.com/";
+
+        public static async UniTask<bool> Ping()
         {
-            await HttpClientUnity.GetAsyncBytes(url: url, timeoutSeconds: 5);
-            primaryUrlReachable = true;
-        }
-        catch (System.Exception) { }
+            string url = $"{PrimeUrl}health";
 
-        if (primaryUrlReachable)
-        {
-            BaseUrl = $"{PrimeUrl}api/";
-            return true;
-        }
+            bool primaryUrlReachable = false;
 
-        url = $"{FallbackUrl}health";
+            try
+            {
+                await HttpClientUnity.GetAsyncBytes(url: url, timeoutSeconds: 5);
+                primaryUrlReachable = true;
+            }
+            catch (System.Exception) { }
 
-        try
-        {
-            await HttpClientUnity.GetAsyncBytes(url: url, timeoutSeconds: 5);
-            BaseUrl = $"{FallbackUrl}api/";
-            return true;
-        }
-        catch (System.Exception)
-        {
-            return false;
+            if (primaryUrlReachable)
+            {
+                BaseUrl = $"{PrimeUrl}api/";
+                return true;
+            }
+
+            url = $"{FallbackUrl}health";
+
+            try
+            {
+                await HttpClientUnity.GetAsyncBytes(url: url, timeoutSeconds: 5);
+                BaseUrl = $"{FallbackUrl}api/";
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
         }
     }
 }

@@ -1,25 +1,30 @@
-using UnityEngine;
-using UnityEngine.UI;
+using Picofon.Core.Auth;
 
-public class CenterInput : FormInput
+namespace Picofon.Core.Auth.Inputs
 {
-    [Space(15)]
-    public Toggle Toggle;
+    using UnityEngine;
+    using UnityEngine.UI;
 
-    public void Start()
+    public class CenterInput : FormInput
     {
-        Toggle.onValueChanged.AddListener(OnToggleChange);
-    }
+        [Space(15)]
+        public Toggle Toggle;
 
-    public override string GetData()
-    {
-        // TODO: Replace with actual center ID retrieval logic
-        int center = 1;
-        return center.ToString();
-    }
+        public void Start()
+        {
+            Toggle.onValueChanged.AddListener(OnToggleChange);
+        }
 
-    private void OnToggleChange(bool isOn)
-    {
-        Valid = isOn;
+        public override string GetData()
+        {
+            // TODO: Replace with actual center ID retrieval logic
+            int center = 1;
+            return center.ToString();
+        }
+
+        private void OnToggleChange(bool isOn)
+        {
+            Valid = isOn;
+        }
     }
 }

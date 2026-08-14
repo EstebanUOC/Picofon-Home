@@ -1,24 +1,27 @@
-using UnityEngine;
-
-[CreateAssetMenu(fileName = "TransitionData", menuName = "Utils/TransitionData")]
-public sealed class TransitionData : ScriptableObject
+namespace Picofon.Utils
 {
-    [SerializeField]
-    private string _sourceScene;
+    using UnityEngine;
 
-    [SerializeField]
-    private string _targetScene;
-
-    public string SourceScene => _sourceScene;
-    public string TargetScene => _targetScene;
-
-    public void LoadTargetScene()
+    [CreateAssetMenu(fileName = "TransitionData", menuName = "Utils/TransitionData")]
+    public sealed class TransitionData : ScriptableObject
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(_targetScene);
-    }
+        [SerializeField]
+        private string _sourceScene;
 
-    public void LoadSourceScene()
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(_sourceScene);
+        [SerializeField]
+        private string _targetScene;
+
+        public string SourceScene => _sourceScene;
+        public string TargetScene => _targetScene;
+
+        public void LoadTargetScene()
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(_targetScene);
+        }
+
+        public void LoadSourceScene()
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(_sourceScene);
+        }
     }
 }

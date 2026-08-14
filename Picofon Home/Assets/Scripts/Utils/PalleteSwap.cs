@@ -1,31 +1,34 @@
-using UnityEngine;
-
-public class PalleteSwapUtil : MonoBehaviour
+namespace Picofon.Utils
 {
-    [SerializeField]
-    private Color _targetColor = Color.red;
+    using UnityEngine;
 
-    [SerializeField]
-    [Range(0f, 1f)]
-    private float _weight = 1f;
-
-    private MaterialPropertyBlock propertyBlock;
-
-    public void OnValidate()
+    public class PalleteSwapUtil : MonoBehaviour
     {
-        propertyBlock ??= new MaterialPropertyBlock();
+        [SerializeField]
+        private Color _targetColor = Color.red;
 
-        Renderer renderer = GetComponent<Renderer>();
-        renderer.GetPropertyBlock(propertyBlock);
+        [SerializeField]
+        [Range(0f, 1f)]
+        private float _weight = 1f;
 
-        propertyBlock.SetColor("_TargetColor", _targetColor);
-        propertyBlock.SetFloat("_Weight", _weight);
+        private MaterialPropertyBlock propertyBlock;
 
-        renderer.SetPropertyBlock(propertyBlock);
-    }
+        public void OnValidate()
+        {
+            propertyBlock ??= new MaterialPropertyBlock();
 
-    public void Start()
-    {
-        OnValidate();
+            Renderer renderer = GetComponent<Renderer>();
+            renderer.GetPropertyBlock(propertyBlock);
+
+            propertyBlock.SetColor("_TargetColor", _targetColor);
+            propertyBlock.SetFloat("_Weight", _weight);
+
+            renderer.SetPropertyBlock(propertyBlock);
+        }
+
+        public void Start()
+        {
+            OnValidate();
+        }
     }
 }

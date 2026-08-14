@@ -1,88 +1,98 @@
-using Cysharp.Threading.Tasks;
-using UnityEngine;
+using Picofon.Core.Auth;
+using Picofon.Core.Auth.Components;
+using Picofon.Core.Auth.Services;
+using Picofon.Core.Network;
+using Picofon.Utils;
 
-public class Disclaimer : MonoBehaviour
+namespace Picofon.Core.Auth.Panels
 {
-    [SerializeField]
-    private UIManager _uiManager;
+    using Cysharp.Threading.Tasks;
+    using UnityEngine;
 
-    [SerializeField]
-    private AuthManager _authManager;
-
-    [Space]
-    [SerializeField]
-    private CustomButton _acceptButton;
-
-    [SerializeField]
-    private CustomButton _declineButton;
-
-    private RectTransform _panel;
-
-    public void Start()
+    public class Disclaimer : MonoBehaviour
     {
-        _acceptButton.OnClick += OnAccept;
-        _declineButton.OnClick += OnDecline;
+        [SerializeField]
+        private UIManager _uiManager;
 
-        _panel = GetComponent<RectTransform>();
-    }
+        [SerializeField]
+        private AuthManager _authManager;
 
-    private void OnAccept()
-    {
-        if (_authManager.IsNewUser)
+        [Space]
+        [SerializeField]
+        private CustomButton _acceptButton;
+
+        [SerializeField]
+        private CustomButton _declineButton;
+
+        private RectTransform _panel;
+
+        public void Start()
         {
-            RegisterNewUser().Forget();
-            return;
+            _acceptButton.OnClick += OnAccept;
+            _declineButton.OnClick += OnDecline;
+
+            _panel = GetComponent<RectTransform>();
         }
 
-        _uiManager.ShowPanel(PanelEnum.Children);
-    }
-
-    private void OnDecline()
-    {
-        _authManager.Logout();
-    }
-
-    private async UniTaskVoid RegisterNewUser()
-    {
-        _uiManager.ShowLoading(LoadingEnum.Normal);
-
-        UserService service = _authManager.UserService;
-
-        ApiResult<RegisterResponse> result = await service.RegisterWithFirebaseToken(
-            firebaseToken: _authManager.NewUserFirebaseToken,
-            disclaimerAccepted: true,
-            role: UserRole.Parent
-        );
-
-        _uiManager.HideLoading(LoadingEnum.Normal);
-
-        if (!result.Success)
+        private void OnAccept()
         {
+            if (_authManager.IsNewUser)
+            {
+                RegisterNewUser().Forget();
+                return;
+            }
+
+            _uiManager.ShowPanel(PanelEnum.Children);
+        }
+
+        private void OnDecline()
+        {
+            _authManager.Logout();
+        }
+
+        private async UniTaskVoid RegisterNewUser()
+        {
+            _uiManager.ShowLoading(LoadingEnum.Normal);
+
+            UserService service = _authManager.UserService;
+
+            ApiResult<RegisterResponse> result = await service.RegisterWithFirebaseToken(
+                firebaseToken: _authManager.NewUserFirebaseToken,
+                disclaimerAccepted: true,
+                role: UserRole.Parent
+            );
+
+            _uiManager.HideLoading(LoadingEnum.Normal);
+
+            if (!result.Success)
+            {
+                await _uiManager.ShowModal(
+                    new ModalData()
+                    {
+                        Title = "Error",
+                        Message =
+                            "There was an error creating your account. Please try again later.",
+                        Panel = _panel,
+                    }
+                );
+
+                _authManager.Logout();
+
+                return;
+            }
+
+            _authManager.SetCurrentUser(result.Data.User);
+
             await _uiManager.ShowModal(
                 new ModalData()
                 {
-                    Title = "Error",
-                    Message = "There was an error creating your account. Please try again later.",
+                    Title = "Account Created",
+                    Message = "Your account has been created successfully.",
                     Panel = _panel,
                 }
             );
 
-            _authManager.Logout();
-
-            return;
+            _uiManager.ShowPanel(PanelEnum.Children);
         }
-
-        _authManager.SetCurrentUser(result.Data.User);
-
-        await _uiManager.ShowModal(
-            new ModalData()
-            {
-                Title = "Account Created",
-                Message = "Your account has been created successfully.",
-                Panel = _panel,
-            }
-        );
-
-        _uiManager.ShowPanel(PanelEnum.Children);
     }
 }

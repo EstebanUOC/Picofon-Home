@@ -1,12 +1,15 @@
-public readonly struct ChildListItemDTO
+namespace Picofon.Core.Auth.DTOs
 {
-    public readonly string Id { get; init; }
+    public readonly struct ChildListItemDTO
+    {
+        public readonly string Id { get; init; }
 
-    public readonly string FirstName { get; init; }
+        public readonly string FirstName { get; init; }
 
-    public readonly string LastName { get; init; }
+        public readonly string LastName { get; init; }
 
-    public readonly int LanguagePreference { get; init; }
+        public readonly int LanguagePreference { get; init; }
 
-    public readonly bool IsAiPersonalizationEnabled { get; init; }
+        public readonly bool IsAiPersonalizationEnabled { get; init; }
+    }
 }

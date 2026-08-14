@@ -1,141 +1,146 @@
-using PrimeTween;
-using TMPro;
-using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
+using Picofon.Utils;
 
-public class ComboBox : MonoBehaviour, IPointerClickHandler
+namespace Picofon.Core.Auth.Components
 {
-    private const string SpanishCode = "Espanyol";
-    private const string CatalanCode = "Català";
+    using PrimeTween;
+    using TMPro;
+    using UnityEngine;
+    using UnityEngine.EventSystems;
+    using UnityEngine.UI;
 
-    [SerializeField]
-    private RectTransform _arrow;
-
-    [SerializeField]
-    private RectTransform _template;
-
-    [Space]
-    [SerializeField]
-    private Image _flag;
-
-    [SerializeField]
-    private TMP_Text _languageName;
-
-    [Space]
-    [SerializeField]
-    private ComboItem[] _options;
-
-    private bool isOpen = false;
-
-    private LanguageData _selectedLanguage;
-
-    public void Awake()
+    public class ComboBox : MonoBehaviour, IPointerClickHandler
     {
-        GenericEventChannel<LanguageData> channel = new();
+        private const string SpanishCode = "Espanyol";
+        private const string CatalanCode = "Català";
 
-        foreach (var option in _options)
-            option.EventChannel = channel;
+        [SerializeField]
+        private RectTransform _arrow;
 
-        _selectedLanguage = _options[1].EventData;
+        [SerializeField]
+        private RectTransform _template;
 
-        channel.OnRaised += (data) => HandleOptionSelected(data);
-    }
+        [Space]
+        [SerializeField]
+        private Image _flag;
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        isOpen = !isOpen;
+        [SerializeField]
+        private TMP_Text _languageName;
 
-        AnimatedOpenClose();
-    }
+        [Space]
+        [SerializeField]
+        private ComboItem[] _options;
 
-    public LanguageCode GetSelectedLanguage()
-    {
-        return _selectedLanguage.Code;
-    }
+        private bool isOpen = false;
 
-    public void SetSelectedLanguage(LanguageCode code)
-    {
-        foreach (var option in _options)
+        private LanguageData _selectedLanguage;
+
+        public void Awake()
         {
-            if (option.EventData.Code == code)
+            GenericEventChannel<LanguageData> channel = new();
+
+            foreach (var option in _options)
+                option.EventChannel = channel;
+
+            _selectedLanguage = _options[1].EventData;
+
+            channel.OnRaised += (data) => HandleOptionSelected(data);
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            isOpen = !isOpen;
+
+            AnimatedOpenClose();
+        }
+
+        public LanguageCode GetSelectedLanguage()
+        {
+            return _selectedLanguage.Code;
+        }
+
+        public void SetSelectedLanguage(LanguageCode code)
+        {
+            foreach (var option in _options)
             {
-                HandleOptionSelected(option.EventData, false);
-                break;
+                if (option.EventData.Code == code)
+                {
+                    HandleOptionSelected(option.EventData, false);
+                    break;
+                }
             }
         }
-    }
 
-    private void HandleOptionSelected(LanguageData data, bool raiseAnimation = true)
-    {
-        isOpen = false;
-        _selectedLanguage = data;
-
-        string name = data.Code switch
+        private void HandleOptionSelected(LanguageData data, bool raiseAnimation = true)
         {
-            LanguageCode.ES => SpanishCode,
-            LanguageCode.CA => CatalanCode,
-            _ => CatalanCode,
-        };
+            isOpen = false;
+            _selectedLanguage = data;
 
-        _flag.sprite = data.Flag;
-        _languageName.text = name;
+            string name = data.Code switch
+            {
+                LanguageCode.ES => SpanishCode,
+                LanguageCode.CA => CatalanCode,
+                _ => CatalanCode,
+            };
 
-        if (raiseAnimation)
-            AnimatedOpenClose();
-    }
+            _flag.sprite = data.Flag;
+            _languageName.text = name;
 
-    private void AnimatedOpenClose()
-    {
-        Vector3 targetRotation = new(0, 0, 90);
-        float targetY = -60f;
-        float scaleY = 0;
-
-        if (isOpen)
-        {
-            _template.gameObject.SetActive(true);
-            _template.localScale = new Vector3(1, 0, 1);
-
-            targetRotation = _arrow.localEulerAngles + new Vector3(0, 0, 180);
-            targetY = -140f;
-            scaleY = 1;
+            if (raiseAnimation)
+                AnimatedOpenClose();
         }
 
-        Tween.EulerAngles(
-            target: _arrow,
-            startValue: _arrow.localEulerAngles,
-            endValue: targetRotation,
-            duration: 0.5f,
-            ease: Ease.OutBack
-        );
+        private void AnimatedOpenClose()
+        {
+            Vector3 targetRotation = new(0, 0, 90);
+            float targetY = -60f;
+            float scaleY = 0;
 
-        Sequence
-            .Create()
-            .Group(
-                Tween.UIAnchoredPositionY(
-                    target: _template,
-                    endValue: targetY,
-                    duration: 0.5f,
-                    ease: Ease.OutBack
-                )
-            )
-            .Group(
-                Tween.ScaleY(
-                    target: _template,
-                    endValue: scaleY,
-                    duration: 0.5f,
-                    ease: Ease.OutBack
-                )
-            )
-            .OnComplete(
-                target: _template,
-                target =>
-                {
-                    if (!isOpen)
-                    {
-                        target.gameObject.SetActive(false);
-                    }
-                }
+            if (isOpen)
+            {
+                _template.gameObject.SetActive(true);
+                _template.localScale = new Vector3(1, 0, 1);
+
+                targetRotation = _arrow.localEulerAngles + new Vector3(0, 0, 180);
+                targetY = -140f;
+                scaleY = 1;
+            }
+
+            Tween.EulerAngles(
+                target: _arrow,
+                startValue: _arrow.localEulerAngles,
+                endValue: targetRotation,
+                duration: 0.5f,
+                ease: Ease.OutBack
             );
+
+            Sequence
+                .Create()
+                .Group(
+                    Tween.UIAnchoredPositionY(
+                        target: _template,
+                        endValue: targetY,
+                        duration: 0.5f,
+                        ease: Ease.OutBack
+                    )
+                )
+                .Group(
+                    Tween.ScaleY(
+                        target: _template,
+                        endValue: scaleY,
+                        duration: 0.5f,
+                        ease: Ease.OutBack
+                    )
+                )
+                .OnComplete(
+                    target: _template,
+                    target =>
+                    {
+                        if (!isOpen)
+                        {
+                            target.gameObject.SetActive(false);
+                        }
+                    }
+                );
+        }
     }
 }

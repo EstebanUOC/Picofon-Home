@@ -1,11 +1,14 @@
-using System;
-
-public class InputChangedEventChannel
+namespace Picofon.Core.Auth.Events
 {
-    public event Action<bool> OnInputChanged;
+    using System;
 
-    public void Raise(bool valid)
+    public class InputChangedEventChannel
     {
-        OnInputChanged?.Invoke(valid);
+        public event Action<bool> OnInputChanged;
+
+        public void Raise(bool valid)
+        {
+            OnInputChanged?.Invoke(valid);
+        }
     }
 }

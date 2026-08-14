@@ -1,198 +1,211 @@
-using System;
-using Cysharp.Threading.Tasks;
-using Firebase.Auth;
-using Google;
-using UnityEngine;
+using Picofon.Core.Auth.Components;
+using Picofon.Core.Auth.Models.User;
+using Picofon.Core.Auth.Services;
+using Picofon.Core.Network;
+using Picofon.Utils;
 
-public class Login : MonoBehaviour
+namespace Picofon.Core.Auth.Panels
 {
-    [SerializeField]
-    public UIManager _uiManager;
+    using System;
+    using Cysharp.Threading.Tasks;
+    using Firebase.Auth;
+    using Google;
+    using UnityEngine;
 
-    [SerializeField]
-    public AuthManager _authManager;
-
-    [SerializeField]
-    public RectTransform _contentPanel;
-
-    [SerializeField]
-    private SimpleButton _optionsButton;
-
-    [Space]
-    [SerializeField]
-    private CustomButtonLoading _loginButton;
-
-    [SerializeField]
-    private CustomButton _loginMailButton;
-
-    [SerializeField]
-    private CustomButton _debugButton;
-
-    private RectTransform _panel;
-
-    public void Start()
+    public class Login : MonoBehaviour
     {
-        _panel = GetComponent<RectTransform>();
+        [SerializeField]
+        public UIManager _uiManager;
 
-        _optionsButton.OnClick += ShowOptions;
+        [SerializeField]
+        public AuthManager _authManager;
 
-        _loginMailButton.OnClick += () => _uiManager.ShowPanel(PanelEnum.RegisterParent);
+        [SerializeField]
+        public RectTransform _contentPanel;
 
-        _debugButton.OnClick += ShowDebugMenu;
+        [SerializeField]
+        private SimpleButton _optionsButton;
 
-        if (!Debug.isDebugBuild)
+        [Space]
+        [SerializeField]
+        private CustomButtonLoading _loginButton;
+
+        [SerializeField]
+        private CustomButton _loginMailButton;
+
+        [SerializeField]
+        private CustomButton _debugButton;
+
+        private RectTransform _panel;
+
+        public void Start()
         {
-            _contentPanel.sizeDelta = new Vector2(_contentPanel.sizeDelta.x, 700);
-            _debugButton.gameObject.SetActive(false);
+            _panel = GetComponent<RectTransform>();
+
+            _optionsButton.OnClick += ShowOptions;
+
+            _loginMailButton.OnClick += () => _uiManager.ShowPanel(PanelEnum.RegisterParent);
+
+            _debugButton.OnClick += ShowDebugMenu;
+
+            if (!Debug.isDebugBuild)
+            {
+                _contentPanel.sizeDelta = new Vector2(_contentPanel.sizeDelta.x, 700);
+                _debugButton.gameObject.SetActive(false);
+            }
+
+            if (Application.isEditor)
+            {
+                _loginButton.Interactable = false;
+                return;
+            }
+
+            _loginButton.OnClick += AuthenticateWithGoogle;
         }
 
-        if (Application.isEditor)
+        private void OnLoginSuccess(UserModel user)
         {
-            _loginButton.Interactable = false;
-            return;
+            _authManager.SetCurrentUser(user);
+            _loginButton.EndLoading();
+
+            if (!user.LegalAccepted)
+            {
+                _uiManager.ShowPanel(PanelEnum.Disclaimer);
+                return;
+            }
+
+            if (user.Role == UserRole.Invited)
+            {
+                _uiManager.ShowPanel(PanelEnum.Role);
+                return;
+            }
+
+            _uiManager.ShowPanel(PanelEnum.Children);
         }
 
-        _loginButton.OnClick += AuthenticateWithGoogle;
-    }
-
-    private void OnLoginSuccess(UserModel user)
-    {
-        _authManager.SetCurrentUser(user);
-        _loginButton.EndLoading();
-
-        if (!user.LegalAccepted)
+        private async UniTaskVoid AuthenticateWithGoogleAsync()
         {
-            _uiManager.ShowPanel(PanelEnum.Disclaimer);
-            return;
-        }
+            FirebaseAuth firebaseInstance = FirebaseAuth.DefaultInstance;
+            GoogleSignIn googleInstance = GoogleSignIn.DefaultInstance;
 
-        if (user.Role == UserRole.Invited)
-        {
-            _uiManager.ShowPanel(PanelEnum.Role);
-            return;
-        }
+            googleInstance.SignOut();
 
-        _uiManager.ShowPanel(PanelEnum.Children);
-    }
+            GoogleSignInUser googleUser;
 
-    private async UniTaskVoid AuthenticateWithGoogleAsync()
-    {
-        FirebaseAuth firebaseInstance = FirebaseAuth.DefaultInstance;
-        GoogleSignIn googleInstance = GoogleSignIn.DefaultInstance;
+            try
+            {
+                googleUser = await googleInstance.SignIn().AsUniTask();
+            }
+            catch (Exception e)
+            {
+                PerformanceLog.LogError("<DEBUG> Google sign-in failed, Error: " + e.Message);
+                return;
+            }
 
-        googleInstance.SignOut();
+            string googleIdToken = googleUser.IdToken;
+            Credential credential = GoogleAuthProvider.GetCredential(googleIdToken, null);
 
-        GoogleSignInUser googleUser;
+            FirebaseUser firebaseUser;
 
-        try
-        {
-            googleUser = await googleInstance.SignIn().AsUniTask();
-        }
-        catch (Exception e)
-        {
-            PerformanceLog.LogError("<DEBUG> Google sign-in failed, Error: " + e.Message);
-            return;
-        }
+            try
+            {
+                firebaseUser = await firebaseInstance
+                    .SignInWithCredentialAsync(credential)
+                    .AsUniTask();
+            }
+            catch (Exception e)
+            {
+                PerformanceLog.LogError(
+                    "<DEBUG> Firebase authentication failed, Error: " + e.Message
+                );
+                return;
+            }
 
-        string googleIdToken = googleUser.IdToken;
-        Credential credential = GoogleAuthProvider.GetCredential(googleIdToken, null);
+            string firebaseIdToken;
 
-        FirebaseUser firebaseUser;
+            try
+            {
+                firebaseIdToken = await firebaseUser.TokenAsync(true).AsUniTask();
+            }
+            catch (Exception e)
+            {
+                PerformanceLog.LogError(
+                    "<DEBUG> Failed to retrieve Firebase ID token, Error: " + e.Message
+                );
+                return;
+            }
 
-        try
-        {
-            firebaseUser = await firebaseInstance.SignInWithCredentialAsync(credential).AsUniTask();
-        }
-        catch (Exception e)
-        {
-            PerformanceLog.LogError("<DEBUG> Firebase authentication failed, Error: " + e.Message);
-            return;
-        }
-
-        string firebaseIdToken;
-
-        try
-        {
-            firebaseIdToken = await firebaseUser.TokenAsync(true).AsUniTask();
-        }
-        catch (Exception e)
-        {
-            PerformanceLog.LogError(
-                "<DEBUG> Failed to retrieve Firebase ID token, Error: " + e.Message
+            ApiResult<LoginData> result = await _authManager.UserService.LoginWithFirebaseToken(
+                firebaseIdToken
             );
-            return;
-        }
 
-        ApiResult<LoginData> result = await _authManager.UserService.LoginWithFirebaseToken(
-            firebaseIdToken
-        );
-
-        if (!result.Success)
-        {
-            ModalData modalData = new()
+            if (!result.Success)
             {
-                Title = "Error",
-                Message = "Could not log in. Please try again later.",
-                Panel = _panel,
-            };
+                ModalData modalData = new()
+                {
+                    Title = "Error",
+                    Message = "Could not log in. Please try again later.",
+                    Panel = _panel,
+                };
 
-            _loginButton.EndLoading();
+                _loginButton.EndLoading();
 
-            await _uiManager.ShowModal(modalData);
+                await _uiManager.ShowModal(modalData);
 
-            return;
-        }
+                return;
+            }
 
-        if (result.Data.IsNewUser)
-        {
-            _authManager.IsNewUser = true;
-
-            _authManager.NewUserFirebaseToken = firebaseIdToken;
-
-            _loginButton.EndLoading();
-
-            _uiManager.ShowPanel(PanelEnum.Role);
-
-            return;
-        }
-
-        _authManager.IsNewUser = false;
-
-        if (result.Data.User.Role == UserRole.Therapist && !result.Data.User.ProfileCompleted)
-        {
-            ModalData modalData = new()
+            if (result.Data.IsNewUser)
             {
-                Title = "Profile Incomplete",
-                Message =
-                    "Your profile is incomplete. Please complete your profile in the web portal to access the app.",
-                Panel = _panel,
-            };
+                _authManager.IsNewUser = true;
+
+                _authManager.NewUserFirebaseToken = firebaseIdToken;
+
+                _loginButton.EndLoading();
+
+                _uiManager.ShowPanel(PanelEnum.Role);
+
+                return;
+            }
+
+            _authManager.IsNewUser = false;
+
+            if (result.Data.User.Role == UserRole.Therapist && !result.Data.User.ProfileCompleted)
+            {
+                ModalData modalData = new()
+                {
+                    Title = "Profile Incomplete",
+                    Message =
+                        "Your profile is incomplete. Please complete your profile in the web portal to access the app.",
+                    Panel = _panel,
+                };
+
+                _loginButton.EndLoading();
+
+                await _uiManager.ShowModal(modalData);
+
+                _authManager.Logout();
+                return;
+            }
 
             _loginButton.EndLoading();
 
-            await _uiManager.ShowModal(modalData);
-
-            _authManager.Logout();
-            return;
+            OnLoginSuccess(result.Data.User);
         }
 
-        _loginButton.EndLoading();
+        private void AuthenticateWithGoogle()
+        {
+            AuthenticateWithGoogleAsync().Forget();
+        }
 
-        OnLoginSuccess(result.Data.User);
-    }
+        private void ShowOptions()
+        {
+            _uiManager.ShowModal(_panel, ModalEnum.Options);
+        }
 
-    private void AuthenticateWithGoogle()
-    {
-        AuthenticateWithGoogleAsync().Forget();
-    }
-
-    private void ShowOptions()
-    {
-        _uiManager.ShowModal(_panel, ModalEnum.Options);
-    }
-
-    private void ShowDebugMenu()
-    {
-        _uiManager.ShowModal(_panel, ModalEnum.DebugMenu);
+        private void ShowDebugMenu()
+        {
+            _uiManager.ShowModal(_panel, ModalEnum.DebugMenu);
+        }
     }
 }

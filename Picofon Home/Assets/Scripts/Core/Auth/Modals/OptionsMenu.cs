@@ -1,68 +1,74 @@
-using System;
-using TMPro;
-using UnityEngine;
+using Picofon.Core.Auth.Components;
+using Picofon.Utils;
 
-public class OptionsMenu : MonoBehaviour
+namespace Picofon.Core.Auth.Modals
 {
-    # region References
+    using System;
+    using TMPro;
+    using UnityEngine;
 
-    [SerializeField]
-    private Modal _modal;
-
-    [SerializeField]
-    private ComboBox _languageComboBox;
-
-    [SerializeField]
-    private CustomButton _saveButton;
-
-    [SerializeField]
-    private CustomButton _creditsButton;
-
-    [SerializeField]
-    private TMP_Text _versionText;
-
-    # endregion
-
-    public GenericEventChannel EventChannel;
-
-    public void Awake()
+    public class OptionsMenu : MonoBehaviour
     {
-        _saveButton.OnClick += HandleSave;
+        # region References
 
-        _creditsButton.OnClick += HandleCredits;
+        [SerializeField]
+        private Modal _modal;
 
-        string preferredLanguage = GamePrefs.PreferredLanguage;
+        [SerializeField]
+        private ComboBox _languageComboBox;
 
-        if (preferredLanguage[0] == 'C')
-            return;
+        [SerializeField]
+        private CustomButton _saveButton;
 
-        if (Enum.TryParse(preferredLanguage, out LanguageCode language))
+        [SerializeField]
+        private CustomButton _creditsButton;
+
+        [SerializeField]
+        private TMP_Text _versionText;
+
+        # endregion
+
+        public GenericEventChannel EventChannel;
+
+        public void Awake()
         {
-            _languageComboBox.SetSelectedLanguage(language);
+            _saveButton.OnClick += HandleSave;
+
+            _creditsButton.OnClick += HandleCredits;
+
+            string preferredLanguage = GamePrefs.PreferredLanguage;
+
+            if (preferredLanguage[0] == 'C')
+                return;
+
+            if (Enum.TryParse(preferredLanguage, out LanguageCode language))
+            {
+                _languageComboBox.SetSelectedLanguage(language);
+            }
         }
-    }
 
-    public void Show()
-    {
-        gameObject.SetActive(true);
-    }
+        public void Show()
+        {
+            gameObject.SetActive(true);
+        }
 
-    public void SetVersionText(float version)
-    {
-        _versionText.text = version.ToString("0.00");
-    }
+        public void SetVersionText(float version)
+        {
+            _versionText.text = version.ToString("0.00");
+        }
 
-    private void HandleSave()
-    {
-        GamePrefs.PreferredLanguage = _languageComboBox.GetSelectedLanguage().ToString();
+        private void HandleSave()
+        {
+            GamePrefs.PreferredLanguage = _languageComboBox.GetSelectedLanguage().ToString();
 
-        EventChannel.Raise();
-    }
+            EventChannel.Raise();
+        }
 
-    private void HandleCredits()
-    {
-        EventChannel.Raise();
+        private void HandleCredits()
+        {
+            EventChannel.Raise();
 
-        _modal.ShowCredits();
+            _modal.ShowCredits();
+        }
     }
 }

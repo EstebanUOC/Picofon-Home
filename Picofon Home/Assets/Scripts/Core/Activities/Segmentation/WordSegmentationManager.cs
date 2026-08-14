@@ -1,9 +1,13 @@
-using UnityEngine;
-
-public class WordSegmentationManager : MonoBehaviour
+namespace Picofon.Activities.Segmentation
 {
-    public void Start()
+    using Picofon.Components;
+    using UnityEngine;
+
+    public class WordSegmentationManager : MonoBehaviour
     {
-        SceneOrientationHelper.LockToLandscape();
+        public void Start()
+        {
+            SceneOrientationHelper.LockToLandscape();
+        }
     }
 }

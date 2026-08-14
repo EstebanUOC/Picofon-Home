@@ -1,127 +1,135 @@
-using System.Threading;
-using Cysharp.Threading.Tasks;
-using UnityEngine;
+using Picofon.Core.Auth;
+using Picofon.Core.Auth.Components;
+using Picofon.Core.Network;
+using Picofon.Utils;
 
-public class RolePanel : MonoBehaviour
+namespace Picofon.Core.Auth.Panels
 {
-    [SerializeField]
-    private UIManager _uiManager;
+    using System.Threading;
+    using Cysharp.Threading.Tasks;
+    using UnityEngine;
 
-    [SerializeField]
-    private AuthManager _authManager;
-
-    [Space]
-    [SerializeField]
-    private RoleCard _therapistCard;
-
-    [SerializeField]
-    private RoleCard _parentCard;
-
-    [SerializeField]
-    private SimpleButton _backButton;
-
-    private RectTransform _panel;
-
-    public void Start()
+    public class RolePanel : MonoBehaviour
     {
-        GenericEventChannel<UserRole> eventChannel = new();
+        [SerializeField]
+        private UIManager _uiManager;
 
-        eventChannel.OnRaised += OnRoleSelected;
+        [SerializeField]
+        private AuthManager _authManager;
 
-        _therapistCard.EventChannel = eventChannel;
-        _parentCard.EventChannel = eventChannel;
+        [Space]
+        [SerializeField]
+        private RoleCard _therapistCard;
 
-        _backButton.OnClick += _authManager.Logout;
+        [SerializeField]
+        private RoleCard _parentCard;
 
-        _panel = GetComponent<RectTransform>();
-    }
+        [SerializeField]
+        private SimpleButton _backButton;
 
-    private void OnRoleSelected(UserRole roleType)
-    {
-        OnRoleSelectedAsync(roleType).Forget();
-    }
+        private RectTransform _panel;
 
-    private async UniTaskVoid OnRoleSelectedAsync(UserRole roleType)
-    {
-        _uiManager.ShowLoading(LoadingEnum.Normal);
-
-        if (_authManager.IsNewUser && roleType == UserRole.Therapist)
+        public void Start()
         {
-            _uiManager.HideLoading(LoadingEnum.Normal);
+            GenericEventChannel<UserRole> eventChannel = new();
 
-            await _uiManager.ShowModal(
-                new ModalData()
-                {
-                    Title = "Therapist Account Creation",
-                    Message =
-                        "Therapist accounts must be created through the web portal. Please create an account on the web portal and log in to the app.",
-                    Panel = _panel,
-                }
-            );
+            eventChannel.OnRaised += OnRoleSelected;
 
-            return;
+            _therapistCard.EventChannel = eventChannel;
+            _parentCard.EventChannel = eventChannel;
+
+            _backButton.OnClick += _authManager.Logout;
+
+            _panel = GetComponent<RectTransform>();
         }
 
-        if (_authManager.IsNewUser && roleType != UserRole.Therapist)
+        private void OnRoleSelected(UserRole roleType)
         {
-            _uiManager.HideLoading(LoadingEnum.Normal);
-
-            _uiManager.ShowPanel(PanelEnum.Disclaimer);
-
-            return;
+            OnRoleSelectedAsync(roleType).Forget();
         }
 
-        CancellationToken token = this.GetCancellationTokenOnDestroy();
-
-        ApiResult result = await _authManager.UserService.UpdateUserRole(
-            _authManager.CurrentUser.Id,
-            roleType,
-            token
-        );
-
-        _uiManager.HideLoading(LoadingEnum.Normal);
-
-        if (!result.Success)
+        private async UniTaskVoid OnRoleSelectedAsync(UserRole roleType)
         {
-            await _uiManager.ShowModal(
-                new ModalData()
-                {
-                    Title = "Error",
-                    Message = "There was an error updating your role. Please try again.",
-                    Panel = _panel,
-                }
-            );
-            return;
-        }
+            _uiManager.ShowLoading(LoadingEnum.Normal);
 
-        await _uiManager.ShowModal(
-            new ModalData()
+            if (_authManager.IsNewUser && roleType == UserRole.Therapist)
             {
-                Title = "Success",
-                Message = "Your role has been updated successfully.",
-                Panel = _panel,
-            }
-        );
+                _uiManager.HideLoading(LoadingEnum.Normal);
 
-        if (!_authManager.CurrentUser.ProfileComplete)
-        {
+                await _uiManager.ShowModal(
+                    new ModalData()
+                    {
+                        Title = "Therapist Account Creation",
+                        Message =
+                            "Therapist accounts must be created through the web portal. Please create an account on the web portal and log in to the app.",
+                        Panel = _panel,
+                    }
+                );
+
+                return;
+            }
+
+            if (_authManager.IsNewUser && roleType != UserRole.Therapist)
+            {
+                _uiManager.HideLoading(LoadingEnum.Normal);
+
+                _uiManager.ShowPanel(PanelEnum.Disclaimer);
+
+                return;
+            }
+
+            CancellationToken token = this.GetCancellationTokenOnDestroy();
+
+            ApiResult result = await _authManager.UserService.UpdateUserRole(
+                _authManager.CurrentUser.Id,
+                roleType,
+                token
+            );
+
+            _uiManager.HideLoading(LoadingEnum.Normal);
+
+            if (!result.Success)
+            {
+                await _uiManager.ShowModal(
+                    new ModalData()
+                    {
+                        Title = "Error",
+                        Message = "There was an error updating your role. Please try again.",
+                        Panel = _panel,
+                    }
+                );
+                return;
+            }
+
             await _uiManager.ShowModal(
                 new ModalData()
                 {
-                    Title = "Profile Incomplete",
-                    Message =
-                        "Your profile is incomplete. Please complete your profile in the web portal to access the app.",
+                    Title = "Success",
+                    Message = "Your role has been updated successfully.",
                     Panel = _panel,
                 }
             );
 
-            _authManager.Logout();
+            if (!_authManager.CurrentUser.ProfileComplete)
+            {
+                await _uiManager.ShowModal(
+                    new ModalData()
+                    {
+                        Title = "Profile Incomplete",
+                        Message =
+                            "Your profile is incomplete. Please complete your profile in the web portal to access the app.",
+                        Panel = _panel,
+                    }
+                );
 
-            return;
+                _authManager.Logout();
+
+                return;
+            }
+
+            _authManager.CurrentUser.Role = roleType;
+
+            _uiManager.ShowPanel(PanelEnum.Children);
         }
-
-        _authManager.CurrentUser.Role = roleType;
-
-        _uiManager.ShowPanel(PanelEnum.Children);
     }
 }

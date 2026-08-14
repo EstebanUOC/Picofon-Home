@@ -1,20 +1,25 @@
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
+using Picofon.Core.Auth.Services;
 
-public class LoginResponse
+namespace Picofon.Core.Auth.Models.Login
 {
-    [JsonInclude]
-    public bool Success { get; set; } = false;
+    using System.Collections.Generic;
+    using System.Text.Json.Serialization;
 
-    [JsonInclude]
-    public LoginData Data { get; set; }
+    public class LoginResponse
+    {
+        [JsonInclude]
+        public bool Success { get; set; } = false;
 
-    [JsonInclude]
-    public MessageData Message { get; set; }
-}
+        [JsonInclude]
+        public LoginData Data { get; set; }
 
-public class MessageData
-{
-    [JsonInclude]
-    public List<string> Content { get; set; }
+        [JsonInclude]
+        public MessageData Message { get; set; }
+    }
+
+    public class MessageData
+    {
+        [JsonInclude]
+        public List<string> Content { get; set; }
+    }
 }

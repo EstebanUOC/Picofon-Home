@@ -1,17 +1,20 @@
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
-
-public class UserRegisterChildResponse
+namespace Picofon.Core.Auth.DTOs.Responses
 {
-    [JsonInclude]
-    public bool Success { get; set; } = false;
+    using System.Collections.Generic;
+    using System.Text.Json.Serialization;
 
-    [JsonInclude]
-    public MessageContent Message { get; set; }
-
-    public class MessageContent
+    public class UserRegisterChildResponse
     {
         [JsonInclude]
-        public List<string> Content { get; set; }
+        public bool Success { get; set; } = false;
+
+        [JsonInclude]
+        public MessageContent Message { get; set; }
+
+        public class MessageContent
+        {
+            [JsonInclude]
+            public List<string> Content { get; set; }
+        }
     }
 }

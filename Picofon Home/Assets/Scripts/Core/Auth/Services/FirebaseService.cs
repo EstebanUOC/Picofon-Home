@@ -1,34 +1,39 @@
-using System.Threading;
-using Cysharp.Threading.Tasks;
-using Firebase;
-using UnityEngine;
+using Picofon.Core.Auth.Interfaces;
 
-public class FirebaseService : ILoadTaskSimple
+namespace Picofon.Core.Auth.Services
 {
-    public bool IsCritical => true;
+    using System.Threading;
+    using Cysharp.Threading.Tasks;
+    using Firebase;
+    using UnityEngine;
 
-    public async UniTask<bool> RunAsync(CancellationToken ct = default)
+    public class FirebaseService : ILoadTaskSimple
     {
-        var (isCancelled, dependencyStatus) = await FirebaseApp
-            .CheckAndFixDependenciesAsync()
-            .AsUniTask()
-            .AttachExternalCancellation(ct)
-            .SuppressCancellationThrow();
+        public bool IsCritical => true;
 
-        if (isCancelled)
+        public async UniTask<bool> RunAsync(CancellationToken ct = default)
         {
-            Debug.LogWarning("Firebase dependency check was cancelled.");
-            return false;
+            var (isCancelled, dependencyStatus) = await FirebaseApp
+                .CheckAndFixDependenciesAsync()
+                .AsUniTask()
+                .AttachExternalCancellation(ct)
+                .SuppressCancellationThrow();
+
+            if (isCancelled)
+            {
+                Debug.LogWarning("Firebase dependency check was cancelled.");
+                return false;
+            }
+
+            if (dependencyStatus != DependencyStatus.Available)
+            {
+                Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
+                return false;
+            }
+
+            Debug.Log("Firebase dependencies are available.");
+
+            return true;
         }
-
-        if (dependencyStatus != DependencyStatus.Available)
-        {
-            Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
-            return false;
-        }
-
-        Debug.Log("Firebase dependencies are available.");
-
-        return true;
     }
 }

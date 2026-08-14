@@ -1,83 +1,86 @@
-using UnityEngine;
-using UnityEngine.UI;
-
-public enum LevelType : byte
+namespace Picofon.Core.MapPath
 {
-    Syllable = 0,
-    Phoneme = 1,
-}
+    using UnityEngine;
+    using UnityEngine.UI;
 
-public enum LevelState : byte
-{
-    Locked = 0,
-    Unlocked = 1,
-    Completed = 2,
-}
-
-public class LevelItemView : MonoBehaviour
-{
-    [Space]
-    [SerializeField]
-    private Image _icon;
-
-    [SerializeField]
-    private Image _shadow;
-
-    [SerializeField]
-    private Image _content;
-
-    [Header("Overlays")]
-    [SerializeField]
-    private GameObject _locked;
-
-    [SerializeField]
-    private GameObject _completed;
-
-    public LevelConfig Config => _config;
-    public int Index => _index;
-
-    private LevelConfig _config;
-    private int _index = 0;
-
-    private readonly Color32 _syllableColor = new(255, 255, 255, 255);
-    private readonly Color32 _phonemeColor = new(206, 129, 225, 255);
-
-    public void Init(in LevelData data)
+    public enum LevelType : byte
     {
-        _index = data.Id;
-        _config = data.Config;
-
-        SetState(data.State);
-        SetBackgroundColor(data.Type);
-
-        _icon.sprite = data.Config.LevelIcon;
+        Syllable = 0,
+        Phoneme = 1,
     }
 
-    private void SetState(LevelState value)
+    public enum LevelState : byte
     {
-        switch (value)
+        Locked = 0,
+        Unlocked = 1,
+        Completed = 2,
+    }
+
+    public class LevelItemView : MonoBehaviour
+    {
+        [Space]
+        [SerializeField]
+        private Image _icon;
+
+        [SerializeField]
+        private Image _shadow;
+
+        [SerializeField]
+        private Image _content;
+
+        [Header("Overlays")]
+        [SerializeField]
+        private GameObject _locked;
+
+        [SerializeField]
+        private GameObject _completed;
+
+        public LevelConfig Config => _config;
+        public int Index => _index;
+
+        private LevelConfig _config;
+        private int _index = 0;
+
+        private readonly Color32 _syllableColor = new(255, 255, 255, 255);
+        private readonly Color32 _phonemeColor = new(206, 129, 225, 255);
+
+        public void Init(in LevelData data)
         {
-            case LevelState.Locked:
-                Instantiate(_locked, transform);
-                break;
-            case LevelState.Unlocked:
-                break;
-            case LevelState.Completed:
-                Instantiate(_completed, transform);
-                break;
+            _index = data.Id;
+            _config = data.Config;
+
+            SetState(data.State);
+            SetBackgroundColor(data.Type);
+
+            _icon.sprite = data.Config.LevelIcon;
         }
-    }
 
-    private void SetBackgroundColor(LevelType levelType)
-    {
-        Color32 newColor = levelType switch
+        private void SetState(LevelState value)
         {
-            LevelType.Syllable => _syllableColor,
-            LevelType.Phoneme => _phonemeColor,
-            _ => _syllableColor,
-        };
+            switch (value)
+            {
+                case LevelState.Locked:
+                    Instantiate(_locked, transform);
+                    break;
+                case LevelState.Unlocked:
+                    break;
+                case LevelState.Completed:
+                    Instantiate(_completed, transform);
+                    break;
+            }
+        }
 
-        _shadow.color = newColor;
-        _content.color = newColor;
+        private void SetBackgroundColor(LevelType levelType)
+        {
+            Color32 newColor = levelType switch
+            {
+                LevelType.Syllable => _syllableColor,
+                LevelType.Phoneme => _phonemeColor,
+                _ => _syllableColor,
+            };
+
+            _shadow.color = newColor;
+            _content.color = newColor;
+        }
     }
 }

@@ -1,43 +1,49 @@
-using Cysharp.Threading.Tasks;
-using TMPro;
-using UnityEngine;
+using Picofon.Core.Auth.Components;
+using Picofon.Utils;
 
-public class ContentMenu : MonoBehaviour
+namespace Picofon.Core.Auth.Modals
 {
-    [Space]
-    [SerializeField]
-    private TMP_Text _title;
+    using Cysharp.Threading.Tasks;
+    using TMPro;
+    using UnityEngine;
 
-    [SerializeField]
-    private TMP_Text _message;
-
-    [SerializeField]
-    private CustomButton _button;
-
-    public GenericEventChannel EventChannel;
-
-    public ReusableCompletionSource<bool> TaskCompletion;
-
-    public void Awake()
+    public class ContentMenu : MonoBehaviour
     {
-        _button.OnClick += HandleClick;
-    }
+        [Space]
+        [SerializeField]
+        private TMP_Text _title;
 
-    public async UniTask<bool> Show(ModalData data)
-    {
-        gameObject.SetActive(true);
+        [SerializeField]
+        private TMP_Text _message;
 
-        TaskCompletion.Reset();
+        [SerializeField]
+        private CustomButton _button;
 
-        _title.text = data.Title;
-        _message.text = data.Message;
+        public GenericEventChannel EventChannel;
 
-        return await TaskCompletion.Task;
-    }
+        public ReusableCompletionSource<bool> TaskCompletion;
 
-    private void HandleClick()
-    {
-        TaskCompletion.TrySetResult(true);
-        EventChannel.Raise();
+        public void Awake()
+        {
+            _button.OnClick += HandleClick;
+        }
+
+        public async UniTask<bool> Show(ModalData data)
+        {
+            gameObject.SetActive(true);
+
+            TaskCompletion.Reset();
+
+            _title.text = data.Title;
+            _message.text = data.Message;
+
+            return await TaskCompletion.Task;
+        }
+
+        private void HandleClick()
+        {
+            TaskCompletion.TrySetResult(true);
+            EventChannel.Raise();
+        }
     }
 }

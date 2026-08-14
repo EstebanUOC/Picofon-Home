@@ -1,27 +1,30 @@
-using TMPro;
-using UnityEngine;
-
-public class CustomToggleInput : MonoBehaviour
+namespace Picofon.Core.Auth.Components
 {
-    [SerializeField]
-    private CustomToggle _toggle;
+    using TMPro;
+    using UnityEngine;
 
-    [SerializeField]
-    private GameObject _background;
-
-    [SerializeField]
-    private TMP_InputField _input;
-
-    public void Awake()
+    public class CustomToggleInput : MonoBehaviour
     {
-        _toggle.OnToggle += Toggle;
-        _background.SetActive(false);
-        _input.interactable = false;
-    }
+        [SerializeField]
+        private CustomToggle _toggle;
 
-    private void Toggle(bool isOn)
-    {
-        _background.SetActive(isOn);
-        _input.interactable = isOn;
+        [SerializeField]
+        private GameObject _background;
+
+        [SerializeField]
+        private TMP_InputField _input;
+
+        public void Awake()
+        {
+            _toggle.OnToggle += Toggle;
+            _background.SetActive(false);
+            _input.interactable = false;
+        }
+
+        private void Toggle(bool isOn)
+        {
+            _background.SetActive(isOn);
+            _input.interactable = isOn;
+        }
     }
 }

@@ -1,70 +1,76 @@
-using System.Collections;
-using UnityEngine;
-using UnityEngine.UI;
+using Picofon.Core.Auth;
+using Picofon.Core.Auth.Events;
 
-public class ToggleGroupField : FormInput
+namespace Picofon.Core.Auth.Inputs
 {
-    [Space(15)]
-    public ToggleGroup ToggleGroup;
+    using System.Collections;
+    using UnityEngine;
+    using UnityEngine.UI;
 
-    [Space(15)]
-    public Toggle OtherToggle;
-    public FormInput OtherInput;
-
-    private readonly InputChangedEventChannel _inputChangedEventChannel = new();
-
-    public void Start()
+    public class ToggleGroupField : FormInput
     {
-        OtherInput.gameObject.SetActive(false);
-        OtherInput.SetInputChangedEventChannel(_inputChangedEventChannel);
+        [Space(15)]
+        public ToggleGroup ToggleGroup;
 
-        foreach (Toggle toggle in ToggleGroup.GetComponentsInChildren<Toggle>())
+        [Space(15)]
+        public Toggle OtherToggle;
+        public FormInput OtherInput;
+
+        private readonly InputChangedEventChannel _inputChangedEventChannel = new();
+
+        public void Start()
         {
-            toggle.onValueChanged.AddListener(OnToggleChanged);
+            OtherInput.gameObject.SetActive(false);
+            OtherInput.SetInputChangedEventChannel(_inputChangedEventChannel);
+
+            foreach (Toggle toggle in ToggleGroup.GetComponentsInChildren<Toggle>())
+            {
+                toggle.onValueChanged.AddListener(OnToggleChanged);
+            }
+
+            OtherToggle.onValueChanged.AddListener(OnOtherToggleChanged);
         }
 
-        OtherToggle.onValueChanged.AddListener(OnOtherToggleChanged);
-    }
-
-    public override string GetData()
-    {
-        if (OtherToggle.isOn)
-            return OtherInput.GetData();
-
-        IEnumerable toggles = ToggleGroup.ActiveToggles();
-
-        string disorder = string.Empty;
-        foreach (Toggle toggle in toggles)
+        public override string GetData()
         {
-            disorder = toggle.name;
+            if (OtherToggle.isOn)
+                return OtherInput.GetData();
+
+            IEnumerable toggles = ToggleGroup.ActiveToggles();
+
+            string disorder = string.Empty;
+            foreach (Toggle toggle in toggles)
+            {
+                disorder = toggle.name;
+            }
+
+            return disorder;
         }
 
-        return disorder;
-    }
-
-    private void OnOtherToggleChanged(bool isOn)
-    {
-        OtherInput.gameObject.SetActive(isOn);
-
-        if (isOn)
+        private void OnOtherToggleChanged(bool isOn)
         {
-            _inputChangedEventChannel.OnInputChanged += HandleOtherInputValidated;
-            Valid = OtherInput.Valid;
+            OtherInput.gameObject.SetActive(isOn);
+
+            if (isOn)
+            {
+                _inputChangedEventChannel.OnInputChanged += HandleOtherInputValidated;
+                Valid = OtherInput.Valid;
+            }
+            else
+            {
+                _inputChangedEventChannel.OnInputChanged -= HandleOtherInputValidated;
+                Valid = false;
+            }
         }
-        else
+
+        private void HandleOtherInputValidated(bool isValid)
         {
-            _inputChangedEventChannel.OnInputChanged -= HandleOtherInputValidated;
-            Valid = false;
+            Valid = isValid;
         }
-    }
 
-    private void HandleOtherInputValidated(bool isValid)
-    {
-        Valid = isValid;
-    }
-
-    private void OnToggleChanged(bool value)
-    {
-        Valid = value;
+        private void OnToggleChanged(bool value)
+        {
+            Valid = value;
+        }
     }
 }

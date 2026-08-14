@@ -1,0 +1,17 @@
+{
+    "name": "Picofon.UI",
+    "rootNamespace": "Picofon.UI",
+    "references": [
+        "Picofon.Components",
+        "Picofon.Utils"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

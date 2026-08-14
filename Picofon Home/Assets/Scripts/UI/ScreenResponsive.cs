@@ -1,32 +1,36 @@
-using UnityEngine;
-
-public class ScreenResponsive : MonoBehaviour
+namespace Picofon.UI
 {
-    RectTransform panel;
-    Rect lastSafeArea = new(0, 0, 0, 0);
+    using Picofon.Utils;
+    using UnityEngine;
 
-    void Awake()
+    public class ScreenResponsive : MonoBehaviour
     {
-        Application.targetFrameRate = 60;
-        panel = GetComponent<RectTransform>();
-        ApplySafeArea();
-    }
+        RectTransform panel;
+        Rect lastSafeArea = new(0, 0, 0, 0);
 
-    void ApplySafeArea()
-    {
-        Rect safeArea = Screen.safeArea;
-        PerformanceLog.Log("Safe Area: " + safeArea);
-        lastSafeArea = safeArea;
+        void Awake()
+        {
+            Application.targetFrameRate = 60;
+            panel = GetComponent<RectTransform>();
+            ApplySafeArea();
+        }
 
-        Vector2 anchorMin = safeArea.position;
-        Vector2 anchorMax = safeArea.position + safeArea.size;
+        void ApplySafeArea()
+        {
+            Rect safeArea = Screen.safeArea;
+            PerformanceLog.Log("Safe Area: " + safeArea);
+            lastSafeArea = safeArea;
 
-        anchorMin.x /= Screen.width;
-        anchorMin.y /= Screen.height;
-        anchorMax.x /= Screen.width;
-        anchorMax.y /= Screen.height;
+            Vector2 anchorMin = safeArea.position;
+            Vector2 anchorMax = safeArea.position + safeArea.size;
 
-        panel.anchorMin = anchorMin;
-        panel.anchorMax = anchorMax;
+            anchorMin.x /= Screen.width;
+            anchorMin.y /= Screen.height;
+            anchorMax.x /= Screen.width;
+            anchorMax.y /= Screen.height;
+
+            panel.anchorMin = anchorMin;
+            panel.anchorMax = anchorMax;
+        }
     }
 }

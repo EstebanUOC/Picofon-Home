@@ -1,25 +1,30 @@
-using PrimeTween;
-using UnityEngine;
-using UnityEngine.EventSystems;
+using Picofon.Utils;
 
-public class RoleCard : MonoBehaviour, IPointerClickHandler
+namespace Picofon.Core.Auth
 {
-    [SerializeField]
-    private UserRole roleType;
+    using PrimeTween;
+    using UnityEngine;
+    using UnityEngine.EventSystems;
 
-    public GenericEventChannel<UserRole> EventChannel;
-
-    public void OnPointerClick(PointerEventData eventData)
+    public class RoleCard : MonoBehaviour, IPointerClickHandler
     {
-        AnimateClick();
-        EventChannel.Raise(roleType);
-    }
+        [SerializeField]
+        private UserRole roleType;
 
-    private void AnimateClick()
-    {
-        Tween scaleIn = Tween.Scale(transform, 0.9f, 0.1f, Ease.OutQuad);
-        Tween scaleOut = Tween.Scale(transform, 1f, 0.1f, Ease.OutQuad);
+        public GenericEventChannel<UserRole> EventChannel;
 
-        Sequence.Create().Group(scaleIn).Chain(scaleOut);
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            AnimateClick();
+            EventChannel.Raise(roleType);
+        }
+
+        private void AnimateClick()
+        {
+            Tween scaleIn = Tween.Scale(transform, 0.9f, 0.1f, Ease.OutQuad);
+            Tween scaleOut = Tween.Scale(transform, 1f, 0.1f, Ease.OutQuad);
+
+            Sequence.Create().Group(scaleIn).Chain(scaleOut);
+        }
     }
 }

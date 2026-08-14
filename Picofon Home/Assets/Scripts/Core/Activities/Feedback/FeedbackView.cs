@@ -1,40 +1,43 @@
-using System;
-using UnityEngine;
-using UnityEngine.UI;
-
-public enum FeedbackType
+namespace Picofon.Activities.Feedback
 {
-    Positive,
-    Neutral,
-}
+    using System;
+    using UnityEngine;
+    using UnityEngine.UI;
 
-public class FeedbackView : MonoBehaviour
-{
-    [Space]
-    public GameObject FeedbackPositive;
-    public GameObject FeedbackNeutral;
-
-    public event Action OnContinueClicked;
-
-    public void Start()
+    public enum FeedbackType
     {
-        Button positiveButton = FeedbackPositive.GetComponentInChildren<Button>();
-        Button neutralButton = FeedbackNeutral.GetComponentInChildren<Button>();
-
-        positiveButton.onClick.AddListener(HandleContinueClicked);
-        neutralButton.onClick.AddListener(HandleContinueClicked);
+        Positive,
+        Neutral,
     }
 
-    public void DisplayFeedbackType(FeedbackType feedbackType)
+    public class FeedbackView : MonoBehaviour
     {
-        bool isPositive = feedbackType == FeedbackType.Positive;
+        [Space]
+        public GameObject FeedbackPositive;
+        public GameObject FeedbackNeutral;
 
-        FeedbackPositive.SetActive(isPositive);
-        FeedbackNeutral.SetActive(!isPositive);
-    }
+        public event Action OnContinueClicked;
 
-    private void HandleContinueClicked()
-    {
-        OnContinueClicked?.Invoke();
+        public void Start()
+        {
+            Button positiveButton = FeedbackPositive.GetComponentInChildren<Button>();
+            Button neutralButton = FeedbackNeutral.GetComponentInChildren<Button>();
+
+            positiveButton.onClick.AddListener(HandleContinueClicked);
+            neutralButton.onClick.AddListener(HandleContinueClicked);
+        }
+
+        public void DisplayFeedbackType(FeedbackType feedbackType)
+        {
+            bool isPositive = feedbackType == FeedbackType.Positive;
+
+            FeedbackPositive.SetActive(isPositive);
+            FeedbackNeutral.SetActive(!isPositive);
+        }
+
+        private void HandleContinueClicked()
+        {
+            OnContinueClicked?.Invoke();
+        }
     }
 }

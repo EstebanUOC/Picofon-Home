@@ -1,8 +1,11 @@
-using UnityEngine;
-
-[CreateAssetMenu(fileName = "LevelConfig", menuName = "ScriptableObjects/LevelConfig")]
-public class LevelConfig : ScriptableObject
+namespace Picofon.Core.MapPath
 {
-    public Sprite LevelIcon;
-    public string SceneName;
+    using UnityEngine;
+
+    [CreateAssetMenu(fileName = "LevelConfig", menuName = "ScriptableObjects/LevelConfig")]
+    public class LevelConfig : ScriptableObject
+    {
+        public Sprite LevelIcon;
+        public string SceneName;
+    }
 }

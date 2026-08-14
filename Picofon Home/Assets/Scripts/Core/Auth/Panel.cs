@@ -1,19 +1,22 @@
-using System;
-using UnityEngine;
-
-public class Panel : MonoBehaviour
+namespace Picofon.Core.Auth
 {
-    public Action OnShow;
-    public Action OnHide;
+    using System;
+    using UnityEngine;
 
-    public virtual void Show()
+    public class Panel : MonoBehaviour
     {
-        gameObject.SetActive(true);
-        OnShow?.Invoke();
-    }
+        public Action OnShow;
+        public Action OnHide;
 
-    public virtual void Hide()
-    {
-        OnHide?.Invoke();
+        public virtual void Show()
+        {
+            gameObject.SetActive(true);
+            OnShow?.Invoke();
+        }
+
+        public virtual void Hide()
+        {
+            OnHide?.Invoke();
+        }
     }
 }
