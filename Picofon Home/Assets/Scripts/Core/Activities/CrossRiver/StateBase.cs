@@ -1,4 +1,7 @@
-interface IStateBase
+namespace Picofon.Activities.CrossRiver
 {
-    protected void OnUpdate();
+    interface IStateBase
+    {
+        protected void OnUpdate();
+    }
 }

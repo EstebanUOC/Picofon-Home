@@ -1,13 +1,18 @@
-using System;
-using UnityEngine;
+using Picofon.Core.MapPath;
 
-[CreateAssetMenu(menuName = "Events/Level Select Event Channel")]
-public class LevelSelectEventChannel : ScriptableObject
+namespace Picofon.Core.MapPath.Events
 {
-    public Action<LevelConfig, int> OnEventRaised;
+    using System;
+    using UnityEngine;
 
-    public void Raise(LevelConfig config, int index)
+    [CreateAssetMenu(menuName = "Events/Level Select Event Channel")]
+    public class LevelSelectEventChannel : ScriptableObject
     {
-        OnEventRaised?.Invoke(config, index);
+        public Action<LevelConfig, int> OnEventRaised;
+
+        public void Raise(LevelConfig config, int index)
+        {
+            OnEventRaised?.Invoke(config, index);
+        }
     }
 }

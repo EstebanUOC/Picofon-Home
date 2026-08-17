@@ -1,22 +1,28 @@
-using UnityEngine;
+using Picofon.Components;
+using Picofon.Utils;
 
-public class MapUIManager : MonoBehaviour
+namespace Picofon.Core.MapPath
 {
-    [SerializeField]
-    private TransitionData _transition;
+    using UnityEngine;
 
-    [SerializeField]
-    private SimpleButton _exitButton;
-
-    public void Start()
+    public class MapUIManager : MonoBehaviour
     {
-        SceneOrientationHelper.LockToLandscape();
+        [SerializeField]
+        private TransitionData _transition;
 
-        _exitButton.OnClick += HandleExitButtonClicked;
-    }
+        [SerializeField]
+        private SimpleButton _exitButton;
 
-    private void HandleExitButtonClicked()
-    {
-        _transition.LoadSourceScene();
+        public void Start()
+        {
+            SceneOrientationHelper.LockToLandscape();
+
+            _exitButton.OnClick += HandleExitButtonClicked;
+        }
+
+        private void HandleExitButtonClicked()
+        {
+            _transition.LoadSourceScene();
+        }
     }
 }

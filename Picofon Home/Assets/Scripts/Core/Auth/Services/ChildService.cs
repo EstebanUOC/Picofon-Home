@@ -1,83 +1,91 @@
-using System.Text.Json;
-using System.Threading;
-using Cysharp.Threading.Tasks;
+using Picofon.Core.Auth;
+using Picofon.Core.Auth.DTOs;
 using Picofon.Core.Network;
+using Picofon.Utils;
 
-public readonly struct ChildService
+namespace Picofon.Core.Auth.Services
 {
-    public async UniTask<ApiResult<ChildDataDTO>> GetChild(
-        string childId,
-        CancellationToken token = default
-    )
+    using System.Text.Json;
+    using System.Threading;
+    using Cysharp.Threading.Tasks;
+
+    public readonly struct ChildService
     {
-        string url = $"{ApiConfig.BaseUrl}/children/{childId}";
-
-        byte[] rawResponse;
-
-        try
+        public async UniTask<ApiResult<ChildDataDTO>> GetChild(
+            string childId,
+            CancellationToken token = default
+        )
         {
-            rawResponse = await HttpClientUnity.GetAsyncBytes(
-                url: url,
-                timeoutSeconds: 5,
-                cancellationToken: token
-            );
-        }
-        catch (System.Exception)
-        {
-            return ApiResult<ChildDataDTO>.Fail(
-                "Network error occurred while fetching activities."
-            );
-        }
+            string url = $"{ApiConfig.BaseUrl}/children/{childId}";
 
-        using JsonDocument doc = JsonDocument.Parse(rawResponse);
-        JsonElement root = doc.RootElement;
+            byte[] rawResponse;
 
-        ApiResponseView<ChildDataDTO> responseView = new(root);
+            try
+            {
+                rawResponse = await HttpClientUnity.GetAsyncBytes(
+                    url: url,
+                    timeoutSeconds: 5,
+                    cancellationToken: token
+                );
+            }
+            catch (System.Exception)
+            {
+                return ApiResult<ChildDataDTO>.Fail(
+                    "Network error occurred while fetching activities."
+                );
+            }
 
-        if (!responseView.Success)
-        {
-            return ApiResult<ChildDataDTO>.Fail(responseView.ErrorMessage);
-        }
+            using JsonDocument doc = JsonDocument.Parse(rawResponse);
+            JsonElement root = doc.RootElement;
 
-        return ApiResult<ChildDataDTO>.Ok(responseView.Data);
-    }
+            ApiResponseView<ChildDataDTO> responseView = new(root);
 
-    public async UniTask<ApiResult> UpdateChild(
-        string childId,
-        CreateChildDTO updateData,
-        CancellationToken token = default
-    )
-    {
-        string url = $"{ApiConfig.BaseUrl}/children/{childId}";
+            if (!responseView.Success)
+            {
+                return ApiResult<ChildDataDTO>.Fail(responseView.ErrorMessage);
+            }
 
-        byte[] rawResponse;
-
-        byte[] jsonRequest = JsonHelper.ToBytes(updateData);
-
-        try
-        {
-            rawResponse = await HttpClientUnity.PatchAsyncBytes(
-                url: url,
-                data: jsonRequest,
-                timeoutSeconds: 5,
-                cancellationToken: token
-            );
-        }
-        catch (System.Exception)
-        {
-            return ApiResult.Fail("Network error occurred while fetching activities.");
+            return ApiResult<ChildDataDTO>.Ok(responseView.Data);
         }
 
-        using JsonDocument doc = JsonDocument.Parse(rawResponse);
-        JsonElement root = doc.RootElement;
-
-        ApiResponseView responseView = new(root);
-
-        if (!responseView.Success)
+        public async UniTask<ApiResult> UpdateChild(
+            string childId,
+            CreateChildDTO updateData,
+            CancellationToken token = default
+        )
         {
-            return ApiResult.Fail(responseView.ErrorMessage);
-        }
+            string url = $"{ApiConfig.BaseUrl}/children/{childId}";
 
-        return ApiResult.Ok();
+            byte[] rawResponse;
+
+            byte[] jsonRequest = JsonHelper.ToBytes(updateData);
+
+            try
+            {
+                rawResponse = await HttpClientUnity.PatchAsyncBytes(
+                    url: url,
+                    data: jsonRequest,
+                    timeoutSeconds: 5,
+                    cancellationToken: token
+                );
+            }
+            catch (System.Exception)
+            {
+                return ApiResult.Fail("Network error occurred while fetching activities.");
+            }
+
+            using JsonDocument doc = JsonDocument.Parse(rawResponse);
+
+            JsonElement root = doc.RootElement;
+
+            ApiResponseView responseView = new(root);
+
+            if (!responseView.Success)
+            {
+                return ApiResult.Fail(responseView.ErrorMessage);
+            }
+
+            return ApiResult.Ok();
+        }
     }
 }

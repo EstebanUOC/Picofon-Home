@@ -1,20 +1,23 @@
-using System;
-using UnityEngine;
-
-public class FloatSelectable : MonoBehaviour
+namespace Picofon.Activities.CrossRiver
 {
-    [SerializeField]
-    private bool _interactable = true;
+    using System;
+    using UnityEngine;
 
-    public event Action OnClick;
-
-    public bool Interactable
+    public class FloatSelectable : MonoBehaviour
     {
-        get => _interactable;
-    }
+        [SerializeField]
+        private bool _interactable = true;
 
-    public void OnMouseDown()
-    {
-        OnClick?.Invoke();
+        public event Action OnClick;
+
+        public bool Interactable
+        {
+            get => _interactable;
+        }
+
+        public void OnMouseDown()
+        {
+            OnClick?.Invoke();
+        }
     }
 }

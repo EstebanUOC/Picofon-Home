@@ -1,82 +1,91 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
+using Picofon.Activities.Basket;
 
-public class CrossRiverUIManager : MonoBehaviour
+namespace Picofon.Activities.CrossRiver
 {
-    #region References
+    using UnityEngine;
+    using UnityEngine.SceneManagement;
 
-    [SerializeField]
-    private GameMenu _gameMenu;
-
-    [SerializeField]
-    private FrameManager _frameManager;
-
-    #endregion
-
-    // Variables
-
-    private AudioClip _introAudio;
-
-    private AudioClip[] _wordClips;
-
-    private bool _labelsVisible;
-
-    public void Awake()
+    public class CrossRiverUIManager : MonoBehaviour
     {
-        _gameMenu.OnMenuOptionSelected += HandleMenuOptionSelected;
-        _frameManager.OnFrameClicked += HandleFrameClicked;
-    }
+        #region References
 
-    public void SetIntroAudio(AudioClip clip)
-    {
-        _introAudio = clip;
-    }
+        [SerializeField]
+        private GameMenu _gameMenu;
 
-    public void SetWordClips(AudioClip[] clips)
-    {
-        _wordClips = clips;
-    }
+        [SerializeField]
+        private FrameManager _frameManager;
 
-    private void HandleFrameClicked(int wordIndex)
-    {
-        if (_wordClips == null || wordIndex >= _wordClips.Length || _wordClips[wordIndex] == null)
-            return;
+        #endregion
 
-        AudioManager.Instance.StopUI();
-        AudioManager.Instance.PlayUI(_wordClips[wordIndex], 1.5f);
-    }
+        // Variables
 
-    private void HandleMenuOptionSelected(GameMenuEvent menuEvent)
-    {
-        switch (menuEvent)
+        private AudioClip _introAudio;
+
+        private AudioClip[] _wordClips;
+
+        private bool _labelsVisible;
+
+        public void Awake()
         {
-            case GameMenuEvent.Clue:
-                ToggleClue();
-                break;
-
-            case GameMenuEvent.Exit:
-                BackToMap();
-                break;
-
-            case GameMenuEvent.Replay:
-                AudioManager.Instance.PlayVoice(_introAudio);
-                break;
+            _gameMenu.OnMenuOptionSelected += HandleMenuOptionSelected;
+            _frameManager.OnFrameClicked += HandleFrameClicked;
         }
-    }
 
-    private void ToggleClue()
-    {
-        _labelsVisible = !_labelsVisible;
+        public void SetIntroAudio(AudioClip clip)
+        {
+            _introAudio = clip;
+        }
 
-        if (_labelsVisible)
-            _frameManager.ShowLabels();
-        else
-            _frameManager.HideLabels();
-    }
+        public void SetWordClips(AudioClip[] clips)
+        {
+            _wordClips = clips;
+        }
 
-    private void BackToMap()
-    {
-        SceneManager.LoadScene("MapPathScene");
-        AudioManager.Instance.StopVoice();
+        private void HandleFrameClicked(int wordIndex)
+        {
+            if (
+                _wordClips == null
+                || wordIndex >= _wordClips.Length
+                || _wordClips[wordIndex] == null
+            )
+                return;
+
+            AudioManager.Instance.StopUI();
+            AudioManager.Instance.PlayUI(_wordClips[wordIndex], 1.5f);
+        }
+
+        private void HandleMenuOptionSelected(GameMenuEvent menuEvent)
+        {
+            switch (menuEvent)
+            {
+                case GameMenuEvent.Clue:
+                    ToggleClue();
+                    break;
+
+                case GameMenuEvent.Exit:
+                    BackToMap();
+                    break;
+
+                case GameMenuEvent.Replay:
+                    AudioManager.Instance.PlayVoice(_introAudio);
+                    break;
+            }
+        }
+
+        private void ToggleClue()
+        {
+            _labelsVisible = !_labelsVisible;
+
+            if (_labelsVisible)
+                _frameManager.ShowLabels();
+            else
+                _frameManager.HideLabels();
+        }
+
+        private void BackToMap()
+        {
+            SceneManager.LoadScene("MapPathScene");
+            AudioManager.Instance.StopVoice();
+        }
     }
 }

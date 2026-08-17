@@ -1,41 +1,48 @@
-using UnityEngine;
+using Picofon.Core.Auth;
+using Picofon.Core.Auth.Components;
+using Picofon.Utils;
 
-public enum DebugMenuResult : byte
+namespace Picofon.Core.Auth.Modals
 {
-    Map,
-    Children,
-}
+    using UnityEngine;
 
-public class DebugMenu : MonoBehaviour
-{
-    [SerializeField]
-    private AuthManager _authManager;
-
-    [Space]
-    [SerializeField]
-    private CustomButton _mapButton;
-
-    [SerializeField]
-    private CustomButton _childrenButton;
-
-    public GenericEventChannel EventChannel;
-
-    public void Awake()
+    public enum DebugMenuResult : byte
     {
-        _mapButton.OnClick += () => HandleClose(DebugMenuResult.Map);
-
-        _childrenButton.OnClick += () => HandleClose(DebugMenuResult.Children);
+        Map,
+        Children,
     }
 
-    public void Show()
+    public class DebugMenu : MonoBehaviour
     {
-        gameObject.SetActive(true);
-    }
+        [SerializeField]
+        private AuthManager _authManager;
 
-    private void HandleClose(DebugMenuResult result)
-    {
-        EventChannel.Raise();
+        [Space]
+        [SerializeField]
+        private CustomButton _mapButton;
 
-        _authManager.HandleDebugMenu(result);
+        [SerializeField]
+        private CustomButton _childrenButton;
+
+        public GenericEventChannel EventChannel;
+
+        public void Awake()
+        {
+            _mapButton.OnClick += () => HandleClose(DebugMenuResult.Map);
+
+            _childrenButton.OnClick += () => HandleClose(DebugMenuResult.Children);
+        }
+
+        public void Show()
+        {
+            gameObject.SetActive(true);
+        }
+
+        private void HandleClose(DebugMenuResult result)
+        {
+            EventChannel.Raise();
+
+            _authManager.HandleDebugMenu(result);
+        }
     }
 }

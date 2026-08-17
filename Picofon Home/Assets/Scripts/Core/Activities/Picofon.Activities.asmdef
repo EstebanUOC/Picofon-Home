@@ -1,0 +1,24 @@
+{
+    "name": "Picofon.Activities",
+    "rootNamespace": "Picofon.Activities",
+    "references": [
+        "Picofon.Utils",
+        "Picofon.Components",
+        "Picofon.Core",
+        "UniTask",
+        "PrimeTween.Runtime",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI",
+        "Unity.Addressables",
+        "Unity.ResourceManager"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

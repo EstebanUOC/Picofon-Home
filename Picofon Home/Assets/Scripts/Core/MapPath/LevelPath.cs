@@ -1,105 +1,108 @@
-using System;
-using Dreamteck.Splines;
-using UnityEngine;
-using UnityEngine.UI;
-
-public class LevelPath : MonoBehaviour
+namespace Picofon.Core.MapPath
 {
-    [SerializeField]
-    private GameObject _scroll;
+    using System;
+    using Dreamteck.Splines;
+    using UnityEngine;
+    using UnityEngine.UI;
 
-    [SerializeField]
-    private GameObject _content;
-
-    private float _offset;
-
-    private const int CountPerPoint = 5;
-
-    public void Awake()
+    public class LevelPath : MonoBehaviour
     {
-        ScrollRect scrollRect = _scroll.GetComponent<ScrollRect>();
-        scrollRect.onValueChanged.AddListener(OnScroll);
+        [SerializeField]
+        private GameObject _scroll;
 
-        _offset = _content.transform.position.x * -1;
-    }
+        [SerializeField]
+        private GameObject _content;
 
-    public void ChangePath(Span<Vector2> points)
-    {
-        SplineComputer spline = GetComponent<SplineComputer>();
+        private float _offset;
 
-        if (spline.pointCount > points.Length)
+        private const int CountPerPoint = 5;
+
+        public void Awake()
         {
-            Resize(spline: spline, points: points);
-            return;
+            ScrollRect scrollRect = _scroll.GetComponent<ScrollRect>();
+            scrollRect.onValueChanged.AddListener(OnScroll);
+
+            _offset = _content.transform.position.x * -1;
         }
 
-        AddRange(spline, points);
-    }
-
-    private void Resize(SplineComputer spline, Span<Vector2> points)
-    {
-        int length = points.Length;
-
-        SplinePoint[] oldPoints = spline.GetPoints();
-        SplinePoint[] newPoints = new SplinePoint[length];
-
-        ObjectController objectController = GetComponent<ObjectController>();
-
-        objectController.spawnCount = length * CountPerPoint;
-
-        for (int i = 0; i < oldPoints.Length; i++)
+        public void ChangePath(Span<Vector2> points)
         {
-            if (i < length)
+            SplineComputer spline = GetComponent<SplineComputer>();
+
+            if (spline.pointCount > points.Length)
             {
-                newPoints[i] = oldPoints[i];
-            }
-        }
-
-        for (int i = 0; i < length; i++)
-        {
-            newPoints[i].position = points[i];
-        }
-
-        spline.SetPoints(newPoints);
-    }
-
-    private void AddRange(SplineComputer spline, Span<Vector2> points)
-    {
-        if (spline.pointCount == points.Length)
-            return;
-
-        int length = points.Length;
-
-        SplinePoint[] oldPoints = spline.GetPoints();
-        SplinePoint[] newPoints = new SplinePoint[points.Length];
-
-        ObjectController objectController = GetComponent<ObjectController>();
-
-        objectController.spawnCount = length * CountPerPoint;
-
-        for (int i = 0; i < length; i++)
-        {
-            if (i < spline.pointCount)
-            {
-                newPoints[i] = oldPoints[i];
-                continue;
+                Resize(spline: spline, points: points);
+                return;
             }
 
-            newPoints[i] = new SplinePoint(points[i]);
+            AddRange(spline, points);
         }
 
-        for (int i = 0; i < length; i++)
+        private void Resize(SplineComputer spline, Span<Vector2> points)
         {
-            newPoints[i].position = points[i];
+            int length = points.Length;
+
+            SplinePoint[] oldPoints = spline.GetPoints();
+            SplinePoint[] newPoints = new SplinePoint[length];
+
+            ObjectController objectController = GetComponent<ObjectController>();
+
+            objectController.spawnCount = length * CountPerPoint;
+
+            for (int i = 0; i < oldPoints.Length; i++)
+            {
+                if (i < length)
+                {
+                    newPoints[i] = oldPoints[i];
+                }
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+                newPoints[i].position = points[i];
+            }
+
+            spline.SetPoints(newPoints);
         }
 
-        spline.SetPoints(newPoints);
-    }
+        private void AddRange(SplineComputer spline, Span<Vector2> points)
+        {
+            if (spline.pointCount == points.Length)
+                return;
 
-    private void OnScroll(Vector2 value)
-    {
-        Vector2 algo = new(x: _content.transform.position.x + _offset, y: 0);
+            int length = points.Length;
 
-        transform.position = algo;
+            SplinePoint[] oldPoints = spline.GetPoints();
+            SplinePoint[] newPoints = new SplinePoint[points.Length];
+
+            ObjectController objectController = GetComponent<ObjectController>();
+
+            objectController.spawnCount = length * CountPerPoint;
+
+            for (int i = 0; i < length; i++)
+            {
+                if (i < spline.pointCount)
+                {
+                    newPoints[i] = oldPoints[i];
+                    continue;
+                }
+
+                newPoints[i] = new SplinePoint(points[i]);
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+                newPoints[i].position = points[i];
+            }
+
+            spline.SetPoints(newPoints);
+        }
+
+        private void OnScroll(Vector2 value)
+        {
+            Vector2 algo = new(x: _content.transform.position.x + _offset, y: 0);
+
+            transform.position = algo;
+        }
     }
 }

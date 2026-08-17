@@ -1,13 +1,16 @@
-public struct LoginFirebaseRequest
+namespace Picofon.Core.Auth.Models.Login
 {
-    public string FirebaseIdToken { get; set; }
-}
+    public struct LoginFirebaseRequest
+    {
+        public string FirebaseIdToken { get; set; }
+    }
 
-public readonly struct FirebaseRequest
-{
-    public readonly bool ReturnSecureToken { get; init; }
+    public readonly struct FirebaseRequest
+    {
+        public readonly bool ReturnSecureToken { get; init; }
 
-    public readonly string Email { get; init; }
+        public readonly string Email { get; init; }
 
-    public readonly string Password { get; init; }
+        public readonly string Password { get; init; }
+    }
 }

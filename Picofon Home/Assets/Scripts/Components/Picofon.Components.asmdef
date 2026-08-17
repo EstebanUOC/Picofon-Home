@@ -1,0 +1,17 @@
+{
+    "name": "Picofon.Components",
+    "rootNamespace": "Picofon.Components",
+    "references": [
+        "PrimeTween.Runtime",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

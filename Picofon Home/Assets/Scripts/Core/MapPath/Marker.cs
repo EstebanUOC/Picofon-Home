@@ -1,39 +1,42 @@
-using PrimeTween;
-using UnityEngine;
-
-public class Marker : MonoBehaviour
+namespace Picofon.Core.MapPath
 {
-    private readonly Vector2 offset = new(0f, 240f);
+    using PrimeTween;
+    using UnityEngine;
 
-    private RectTransform _rectTransform;
-
-    public void Awake()
+    public class Marker : MonoBehaviour
     {
-        const float moveAmount = 30f;
+        private readonly Vector2 offset = new(0f, 240f);
 
-        Transform content = transform.GetChild(0);
+        private RectTransform _rectTransform;
 
-        Tween.LocalPositionY(
-            content,
-            moveAmount,
-            0.8f,
-            cycles: -1,
-            cycleMode: CycleMode.Yoyo,
-            ease: Ease.InOutSine
-        );
+        public void Awake()
+        {
+            const float moveAmount = 30f;
 
-        _rectTransform = transform.GetComponent<RectTransform>();
-    }
+            Transform content = transform.GetChild(0);
 
-    public void PositionMarker(Vector2 position)
-    {
-        _rectTransform.anchoredPosition = position + offset;
-    }
+            Tween.LocalPositionY(
+                content,
+                moveAmount,
+                0.8f,
+                cycles: -1,
+                cycleMode: CycleMode.Yoyo,
+                ease: Ease.InOutSine
+            );
 
-    public void MoveMarker(Vector2 position, in Sequence sequence)
-    {
-        sequence.Chain(
-            Tween.UIAnchoredPosition(_rectTransform, position + offset, 1f, Ease.InOutBack)
-        );
+            _rectTransform = transform.GetComponent<RectTransform>();
+        }
+
+        public void PositionMarker(Vector2 position)
+        {
+            _rectTransform.anchoredPosition = position + offset;
+        }
+
+        public void MoveMarker(Vector2 position, in Sequence sequence)
+        {
+            sequence.Chain(
+                Tween.UIAnchoredPosition(_rectTransform, position + offset, 1f, Ease.InOutBack)
+            );
+        }
     }
 }

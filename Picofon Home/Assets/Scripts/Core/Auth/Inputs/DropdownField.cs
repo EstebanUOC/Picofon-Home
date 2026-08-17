@@ -1,19 +1,24 @@
-using TMPro;
-using UnityEngine;
+using Picofon.Core.Auth;
 
-public class DropdownField : FormInput
+namespace Picofon.Core.Auth.Inputs
 {
-    [Space]
-    public TMP_Dropdown Dropdown;
+    using TMPro;
+    using UnityEngine;
 
-    public void Start()
+    public class DropdownField : FormInput
     {
-        Valid = true;
-    }
+        [Space]
+        public TMP_Dropdown Dropdown;
 
-    public override string GetData()
-    {
-        int value = Dropdown.value + 1;
-        return value.ToString();
+        public void Start()
+        {
+            Valid = true;
+        }
+
+        public override string GetData()
+        {
+            int value = Dropdown.value + 1;
+            return value.ToString();
+        }
     }
 }

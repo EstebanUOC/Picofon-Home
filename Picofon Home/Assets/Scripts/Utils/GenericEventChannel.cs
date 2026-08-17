@@ -1,21 +1,24 @@
-using System;
-
-public class GenericEventChannel<T>
+namespace Picofon.Utils
 {
-    public event Action<T> OnRaised;
+    using System;
 
-    public void Raise(T item)
+    public class GenericEventChannel<T>
     {
-        OnRaised?.Invoke(item);
+        public event Action<T> OnRaised;
+
+        public void Raise(T item)
+        {
+            OnRaised?.Invoke(item);
+        }
     }
-}
 
-public class GenericEventChannel
-{
-    public event Action OnRaised;
-
-    public void Raise()
+    public class GenericEventChannel
     {
-        OnRaised?.Invoke();
+        public event Action OnRaised;
+
+        public void Raise()
+        {
+            OnRaised?.Invoke();
+        }
     }
 }

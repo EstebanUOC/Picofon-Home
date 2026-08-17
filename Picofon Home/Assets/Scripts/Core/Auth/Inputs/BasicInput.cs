@@ -1,57 +1,62 @@
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
+using Picofon.Core.Auth;
 
-public class BasicInput : FormInput
+namespace Picofon.Core.Auth.Inputs
 {
-    [Space(15)]
-    public TMP_InputField Input;
+    using TMPro;
+    using UnityEngine;
+    using UnityEngine.UI;
 
-    public int MinLength = 1;
-
-    protected ColorBlock _defaultColorBlock;
-    protected Color _colorImage;
-
-    public virtual void Start()
+    public class BasicInput : FormInput
     {
-        Input.onValueChanged.AddListener(OnInputChange);
-        _defaultColorBlock = Input.colors;
-        _colorImage = Input.image.color;
-    }
+        [Space(15)]
+        public TMP_InputField Input;
 
-    protected virtual void OnInputChange(string input)
-    {
-        ValidateInput(input);
-    }
+        public int MinLength = 1;
 
-    protected override void OnError()
-    {
-        _defaultColorBlock.selectedColor = _errorColor;
-        Input.colors = _defaultColorBlock;
-        Input.image.color = _errorColor;
-    }
+        protected ColorBlock _defaultColorBlock;
+        protected Color _colorImage;
 
-    protected override void OnValid()
-    {
-        _defaultColorBlock.selectedColor = _validColor;
-        Input.colors = _defaultColorBlock;
-        Input.image.color = _validColor;
-    }
+        public virtual void Start()
+        {
+            Input.onValueChanged.AddListener(OnInputChange);
+            _defaultColorBlock = Input.colors;
+            _colorImage = Input.image.color;
+        }
 
-    protected override void OnReset()
-    {
-        _defaultColorBlock.selectedColor = _defaultColor;
-        Input.colors = _defaultColorBlock;
-        Input.image.color = _colorImage;
-    }
+        protected virtual void OnInputChange(string input)
+        {
+            ValidateInput(input);
+        }
 
-    protected override void ValidateInput(string input)
-    {
-        Valid = input.Length >= MinLength;
-    }
+        protected override void OnError()
+        {
+            _defaultColorBlock.selectedColor = _errorColor;
+            Input.colors = _defaultColorBlock;
+            Input.image.color = _errorColor;
+        }
 
-    public override string GetData()
-    {
-        return Input.text;
+        protected override void OnValid()
+        {
+            _defaultColorBlock.selectedColor = _validColor;
+            Input.colors = _defaultColorBlock;
+            Input.image.color = _validColor;
+        }
+
+        protected override void OnReset()
+        {
+            _defaultColorBlock.selectedColor = _defaultColor;
+            Input.colors = _defaultColorBlock;
+            Input.image.color = _colorImage;
+        }
+
+        protected override void ValidateInput(string input)
+        {
+            Valid = input.Length >= MinLength;
+        }
+
+        public override string GetData()
+        {
+            return Input.text;
+        }
     }
 }

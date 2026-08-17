@@ -1,67 +1,74 @@
-using BasketResponses;
-using Cysharp.Threading.Tasks;
-using UnityEngine;
+using Picofon.Activities.Basket;
+using Picofon.Activities.Basket.DTOs.Responses;
+using Picofon.Core.MapPath;
+using Picofon.Utils;
 
-public class FeedbackController : MonoBehaviour
+namespace Picofon.Activities.Feedback
 {
-    [SerializeField]
-    private FeedbackView _feedbackView;
+    using Cysharp.Threading.Tasks;
+    using UnityEngine;
 
-    [SerializeField]
-    private ItemFeedbackManager _itemManager;
-
-    private ReusableCompletionSource<bool> _taskCompletion;
-
-    public void Awake()
+    public class FeedbackController : MonoBehaviour
     {
-        _taskCompletion = new ReusableCompletionSource<bool>();
+        [SerializeField]
+        private FeedbackView _feedbackView;
 
-        _feedbackView.OnContinueClicked += OnContinueButtonClicked;
-    }
+        [SerializeField]
+        private ItemFeedbackManager _itemManager;
 
-    public void OnDestroy()
-    {
-        _taskCompletion.TrySetCanceled();
-    }
+        private ReusableCompletionSource<bool> _taskCompletion;
 
-    public void Init(ActivitySkill skill)
-    {
-        gameObject.SetActive(true);
-        gameObject.SetActive(false);
-        _itemManager.Init(skill);
-    }
+        public void Awake()
+        {
+            _taskCompletion = new ReusableCompletionSource<bool>();
 
-    public async UniTask<bool> Show(FeedbackType feedbackType)
-    {
-        gameObject.SetActive(true);
-        _feedbackView.DisplayFeedbackType(feedbackType);
-        _itemManager.ConfigureItemsByType(feedbackType);
+            _feedbackView.OnContinueClicked += OnContinueButtonClicked;
+        }
 
-        _taskCompletion.Reset();
+        public void OnDestroy()
+        {
+            _taskCompletion.TrySetCanceled();
+        }
 
-        return await _taskCompletion.Task;
-    }
+        public void Init(ActivitySkill skill)
+        {
+            gameObject.SetActive(true);
+            gameObject.SetActive(false);
+            _itemManager.Init(skill);
+        }
 
-    public async UniTask<bool> ShowSL(FeedbackType feedbackType, int correctIndex)
-    {
-        gameObject.SetActive(true);
-        _feedbackView.DisplayFeedbackType(feedbackType);
-        _itemManager.ConfigureItemsByTypeSL(feedbackType, correctIndex);
+        public async UniTask<bool> Show(FeedbackType feedbackType)
+        {
+            gameObject.SetActive(true);
+            _feedbackView.DisplayFeedbackType(feedbackType);
+            _itemManager.ConfigureItemsByType(feedbackType);
 
-        _taskCompletion.Reset();
+            _taskCompletion.Reset();
 
-        return await _taskCompletion.Task;
-    }
+            return await _taskCompletion.Task;
+        }
 
-    public void SetItemsContent(in ViewContentDTO content, int length = 0)
-    {
-        _itemManager.SetItemsContent(in content, length);
-    }
+        public async UniTask<bool> ShowSL(FeedbackType feedbackType, int correctIndex)
+        {
+            gameObject.SetActive(true);
+            _feedbackView.DisplayFeedbackType(feedbackType);
+            _itemManager.ConfigureItemsByTypeSL(feedbackType, correctIndex);
 
-    private void OnContinueButtonClicked()
-    {
-        _taskCompletion.TrySetResult(true);
+            _taskCompletion.Reset();
 
-        gameObject.SetActive(false);
+            return await _taskCompletion.Task;
+        }
+
+        public void SetItemsContent(in ViewContentDTO content, int length = 0)
+        {
+            _itemManager.SetItemsContent(in content, length);
+        }
+
+        private void OnContinueButtonClicked()
+        {
+            _taskCompletion.TrySetResult(true);
+
+            gameObject.SetActive(false);
+        }
     }
 }

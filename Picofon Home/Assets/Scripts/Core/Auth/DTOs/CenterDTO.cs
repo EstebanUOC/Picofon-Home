@@ -1,8 +1,11 @@
-public readonly struct CenterDTO
+namespace Picofon.Core.Auth.DTOs
 {
-    public readonly int Id { get; init; }
+    public readonly struct CenterDTO
+    {
+        public readonly int Id { get; init; }
 
-    public readonly string Name { get; init; }
+        public readonly string Name { get; init; }
 
-    public readonly int CountryId { get; init; }
+        public readonly int CountryId { get; init; }
+    }
 }

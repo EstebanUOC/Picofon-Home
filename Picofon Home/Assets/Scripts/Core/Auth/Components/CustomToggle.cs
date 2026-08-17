@@ -1,121 +1,124 @@
-using System;
-using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
-
-public class CustomToggle : MonoBehaviour, IPointerClickHandler
+namespace Picofon.Core.Auth.Components
 {
-    # region References
+    using System;
+    using UnityEngine;
+    using UnityEngine.EventSystems;
+    using UnityEngine.UI;
 
-    [SerializeField]
-    private bool _isSelectedByDefault = false;
-
-    [SerializeField]
-    private int _index;
-
-    [SerializeField]
-    private Image _target;
-
-    [SerializeField]
-    private Sprite _selectedSprite;
-
-    [Space]
-    [SerializeField]
-    private Image _selectedBackground;
-
-    [SerializeField]
-    private CustomToggleGroup _group;
-
-    #endregion
-
-    // Properties
-
-    public bool IsSelected => _isSelected;
-    public int Index => _index;
-
-    // Events
-
-    public event Action<bool> OnToggle;
-
-    // Variables
-
-    private Color _defaultBackgroundColor;
-
-    private Sprite _defaultSprite;
-
-    private bool _isSelected = false;
-
-    public void Awake()
+    public class CustomToggle : MonoBehaviour, IPointerClickHandler
     {
-        if (_target is not null)
+        # region References
+
+        [SerializeField]
+        private bool _isSelectedByDefault = false;
+
+        [SerializeField]
+        private int _index;
+
+        [SerializeField]
+        private Image _target;
+
+        [SerializeField]
+        private Sprite _selectedSprite;
+
+        [Space]
+        [SerializeField]
+        private Image _selectedBackground;
+
+        [SerializeField]
+        private CustomToggleGroup _group;
+
+        #endregion
+
+        // Properties
+
+        public bool IsSelected => _isSelected;
+        public int Index => _index;
+
+        // Events
+
+        public event Action<bool> OnToggle;
+
+        // Variables
+
+        private Color _defaultBackgroundColor;
+
+        private Sprite _defaultSprite;
+
+        private bool _isSelected = false;
+
+        public void Awake()
         {
-            _defaultSprite = _target.sprite;
+            if (_target is not null)
+            {
+                _defaultSprite = _target.sprite;
+            }
+
+            _defaultBackgroundColor = _selectedBackground.color;
+            _selectedBackground.color = Color.clear;
+
+            if (_isSelectedByDefault)
+            {
+                Toggle();
+
+                _group?.SelectToggle(this);
+            }
         }
 
-        _defaultBackgroundColor = _selectedBackground.color;
-        _selectedBackground.color = Color.clear;
-
-        if (_isSelectedByDefault)
+        public void OnPointerClick(PointerEventData eventData)
         {
             Toggle();
 
             _group?.SelectToggle(this);
         }
-    }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        Toggle();
-
-        _group?.SelectToggle(this);
-    }
-
-    public void Toggle()
-    {
-        if (_group?.ShouldToggle(this) == false)
+        public void Toggle()
         {
-            return;
+            if (_group?.ShouldToggle(this) == false)
+            {
+                return;
+            }
+
+            _isSelected = !_isSelected;
+
+            OnToggle?.Invoke(_isSelected);
+
+            _selectedBackground.color = Color.clear;
+
+            if (_isSelected)
+            {
+                _selectedBackground.color = _defaultBackgroundColor;
+            }
+
+            if (_target is null)
+            {
+                return;
+            }
+
+            Sprite sprite = _defaultSprite;
+
+            if (_isSelected)
+            {
+                sprite = _selectedSprite;
+            }
+
+            _target.sprite = sprite;
         }
 
-        _isSelected = !_isSelected;
-
-        OnToggle?.Invoke(_isSelected);
-
-        _selectedBackground.color = Color.clear;
-
-        if (_isSelected)
+        public void ToggleOff()
         {
-            _selectedBackground.color = _defaultBackgroundColor;
+            OnToggle?.Invoke(false);
+
+            _isSelected = false;
+
+            _selectedBackground.color = Color.clear;
+
+            if (_target is null)
+            {
+                return;
+            }
+
+            _target.sprite = _defaultSprite;
         }
-
-        if (_target is null)
-        {
-            return;
-        }
-
-        Sprite sprite = _defaultSprite;
-
-        if (_isSelected)
-        {
-            sprite = _selectedSprite;
-        }
-
-        _target.sprite = sprite;
-    }
-
-    public void ToggleOff()
-    {
-        OnToggle?.Invoke(false);
-
-        _isSelected = false;
-
-        _selectedBackground.color = Color.clear;
-
-        if (_target is null)
-        {
-            return;
-        }
-
-        _target.sprite = _defaultSprite;
     }
 }

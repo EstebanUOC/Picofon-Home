@@ -1,33 +1,36 @@
-using System;
-using System.Threading;
-using Cysharp.Threading.Tasks;
-
-public sealed class ReusableCompletionSource<T> : IUniTaskSource<T>
+namespace Picofon.Utils
 {
-    public UniTaskCompletionSourceCore<T> core;
+    using System;
+    using System.Threading;
+    using Cysharp.Threading.Tasks;
 
-    public short Version => core.Version;
+    public sealed class ReusableCompletionSource<T> : IUniTaskSource<T>
+    {
+        public UniTaskCompletionSourceCore<T> core;
 
-    public UniTask<T> Task => new(this, core.Version);
+        public short Version => core.Version;
 
-    public bool TrySetResult(T value) => core.TrySetResult(value);
+        public UniTask<T> Task => new(this, core.Version);
 
-    public bool TrySetException(Exception ex) => core.TrySetException(ex);
+        public bool TrySetResult(T value) => core.TrySetResult(value);
 
-    public bool TrySetCanceled(CancellationToken ct) => core.TrySetCanceled(ct);
+        public bool TrySetException(Exception ex) => core.TrySetException(ex);
 
-    public bool TrySetCanceled() => core.TrySetCanceled();
+        public bool TrySetCanceled(CancellationToken ct) => core.TrySetCanceled(ct);
 
-    public void Reset() => core.Reset();
+        public bool TrySetCanceled() => core.TrySetCanceled();
 
-    public T GetResult(short token) => core.GetResult(token);
+        public void Reset() => core.Reset();
 
-    public UniTaskStatus GetStatus(short token) => core.GetStatus(token);
+        public T GetResult(short token) => core.GetResult(token);
 
-    public UniTaskStatus UnsafeGetStatus() => core.UnsafeGetStatus();
+        public UniTaskStatus GetStatus(short token) => core.GetStatus(token);
 
-    public void OnCompleted(Action<object> continuation, object state, short token) =>
-        core.OnCompleted(continuation, state, token);
+        public UniTaskStatus UnsafeGetStatus() => core.UnsafeGetStatus();
 
-    void IUniTaskSource.GetResult(short token) => core.GetResult(token);
+        public void OnCompleted(Action<object> continuation, object state, short token) =>
+            core.OnCompleted(continuation, state, token);
+
+        void IUniTaskSource.GetResult(short token) => core.GetResult(token);
+    }
 }

@@ -1,26 +1,29 @@
-using System.Threading;
-using Cysharp.Threading.Tasks;
-
-public interface ILoadTask
+namespace Picofon.Core.Auth.Interfaces
 {
-    public bool IsCritical { get; }
-}
+    using System.Threading;
+    using Cysharp.Threading.Tasks;
 
-public struct LoadTaskResult<T>
-{
-    public bool Success;
-    public T Result;
-}
+    public interface ILoadTask
+    {
+        public bool IsCritical { get; }
+    }
 
-public interface ILoadTaskGeneric<T> : ILoadTask
-{
-    public UniTask<LoadTaskResult<T>> RunAsync(
-        CancellationToken ct,
-        CancellationToken timeoutCt = default
-    );
-}
+    public struct LoadTaskResult<T>
+    {
+        public bool Success;
+        public T Result;
+    }
 
-public interface ILoadTaskSimple : ILoadTask
-{
-    public UniTask<bool> RunAsync(CancellationToken ct);
+    public interface ILoadTaskGeneric<T> : ILoadTask
+    {
+        public UniTask<LoadTaskResult<T>> RunAsync(
+            CancellationToken ct,
+            CancellationToken timeoutCt = default
+        );
+    }
+
+    public interface ILoadTaskSimple : ILoadTask
+    {
+        public UniTask<bool> RunAsync(CancellationToken ct);
+    }
 }

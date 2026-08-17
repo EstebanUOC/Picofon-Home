@@ -1,57 +1,64 @@
-using System.Text.Json;
-using System.Threading;
-using Cysharp.Threading.Tasks;
 using Picofon.Core.Network;
+using Picofon.Core.Session.Models;
+using Picofon.Utils;
 
-public class SessionService
+namespace Picofon.Core.Session.Services
 {
-    private readonly string url = ApiConfig.BaseUrl + "therapy-task-result/bulk";
+    using System.Text.Json;
+    using System.Threading;
+    using Cysharp.Threading.Tasks;
 
-    public async UniTask<ApiResult> CreateTherapySession(
-        GeneralSessionDTO sessionInfo,
-        TherapySessionDTO[] sessions,
-        CancellationToken token = default
-    )
+    public class SessionService
     {
-        string url = this.url;
+        private readonly string url = ApiConfig.BaseUrl + "therapy-task-result/bulk";
 
-        byte[] rawResponse;
-
-        TherapySessionCreateRequest sessionRequest = new()
+        public async UniTask<ApiResult> CreateTherapySession(
+            GeneralSessionDTO sessionInfo,
+            TherapySessionDTO[] sessions,
+            CancellationToken token = default
+        )
         {
-            General = sessionInfo,
-            Tasks = sessions,
-        };
+            string url = this.url;
 
-        byte[] jsonRequest = JsonHelper.ToBytes(in sessionRequest);
+            byte[] rawResponse;
 
-        try
-        {
-            rawResponse = await HttpClientUnity.PostAsyncBytes(
-                url: url,
-                data: jsonRequest,
-                timeoutSeconds: 5,
-                cancellationToken: token
-            );
+            TherapySessionCreateRequest sessionRequest = new()
+            {
+                General = sessionInfo,
+                Tasks = sessions,
+            };
+
+            byte[] jsonRequest = JsonHelper.ToBytes(in sessionRequest);
+
+            try
+            {
+                rawResponse = await HttpClientUnity.PostAsyncBytes(
+                    url: url,
+                    data: jsonRequest,
+                    timeoutSeconds: 5,
+                    cancellationToken: token
+                );
+            }
+            catch (System.Exception)
+            {
+                return ApiResult.Fail("Network error occurred while creating therapy session.");
+            }
+
+            using JsonDocument doc = JsonDocument.Parse(rawResponse);
+
+            JsonElement root = doc.RootElement;
+
+            ApiResponseView responseView = new(root);
+
+            if (!responseView.Success)
+            {
+                PerformanceLog.Log(
+                    $"Failed to create therapy session \nURL: {url} \nRoot: {root} \nRequest: {JsonHelper.ToJson(sessionRequest)}"
+                );
+                return ApiResult.Fail(responseView.ErrorMessage);
+            }
+
+            return ApiResult.Ok();
         }
-        catch (System.Exception)
-        {
-            return ApiResult.Fail("Network error occurred while creating therapy session.");
-        }
-
-        using JsonDocument doc = JsonDocument.Parse(rawResponse);
-        JsonElement root = doc.RootElement;
-
-        ApiResponseView responseView = new(root);
-
-        if (!responseView.Success)
-        {
-            PerformanceLog.Log(
-                $"Failed to create therapy session \nURL: {url} \nRoot: {root} \nRequest: {JsonHelper.ToJson(sessionRequest)}"
-            );
-            return ApiResult.Fail(responseView.ErrorMessage);
-        }
-
-        return ApiResult.Ok();
     }
 }

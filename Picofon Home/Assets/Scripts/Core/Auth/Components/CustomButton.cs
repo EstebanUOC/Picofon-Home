@@ -1,80 +1,83 @@
-using System;
-using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
-
-public class CustomButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+namespace Picofon.Core.Auth.Components
 {
-    [SerializeField]
-    private RectTransform _backgroundRect;
+    using System;
+    using UnityEngine;
+    using UnityEngine.EventSystems;
+    using UnityEngine.UI;
 
-    [SerializeField]
-    private RectTransform _contentRect;
-
-    [Space]
-    [SerializeField]
-    private Image _inactiveOverlay;
-
-    public event Action OnClick;
-
-    public bool Interactable
+    public class CustomButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        get => _interactable;
-        set => SetInteractable(value);
-    }
+        [SerializeField]
+        private RectTransform _backgroundRect;
 
-    private float _defaultContentY;
-    private bool _interactable = true;
+        [SerializeField]
+        private RectTransform _contentRect;
 
-    public void Awake()
-    {
-        _defaultContentY = _contentRect.anchoredPosition.y;
+        [Space]
+        [SerializeField]
+        private Image _inactiveOverlay;
 
-        if (_inactiveOverlay != null)
+        public event Action OnClick;
+
+        public bool Interactable
         {
-            Color32 inactiveColor = _backgroundRect.gameObject.GetComponent<Image>().color;
-            inactiveColor.a = 130;
-
-            _inactiveOverlay.color = inactiveColor;
+            get => _interactable;
+            set => SetInteractable(value);
         }
-    }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        if (!_interactable)
-            return;
+        private float _defaultContentY;
+        private bool _interactable = true;
 
-        Vector2 contentPos = (_defaultContentY - 11f) * Vector2.up;
-        Vector2 bgSize = 11f * Vector2.down;
-        Vector2 bgMoveY = 5.5f * Vector2.down;
+        public void Awake()
+        {
+            _defaultContentY = _contentRect.anchoredPosition.y;
 
-        _contentRect.anchoredPosition = contentPos;
-        _backgroundRect.sizeDelta = bgSize;
-        _backgroundRect.anchoredPosition = bgMoveY;
-    }
+            if (_inactiveOverlay != null)
+            {
+                Color32 inactiveColor = _backgroundRect.gameObject.GetComponent<Image>().color;
+                inactiveColor.a = 130;
 
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        if (!_interactable)
-            return;
+                _inactiveOverlay.color = inactiveColor;
+            }
+        }
 
-        Vector2 contentPos = _contentRect.anchoredPosition;
-        contentPos.y = _defaultContentY;
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (!_interactable)
+                return;
 
-        _contentRect.anchoredPosition = contentPos;
-        _backgroundRect.sizeDelta = Vector2.zero;
-        _backgroundRect.anchoredPosition = Vector2.zero;
+            Vector2 contentPos = (_defaultContentY - 11f) * Vector2.up;
+            Vector2 bgSize = 11f * Vector2.down;
+            Vector2 bgMoveY = 5.5f * Vector2.down;
 
-        OnClick?.Invoke();
-    }
+            _contentRect.anchoredPosition = contentPos;
+            _backgroundRect.sizeDelta = bgSize;
+            _backgroundRect.anchoredPosition = bgMoveY;
+        }
 
-    private void SetInteractable(bool value)
-    {
-        if (_interactable == value)
-            return;
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            if (!_interactable)
+                return;
 
-        _interactable = value;
+            Vector2 contentPos = _contentRect.anchoredPosition;
+            contentPos.y = _defaultContentY;
 
-        _inactiveOverlay.gameObject.SetActive(!_interactable);
+            _contentRect.anchoredPosition = contentPos;
+            _backgroundRect.sizeDelta = Vector2.zero;
+            _backgroundRect.anchoredPosition = Vector2.zero;
+
+            OnClick?.Invoke();
+        }
+
+        private void SetInteractable(bool value)
+        {
+            if (_interactable == value)
+                return;
+
+            _interactable = value;
+
+            _inactiveOverlay.gameObject.SetActive(!_interactable);
+        }
     }
 }

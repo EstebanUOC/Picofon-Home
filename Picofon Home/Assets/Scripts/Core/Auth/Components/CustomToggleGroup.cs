@@ -1,36 +1,39 @@
-using UnityEngine;
-
-public class CustomToggleGroup : MonoBehaviour
+namespace Picofon.Core.Auth.Components
 {
-    private bool _someSelected = false;
+    using UnityEngine;
 
-    private CustomToggle _selectedToggle;
-
-    public void SelectToggle(CustomToggle toggle)
+    public class CustomToggleGroup : MonoBehaviour
     {
-        if (toggle == _selectedToggle)
-        {
-            return;
-        }
+        private bool _someSelected = false;
 
-        if (_someSelected)
+        private CustomToggle _selectedToggle;
+
+        public void SelectToggle(CustomToggle toggle)
         {
-            _selectedToggle.ToggleOff();
+            if (toggle == _selectedToggle)
+            {
+                return;
+            }
+
+            if (_someSelected)
+            {
+                _selectedToggle.ToggleOff();
+                _selectedToggle = toggle;
+                return;
+            }
+
+            _someSelected = true;
             _selectedToggle = toggle;
-            return;
         }
 
-        _someSelected = true;
-        _selectedToggle = toggle;
-    }
+        public int GetSelectedIndex()
+        {
+            return _selectedToggle.Index;
+        }
 
-    public int GetSelectedIndex()
-    {
-        return _selectedToggle.Index;
-    }
-
-    public bool ShouldToggle(CustomToggle toggle)
-    {
-        return toggle != _selectedToggle;
+        public bool ShouldToggle(CustomToggle toggle)
+        {
+            return toggle != _selectedToggle;
+        }
     }
 }

@@ -1,177 +1,186 @@
-using System;
-using Cysharp.Threading.Tasks;
-using PrimeTween;
-using UnityEngine;
+using Picofon.Activities.Basket;
 
-public class FloatManager : MonoBehaviour
+namespace Picofon.Activities.CrossRiver
 {
-    public event Action<int> OnFloatClicked;
+    using System;
+    using Cysharp.Threading.Tasks;
+    using PrimeTween;
+    using UnityEngine;
 
-    #region References
-
-    [SerializeField]
-    private Capsule _capsule;
-
-    [SerializeField]
-    private FloatItem[] _floats;
-
-    [SerializeField]
-    private FrameManager _frameManager;
-
-    [SerializeField]
-    private ParticleSystem _jumpParticles;
-
-    [SerializeField]
-    private AudioClip _splash;
-
-    #endregion
-
-    // Variables
-
-    private int _currentFloatIndex;
-    private bool _interactable;
-
-    public void Start()
+    public class FloatManager : MonoBehaviour
     {
-        CalledDefered().Forget();
+        public event Action<int> OnFloatClicked;
 
-        _interactable = false;
+        #region References
 
-        _floats[2].Drown();
-        _floats[3].Drown();
-    }
+        [SerializeField]
+        private Capsule _capsule;
 
-    private async UniTaskVoid CalledDefered()
-    {
-        await UniTask.WaitForEndOfFrame(this);
+        [SerializeField]
+        private FloatItem[] _floats;
 
-        _currentFloatIndex = 0;
-        _floats[_currentFloatIndex].Floating();
-    }
+        [SerializeField]
+        private FrameManager _frameManager;
 
-    public void EnableInteraction()
-    {
-        _interactable = true;
-    }
+        [SerializeField]
+        private ParticleSystem _jumpParticles;
 
-    public void DisableInteraction()
-    {
-        _interactable = false;
-    }
+        [SerializeField]
+        private AudioClip _splash;
 
-    public void NotifyLanding()
-    {
-        _floats[_currentFloatIndex].Landing();
+        #endregion
 
-        AudioManager.Instance.PlaySFX(_splash, volume: 0.2f);
-    }
+        // Variables
 
-    public void NotifyMovingComplete()
-    {
-        Span<int> moved = stackalloc int[2];
+        private int _currentFloatIndex;
+        private bool _interactable;
 
-        if (_currentFloatIndex > 1)
+        public void Start()
         {
-            moved[0] = 0;
-            moved[1] = 1;
-        }
-        else
-        {
-            moved[0] = 2;
-            moved[1] = 3;
+            CalledDefered().Forget();
+
+            _interactable = false;
+
+            _floats[2].Drown();
+            _floats[3].Drown();
         }
 
-        foreach (int index in moved)
+        private async UniTaskVoid CalledDefered()
         {
-            Vector3 pos = _floats[index].transform.position;
+            await UniTask.WaitForEndOfFrame(this);
 
-            pos.x = 5.5f;
+            _currentFloatIndex = 0;
+            _floats[_currentFloatIndex].Floating();
+        }
 
-            if ((index & 1) == 0)
+        public void EnableInteraction()
+        {
+            _interactable = true;
+        }
+
+        public void DisableInteraction()
+        {
+            _interactable = false;
+        }
+
+        public void NotifyLanding()
+        {
+            _floats[_currentFloatIndex].Landing();
+
+            AudioManager.Instance.PlaySFX(_splash, volume: 0.2f);
+        }
+
+        public void NotifyMovingComplete()
+        {
+            Span<int> moved = stackalloc int[2];
+
+            if (_currentFloatIndex > 1)
             {
-                pos.y = 0;
+                moved[0] = 0;
+                moved[1] = 1;
             }
             else
             {
-                pos.y = -3.4f;
+                moved[0] = 2;
+                moved[1] = 3;
             }
 
-            _floats[index].transform.localPosition = pos;
+            foreach (int index in moved)
+            {
+                Vector3 pos = _floats[index].transform.position;
 
-            _floats[index].Revive();
+                pos.x = 5.5f;
+
+                if ((index & 1) == 0)
+                {
+                    pos.y = 0;
+                }
+                else
+                {
+                    pos.y = -3.4f;
+                }
+
+                _floats[index].transform.localPosition = pos;
+
+                _floats[index].Revive();
+            }
+
+            _frameManager.ShowFrames();
         }
 
-        _frameManager.ShowFrames();
-    }
-
-    public void OnFloatItemClicked(FloatItem floatItem)
-    {
-        if (!_interactable)
-            return;
-
-        int clickedIndex = -1;
-
-        for (int i = 0; i < _floats.Length; i++)
+        public void OnFloatItemClicked(FloatItem floatItem)
         {
-            if (_floats[i] != floatItem)
-                continue;
+            if (!_interactable)
+                return;
 
-            clickedIndex = i;
-            break;
-        }
+            int clickedIndex = -1;
 
-        if (clickedIndex < 0)
-            return;
+            for (int i = 0; i < _floats.Length; i++)
+            {
+                if (_floats[i] != floatItem)
+                    continue;
 
-        Span<int> drowned = stackalloc int[2];
-        drowned[0] = _currentFloatIndex;
-        drowned[1] = (clickedIndex & 1) == 0 ? clickedIndex + 1 : clickedIndex - 1;
-        _currentFloatIndex = clickedIndex;
+                clickedIndex = i;
+                break;
+            }
 
-        OnFloatClicked?.Invoke(clickedIndex);
+            if (clickedIndex < 0)
+                return;
 
-        Tween.LocalPositionX(_floats[_currentFloatIndex].transform, endValue: -4, duration: 0.5f);
+            Span<int> drowned = stackalloc int[2];
+            drowned[0] = _currentFloatIndex;
+            drowned[1] = (clickedIndex & 1) == 0 ? clickedIndex + 1 : clickedIndex - 1;
+            _currentFloatIndex = clickedIndex;
 
-        foreach (int index in drowned)
-        {
-            _floats[index].Drown();
-
-            Transform floatTransform = _floats[index].transform;
+            OnFloatClicked?.Invoke(clickedIndex);
 
             Tween.LocalPositionX(
-                floatTransform,
-                endValue: floatTransform.position.x - 9.5f,
+                _floats[_currentFloatIndex].transform,
+                endValue: -4,
                 duration: 0.5f
             );
+
+            foreach (int index in drowned)
+            {
+                _floats[index].Drown();
+
+                Transform floatTransform = _floats[index].transform;
+
+                Tween.LocalPositionX(
+                    floatTransform,
+                    endValue: floatTransform.position.x - 9.5f,
+                    duration: 0.5f
+                );
+            }
+
+            _frameManager.HideFrames();
+
+            _jumpParticles.Play();
+            _capsule.JumpTo(floatItem);
         }
 
-        _frameManager.HideFrames();
-
-        _jumpParticles.Play();
-        _capsule.JumpTo(floatItem);
-    }
-
-    public void ReviveInitialFloats()
-    {
-        _interactable = true;
-
-        _floats[2].Revive();
-        _floats[3].Revive();
-    }
-
-    public void DrownFinalFloats()
-    {
-        _interactable = false;
-
-        if (_currentFloatIndex > 1)
+        public void ReviveInitialFloats()
         {
-            _floats[0].gameObject.SetActive(false);
-            _floats[1].gameObject.SetActive(false);
+            _interactable = true;
+
+            _floats[2].Revive();
+            _floats[3].Revive();
         }
-        else
+
+        public void DrownFinalFloats()
         {
-            _floats[2].gameObject.SetActive(false);
-            _floats[3].gameObject.SetActive(false);
+            _interactable = false;
+
+            if (_currentFloatIndex > 1)
+            {
+                _floats[0].gameObject.SetActive(false);
+                _floats[1].gameObject.SetActive(false);
+            }
+            else
+            {
+                _floats[2].gameObject.SetActive(false);
+                _floats[3].gameObject.SetActive(false);
+            }
         }
     }
 }

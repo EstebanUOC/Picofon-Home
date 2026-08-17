@@ -1,0 +1,17 @@
+{
+    "name": "Picofon.Utils",
+    "rootNamespace": "Picofon.Utils",
+    "references": [
+        "UniTask",
+        "Unity.Localization"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

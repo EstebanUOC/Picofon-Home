@@ -1,99 +1,105 @@
-using UnityEngine;
+using Picofon.Core.Auth;
+using Picofon.Core.Auth.Loadings;
 
-public class LoadingPanel : MonoBehaviour
+namespace Picofon.Core.Auth.Panels
 {
-    [Space]
-    [SerializeField]
-    private GameObject _bootObject;
+    using UnityEngine;
 
-    [SerializeField]
-    private GameObject _mapObject;
-
-    [SerializeField]
-    private GameObject _normal;
-
-    BootLoading _bootLoading;
-
-    NormalLoading _normalLoading;
-
-    MapLoading _mapLoading;
-
-    public void Show(LoadingEnum loading)
+    public class LoadingPanel : MonoBehaviour
     {
-        if (loading == LoadingEnum.Boot)
+        [Space]
+        [SerializeField]
+        private GameObject _bootObject;
+
+        [SerializeField]
+        private GameObject _mapObject;
+
+        [SerializeField]
+        private GameObject _normal;
+
+        BootLoading _bootLoading;
+
+        NormalLoading _normalLoading;
+
+        MapLoading _mapLoading;
+
+        public void Show(LoadingEnum loading)
         {
-            ShowBoot();
-            return;
+            if (loading == LoadingEnum.Boot)
+            {
+                ShowBoot();
+                return;
+            }
+
+            ShowNormal();
         }
 
-        ShowNormal();
-    }
-
-    public void Hide(LoadingEnum loading)
-    {
-        switch (loading)
+        public void Hide(LoadingEnum loading)
         {
-            case LoadingEnum.Boot:
+            switch (loading)
+            {
+                case LoadingEnum.Boot:
+                    _bootLoading.Hide();
+                    break;
+                case LoadingEnum.Normal:
+                    _normalLoading.Hide();
+                    break;
+            }
+
+            if (loading == LoadingEnum.Boot)
+            {
                 _bootLoading.Hide();
-                break;
-            case LoadingEnum.Normal:
-                _normalLoading.Hide();
-                break;
+                return;
+            }
+
+            _normalLoading.Hide();
         }
 
-        if (loading == LoadingEnum.Boot)
+        public void ShowMapTransition()
         {
-            _bootLoading.Hide();
-            return;
+            gameObject.SetActive(true);
+
+            _mapObject.SetActive(true);
+
+            if (_mapLoading == null)
+            {
+                _mapLoading = _mapObject.GetComponent<MapLoading>();
+            }
+
+            _mapLoading.Show();
         }
 
-        _normalLoading.Hide();
-    }
-
-    public void ShowMapTransition()
-    {
-        gameObject.SetActive(true);
-
-        _mapObject.SetActive(true);
-
-        if (_mapLoading == null)
+        public void ContinueMapTransition(bool success)
         {
-            _mapLoading = _mapObject.GetComponent<MapLoading>();
+            _mapLoading.Continue(success);
         }
 
-        _mapLoading.Show();
-    }
-
-    public void ContinueMapTransition(bool success)
-    {
-        _mapLoading.Continue(success);
-    }
-
-    private void ShowNormal()
-    {
-        gameObject.SetActive(true);
-
-        _normal.SetActive(true);
-
-        if (_normalLoading == null)
+        private void ShowNormal()
         {
-            _normalLoading = _normal.GetComponent<NormalLoading>();
+            gameObject.SetActive(true);
+
+            _normal.SetActive(true);
+
+            if (_normalLoading == null)
+            {
+                _normalLoading = _normal.GetComponent<NormalLoading>();
+            }
+
+            _normalLoading.Show();
         }
 
-        _normalLoading.Show();
-    }
-
-    private void ShowBoot()
-    {
-        gameObject.SetActive(true);
-
-        _bootObject.SetActive(true);
-
-        if (_bootLoading == null)
+        private void ShowBoot()
         {
-            _bootLoading = _bootObject.GetComponent<BootLoading>();
-        }
+            gameObject.SetActive(true);
 
-        _bootLoading.Show();
+            _bootObject.SetActive(true);
+
+            if (_bootLoading == null)
+            {
+                _bootLoading = _bootObject.GetComponent<BootLoading>();
+            }
+
+            _bootLoading.Show();
+        }
     }
 }

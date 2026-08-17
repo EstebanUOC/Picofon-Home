@@ -1,0 +1,26 @@
+{
+    "name": "Picofon.Core",
+    "rootNamespace": "Picofon.Core",
+    "references": [
+        "Picofon.Utils",
+        "Picofon.Components",
+        "Picofon.GoogleSignIn",
+        "UniTask",
+        "PrimeTween.Runtime",
+        "Unity.TextMeshPro",
+        "Unity.ResourceManager",
+        "UnityEngine.UI",
+        "Unity.Localization",
+        "Dreamteck.Splines",
+        "Dreamteck.Utilities"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

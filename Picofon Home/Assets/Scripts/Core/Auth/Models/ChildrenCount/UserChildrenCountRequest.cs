@@ -1,18 +1,22 @@
-using UnityEngine;
+using Picofon.Utils;
 
-public class UserChildrenCountRequest : MonoBehaviour
+namespace Picofon.Core.Auth.Models.ChildrenCount
 {
-    private readonly string url = string.Empty;
-    public string Url => url;
+    using UnityEngine;
 
-    public UserChildrenCountRequest(string id)
+    public class UserChildrenCountRequest : MonoBehaviour
     {
-        url =
-            $"https://ehc-picofon2.techlab.uoc.edu/api/children/owner/{id}?is_active=true";
-    }
+        private readonly string url = string.Empty;
+        public string Url => url;
 
-    public string ToJson()
-    {
-        return JsonHelper.ToJson(this);
+        public UserChildrenCountRequest(string id)
+        {
+            url = $"https://ehc-picofon2.techlab.uoc.edu/api/children/owner/{id}?is_active=true";
+        }
+
+        public string ToJson()
+        {
+            return JsonHelper.ToJson(this);
+        }
     }
 }

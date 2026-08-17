@@ -1,59 +1,64 @@
-using System;
-using System.Text.Json.Serialization;
+using Picofon.Utils;
 
-[Serializable]
-public class ChildModel
+namespace Picofon.Core.Auth.Models
 {
-    [JsonInclude]
-    public string FirstName;
+    using System;
+    using System.Text.Json.Serialization;
 
-    [JsonInclude]
-    public string LastName;
-
-    [JsonInclude]
-    public string BirthDate;
-
-    [JsonInclude]
-    public string Disorder;
-
-    [JsonInclude]
-    public string School;
-
-    [JsonInclude]
-    public int Grade;
-
-    [JsonInclude]
-    public int CenterId;
-
-    [JsonInclude]
-    public string OwnerId;
-
-    [JsonInclude]
-    public string Id;
-
-    public static bool Validate(ChildModel child)
+    [Serializable]
+    public class ChildModel
     {
-        if (child == null)
-            return false;
+        [JsonInclude]
+        public string FirstName;
 
-        bool isValid =
-            !string.IsNullOrEmpty(child.FirstName)
-            && !string.IsNullOrEmpty(child.LastName)
-            && !string.IsNullOrEmpty(child.BirthDate)
-            && !string.IsNullOrEmpty(child.Disorder)
-            && !string.IsNullOrEmpty(child.School)
-            && child.Grade > 0
-            && child.CenterId > 0
-            && !string.IsNullOrEmpty(child.OwnerId);
+        [JsonInclude]
+        public string LastName;
 
-        if (!isValid)
-            return false;
+        [JsonInclude]
+        public string BirthDate;
 
-        return true;
-    }
+        [JsonInclude]
+        public string Disorder;
 
-    public string ToJson()
-    {
-        return JsonHelper.ToJson(this);
+        [JsonInclude]
+        public string School;
+
+        [JsonInclude]
+        public int Grade;
+
+        [JsonInclude]
+        public int CenterId;
+
+        [JsonInclude]
+        public string OwnerId;
+
+        [JsonInclude]
+        public string Id;
+
+        public static bool Validate(ChildModel child)
+        {
+            if (child == null)
+                return false;
+
+            bool isValid =
+                !string.IsNullOrEmpty(child.FirstName)
+                && !string.IsNullOrEmpty(child.LastName)
+                && !string.IsNullOrEmpty(child.BirthDate)
+                && !string.IsNullOrEmpty(child.Disorder)
+                && !string.IsNullOrEmpty(child.School)
+                && child.Grade > 0
+                && child.CenterId > 0
+                && !string.IsNullOrEmpty(child.OwnerId);
+
+            if (!isValid)
+                return false;
+
+            return true;
+        }
+
+        public string ToJson()
+        {
+            return JsonHelper.ToJson(this);
+        }
     }
 }
