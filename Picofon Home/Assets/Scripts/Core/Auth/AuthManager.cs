@@ -105,6 +105,7 @@ public class AuthManager : MonoBehaviour
                 user = new()
                 {
                     Id = "noXJSkWJnCW5iSEu32n5Kvofq5a2",
+                    // Id = "vraMinvYwmcaiaTuVgSxrBCNMA93",
                     Email = "test@gmail.com",
                     Username = "Debug User",
                     Role = UserRole.Parent,

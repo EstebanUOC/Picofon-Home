@@ -106,6 +106,8 @@ public class AudioLoader
 
         // Load the image audio clips for the activity
 
+        audioPaths[0] = "caña";
+
         for (int i = 0; i < audioPaths.Length; i++)
         {
             string path = TextUtils.RemoveAccentsAndPrepend(input: audioPaths[i], prefix: prefix);

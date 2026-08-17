@@ -2,7 +2,6 @@ using System.Text.Json;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Picofon.Core.Network;
-using UnityEngine;
 
 public struct ActivityRequestParams
 {
@@ -37,37 +36,39 @@ public class BasketService
                 cancellationToken: token
             );
         }
-        catch (System.Exception e)
+        catch (System.Exception)
         {
-            if (!GamePrefs.DebugMode)
-            {
-                PerformanceLog.LogError($"Network request failed with error: {e.Message}");
+            return ApiResult<T>.Fail("Network error occurred while fetching activities.");
 
-                return ApiResult<T>.Fail("Network error occurred while fetching activities.");
-            }
-
-            PerformanceLog.LogWarning(
-                "Network request failed. Falling back to local data in Debug Mode."
-            );
-
-            char activityChar = typeof(T).FullName.ToLower()[50];
-
-            PerformanceLog.LogWarning($"Activity character determined as: {activityChar}");
-
-            string streamingPath = System.IO.Path.Combine(
-                Application.streamingAssetsPath,
-                $"plan-{activityChar}.json"
-            );
-
-            string uri = new System.Uri(streamingPath).AbsoluteUri;
-
-            PerformanceLog.LogWarning($"Loading local data from: {uri}");
-
-            rawResponse = await HttpClientUnity.GetAsyncBytes(
-                url: uri,
-                timeoutSeconds: 5,
-                cancellationToken: token
-            );
+            // if (!GamePrefs.DebugMode)
+            // {
+            //     PerformanceLog.LogError($"Network request failed with error: {e.Message}");
+            //
+            //     return ApiResult<T>.Fail("Network error occurred while fetching activities.");
+            // }
+            //
+            // PerformanceLog.LogWarning(
+            //     "Network request failed. Falling back to local data in Debug Mode."
+            // );
+            //
+            // char activityChar = typeof(T).FullName.ToLower()[50];
+            //
+            // PerformanceLog.LogWarning($"Activity character determined as: {activityChar}");
+            //
+            // string streamingPath = System.IO.Path.Combine(
+            //     Application.streamingAssetsPath,
+            //     $"plan-{activityChar}.json"
+            // );
+            //
+            // string uri = new System.Uri(streamingPath).AbsoluteUri;
+            //
+            // PerformanceLog.LogWarning($"Loading local data from: {uri}");
+            //
+            // rawResponse = await HttpClientUnity.GetAsyncBytes(
+            //     url: uri,
+            //     timeoutSeconds: 5,
+            //     cancellationToken: token
+            // );
         }
 
         using JsonDocument doc = JsonDocument.Parse(rawResponse);

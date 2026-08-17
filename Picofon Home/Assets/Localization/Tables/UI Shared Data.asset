@@ -371,6 +371,18 @@ MonoBehaviour:
     m_Key: MAP_PATH_LABEL
     m_Metadata:
       m_Items: []
+  - m_Id: 40204140486443008
+    m_Key: MODAL_GAME_FINISH
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40206888057552896
+    m_Key: NO_ACTIVE_PLANS_MESSAGE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40207061835956224
+    m_Key: NO_ACTIVE_PLANS_TITLE
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -6117,6 +6117,62 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemTransform: {fileID: 0}
   _animationType: 2
+--- !u!1 &1668872508 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5688386168286580037, guid: ae12d33b6d8524a27a2f11a717ceadd4, type: 3}
+  m_PrefabInstance: {fileID: 129436212645371839}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1668872510 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7689271060198496815, guid: ae12d33b6d8524a27a2f11a717ceadd4, type: 3}
+  m_PrefabInstance: {fileID: 129436212645371839}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668872508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1668872512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668872508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:9218e6ba46a99bc4bbfb36d6b92602f6
+    m_TableEntryReference:
+      m_KeyId: 40204140486443008
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1668872510}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &1678558547
 GameObject:
   m_ObjectHideFlags: 0
@@ -7056,13 +7112,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 127598249}
     m_Modifications:
+    - target: {fileID: 2557145959808070098, guid: ae12d33b6d8524a27a2f11a717ceadd4, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2557145959808070098, guid: ae12d33b6d8524a27a2f11a717ceadd4, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4322736482601868334, guid: ae12d33b6d8524a27a2f11a717ceadd4, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 450
+      objectReference: {fileID: 0}
     - target: {fileID: 5345444374101308731, guid: ae12d33b6d8524a27a2f11a717ceadd4, type: 3}
       propertyPath: m_Name
       value: Modal Game
       objectReference: {fileID: 0}
     - target: {fileID: 5345444374101308731, guid: ae12d33b6d8524a27a2f11a717ceadd4, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7148211597441615405, guid: ae12d33b6d8524a27a2f11a717ceadd4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7084,10 +7152,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7689271060198496815, guid: ae12d33b6d8524a27a2f11a717ceadd4, type: 3}
+      propertyPath: m_text
+      value: "Molt b\xE9! Has acabat totes les activitats. \nHo has fet genial!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 9005063624200521717, guid: ae12d33b6d8524a27a2f11a717ceadd4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -120
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5688386168286580037, guid: ae12d33b6d8524a27a2f11a717ceadd4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1668872512}
   m_SourcePrefab: {fileID: 100100000, guid: ae12d33b6d8524a27a2f11a717ceadd4, type: 3}
 --- !u!114 &129436212645371840 stripped
 MonoBehaviour:

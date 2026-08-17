@@ -334,8 +334,8 @@ public class BasketManagerRE : MonoBehaviour
             IsCorrect = isCorrect,
             TaskIndex = _currentActivityIndex,
             MainAttributeWs = _currentActivity.MainWord.Id,
-            SelectedAttributeWs = currentWord.Id,
             CorrectAttributeWs = correctWordId,
+            SelectedAttributeWs = currentWord.Id,
         };
 
         _sessionManager.RecordActivityResult(in taskInfo);

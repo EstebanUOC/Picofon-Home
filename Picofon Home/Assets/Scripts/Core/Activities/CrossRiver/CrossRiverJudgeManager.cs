@@ -352,7 +352,7 @@ public class CrossRiverJudgeManager : MonoBehaviour
             IsCorrect = isCorrect,
             TaskIndex = _dataManager.GetCurrentIndex(),
             MainAttributeWs = word?.Id,
-            SelectedButton = isPositive,
+            SelectedButton = isPositive ? 1 : 0,
         };
 
         _sessionManager.RecordActivityResult(taskInfo);

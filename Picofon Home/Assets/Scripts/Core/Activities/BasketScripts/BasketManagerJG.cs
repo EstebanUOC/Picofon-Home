@@ -338,8 +338,8 @@ public class BasketGameManagerJG : MonoBehaviour
         {
             IsCorrect = isCorrect,
             TaskIndex = _currentActivityIndex,
-            SelectedButton = isPositive,
             MainAttributeWs = _currentActivity.Words[0].Id,
+            SelectedButton = isPositive ? 1 : 0,
         };
 
         _sessionManager.RecordActivityResult(in taskInfo);
