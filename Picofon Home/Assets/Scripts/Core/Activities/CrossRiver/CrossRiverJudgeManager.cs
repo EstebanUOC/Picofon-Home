@@ -378,6 +378,10 @@ namespace Picofon.Activities.CrossRiver
 
             _feedbackController.SetItemsContent(in feedbackContent);
 
+            PerformanceLog.Log(
+                $"Loading audio clips for round {_dataManager.GetCurrentIndex()}, until 2"
+            );
+
             AudioManager.Instance.GetAudios(_dataManager.GetCurrentIndex(), 2, _wordClips);
 
             _uiManager.SetWordClips(_wordClips);

@@ -67,11 +67,8 @@ namespace Picofon.Activities.Basket
 
         public async UniTask<bool> ShowSummary()
         {
-            PerformanceLog.Log("ModalGame.ShowSummary");
-
             if (!gameObject.activeSelf)
             {
-                PerformanceLog.Log("ModalGame.ShowSummary: activating gameObject");
                 gameObject.SetActive(true);
             }
 
