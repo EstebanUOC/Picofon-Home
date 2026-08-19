@@ -34,8 +34,6 @@ namespace Picofon.Activities.Basket
 
         public void Awake()
         {
-            gameObject.SetActive(false);
-
             _taskCompletion = new ReusableCompletionSource<bool>();
 
             _buttonSummary.OnClick += OnButtonClicked;
@@ -69,8 +67,11 @@ namespace Picofon.Activities.Basket
 
         public async UniTask<bool> ShowSummary()
         {
+            PerformanceLog.Log("ModalGame.ShowSummary");
+
             if (!gameObject.activeSelf)
             {
+                PerformanceLog.Log("ModalGame.ShowSummary: activating gameObject");
                 gameObject.SetActive(true);
             }
 

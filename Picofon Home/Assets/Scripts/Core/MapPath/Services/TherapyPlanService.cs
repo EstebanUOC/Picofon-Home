@@ -91,56 +91,6 @@ namespace Picofon.Core.MapPath.Services
             return ApiResult<T>.Ok(responseView.Data);
         }
 
-        // public async UniTask<ApiResult<T>> CreateDefaultPlans<T>(
-        //     string childId,
-        //     string assignedById,
-        //     CancellationToken token = default
-        // )
-        // {
-        //     string url = $"{baseURL}/default";
-        //
-        //     byte[] rawResponse;
-        //
-        //     CreateDefaultPlansRequest request = new()
-        //     {
-        //         ChildId = childId,
-        //         AssignedById = assignedById,
-        //     };
-        //
-        //     byte[] jsonRequest = JsonHelper.ToBytes(in request);
-        //
-        //     try
-        //     {
-        //         rawResponse = await HttpClientUnity.PostAsyncBytes(
-        //             url: url,
-        //             data: jsonRequest,
-        //             timeoutSeconds: 5,
-        //             cancellationToken: token
-        //         );
-        //     }
-        //     catch (System.Exception)
-        //     {
-        //         return ApiResult<T>.Fail(
-        //             "Network error occurred while creating default therapy plans."
-        //         );
-        //     }
-        //
-        //     using JsonDocument doc = JsonDocument.Parse(rawResponse);
-        //     JsonElement root = doc.RootElement;
-        //
-        //     ApiResponseView<T> responseView = new(root);
-        //
-        //     if (!responseView.Success)
-        //     {
-        //         PerformanceLog.Log(
-        //             $"Failed to create default therapy plans for child {childId}.\n Error: {responseView.ErrorMessage} \n Request: {JsonHelper.ToJson(jsonRequest)}"
-        //         );
-        //         return ApiResult<T>.Fail(responseView.ErrorMessage);
-        //     }
-        //
-        //     return ApiResult<T>.Ok(responseView.Data);
-        // }
-
         public async UniTask<ApiResult> ChangePlanStatus(
             int id,
             TherapyStatus status,
