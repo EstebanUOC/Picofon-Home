@@ -34,8 +34,6 @@ namespace Picofon.Activities.Basket
 
         public void Awake()
         {
-            gameObject.SetActive(false);
-
             _taskCompletion = new ReusableCompletionSource<bool>();
 
             _buttonSummary.OnClick += OnButtonClicked;

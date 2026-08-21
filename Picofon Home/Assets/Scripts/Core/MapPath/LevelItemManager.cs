@@ -83,8 +83,12 @@ namespace Picofon.Core.MapPath
             _containerMiddle = _canvas.rect.width / 2;
         }
 
-        public void RenderLevels(int count, int last, int current, in Sequence sequence)
+        public void RenderLevels(LevelDataStore store, in Sequence sequence)
         {
+            int count = store.GetPlansCount();
+            int current = store.CurrentLevel;
+            int last = store.LastLevel;
+
             float spacingMiddle = _spacing.y / 2;
 
             int childCount = _container.childCount;
@@ -120,6 +124,14 @@ namespace Picofon.Core.MapPath
                 bool locked = i > current;
 
                 LevelConfig config = _configurations[i & 1];
+
+                ActivityType activityType = (ActivityType)
+                    store.GetPlanByIndex(i).TherapyTemplate.TaskTypeId;
+
+                if (activityType != ActivityType.Judge)
+                {
+                    config = _configurations[0];
+                }
 
                 LevelType type = (i & 1) == 0 ? LevelType.Syllable : LevelType.Phoneme;
 

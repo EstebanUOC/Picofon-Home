@@ -290,6 +290,47 @@ namespace Picofon.Activities.CrossRiver
             }
         }
 
+        private void HideUI()
+        {
+            _ = Sequence
+                .Create()
+                .Group(
+                    Tween.UIAnchoredPositionX(
+                        target: _menuTransform,
+                        endValue: -200,
+                        duration: 0.5f,
+                        ease: Ease.OutCubic
+                    )
+                )
+                .Group(
+                    Tween.UIAnchoredPositionX(
+                        target: _counterTransform,
+                        endValue: 400,
+                        duration: 0.5f,
+                        ease: Ease.OutCubic
+                    )
+                );
+
+            if (_progressBarTransform.rotation.z == 0)
+            {
+                _ = Tween.UIAnchoredPositionY(
+                    target: _progressBarTransform,
+                    endValue: 700,
+                    duration: 0.5f,
+                    ease: Ease.OutCubic
+                );
+            }
+            else
+            {
+                _ = Tween.UIAnchoredPositionX(
+                    target: _progressBarTransform,
+                    endValue: -100,
+                    duration: 0.5f,
+                    ease: Ease.OutCubic
+                );
+            }
+        }
+
         private string[] BuildAudioPaths()
         {
             JudgeActivity[] activities = _dataManager.GetActivities();
@@ -336,6 +377,10 @@ namespace Picofon.Activities.CrossRiver
             ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords, true);
 
             _feedbackController.SetItemsContent(in feedbackContent);
+
+            PerformanceLog.Log(
+                $"Loading audio clips for round {_dataManager.GetCurrentIndex()}, until 2"
+            );
 
             AudioManager.Instance.GetAudios(_dataManager.GetCurrentIndex(), 2, _wordClips);
 
@@ -411,6 +456,8 @@ namespace Picofon.Activities.CrossRiver
             await UniTask.WaitForSeconds(0.5f);
 
             await _modalGame.ShowSummary();
+
+            HideUI();
 
             _fade.Load();
 

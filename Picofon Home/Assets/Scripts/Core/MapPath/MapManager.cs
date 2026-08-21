@@ -10,9 +10,7 @@ namespace Picofon.Core.MapPath
 {
     using Cysharp.Threading.Tasks;
     using PrimeTween;
-    using TMPro;
     using UnityEngine;
-    using UnityEngine.Localization.Settings;
 
     public enum ActivityType : byte
     {
@@ -58,7 +56,7 @@ namespace Picofon.Core.MapPath
 
             if (string.IsNullOrEmpty(childId))
             {
-                childId = "7502342238";
+                childId = "77345678B";
                 PerformanceLog.LogWarning("Using default ChildId for testing in Unity Editor.");
             }
 
@@ -102,12 +100,7 @@ namespace Picofon.Core.MapPath
 
             Sequence sequence = _transition.ZoomIn();
 
-            _itemManager.RenderLevels(
-                count: instance.GetPlansCount(),
-                last: instance.LastLevel,
-                current: instance.CurrentLevel,
-                sequence: in sequence
-            );
+            _itemManager.RenderLevels(store: instance, sequence: in sequence);
         }
 
         private void HandleLevelSelected(LevelConfig config, int index)
