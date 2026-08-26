@@ -19945,6 +19945,7 @@ MonoBehaviour:
   _loginPanel: {fileID: 2090523356}
   _loginEmailInput: {fileID: 1663137052}
   _loginPasswordInput: {fileID: 1679973362}
+  _togglePasswordButton: {fileID: 1995104639}
   _loginButton: {fileID: 279484257}
   _goRegisterButton: {fileID: 156469206}
   _registerPanel: {fileID: 1188935748}
