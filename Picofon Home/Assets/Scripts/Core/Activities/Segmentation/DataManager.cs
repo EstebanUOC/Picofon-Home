@@ -8,11 +8,14 @@ namespace Picofon.Activities.Segmentation
     public class DataManager
     {
         private SegmentationActivity[] _activities;
+        private SegmentationGeneralData _generalData;
         private int _currentIndex;
 
         public SegmentationActivity GetCurrentActivity() => _activities?[_currentIndex];
 
         public SegmentationActivity[] GetActivities() => _activities;
+
+        public SegmentationGeneralData GetGeneralData() => _generalData;
 
         public int GetActivityCount() => _activities?.Length ?? 0;
 
@@ -29,18 +32,19 @@ namespace Picofon.Activities.Segmentation
             return true;
         }
 
-        public async UniTask<ApiResult<ActivitiesData<SegmentationActivity>>> LoadActivities(
+        public async UniTask<ApiResult<SegmentationData>> LoadActivities(
             ActivityRequestParams @params
         )
         {
             BasketService service = new();
-            ApiResult<ActivitiesData<SegmentationActivity>> result = await service.GetActivities<
-                ActivitiesData<SegmentationActivity>
-            >(@params);
+            ApiResult<SegmentationData> result = await service.GetActivities<SegmentationData>(
+                @params
+            );
 
             if (result.Success && result.Data is { Activities: { Length: > 0 } acts })
             {
                 _activities = acts;
+                _generalData = result.Data.GeneralData;
                 _currentIndex = 0;
             }
 
@@ -50,6 +54,7 @@ namespace Picofon.Activities.Segmentation
         public void Reset()
         {
             _activities = null;
+            _generalData = null;
             _currentIndex = 0;
         }
     }

@@ -1,7 +1,6 @@
 namespace Picofon.Activities.Segmentation
 {
     using Cysharp.Threading.Tasks;
-    using Picofon.Activities.Basket.Services;
     using Picofon.Components;
     using Picofon.Core.MapPath;
     using Picofon.Core.Network;
@@ -36,7 +35,11 @@ namespace Picofon.Activities.Segmentation
 
         private SegmentationActivity _currentActivity;
 
+        private int _syllablesNumber;
+
         private int _currentFingers;
+
+        private bool _expectedAnswer;
 
         private static readonly System.Random _rng = new();
 
@@ -67,8 +70,7 @@ namespace Picofon.Activities.Segmentation
 
         private async UniTask LoadActivities(ActivityRequestParams @params)
         {
-            ApiResult<ActivitiesData<SegmentationActivity>> result =
-                await _dataManager.LoadActivities(@params);
+            ApiResult<SegmentationData> result = await _dataManager.LoadActivities(@params);
 
             if (!result.Success)
             {
@@ -81,6 +83,8 @@ namespace Picofon.Activities.Segmentation
                 Debug.LogWarning("[WordSegmentation] No activities found.");
                 return;
             }
+
+            _syllablesNumber = _dataManager.GetGeneralData()?.SyllablesNumber ?? 0;
 
             Debug.Log(
                 $"[WordSegmentation] Loaded {_dataManager.GetActivityCount()} activities successfully."
@@ -99,15 +103,17 @@ namespace Picofon.Activities.Segmentation
 
             _currentFingers = _rng.Next(0, 6);
 
+            _expectedAnswer = _currentFingers == _syllablesNumber;
+
             handManager.Fingers = _currentFingers;
         }
 
         private void HandleAnswer(bool isYes)
         {
-            bool isCorrect = isYes == _currentActivity.Answer;
+            bool isCorrect = isYes == _expectedAnswer;
 
             Debug.Log(
-                $"[WordSegmentation] Word=\"{_currentActivity.Word.Word}\", Answer={_currentActivity.Answer}, Selected={(isYes ? "Yes" : "No")}: {(isCorrect ? "CORRECTO" : "INCORRECTO")}"
+                $"[WordSegmentation] Word=\"{_currentActivity.Word.Word}\", Syllables={_syllablesNumber}, Fingers={_currentFingers}, Expected={(_expectedAnswer ? "Yes" : "No")}, Selected={(isYes ? "Yes" : "No")} → {(isCorrect ? "CORRECT" : "INCORRECT")}"
             );
 
             if (_dataManager.MoveNext())

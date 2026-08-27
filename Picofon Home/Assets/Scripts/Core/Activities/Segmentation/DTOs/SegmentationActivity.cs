@@ -8,11 +8,6 @@ namespace Picofon.Activities.Segmentation
         [JsonInclude]
         public WordInfo[] Words { get; set; }
 
-        [JsonInclude]
-        public bool Answer { get; set; }
-
         public WordInfo Word => Words[0];
-
-        public WordInfo Fingers => Words[1];
     }
 }
