@@ -50,7 +50,7 @@ TextureImporter:
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -113,10 +113,10 @@ TextureImporter:
       name: Papirus_0
       rect:
         serializedVersion: 2
-        x: 9
-        y: 194
-        width: 1005
-        height: 506
+        x: 0
+        y: 195
+        width: 1024
+        height: 505
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,8 +124,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 905b9f3b72612d9819a2407c4d4eaef6
-      internalID: 986215083
+      spriteID: cdd9491c5de62cf559b67e9aad7fea98
+      internalID: -134598102
       vertices: []
       indices: 
       edges: []
@@ -134,10 +134,10 @@ TextureImporter:
       name: Papirus_1
       rect:
         serializedVersion: 2
-        x: 214
+        x: 213
         y: 0
-        width: 595
-        height: 172
+        width: 596
+        height: 153
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -145,8 +145,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dd545c11cea0fb8088fff0ee95a6bf6d
-      internalID: 920787804
+      spriteID: e41e1bcebce8940a496e46235a7da8cc
+      internalID: -241757044
       vertices: []
       indices: 
       edges: []
@@ -162,8 +162,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Papirus_0: 986215083
-      Papirus_1: 920787804
+      Papirus_0: -134598102
+      Papirus_1: -241757044
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
