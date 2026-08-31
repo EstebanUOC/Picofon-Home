@@ -54,7 +54,7 @@ namespace Picofon.Activities.Segmentation
         private RectTransform _menuTransform;
 
         [SerializeField]
-        private RectTransform _labelTransform;
+        private Transform _labelTransform;
 
         #endregion
 
@@ -74,6 +74,8 @@ namespace Picofon.Activities.Segmentation
         private float _defaultCounterX;
         private float _defaultProgressBarValue;
 
+        private bool _clueVisible = false;
+
         private static readonly System.Random _rng = new();
 
         public void Awake()
@@ -84,6 +86,13 @@ namespace Picofon.Activities.Segmentation
             _noButton.OnClick += () => HandleAnswer(false);
 
             _gameMenu.OnMenuOptionSelected += HandleMenuOptionSelected;
+
+            Tween.Scale(
+                target: _labelTransform,
+                endValue: Vector3.one * 0,
+                duration: 0.5f,
+                ease: Ease.OutCubic
+            );
         }
 
         public async void Start()
@@ -296,6 +305,20 @@ namespace Picofon.Activities.Segmentation
             {
                 case GameMenuEvent.Exit:
                     LoadScene("MapPathScene").Forget();
+                    break;
+
+                case GameMenuEvent.Clue:
+                    _clueVisible = !_clueVisible;
+
+                    int target = _clueVisible ? 1 : 0;
+
+                    Tween.Scale(
+                        target: _labelTransform,
+                        endValue: Vector3.one * target,
+                        duration: 0.5f,
+                        ease: Ease.OutCubic
+                    );
+
                     break;
             }
         }
