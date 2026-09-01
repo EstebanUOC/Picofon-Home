@@ -1,7 +1,10 @@
 namespace Picofon.Activities.Segmentation
 {
+    using System;
     using Cysharp.Threading.Tasks;
     using Picofon.Activities.Basket;
+    using Picofon.Activities.Basket.DTOs.Responses;
+    using Picofon.Activities.Feedback;
     using Picofon.Components;
     using Picofon.Core.MapPath;
     using Picofon.Core.Network;
@@ -42,6 +45,9 @@ namespace Picofon.Activities.Segmentation
 
         [SerializeField]
         private Counter _counter;
+
+        [SerializeField]
+        private FeedbackController _feedbackController;
 
         [Space]
         [SerializeField]
@@ -98,6 +104,8 @@ namespace Picofon.Activities.Segmentation
         public async void Start()
         {
             SceneOrientationHelper.LockToLandscape();
+
+            _feedbackController.Init(LevelPayload.Skill);
 
             ActivityRequestParams @params = LevelPayload.Params;
 
@@ -261,9 +269,19 @@ namespace Picofon.Activities.Segmentation
         {
             _currentActivity = _dataManager.GetCurrentActivity();
 
-            _wordImage.sprite = LoadSprite(_currentActivity.Word.Path);
+            Sprite icon = LoadSprite(_currentActivity.Word.Path);
+
+            _wordImage.sprite = icon;
 
             _wordText.text = _currentActivity.Word.Word;
+
+            ViewContentDTO feedbackContent = new(
+                new[] { icon },
+                new[] { _currentActivity.Word.SyllabifiedWord },
+                Array.Empty<string>()
+            );
+
+            _feedbackController.SetItemsContent(in feedbackContent, length: 1);
 
             _currentFingers = _rng.Next(0, 6);
 
@@ -274,6 +292,9 @@ namespace Picofon.Activities.Segmentation
 
         private void HandleAnswer(bool isYes)
         {
+            _yesButton.Interactable = false;
+            _noButton.Interactable = false;
+
             bool isCorrect = isYes == _expectedAnswer;
 
             Debug.Log(
@@ -282,6 +303,20 @@ namespace Picofon.Activities.Segmentation
 
             _progressBar.SetProgress(_dataManager.GetCurrentIndex() + 1, isCorrect);
             _counter.AddScore(isCorrect);
+
+            ShowRoundResult(isCorrect).Forget();
+        }
+
+        private async UniTaskVoid ShowRoundResult(bool isCorrect)
+        {
+            FeedbackType feedbackType = isCorrect ? FeedbackType.Positive : FeedbackType.Neutral;
+
+            await UniTask.WaitForSeconds(1.5f);
+
+            await _feedbackController.ShowSegmentation(feedbackType);
+
+            _yesButton.Interactable = true;
+            _noButton.Interactable = true;
 
             if (_dataManager.MoveNext())
             {

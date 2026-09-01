@@ -31,6 +31,11 @@ namespace Picofon.Activities.Basket
             _image.sprite = sprite;
         }
 
+        public void ConfigureItem(StringBuilder builder)
+        {
+            _text.SetText(builder);
+        }
+
         public void ConfigureItem(StringBuilder builder, Color32 color)
         {
             _text.color = color;

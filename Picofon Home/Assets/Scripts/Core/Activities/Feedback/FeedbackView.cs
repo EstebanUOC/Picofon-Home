@@ -12,7 +12,9 @@ namespace Picofon.Activities.Feedback
 
     public class FeedbackView : MonoBehaviour
     {
-        [Space]
+        [SerializeField]
+        private Image _imageComponent;
+
         public GameObject FeedbackPositive;
         public GameObject FeedbackNeutral;
 
@@ -25,6 +27,11 @@ namespace Picofon.Activities.Feedback
 
             positiveButton.onClick.AddListener(HandleContinueClicked);
             neutralButton.onClick.AddListener(HandleContinueClicked);
+
+            if (_imageComponent != null)
+            {
+                _imageComponent.enabled = false;
+            }
         }
 
         public void DisplayFeedbackType(FeedbackType feedbackType)
@@ -33,6 +40,11 @@ namespace Picofon.Activities.Feedback
 
             FeedbackPositive.SetActive(isPositive);
             FeedbackNeutral.SetActive(!isPositive);
+
+            if (_imageComponent != null)
+            {
+                _imageComponent.enabled = isPositive;
+            }
         }
 
         private void HandleContinueClicked()
