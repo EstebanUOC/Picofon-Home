@@ -2263,7 +2263,7 @@ MonoBehaviour:
   _papirusTransform: {fileID: 1803165851}
   _buttonsTransform: {fileID: 1763425240}
   _handsTransform: {fileID: 1280404971}
-  _imageButton: {fileID: 0}
+  _imageButton: {fileID: 1060623577}
 --- !u!1 &789961248
 GameObject:
   m_ObjectHideFlags: 0
