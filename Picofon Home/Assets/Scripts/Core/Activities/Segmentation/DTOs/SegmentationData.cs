@@ -5,9 +5,6 @@ namespace Picofon.Activities.Segmentation
     public class SegmentationGeneralData
     {
         [JsonInclude]
-        public int SyllablesNumber { get; set; }
-
-        [JsonInclude]
         public int SkillId { get; set; }
 
         [JsonInclude]

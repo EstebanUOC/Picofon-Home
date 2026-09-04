@@ -6,8 +6,8 @@ namespace Picofon.Activities.Segmentation
     public class SegmentationActivity
     {
         [JsonInclude]
-        public WordInfo[] Words { get; set; }
+        public WordInfoSegmentation[] Words { get; set; }
 
-        public WordInfo Word => Words[0];
+        public WordInfoSegmentation Word => Words[0];
     }
 }

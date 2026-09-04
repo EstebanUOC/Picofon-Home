@@ -57,10 +57,23 @@ namespace Picofon.Activities.Segmentation
         private RectTransform _counterTransform;
 
         [SerializeField]
+        private Transform _labelTransform;
+
+        [Space]
+        [SerializeField]
         private RectTransform _menuTransform;
 
         [SerializeField]
-        private Transform _labelTransform;
+        private Transform _papirusTransform;
+
+        [SerializeField]
+        private Transform _buttonsTransform;
+
+        [SerializeField]
+        private Transform _handsTransform;
+
+        [SerializeField]
+        private SimplePhysicalButton _imageButton;
 
         #endregion
 
@@ -76,9 +89,10 @@ namespace Picofon.Activities.Segmentation
 
         private bool _expectedAnswer;
 
-        private float _defaultMenuX;
         private float _defaultCounterX;
         private float _defaultProgressBarValue;
+
+        private float _defaultMenuX;
 
         private bool _clueVisible = false;
 
@@ -90,6 +104,8 @@ namespace Picofon.Activities.Segmentation
 
             _yesButton.OnClick += () => HandleAnswer(true);
             _noButton.OnClick += () => HandleAnswer(false);
+
+            _imageButton.OnClick += Test;
 
             _gameMenu.OnMenuOptionSelected += HandleMenuOptionSelected;
 
@@ -112,7 +128,7 @@ namespace Picofon.Activities.Segmentation
 #if DEBUG
             if (@params.ChildId is null)
             {
-                @params = new ActivityRequestParams { PlanId = 441, ChildId = "99345678A" };
+                @params = new ActivityRequestParams { PlanId = 454, ChildId = "273343238" };
                 PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
             }
 #endif
@@ -126,7 +142,7 @@ namespace Picofon.Activities.Segmentation
 
             _fade.FirstLoad();
 
-            PositionMenu();
+            PositionUI();
 
             ApiResult<SegmentationData> result = await _dataManager.LoadActivities(@params);
 
@@ -146,8 +162,6 @@ namespace Picofon.Activities.Segmentation
                 return;
             }
 
-            _syllablesNumber = _dataManager.GetGeneralData()?.SyllablesNumber ?? 0;
-
             Debug.Log(
                 $"[WordSegmentation] Loaded {_dataManager.GetActivityCount()} activities successfully."
             );
@@ -160,12 +174,11 @@ namespace Picofon.Activities.Segmentation
             SetupRound();
         }
 
-        private void PositionMenu()
+        private void PositionUI()
         {
             _defaultMenuX = _menuTransform.anchoredPosition.x;
             _defaultCounterX = _counterTransform.anchoredPosition.x;
 
-            _menuTransform.anchoredPosition = new Vector2(-200, _menuTransform.anchoredPosition.y);
             _counterTransform.anchoredPosition = new Vector2(
                 400,
                 _counterTransform.anchoredPosition.y
@@ -194,13 +207,6 @@ namespace Picofon.Activities.Segmentation
         private async UniTaskVoid AnimateUI()
         {
             await UniTask.WaitForSeconds(1f);
-
-            _ = Tween.UIAnchoredPositionX(
-                target: _menuTransform,
-                endValue: _defaultMenuX,
-                duration: 0.5f,
-                ease: Ease.OutCubic
-            );
 
             _ = Tween.UIAnchoredPositionX(
                 target: _counterTransform,
@@ -281,6 +287,8 @@ namespace Picofon.Activities.Segmentation
                 Array.Empty<string>()
             );
 
+            _syllablesNumber = _currentActivity.Word.SyllablesCount;
+
             _feedbackController.SetItemsContent(in feedbackContent, length: 1);
 
             _currentFingers = _rng.Next(0, 6);
@@ -288,6 +296,59 @@ namespace Picofon.Activities.Segmentation
             _expectedAnswer = _currentFingers == _syllablesNumber;
 
             handManager.Fingers = _currentFingers;
+
+            // Test
+
+            _menuTransform.anchoredPosition = new Vector2(-200, _menuTransform.anchoredPosition.y);
+
+            _papirusTransform.localScale = Vector3.one * 1.4f;
+            _papirusTransform.localPosition = Vector3.zero;
+
+            _buttonsTransform.localPosition = new Vector3(
+                _buttonsTransform.localPosition.x,
+                -6.5f,
+                0
+            );
+
+            _handsTransform.localPosition = new Vector3(14f, _handsTransform.localPosition.y, 0);
+        }
+
+        private void Test()
+        {
+            Tween.UIAnchoredPositionX(
+                target: _menuTransform,
+                endValue: _defaultMenuX,
+                duration: 0.5f,
+                ease: Ease.OutCubic
+            );
+
+            Tween.Scale(
+                target: _papirusTransform,
+                endValue: Vector3.one,
+                duration: 0.5f,
+                ease: Ease.OutCubic
+            );
+
+            Tween.LocalPosition(
+                target: _papirusTransform,
+                endValue: new Vector3(-2.5f, 1.3f, 0),
+                duration: 0.5f,
+                ease: Ease.OutCubic
+            );
+
+            Tween.LocalPositionY(
+                target: _buttonsTransform,
+                endValue: -3.55f,
+                duration: 0.5f,
+                ease: Ease.OutCubic
+            );
+
+            Tween.LocalPositionX(
+                target: _handsTransform,
+                endValue: 6,
+                duration: 0.5f,
+                ease: Ease.OutCubic
+            );
         }
 
         private void HandleAnswer(bool isYes)
