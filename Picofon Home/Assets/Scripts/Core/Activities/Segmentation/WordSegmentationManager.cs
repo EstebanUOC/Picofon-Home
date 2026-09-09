@@ -77,6 +77,10 @@ namespace Picofon.Activities.Segmentation
 
         #endregion
 
+        // Readonly fields
+
+        private readonly AudioClip[] _feedbackClips = new AudioClip[5];
+
         // Variables
 
         private DataManager _dataManager;
@@ -96,7 +100,9 @@ namespace Picofon.Activities.Segmentation
 
         private bool _clueVisible = false;
 
-        private static readonly System.Random _rng = new();
+        private AudioClip _currentWordClip;
+
+        private AudioClip _currentFingersClip;
 
         public void Awake()
         {
@@ -117,26 +123,35 @@ namespace Picofon.Activities.Segmentation
             );
         }
 
+        public void OnDestroy()
+        {
+            AudioManager.Instance?.UnloadAudios();
+        }
+
         public async void Start()
         {
             SceneOrientationHelper.LockToLandscape();
 
-            _feedbackController.Init(LevelPayload.Skill);
-
+            ActivitySkill skill = LevelPayload.Skill;
+            LanguageID language = LevelPayload.Language;
             ActivityRequestParams @params = LevelPayload.Params;
 
 #if DEBUG
             if (@params.ChildId is null)
             {
+                skill = ActivitySkill.Initial;
+                language = LanguageID.Spanish;
                 @params = new ActivityRequestParams { PlanId = 454, ChildId = "273343238" };
                 PerformanceLog.LogWarning("Using default parameters for testing in Unity Editor.");
             }
 #endif
 
-            await LoadActivities(@params);
+            _feedbackController.Init(skill);
+
+            await LoadActivities(@params, language);
         }
 
-        private async UniTask LoadActivities(ActivityRequestParams @params)
+        private async UniTask LoadActivities(ActivityRequestParams @params, LanguageID language)
         {
             await UniTask.WaitForEndOfFrame(this);
 
@@ -148,7 +163,9 @@ namespace Picofon.Activities.Segmentation
 
             if (!result.Success)
             {
-                Debug.LogError($"[WordSegmentation] Error loading activities: {result.Message}");
+                PerformanceLog.LogError(
+                    $"[WordSegmentation] Error loading activities: {result.Message}"
+                );
 
                 _fade.StopAndZoom();
                 return;
@@ -156,15 +173,23 @@ namespace Picofon.Activities.Segmentation
 
             if (!_dataManager.HasActivities())
             {
-                Debug.LogWarning("[WordSegmentation] No activities found.");
+                PerformanceLog.LogWarning("[WordSegmentation] No activities found.");
 
                 _fade.StopAndZoom();
                 return;
             }
 
-            Debug.Log(
-                $"[WordSegmentation] Loaded {_dataManager.GetActivityCount()} activities successfully."
-            );
+            string[] audioPaths = BuildAudioPaths();
+
+            ActivityLabels labels = new()
+            {
+                Mechanic = MechanicID.Segmentation,
+                Language = language,
+            };
+
+            await AudioManager.Instance.LoadAudios(audioPaths, labels);
+
+            AudioManager.Instance.GetIntroAudios(_feedbackClips, MechanicID.Segmentation);
 
             _progressBar.Initialize(_dataManager.GetActivityCount(), false);
 
@@ -172,6 +197,17 @@ namespace Picofon.Activities.Segmentation
             AnimateUI().Forget();
 
             SetupRound();
+
+            int introIndex = (int)ResponseAudioID.Intro;
+            AudioClip introClip = _feedbackClips[introIndex];
+
+            _imageButton.Interactable = false;
+
+            AudioManager.Instance.PlayVoice(introClip);
+
+            await AudioManager.Instance.WaitVoiceToEnd();
+
+            _imageButton.Interactable = true;
         }
 
         private void PositionUI()
@@ -271,6 +307,23 @@ namespace Picofon.Activities.Segmentation
             }
         }
 
+        private string[] BuildAudioPaths()
+        {
+            SegmentationActivity[] activities = _dataManager.GetActivities();
+
+            if (activities == null || activities.Length == 0)
+                return Array.Empty<string>();
+
+            string[] paths = new string[activities.Length];
+
+            for (int i = 0; i < activities.Length; i++)
+            {
+                paths[i] = activities[i].Word.Word;
+            }
+
+            return paths;
+        }
+
         private void SetupRound()
         {
             _currentActivity = _dataManager.GetCurrentActivity();
@@ -281,17 +334,24 @@ namespace Picofon.Activities.Segmentation
 
             _wordText.text = _currentActivity.Word.Word;
 
+            _syllablesNumber = _currentActivity.Word.SyllablesCount;
+
             ViewContentDTO feedbackContent = new(
                 new[] { icon },
                 new[] { _currentActivity.Word.SyllabifiedWord },
                 Array.Empty<string>()
             );
 
-            _syllablesNumber = _currentActivity.Word.SyllablesCount;
-
             _feedbackController.SetItemsContent(in feedbackContent, length: 1);
 
-            _currentFingers = _rng.Next(0, 6);
+            _currentWordClip = AudioManager.Instance.GetAudio(_dataManager.GetCurrentIndex());
+
+            _currentFingers = UnityEngine.Random.Range(0, 6);
+
+            _currentFingersClip = AudioManager.Instance.GetSegmentationClips(
+                SegmentationAudioID.Finger,
+                _currentFingers
+            );
 
             _expectedAnswer = _currentFingers == _syllablesNumber;
 
@@ -315,6 +375,8 @@ namespace Picofon.Activities.Segmentation
 
         private void Test()
         {
+            TestAudio().Forget();
+
             Tween.UIAnchoredPositionX(
                 target: _menuTransform,
                 endValue: _defaultMenuX,
@@ -351,6 +413,15 @@ namespace Picofon.Activities.Segmentation
             );
         }
 
+        private async UniTaskVoid TestAudio()
+        {
+            AudioManager.Instance.PlayUI(_currentWordClip);
+
+            await AudioManager.Instance.WaitUIToEnd();
+
+            AudioManager.Instance.PlayVoice(_currentFingersClip);
+        }
+
         private void HandleAnswer(bool isYes)
         {
             _yesButton.Interactable = false;
@@ -358,7 +429,7 @@ namespace Picofon.Activities.Segmentation
 
             bool isCorrect = isYes == _expectedAnswer;
 
-            Debug.Log(
+            PerformanceLog.Log(
                 $"[WordSegmentation] Word=\"{_currentActivity.Word.Word}\", Syllables={_syllablesNumber}, Fingers={_currentFingers}, Expected={(_expectedAnswer ? "Yes" : "No")}, Selected={(isYes ? "Yes" : "No")} → {(isCorrect ? "CORRECT" : "INCORRECT")}"
             );
 
@@ -385,7 +456,7 @@ namespace Picofon.Activities.Segmentation
             }
             else
             {
-                Debug.Log("[WordSegmentation] All activities completed.");
+                PerformanceLog.Log("[WordSegmentation] All activities completed.");
 
                 HideUI();
 

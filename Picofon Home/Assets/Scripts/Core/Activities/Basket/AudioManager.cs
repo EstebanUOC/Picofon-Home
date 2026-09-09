@@ -60,9 +60,19 @@ namespace Picofon.Activities.Basket
             _audioLoader.GetAudios(index, quantity, clips);
         }
 
-        public void GetIntroAudios(AudioClip[] clips)
+        public AudioClip GetAudio(int index)
         {
-            _audioLoader.GetFeedbackAudios(clips);
+            return _audioLoader.GetAudio(index);
+        }
+
+        public void GetIntroAudios(AudioClip[] clips, MechanicID mechanic = MechanicID.Basket)
+        {
+            _audioLoader.GetFeedbackAudios(clips, mechanic);
+        }
+
+        public AudioClip GetSegmentationClips(SegmentationAudioID audioID, int syllablesCount)
+        {
+            return _audioLoader.GetSegmentationClips(audioID, syllablesCount);
         }
 
         public void PlayVoice(AudioClip clip, float volume = 1f)
@@ -74,6 +84,11 @@ namespace Picofon.Activities.Basket
         public UniTask WaitVoiceToEnd()
         {
             return UniTask.WaitWhile(() => _voiceSource.isPlaying);
+        }
+
+        public UniTask WaitUIToEnd()
+        {
+            return UniTask.WaitWhile(() => _uiSource.isPlaying);
         }
 
         public void StopVoice()

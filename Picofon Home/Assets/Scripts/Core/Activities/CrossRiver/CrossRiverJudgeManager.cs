@@ -199,8 +199,6 @@ namespace Picofon.Activities.CrossRiver
             _fade.StopAndZoom();
             AnimateUI().Forget();
 
-            _currentActivity = _dataManager.GetCurrentActivity();
-
             int introIndex = (int)ResponseAudioID.Intro;
             AudioClip introClip = _feedbackClips[introIndex];
 
@@ -377,10 +375,6 @@ namespace Picofon.Activities.CrossRiver
             ViewContentDTO feedbackContent = new(_icons, _syllabifiedWords, true);
 
             _feedbackController.SetItemsContent(in feedbackContent);
-
-            PerformanceLog.Log(
-                $"Loading audio clips for round {_dataManager.GetCurrentIndex()}, until 2"
-            );
 
             AudioManager.Instance.GetAudios(_dataManager.GetCurrentIndex(), 2, _wordClips);
 

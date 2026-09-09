@@ -4077,6 +4077,14 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 93a2a3c01cda680e2a697a088bfe822b
+    m_Address: SP-SG-CA
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - intro
+    - lang-ca
+    - mecha-segmentation
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 93b611d4880bdc723aa823cc9c2d076f
     m_Address: CA-fort
     m_ReadOnly: 0
