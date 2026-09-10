@@ -67,6 +67,23 @@ namespace Picofon.Activities.Basket.DTOs.Responses
         public string Sound { get; set; }
     }
 
+    public class WordInfoSegmentation
+    {
+        public int Id { get; set; }
+
+        [JsonInclude]
+        public string Word { get; set; }
+
+        [JsonInclude]
+        public string Path { get; set; }
+
+        [JsonInclude]
+        public string SyllabifiedWord { get; set; }
+
+        [JsonInclude]
+        public int SyllablesCount { get; set; }
+    }
+
     public class WordInfoPS : WordInfo
     {
         [JsonInclude]

@@ -5,6 +5,8 @@ using Picofon.Core.MapPath;
 namespace Picofon.Activities.Basket
 {
     using System.Text;
+    using Codice.Client.Common;
+    using Picofon.Utils;
     using UnityEngine;
 
     public class ItemFeedbackManager : MonoBehaviour
@@ -117,6 +119,33 @@ namespace Picofon.Activities.Basket
             }
         }
 
+        public void ConfigureItemsByTypeSegmentation()
+        {
+            ItemFeedback item = _items[0].GetComponent<ItemFeedback>();
+
+            string word = item.SyllabifiedWord;
+
+            _builder.Clear();
+
+            bool nextSeparator;
+
+            do
+            {
+                int sep = word.IndexOf('#');
+
+                _builder.Append(word, startIndex: 0, count: sep);
+                _builder.Append(" - ");
+
+                nextSeparator = word.IndexOf('#', sep + 1) != -1;
+            } while (nextSeparator);
+
+            int lastSep = word.LastIndexOf('#');
+
+            _builder.Append(word, startIndex: lastSep + 1, count: word.Length - lastSep - 1);
+
+            item.ConfigureItem(_builder);
+        }
+
         private void CountSyllables(string word, out int syllablesCount)
         {
             syllablesCount = 1;
@@ -138,9 +167,9 @@ namespace Picofon.Activities.Basket
                 {
                     int sep = word.IndexOf('#');
 
-                    ColorWord(word, 0, sep, feedbackType);
+                    ColorWord(word, startIndex: 0, length: sep, feedbackType);
 
-                    _builder.Append(word, sep + 1, word.Length - sep - 1);
+                    _builder.Append(word, startIndex: sep + 1, count: word.Length - sep - 1);
                     break;
                 }
                 case ActivitySkill.Medial:
@@ -148,9 +177,21 @@ namespace Picofon.Activities.Basket
                     int firstSep = word.IndexOf('#');
                     int lastSep = word.LastIndexOf('#');
 
-                    _builder.Append(word, 0, firstSep);
-                    ColorWord(word, firstSep + 1, lastSep - firstSep - 1, feedbackType);
-                    _builder.Append(word, lastSep + 1, word.Length - lastSep - 1);
+                    _builder.Append(word, startIndex: 0, count: firstSep);
+
+                    ColorWord(
+                        word,
+                        startIndex: firstSep + 1,
+                        length: lastSep - firstSep - 1,
+                        feedbackType
+                    );
+
+                    _builder.Append(
+                        word,
+                        startIndex: lastSep + 1,
+                        count: word.Length - lastSep - 1
+                    );
+
                     break;
                 }
                 case ActivitySkill.Final:
@@ -160,7 +201,7 @@ namespace Picofon.Activities.Basket
                     int firstSep = word.IndexOf('#');
                     int lastSep = word.LastIndexOf('#');
 
-                    _builder.Append(word, 0, firstSep);
+                    _builder.Append(word, startIndex: 0, count: firstSep);
 
                     if (syllablesCount > 2)
                     {

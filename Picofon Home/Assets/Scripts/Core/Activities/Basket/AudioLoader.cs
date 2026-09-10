@@ -3,6 +3,7 @@ using Picofon.Utils;
 
 namespace Picofon.Activities.Basket
 {
+    using System;
     using System.Collections.Generic;
     using Cysharp.Threading.Tasks;
     using UnityEngine;
@@ -20,6 +21,12 @@ namespace Picofon.Activities.Basket
     {
         CrossRiver,
         Basket,
+        Segmentation,
+    }
+
+    public enum SegmentationAudioID
+    {
+        Finger,
     }
 
     public readonly struct ActivityLabels
@@ -41,10 +48,18 @@ namespace Picofon.Activities.Basket
 
         private AsyncOperationHandle<IList<AudioClip>> _feedbackHandle;
 
+        private AsyncOperationHandle<IList<AudioClip>> _segmentationSoundsHandle;
+
         private AudioClip _clip;
 
         public async UniTask LoadAudios(string[] audioPaths, ActivityLabels labels)
         {
+            if (labels.Mechanic == MechanicID.Segmentation)
+            {
+                await LoadAudiosSegmentation(audioPaths, labels);
+                return;
+            }
+
             _audioHandles = new AsyncOperationHandle<AudioClip>[audioPaths.Length];
 
             string skillLabel = labels.Skill switch
@@ -66,6 +81,7 @@ namespace Picofon.Activities.Basket
             {
                 MechanicID.CrossRiver => "mecha-cross",
                 MechanicID.Basket => "mecha-basket",
+                MechanicID.Segmentation => "mecha-segmentation",
                 _ => string.Empty,
             };
 
@@ -146,6 +162,95 @@ namespace Picofon.Activities.Basket
             }
         }
 
+        private async UniTask LoadAudiosSegmentation(string[] audioPaths, ActivityLabels labels)
+        {
+            _audioHandles = new AsyncOperationHandle<AudioClip>[audioPaths.Length];
+
+            string mechanicLabel = "mecha-segmentation";
+
+            string languageLabel = labels.Language switch
+            {
+                LanguageID.Catalan => "lang-ca",
+                LanguageID.Spanish => "lang-es",
+                _ => string.Empty,
+            };
+
+            string[] introKeys = new[] { mechanicLabel, languageLabel, "intro" };
+
+            IEnumerable<string> introEnumerable = introKeys;
+
+            var introHandle = Addressables.LoadResourceLocationsAsync(
+                introEnumerable,
+                Addressables.MergeMode.Intersection
+            );
+
+            await introHandle.Task.AsUniTask();
+
+            _introHandle = Addressables.LoadAssetAsync<AudioClip>(introHandle.Result[0]);
+
+            await _introHandle.Task.AsUniTask();
+
+            string[] soundKeys = new[] { mechanicLabel, languageLabel };
+
+            IEnumerable<string> soundEnumerable = soundKeys;
+
+            _segmentationSoundsHandle = Addressables.LoadAssetsAsync<AudioClip>(
+                soundEnumerable,
+                null,
+                Addressables.MergeMode.Intersection
+            );
+
+            await _segmentationSoundsHandle.Task.AsUniTask();
+
+            string introName = _introHandle.Result.name;
+
+            foreach (var clip in _segmentationSoundsHandle.Result)
+            {
+                if (clip.name == introName)
+                    continue;
+
+                clip.LoadAudioData();
+
+                await LoadAudio(clip);
+            }
+
+            string prefix = labels.Language switch
+            {
+                LanguageID.Catalan => "CA-",
+                LanguageID.Spanish => "SP-",
+                _ => string.Empty,
+            };
+
+            for (int i = 0; i < audioPaths.Length; i++)
+            {
+                string path = TextUtils.RemoveAccentsAndPrepend(
+                    input: audioPaths[i],
+                    prefix: prefix
+                );
+
+                AsyncOperationHandle<AudioClip> handle = Addressables.LoadAssetAsync<AudioClip>(
+                    path
+                );
+
+                await handle.Task.AsUniTask();
+
+                if (handle.Status != AsyncOperationStatus.Succeeded)
+                {
+                    Addressables.Release(handle);
+                    PerformanceLog.LogError($"Failed to load audio at path: {path}");
+                    continue;
+                }
+
+                AudioClip audio = handle.Result;
+
+                audio.LoadAudioData();
+
+                await LoadAudio(audio);
+
+                _audioHandles[i] = handle;
+            }
+        }
+
         public void UnloadAudios()
         {
             if (_introHandle.IsValid())
@@ -164,6 +269,16 @@ namespace Picofon.Activities.Basket
                 Addressables.Release(_feedbackHandle);
             }
 
+            if (_segmentationSoundsHandle.IsValid())
+            {
+                foreach (var clip in _segmentationSoundsHandle.Result)
+                {
+                    clip.UnloadAudioData();
+                }
+
+                Addressables.Release(_segmentationSoundsHandle);
+            }
+
             if (_audioHandles == null)
                 return;
 
@@ -178,24 +293,74 @@ namespace Picofon.Activities.Basket
             }
         }
 
-        public void GetAudios(int index, int quantity, AudioClip[] clips)
+        public void GetAudios(int index, int count, AudioClip[] clips)
         {
-            for (int i = 0; i < quantity; i++)
+            for (int i = 0; i < count; i++)
             {
-                var handle = _audioHandles[index * quantity + i];
+                var handle = _audioHandles[index * count + i];
 
                 if (!handle.IsValid())
                 {
                     continue;
                 }
 
-                clips[i] = _audioHandles[index * quantity + i].Result;
+                clips[i] = _audioHandles[index * count + i].Result;
             }
         }
 
-        public void GetFeedbackAudios(AudioClip[] clips)
+        public AudioClip GetAudio(int index)
         {
-            IList<AudioClip> feedbackClips = _feedbackHandle.Result;
+            var handle = _audioHandles[index];
+
+            if (!handle.IsValid())
+            {
+                return null;
+            }
+
+            return _audioHandles[index].Result;
+        }
+
+        public AudioClip GetSegmentationClips(SegmentationAudioID audioID, int syllabesCount)
+        {
+            char charToSearch = audioID switch
+            {
+                SegmentationAudioID.Finger => 'S',
+                _ => ' ',
+            };
+
+            PerformanceLog.Log(
+                "Segmentation sound handle count: " + _segmentationSoundsHandle.Result.Count
+            );
+
+            for (int i = 0; i < _segmentationSoundsHandle.Result.Count; i++)
+            {
+                AudioClip clip = _segmentationSoundsHandle.Result[i];
+
+                PerformanceLog.Log(
+                    $"Clip name: {clip.name}, Last char: {clip.name[^1]}, Second last char: {clip.name[^2]}"
+                );
+
+                if (clip.name[^2] == charToSearch && (clip.name[^1] - '0') == syllabesCount)
+                {
+                    return clip;
+                }
+            }
+
+            return null;
+        }
+
+        public void GetFeedbackAudios(AudioClip[] clips, MechanicID mechanic = MechanicID.Basket)
+        {
+            IList<AudioClip> feedbackClips;
+
+            if (mechanic == MechanicID.Segmentation)
+            {
+                feedbackClips = _segmentationSoundsHandle.Result;
+            }
+            else
+            {
+                feedbackClips = _feedbackHandle.Result;
+            }
 
             clips[0] = _introHandle.Result;
 

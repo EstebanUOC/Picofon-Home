@@ -59,6 +59,17 @@ namespace Picofon.Activities.Feedback
             return await _taskCompletion.Task;
         }
 
+        public async UniTask<bool> ShowSegmentation(FeedbackType feedbackType)
+        {
+            gameObject.SetActive(true);
+            _feedbackView.DisplayFeedbackType(feedbackType);
+            _itemManager.ConfigureItemsByTypeSegmentation();
+
+            _taskCompletion.Reset();
+
+            return await _taskCompletion.Task;
+        }
+
         public void SetItemsContent(in ViewContentDTO content, int length = 0)
         {
             _itemManager.SetItemsContent(in content, length);

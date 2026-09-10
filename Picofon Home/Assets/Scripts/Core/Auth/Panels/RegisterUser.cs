@@ -52,6 +52,9 @@ namespace Picofon.Core.Auth.Panels
         private TMP_InputField _loginPasswordInput;
 
         [SerializeField]
+        private SimpleButton _togglePasswordButton;
+
+        [SerializeField]
         private CustomButtonLoading _loginButton;
 
         [SerializeField]
@@ -90,6 +93,8 @@ namespace Picofon.Core.Auth.Panels
         public void Start()
         {
             _returnButton.OnClick += () => _uiManager.ShowPanel(PanelEnum.Login);
+
+            _togglePasswordButton.OnClick += TooglePasswordVisibility;
 
             _loginButton.OnClick += Login;
             _goRegisterButton.OnClick += ShowRegister;
@@ -381,6 +386,14 @@ namespace Picofon.Core.Auth.Panels
         private void Register()
         {
             RegisterAsync().Forget();
+        }
+
+        private void TooglePasswordVisibility()
+        {
+            _loginPasswordInput.contentType =
+                _loginPasswordInput.contentType == TMP_InputField.ContentType.Password
+                    ? TMP_InputField.ContentType.Standard
+                    : TMP_InputField.ContentType.Password;
         }
     }
 }

@@ -171,6 +171,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 05492a8263ec97acf99628941a618c4e
+    m_Address: SP-MO-SY-SPS-J-GE-T-S3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - mecha-segmentation
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 056cc44c3fcad9206926ca6818ef1dc9
     m_Address: SP-cantar
     m_ReadOnly: 0
@@ -1071,6 +1078,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 264fb988cdc8d4178acd36cf2ee131ff
+    m_Address: SP-MO-SY-SPS-J-GE-T-N5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - mecha-segmentation
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 265fc1e046ac09df989b6ed64bfb0a78
     m_Address: "SP-mu\xF1eca"
     m_ReadOnly: 0
@@ -1206,6 +1220,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2ac222f4eb002a0ed830ed290f0c5001
+    m_Address: SP-MO-SY-SPS-J-GE-T-N1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - mecha-segmentation
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2ae3715a0a395bc6cba3770d36aab447
     m_Address: "SP-le\xF3n"
     m_ReadOnly: 0
@@ -1305,6 +1326,13 @@ MonoBehaviour:
     m_Address: "SP-escorpi\xF3n"
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2ecfb6c70e45ec9ceb7c98b9f6c84ef9
+    m_Address: SP-MO-SY-SPS-J-GE-T-P3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - mecha-segmentation
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2ee5ab45b47ba5139a41def8f763280e
     m_Address: "SP-cintur\xF3n"
@@ -2921,6 +2949,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 69d2313fdb57a9a35a834c06d7382cf2
+    m_Address: SP-MO-SY-SPS-J-GE-T-S1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - mecha-segmentation
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 69e00d40fb81bba60b4711023bc458c2
     m_Address: SP-pulga
     m_ReadOnly: 0
@@ -3294,6 +3329,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7853bb55bee18d930adfe4af86ee0040
+    m_Address: SP-MO-SY-SPS-J-GE-T-N4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - mecha-segmentation
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 78bfe889412caf3d3a219dcaa03a0e12
     m_Address: SP-sobaco
     m_ReadOnly: 0
@@ -3394,7 +3436,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7be959775f616650f8465ec3dcab8e6e
-    m_Address: "SP-bamb\xFA"
+    m_Address: SP-bambu
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -5305,6 +5347,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c26949a8b0669634eb287337d8b534b1
+    m_Address: SP-MO-SY-SPS-J-GE-T-P5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - mecha-segmentation
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c2694c8da7ac99514af0910482665115
     m_Address: SP-mofeta
     m_ReadOnly: 0
@@ -5339,6 +5388,13 @@ MonoBehaviour:
     m_Address: SP-kiwi
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3b1665483779aef8bf5ee02119b1a90
+    m_Address: SP-MO-SY-SPS-J-GE-T-P2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - mecha-segmentation
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c3b422959416246a286cfce2f21434f7
     m_Address: "SP-autob\xFAs"
@@ -5429,6 +5485,13 @@ MonoBehaviour:
     m_Address: SP-carrera
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7e14f8da2378fcdbb33866894041b22
+    m_Address: SP-MO-SY-SPS-J-GE-T-S4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - mecha-segmentation
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c848a9646268203e689494e91c34b3ac
     m_Address: SP-girasol
@@ -5555,6 +5618,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cb8b68158b0d1f53bb6782d90f401412
+    m_Address: SP-MO-SY-SPS-J-GE-T-P1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - mecha-segmentation
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cb8ced7195011d6c3840d7d9d6e155d0
     m_Address: SP-bajo
     m_ReadOnly: 0
@@ -5624,6 +5694,13 @@ MonoBehaviour:
     m_Address: SP-liebre
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd40da945f68838a189bb9e1d3451147
+    m_Address: SP-MO-SY-SPS-J-GE-T-N3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - mecha-segmentation
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cd5087bbe542221498516328d4ace437
     m_Address: SP-atleta
@@ -5998,10 +6075,24 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9dbeca5dc4f0b54ba6e6828abd4d9a2
+    m_Address: SP-MO-SY-SPS-J-GE-T-S5
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - mecha-segmentation
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d9f483bc0d637b87f927f15d03c85743
     m_Address: SP-borrar
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9ffb4cb0a5d9970a925cf2de9b30c96
+    m_Address: SP-MO-SY-SPS-J-GE-T-P4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - mecha-segmentation
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: da854a057ed4b904ab5709887ee92042
     m_Address: "SP-bid\xF3n"
@@ -6305,6 +6396,21 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e6465f37879eb23c18f365b1f6428908
+    m_Address: SP-MO-SY-SPS-J-GE-T-I
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - intro
+    - lang-es
+    - mecha-segmentation
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e69bc1e43e7eb4ebc8f5decd12601d2e
+    m_Address: SP-MO-SY-SPS-J-GE-T-N2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - mecha-segmentation
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e6d081a30d1350ec6a15b48863302a69
     m_Address: SP-gelatina
     m_ReadOnly: 0
@@ -6369,6 +6475,13 @@ MonoBehaviour:
     m_Address: SP-beso
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e8467d54416c90ca0a6cd4def196fa6d
+    m_Address: SP-MO-SY-SPS-J-GE-T-S2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - lang-es
+    - mecha-segmentation
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e85e9e1f360ce48a58cae1ee283da1d6
     m_Address: "SP-az\xFAcar"
