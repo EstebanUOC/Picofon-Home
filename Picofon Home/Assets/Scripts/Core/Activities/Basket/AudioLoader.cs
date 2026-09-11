@@ -3,7 +3,6 @@ using Picofon.Utils;
 
 namespace Picofon.Activities.Basket
 {
-    using System;
     using System.Collections.Generic;
     using Cysharp.Threading.Tasks;
     using UnityEngine;
@@ -27,6 +26,8 @@ namespace Picofon.Activities.Basket
     public enum SegmentationAudioID
     {
         Finger,
+        Positive,
+        Negative,
     }
 
     public readonly struct ActivityLabels
@@ -325,20 +326,14 @@ namespace Picofon.Activities.Basket
             char charToSearch = audioID switch
             {
                 SegmentationAudioID.Finger => 'S',
+                SegmentationAudioID.Positive => 'P',
+                SegmentationAudioID.Negative => 'N',
                 _ => ' ',
             };
-
-            PerformanceLog.Log(
-                "Segmentation sound handle count: " + _segmentationSoundsHandle.Result.Count
-            );
 
             for (int i = 0; i < _segmentationSoundsHandle.Result.Count; i++)
             {
                 AudioClip clip = _segmentationSoundsHandle.Result[i];
-
-                PerformanceLog.Log(
-                    $"Clip name: {clip.name}, Last char: {clip.name[^1]}, Second last char: {clip.name[^2]}"
-                );
 
                 if (clip.name[^2] == charToSearch && (clip.name[^1] - '0') == syllabesCount)
                 {
@@ -347,6 +342,11 @@ namespace Picofon.Activities.Basket
             }
 
             return null;
+        }
+
+        public AudioClip GetIntroClip()
+        {
+            return _introHandle.Result;
         }
 
         public void GetFeedbackAudios(AudioClip[] clips, MechanicID mechanic = MechanicID.Basket)

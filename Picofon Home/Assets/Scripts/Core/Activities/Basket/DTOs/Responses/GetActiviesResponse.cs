@@ -81,7 +81,7 @@ namespace Picofon.Activities.Basket.DTOs.Responses
         public string SyllabifiedWord { get; set; }
 
         [JsonInclude]
-        public int SyllablesCount { get; set; }
+        public int SyllableCount { get; set; }
     }
 
     public class WordInfoPS : WordInfo

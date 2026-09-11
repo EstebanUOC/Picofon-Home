@@ -1183,13 +1183,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2e7c380085c873c6db6c445dd54dddd9
-    m_Address: Assets/Audio/SFX/Voice/Activities/Segmentation/Catalan/Instruction/SP-MO-SY-SPS-J-GE-T-P4.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-ca
-    - mecha-segmentation
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2ecd7b2295d57e4dfb3350554aa59427
     m_Address: CA-pilota
     m_ReadOnly: 0
@@ -1722,13 +1715,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3dcaf7388a5aaf35486fe70aae1a273d
-    m_Address: Assets/Audio/SFX/Voice/Activities/Segmentation/Catalan/Instruction/SP-MO-SY-SPS-J-GE-T-P5.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-ca
-    - mecha-segmentation
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3de0d327728151273a1d9441e4623e92
     m_Address: CA-pati
     m_ReadOnly: 0
@@ -1946,13 +1932,6 @@ MonoBehaviour:
     m_Address: CA-crep
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4476133bec78783278f8899ffe8931e3
-    m_Address: Assets/Audio/SFX/Voice/Activities/Segmentation/Catalan/Instruction/SP-MO-SY-SPS-J-GE-T-N3.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-ca
-    - mecha-segmentation
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 44854dce3a49a3175b842ac8b5c5e0a8
     m_Address: CA-patata
@@ -2492,13 +2471,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 59cf7d06fa9c6f838a531ce13a7c0c3b
-    m_Address: Assets/Audio/SFX/Voice/Activities/Segmentation/Catalan/Instruction/SP-MO-SY-SPS-J-GE-T-P1.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-ca
-    - mecha-segmentation
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 59f2a87c23da709b8a35b1dc463eb431
     m_Address: CA-llagosta
     m_ReadOnly: 0
@@ -2538,13 +2510,6 @@ MonoBehaviour:
     m_Address: CA-japo
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5cb2f732121b6c4b890f032e63b377d1
-    m_Address: Assets/Audio/SFX/Voice/Activities/Segmentation/Catalan/Fingers/SP-MO-SY-SPS-J-GE-T-S1.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-ca
-    - mecha-segmentation
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5d0ee9895e1f761859a95609c3cdef7b
     m_Address: CA-salami
@@ -2769,13 +2734,6 @@ MonoBehaviour:
     m_Address: CA-ovella
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 63e7bb9493b51066eadf326a1515b529
-    m_Address: Assets/Audio/SFX/Voice/Activities/Segmentation/Catalan/Instruction/SP-MO-SY-SPS-J-GE-T-P3.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-ca
-    - mecha-segmentation
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6428a8793e302d98aaba11b7de84b368
     m_Address: CA-tap
@@ -3067,13 +3025,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6f30ae543643cdbe38d544f182bd9c53
-    m_Address: Assets/Audio/SFX/Voice/Activities/Segmentation/Catalan/Fingers/SP-MO-SY-SPS-J-GE-T-S3.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-ca
-    - mecha-segmentation
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6f37c1c9ae45b31a8a70b4bbf6248528
     m_Address: CA-noria
     m_ReadOnly: 0
@@ -3357,21 +3308,6 @@ MonoBehaviour:
     m_Address: CA-llavis
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 76d903445b2f5ef0cb4a90c421c7ce94
-    m_Address: Assets/Audio/SFX/Voice/Activities/Segmentation/Catalan/Instruction/SP-MO-SY-SPS-J-GE-T-N1.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-ca
-    - mecha-segmentation
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 773f5f85bedfb4602bf4a957a7453ba3
-    m_Address: Assets/Audio/SFX/Voice/Activities/Segmentation/Catalan/Instruction/SP-MO-SY-SPS-J-GE-T-I.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - intro
-    - lang-ca
-    - mecha-segmentation
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 77619b1cbbec561e9a370301b134bd6b
     m_Address: CA-datil
@@ -4291,13 +4227,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 98bbc28659686d618baeebdd3e0696d4
-    m_Address: Assets/Audio/SFX/Voice/Activities/Segmentation/Catalan/Fingers/SP-MO-SY-SPS-J-GE-T-S5.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-ca
-    - mecha-segmentation
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9923a5c16d8948e299ff78e72d908391
     m_Address: CA-rapid
     m_ReadOnly: 0
@@ -4598,13 +4527,6 @@ MonoBehaviour:
     m_Address: CA-dibuixar
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a16bc2c6181b912ef90b665ff4c8e204
-    m_Address: Assets/Audio/SFX/Voice/Activities/Segmentation/Catalan/Instruction/SP-MO-SY-SPS-J-GE-T-P2.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-ca
-    - mecha-segmentation
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a187cb1d14c37f2928945ac2f60be4d5
     m_Address: CA-tassa
@@ -6428,13 +6350,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: deb07f98c3037a9a0b94e88af9cb8a28
-    m_Address: Assets/Audio/SFX/Voice/Activities/Segmentation/Catalan/Instruction/SP-MO-SY-SPS-J-GE-T-N2.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-ca
-    - mecha-segmentation
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: df2ec7b5fbe9cc3078776f5b6ff8574d
     m_Address: CA-flautista
     m_ReadOnly: 0
@@ -6524,13 +6439,6 @@ MonoBehaviour:
     m_Address: CA-fanal
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e23d02603dd96891399cb5427d9fd268
-    m_Address: Assets/Audio/SFX/Voice/Activities/Segmentation/Catalan/Instruction/SP-MO-SY-SPS-J-GE-T-N4.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-ca
-    - mecha-segmentation
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e248188c2c9e0b095ae6617c765d6f34
     m_Address: CA-llenguado
@@ -6636,13 +6544,6 @@ MonoBehaviour:
     m_Address: CA-salmo
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e5a1c87c734f246479a719328db5b978
-    m_Address: Assets/Audio/SFX/Voice/Activities/Segmentation/Catalan/Fingers/SP-MO-SY-SPS-J-GE-T-S2.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-ca
-    - mecha-segmentation
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e5c3ccbeffbe5fc389af418770c66c12
     m_Address: CA-pebrot
@@ -7125,13 +7026,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f759883b2f0ec004598fae75f8434abd
-    m_Address: Assets/Audio/SFX/Voice/Activities/Segmentation/Catalan/Fingers/SP-MO-SY-SPS-J-GE-T-S4.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-ca
-    - mecha-segmentation
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f7976a0f92d569a9e96d47168fde5af2
     m_Address: CA-nen
     m_ReadOnly: 0
@@ -7166,13 +7060,6 @@ MonoBehaviour:
     m_Address: CA-roda
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f93f4968b9e81dba3abda3152537038b
-    m_Address: Assets/Audio/SFX/Voice/Activities/Segmentation/Catalan/Instruction/SP-MO-SY-SPS-J-GE-T-N5.ogg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - lang-ca
-    - mecha-segmentation
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f97063061e331e2ecb0be24513245c50
     m_Address: CA-terratremol

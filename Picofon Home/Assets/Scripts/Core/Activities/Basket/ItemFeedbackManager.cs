@@ -127,9 +127,9 @@ namespace Picofon.Activities.Basket
 
             _builder.Clear();
 
-            bool nextSeparator;
+            bool nextSeparator = word.IndexOf('#') != -1;
 
-            do
+            while (nextSeparator)
             {
                 int sep = word.IndexOf('#');
 
@@ -137,11 +137,18 @@ namespace Picofon.Activities.Basket
                 _builder.Append(" - ");
 
                 nextSeparator = word.IndexOf('#', sep + 1) != -1;
-            } while (nextSeparator);
+            }
 
             int lastSep = word.LastIndexOf('#');
 
-            _builder.Append(word, startIndex: lastSep + 1, count: word.Length - lastSep - 1);
+            if (lastSep != -1)
+            {
+                _builder.Append(word, startIndex: lastSep + 1, count: word.Length - lastSep - 1);
+            }
+            else
+            {
+                _builder.Append(word);
+            }
 
             item.ConfigureItem(_builder);
         }

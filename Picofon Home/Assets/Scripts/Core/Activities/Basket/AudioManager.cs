@@ -65,6 +65,11 @@ namespace Picofon.Activities.Basket
             return _audioLoader.GetAudio(index);
         }
 
+        public AudioClip GetIntroClip()
+        {
+            return _audioLoader.GetIntroClip();
+        }
+
         public void GetIntroAudios(AudioClip[] clips, MechanicID mechanic = MechanicID.Basket)
         {
             _audioLoader.GetFeedbackAudios(clips, mechanic);

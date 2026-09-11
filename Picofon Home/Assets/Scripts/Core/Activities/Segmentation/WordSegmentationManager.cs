@@ -77,10 +77,6 @@ namespace Picofon.Activities.Segmentation
 
         #endregion
 
-        // Readonly fields
-
-        private readonly AudioClip[] _feedbackClips = new AudioClip[5];
-
         // Variables
 
         private DataManager _dataManager;
@@ -92,6 +88,8 @@ namespace Picofon.Activities.Segmentation
         private int _currentFingers;
 
         private bool _expectedAnswer;
+
+        private bool _isMinimized;
 
         private float _defaultCounterX;
         private float _defaultProgressBarValue;
@@ -189,8 +187,6 @@ namespace Picofon.Activities.Segmentation
 
             await AudioManager.Instance.LoadAudios(audioPaths, labels);
 
-            AudioManager.Instance.GetIntroAudios(_feedbackClips, MechanicID.Segmentation);
-
             _progressBar.Initialize(_dataManager.GetActivityCount(), false);
 
             _fade.StopAndZoom();
@@ -198,8 +194,7 @@ namespace Picofon.Activities.Segmentation
 
             SetupRound();
 
-            int introIndex = (int)ResponseAudioID.Intro;
-            AudioClip introClip = _feedbackClips[introIndex];
+            AudioClip introClip = AudioManager.Instance.GetIntroClip();
 
             _imageButton.Interactable = false;
 
@@ -334,7 +329,9 @@ namespace Picofon.Activities.Segmentation
 
             _wordText.text = _currentActivity.Word.Word;
 
-            _syllablesNumber = _currentActivity.Word.SyllablesCount;
+            _syllablesNumber = _currentActivity.Word.SyllableCount;
+
+            _isMinimized = false;
 
             ViewContentDTO feedbackContent = new(
                 new[] { icon },
@@ -346,7 +343,7 @@ namespace Picofon.Activities.Segmentation
 
             _currentWordClip = AudioManager.Instance.GetAudio(_dataManager.GetCurrentIndex());
 
-            _currentFingers = UnityEngine.Random.Range(0, 6);
+            _currentFingers = UnityEngine.Random.Range(1, 6);
 
             _currentFingersClip = AudioManager.Instance.GetSegmentationClips(
                 SegmentationAudioID.Finger,
@@ -354,6 +351,10 @@ namespace Picofon.Activities.Segmentation
             );
 
             _expectedAnswer = _currentFingers == _syllablesNumber;
+
+            PerformanceLog.Log(
+                $"Fingers: {_currentFingers}, Syllables: {_syllablesNumber}, Expected answer: {_expectedAnswer}"
+            );
 
             handManager.Fingers = _currentFingers;
 
@@ -376,6 +377,11 @@ namespace Picofon.Activities.Segmentation
         private void Test()
         {
             TestAudio().Forget();
+
+            if (_isMinimized)
+            {
+                return;
+            }
 
             Tween.UIAnchoredPositionX(
                 target: _menuTransform,
@@ -417,9 +423,16 @@ namespace Picofon.Activities.Segmentation
         {
             AudioManager.Instance.PlayUI(_currentWordClip);
 
+            if (_isMinimized)
+            {
+                return;
+            }
+
             await AudioManager.Instance.WaitUIToEnd();
 
             AudioManager.Instance.PlayVoice(_currentFingersClip);
+
+            _isMinimized = true;
         }
 
         private void HandleAnswer(bool isYes)
@@ -429,11 +442,15 @@ namespace Picofon.Activities.Segmentation
 
             bool isCorrect = isYes == _expectedAnswer;
 
-            PerformanceLog.Log(
-                $"[WordSegmentation] Word=\"{_currentActivity.Word.Word}\", Syllables={_syllablesNumber}, Fingers={_currentFingers}, Expected={(_expectedAnswer ? "Yes" : "No")}, Selected={(isYes ? "Yes" : "No")} → {(isCorrect ? "CORRECT" : "INCORRECT")}"
+            _progressBar.SetProgress(_dataManager.GetCurrentIndex() + 1, isCorrect);
+
+            AudioClip feedbackClip = AudioManager.Instance.GetSegmentationClips(
+                isCorrect ? SegmentationAudioID.Positive : SegmentationAudioID.Negative,
+                _currentActivity.Word.SyllableCount
             );
 
-            _progressBar.SetProgress(_dataManager.GetCurrentIndex() + 1, isCorrect);
+            AudioManager.Instance.PlayVoice(feedbackClip);
+
             _counter.AddScore(isCorrect);
 
             ShowRoundResult(isCorrect).Forget();
