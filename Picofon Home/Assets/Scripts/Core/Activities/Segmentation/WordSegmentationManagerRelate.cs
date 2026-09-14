@@ -14,7 +14,7 @@ namespace Picofon.Activities.Segmentation
     using UnityEngine;
     using UnityEngine.SceneManagement;
 
-    public class WordSegmentationManager : MonoBehaviour
+    public class WordSegmentationManagerRelate : MonoBehaviour
     {
         # region References
 
@@ -22,10 +22,7 @@ namespace Picofon.Activities.Segmentation
         private HandManager handManager;
 
         [SerializeField]
-        private SimplePhysicalButton _yesButton;
-
-        [SerializeField]
-        private SimplePhysicalButton _noButton;
+        private SimplePhysicalButton _confirmButton;
 
         [SerializeField]
         private SpriteRenderer _wordImage;
@@ -106,8 +103,7 @@ namespace Picofon.Activities.Segmentation
         {
             _dataManager = new DataManager();
 
-            _yesButton.OnClick += () => HandleAnswer(true);
-            _noButton.OnClick += () => HandleAnswer(false);
+            _confirmButton.OnClick += HandleAnswer;
 
             _imageButton.OnClick += PositionUIForRound;
 
@@ -483,12 +479,9 @@ namespace Picofon.Activities.Segmentation
             _isMinimized = true;
         }
 
-        private void HandleAnswer(bool isYes)
+        private void HandleAnswer()
         {
-            _yesButton.Interactable = false;
-            _noButton.Interactable = false;
-
-            bool isCorrect = isYes == _expectedAnswer;
+            bool isCorrect = true;
 
             _progressBar.SetProgress(_dataManager.GetCurrentIndex() + 1, isCorrect);
 
@@ -511,9 +504,6 @@ namespace Picofon.Activities.Segmentation
             await UniTask.WaitForSeconds(1.5f);
 
             await _feedbackController.ShowSegmentation(feedbackType);
-
-            _yesButton.Interactable = true;
-            _noButton.Interactable = true;
 
             if (_dataManager.MoveNext())
             {
