@@ -461,6 +461,8 @@ namespace Picofon.Activities.Segmentation
             await AudioManager.Instance.WaitVoiceToEnd();
 
             _imageButton.Interactable = true;
+
+            _isMinimized = false;
         }
 
         private async UniTaskVoid PlayWordAudio()

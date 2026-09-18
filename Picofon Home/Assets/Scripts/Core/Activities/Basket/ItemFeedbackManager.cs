@@ -5,8 +5,6 @@ using Picofon.Core.MapPath;
 namespace Picofon.Activities.Basket
 {
     using System.Text;
-    using Codice.Client.Common;
-    using Picofon.Utils;
     using UnityEngine;
 
     public class ItemFeedbackManager : MonoBehaviour
