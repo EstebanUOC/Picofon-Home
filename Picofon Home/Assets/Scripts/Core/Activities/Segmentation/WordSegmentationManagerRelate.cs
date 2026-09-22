@@ -19,12 +19,6 @@ namespace Picofon.Activities.Segmentation
         # region References
 
         [SerializeField]
-        private HandManager handManager;
-
-        [SerializeField]
-        private SimplePhysicalButton _confirmButton;
-
-        [SerializeField]
         private SpriteRenderer _wordImage;
 
         [SerializeField]
@@ -64,13 +58,23 @@ namespace Picofon.Activities.Segmentation
         private Transform _papirusTransform;
 
         [SerializeField]
-        private Transform _buttonsTransform;
-
-        [SerializeField]
         private Transform _handsTransform;
 
         [SerializeField]
         private SimplePhysicalButton _imageButton;
+
+        // Hand Buttons
+        [SerializeField]
+        private SimplePhysicalButton _hand1Button;
+
+        [SerializeField]
+        private SimplePhysicalButton _hand2Button;
+
+        [SerializeField]
+        private SimplePhysicalButton _hand3Button;
+
+        [SerializeField]
+        private SimplePhysicalButton _hand4Button;
 
         #endregion
 
@@ -103,7 +107,10 @@ namespace Picofon.Activities.Segmentation
         {
             _dataManager = new DataManager();
 
-            _confirmButton.OnClick += HandleAnswer;
+            _hand1Button.OnClick += () => HandleAnswer(1);
+            _hand2Button.OnClick += () => HandleAnswer(2);
+            _hand3Button.OnClick += () => HandleAnswer(3);
+            _hand4Button.OnClick += () => HandleAnswer(4);
 
             _imageButton.OnClick += PositionUIForRound;
 
@@ -352,20 +359,10 @@ namespace Picofon.Activities.Segmentation
                 $"Fingers: {_currentFingers}, Syllables: {_syllablesNumber}, Expected answer: {_expectedAnswer}"
             );
 
-            handManager.Fingers = _currentFingers;
-
-            // Test
-
             _menuTransform.anchoredPosition = new Vector2(-200, _menuTransform.anchoredPosition.y);
 
             _papirusTransform.localScale = Vector3.one * 1.4f;
             _papirusTransform.localPosition = Vector3.zero;
-
-            _buttonsTransform.localPosition = new Vector3(
-                _buttonsTransform.localPosition.x,
-                -6.5f,
-                0
-            );
 
             _handsTransform.localPosition = new Vector3(14f, _handsTransform.localPosition.y, 0);
         }
@@ -388,28 +385,21 @@ namespace Picofon.Activities.Segmentation
 
             Tween.Scale(
                 target: _papirusTransform,
-                endValue: Vector3.one,
+                endValue: Vector3.one * 0.9f,
                 duration: 0.5f,
                 ease: Ease.OutCubic
             );
 
             Tween.LocalPosition(
                 target: _papirusTransform,
-                endValue: new Vector3(-2.5f, 1.3f, 0),
-                duration: 0.5f,
-                ease: Ease.OutCubic
-            );
-
-            Tween.LocalPositionY(
-                target: _buttonsTransform,
-                endValue: -3.55f,
+                endValue: new Vector3(-2.5f, 0.12f, 0),
                 duration: 0.5f,
                 ease: Ease.OutCubic
             );
 
             Tween.LocalPositionX(
                 target: _handsTransform,
-                endValue: 6,
+                endValue: 5.6f,
                 duration: 0.5f,
                 ease: Ease.OutCubic
             );
@@ -434,13 +424,6 @@ namespace Picofon.Activities.Segmentation
             _ = Tween.LocalPosition(
                 target: _papirusTransform,
                 endValue: Vector3.zero,
-                duration: 0.5f,
-                ease: Ease.OutCubic
-            );
-
-            _ = Tween.LocalPositionY(
-                target: _buttonsTransform,
-                endValue: -6.5f,
                 duration: 0.5f,
                 ease: Ease.OutCubic
             );
@@ -481,9 +464,9 @@ namespace Picofon.Activities.Segmentation
             _isMinimized = true;
         }
 
-        private void HandleAnswer()
+        private void HandleAnswer(int fingersCount)
         {
-            bool isCorrect = true;
+            bool isCorrect = fingersCount == _syllablesNumber;
 
             _progressBar.SetProgress(_dataManager.GetCurrentIndex() + 1, isCorrect);
 
