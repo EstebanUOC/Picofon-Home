@@ -101,7 +101,7 @@ namespace Picofon.Activities.Segmentation
 
         private AudioClip _currentWordClip;
 
-        private AudioClip _currentFingersClip;
+        private AudioClip _instructionClip;
 
         public void Awake()
         {
@@ -186,6 +186,7 @@ namespace Picofon.Activities.Segmentation
             {
                 Mechanic = MechanicID.Segmentation,
                 Language = language,
+                Activity = "a",
             };
 
             await AudioManager.Instance.LoadAudios(audioPaths, labels);
@@ -348,9 +349,9 @@ namespace Picofon.Activities.Segmentation
 
             _currentFingers = UnityEngine.Random.Range(1, 6);
 
-            _currentFingersClip = AudioManager.Instance.GetSegmentationClips(
-                SegmentationAudioID.Finger,
-                _currentFingers
+            _instructionClip = AudioManager.Instance.GetSegmentationClips(
+                SegmentationAudioID.Instruction,
+                0
             );
 
             _expectedAnswer = _currentFingers == _syllablesNumber;
@@ -459,7 +460,7 @@ namespace Picofon.Activities.Segmentation
 
             await AudioManager.Instance.WaitUIToEnd();
 
-            AudioManager.Instance.PlayVoice(_currentFingersClip);
+            AudioManager.Instance.PlayVoice(_instructionClip);
 
             _isMinimized = true;
         }

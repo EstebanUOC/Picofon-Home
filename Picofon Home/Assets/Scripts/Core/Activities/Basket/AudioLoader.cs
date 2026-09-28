@@ -28,6 +28,7 @@ namespace Picofon.Activities.Basket
         Finger,
         Positive,
         Negative,
+        Instruction,
     }
 
     public readonly struct ActivityLabels
@@ -46,6 +47,8 @@ namespace Picofon.Activities.Basket
         private AsyncOperationHandle<AudioClip>[] _audioHandles;
 
         private AsyncOperationHandle<AudioClip> _introHandle;
+
+        private AsyncOperationHandle<AudioClip> _intructionSegmentationHandle;
 
         private AsyncOperationHandle<IList<AudioClip>> _feedbackHandle;
 
@@ -187,9 +190,24 @@ namespace Picofon.Activities.Basket
 
             await introHandle.Task.AsUniTask();
 
-            _introHandle = Addressables.LoadAssetAsync<AudioClip>(introHandle.Result[0]);
+            if (!string.IsNullOrEmpty(labels.Activity))
+            {
+                _introHandle = Addressables.LoadAssetAsync<AudioClip>(introHandle.Result[1]);
 
-            await _introHandle.Task.AsUniTask();
+                await _introHandle.Task.AsUniTask();
+
+                _intructionSegmentationHandle = Addressables.LoadAssetAsync<AudioClip>(
+                    introHandle.Result[0]
+                );
+
+                await _intructionSegmentationHandle.Task.AsUniTask();
+            }
+            else
+            {
+                _introHandle = Addressables.LoadAssetAsync<AudioClip>(introHandle.Result[0]);
+
+                await _introHandle.Task.AsUniTask();
+            }
 
             string[] soundKeys = new[] { mechanicLabel, languageLabel };
 
@@ -323,6 +341,11 @@ namespace Picofon.Activities.Basket
 
         public AudioClip GetSegmentationClips(SegmentationAudioID audioID, int syllabesCount)
         {
+            if (audioID == SegmentationAudioID.Instruction)
+            {
+                return _intructionSegmentationHandle.Result;
+            }
+
             char charToSearch = audioID switch
             {
                 SegmentationAudioID.Finger => 'S',

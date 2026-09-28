@@ -1699,6 +1699,14 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3aa85044010b5cef895ed5e4494d97d3
+    m_Address: SP-MO-SY-SPS-J-GE-T-I1.ogg
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - intro
+    - lang-es
+    - mecha-segmentation
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3aaf0a9ffcb45ee879001d2eaf0639b0
     m_Address: SP-flautista
     m_ReadOnly: 0
