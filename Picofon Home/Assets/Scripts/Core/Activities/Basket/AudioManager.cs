@@ -27,6 +27,8 @@ namespace Picofon.Activities.Basket
                 return;
             }
 
+            transform.SetParent(null);
+
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }

@@ -86,10 +86,6 @@ namespace Picofon.Activities.Segmentation
 
         private int _syllablesNumber;
 
-        private int _currentFingers;
-
-        private bool _expectedAnswer;
-
         private bool _isMinimized;
 
         private float _defaultCounterX;
@@ -243,13 +239,6 @@ namespace Picofon.Activities.Segmentation
         {
             await UniTask.WaitForSeconds(1f);
 
-            _ = Tween.UIAnchoredPositionX(
-                target: _counterTransform,
-                endValue: _defaultCounterX,
-                duration: 0.5f,
-                ease: Ease.OutCubic
-            );
-
             if (_progressBarTransform.rotation.z == 0)
             {
                 _ = Tween.UIAnchoredPositionY(
@@ -347,17 +336,9 @@ namespace Picofon.Activities.Segmentation
 
             _currentWordClip = AudioManager.Instance.GetAudio(_dataManager.GetCurrentIndex());
 
-            _currentFingers = UnityEngine.Random.Range(1, 6);
-
             _instructionClip = AudioManager.Instance.GetSegmentationClips(
                 SegmentationAudioID.Instruction,
                 0
-            );
-
-            _expectedAnswer = _currentFingers == _syllablesNumber;
-
-            PerformanceLog.Log(
-                $"Fingers: {_currentFingers}, Syllables: {_syllablesNumber}, Expected answer: {_expectedAnswer}"
             );
 
             _menuTransform.anchoredPosition = new Vector2(-200, _menuTransform.anchoredPosition.y);
@@ -366,6 +347,18 @@ namespace Picofon.Activities.Segmentation
             _papirusTransform.localPosition = Vector3.zero;
 
             _handsTransform.localPosition = new Vector3(14f, _handsTransform.localPosition.y, 0);
+
+            if (_labelTransform.gameObject.activeSelf && _labelTransform.localScale != Vector3.zero)
+            {
+                _clueVisible = false;
+
+                Tween.Scale(
+                    target: _labelTransform,
+                    endValue: Vector3.zero,
+                    duration: 0.5f,
+                    ease: Ease.OutCubic
+                );
+            }
         }
 
         private void PositionUIForRound()

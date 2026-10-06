@@ -57,15 +57,12 @@ namespace Picofon.Core.MapPath
             if (string.IsNullOrEmpty(childId))
             {
                 childId = "77345678B";
-                PerformanceLog.LogWarning("Using default ChildId for testing in Unity Editor.");
+                PerformanceLog.LogWarning("Using default parameters for testing in Editor");
             }
 
             if (string.IsNullOrEmpty(_conductedById))
             {
                 _conductedById = "noXJSkWJnCW5iSEu32n5Kvofq5a2";
-                PerformanceLog.LogWarning(
-                    "Using default ConductedById for testing in Unity Editor."
-                );
             }
 
 # endif
