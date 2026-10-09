@@ -76,6 +76,9 @@ namespace Picofon.Activities.Segmentation
         [SerializeField]
         private SimplePhysicalButton _hand4Button;
 
+        [SerializeField]
+        private SimplePhysicalButton _hand5Button;
+
         #endregion
 
         // Variables
@@ -99,6 +102,8 @@ namespace Picofon.Activities.Segmentation
 
         private AudioClip _instructionClip;
 
+        private Vector2[] _handPositions = new Vector2[4];
+
         public void Awake()
         {
             _dataManager = new DataManager();
@@ -107,6 +112,11 @@ namespace Picofon.Activities.Segmentation
             _hand2Button.OnClick += () => HandleAnswer(2);
             _hand3Button.OnClick += () => HandleAnswer(3);
             _hand4Button.OnClick += () => HandleAnswer(4);
+
+            _handPositions[0] = _hand1Button.transform.localPosition;
+            _handPositions[1] = _hand2Button.transform.localPosition;
+            _handPositions[2] = _hand3Button.transform.localPosition;
+            _handPositions[3] = _hand4Button.transform.localPosition;
 
             _imageButton.OnClick += PositionUIForRound;
 
@@ -358,6 +368,54 @@ namespace Picofon.Activities.Segmentation
                     duration: 0.5f,
                     ease: Ease.OutCubic
                 );
+            }
+
+            SetupHandPosition();
+        }
+
+        private void SetupHandPosition()
+        {
+            bool random = UnityEngine.Random.value > 0.5f;
+
+            switch (_syllablesNumber)
+            {
+                case 1:
+                    _hand1Button.gameObject.SetActive(true);
+                    _hand5Button.gameObject.SetActive(false);
+
+                    _hand1Button.transform.localPosition = _handPositions[0];
+                    _hand2Button.transform.localPosition = _handPositions[1];
+                    _hand3Button.transform.localPosition = _handPositions[2];
+                    _hand4Button.transform.localPosition = _handPositions[3];
+                    break;
+                case 5:
+                    _hand5Button.gameObject.SetActive(true);
+                    _hand1Button.gameObject.SetActive(false);
+
+                    _hand2Button.transform.localPosition = _handPositions[0];
+                    _hand3Button.transform.localPosition = _handPositions[1];
+                    _hand4Button.transform.localPosition = _handPositions[2];
+                    break;
+
+                default:
+                    _hand1Button.gameObject.SetActive(random);
+                    _hand5Button.gameObject.SetActive(!random);
+
+                    if (random)
+                    {
+                        _hand1Button.transform.localPosition = _handPositions[0];
+                        _hand2Button.transform.localPosition = _handPositions[1];
+                        _hand3Button.transform.localPosition = _handPositions[2];
+                        _hand4Button.transform.localPosition = _handPositions[3];
+                    }
+                    else
+                    {
+                        _hand2Button.transform.localPosition = _handPositions[0];
+                        _hand3Button.transform.localPosition = _handPositions[1];
+                        _hand4Button.transform.localPosition = _handPositions[2];
+                    }
+
+                    break;
             }
         }
 

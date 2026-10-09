@@ -46,7 +46,7 @@ namespace Picofon.Core.MapPath
 
             _fade.color = new Color(0, 0, 0, 0);
 
-            Tween.Alpha(_fade, 1, 0.5f);
+            Tween.Alpha(_fade, 0.7f, 0.5f);
 
             _videoPlayer.gameObject.SetActive(true);
             _videoPlayer.Play();
