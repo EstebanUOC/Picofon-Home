@@ -53,9 +53,6 @@ namespace Picofon.Activities.Basket
 
         public void ConfigureItemsByType(FeedbackType feedbackType)
         {
-            Color32 textColor =
-                feedbackType == FeedbackType.Positive ? _positiveColor : _negativeColor;
-
             for (int i = 0; i < _items.Length; i++)
             {
                 ItemFeedback item = _items[i].GetComponent<ItemFeedback>();
@@ -65,15 +62,12 @@ namespace Picofon.Activities.Basket
 
                 BuildWord(word, feedbackType);
 
-                item.ConfigureItem(_builder, textColor);
+                item.ConfigureItem(_builder);
             }
         }
 
         public void ConfigureItemsByTypeSL(FeedbackType feedbackType, int correctIndex)
         {
-            Color32 textColor =
-                feedbackType == FeedbackType.Positive ? _positiveColor : _negativeColor;
-
             for (int i = 0; i < _items.Length; i++)
             {
                 ItemFeedback item = _items[i].GetComponent<ItemFeedback>();
@@ -85,7 +79,7 @@ namespace Picofon.Activities.Basket
                     {
                         word = item.Word;
 
-                        item.ConfigureItem(word, textColor);
+                        item.ConfigureItem(word);
 
                         continue;
                     }
@@ -94,7 +88,7 @@ namespace Picofon.Activities.Basket
 
                     BuildWord(word, feedbackType);
 
-                    item.ConfigureItem(_builder, textColor);
+                    item.ConfigureItem(_builder);
 
                     continue;
                 }
@@ -103,7 +97,7 @@ namespace Picofon.Activities.Basket
                 {
                     word = item.Word;
 
-                    item.ConfigureItem(word, textColor);
+                    item.ConfigureItem(word);
                     continue;
                 }
 
@@ -113,7 +107,7 @@ namespace Picofon.Activities.Basket
 
                 BuildWord(word, feedbackType);
 
-                item.ConfigureItem(_builder, textColor);
+                item.ConfigureItem(_builder);
             }
         }
 

@@ -47,5 +47,10 @@ namespace Picofon.Activities.Basket
             _text.color = color;
             _text.SetText(text);
         }
+
+        public void ConfigureItem(string text)
+        {
+            _text.SetText(text);
+        }
     }
 }

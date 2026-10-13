@@ -62,6 +62,7 @@ namespace Picofon.Activities.Feedback
         public async UniTask<bool> ShowSegmentation(FeedbackType feedbackType)
         {
             gameObject.SetActive(true);
+
             _feedbackView.DisplayFeedbackType(feedbackType);
             _itemManager.ConfigureItemsByTypeSegmentation();
 
