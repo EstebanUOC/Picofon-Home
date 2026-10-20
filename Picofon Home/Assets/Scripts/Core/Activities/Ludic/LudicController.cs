@@ -1,21 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
+using Picofon.Utils;
+using PrimeTween;
 using UnityEngine;
 
 namespace Picofon.Activities
 {
     public class LudicController : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        [SerializeField]
+        private Transform _barrel;
+
+        [SerializeField]
+        private CloudManager _cloudManager;
+
+        public void Start()
         {
-        
+            _cloudManager.OnCloudTouched += CloudTouched;
         }
 
-        // Update is called once per frame
-        void Update()
+        public void FixedUpdate() { }
+
+        public void CloudTouched(Vector3 position)
         {
-        
+            // Quaternion target = Quaternion.LookRotation(position - _barrel.position);
+            //
+            // Tween.LocalRotation(_barrel, target, 0.5f);
+
+            _barrel.up = position - _barrel.position;
         }
     }
 }

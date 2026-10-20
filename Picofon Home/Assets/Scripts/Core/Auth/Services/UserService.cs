@@ -1,7 +1,6 @@
 using Picofon.Core.Auth.DTOs;
 using Picofon.Core.Auth.Models.Login;
 using Picofon.Core.Auth.Models.User;
-using Picofon.Core.Auth.Panels;
 using Picofon.Core.MapPath.Services;
 using Picofon.Core.Network;
 using Picofon.Utils;
@@ -421,21 +420,13 @@ namespace Picofon.Core.Auth.Services
 
             // After successfully registering the child, create default therapy plans for the child
 
-            url = $"{ApiConfig.BaseUrl}/therapy/default";
-
-            CreateDefaultPlansRequest request = new()
-            {
-                ChildId = childCreateDTO.Id,
-                AssignedById = childCreateDTO.UserId,
-            };
-
-            jsonRequest = JsonHelper.ToBytes(in request);
+            url =
+                $"{ApiConfig.BaseUrl}/segment-levels/generate-initial-level-params?child_id={childCreateDTO.Id}";
 
             try
             {
-                rawResponse = await HttpClientUnity.PostAsyncBytes(
+                rawResponse = await HttpClientUnity.GetAsyncBytes(
                     url: url,
-                    data: jsonRequest,
                     timeoutSeconds: 5,
                     cancellationToken: token
                 );
@@ -443,26 +434,38 @@ namespace Picofon.Core.Auth.Services
             catch (System.Exception e)
             {
                 PerformanceLog.LogError(
-                    $"Error creating default therapy plans for child {childCreateDTO.Id}: {e.Message}, URL: {url}, Payload: {request}"
+                    $"Error generating initial level params for child {childCreateDTO.Id}: {e.Message}, URL: {url}"
                 );
                 return ApiResult.Fail(
-                    "Network error occurred while creating default therapy plans."
+                    "Network error occurred while generating initial level parameters."
                 );
             }
 
             using JsonDocument planDoc = JsonDocument.Parse(rawResponse);
             JsonElement planRoot = planDoc.RootElement;
 
-            ApiResponseView planResponseView = new(planRoot);
+            ApiResponseView<LearningRateData> planResponseView = new(planRoot);
 
             if (!planResponseView.Success)
             {
                 return ApiResult.Fail(planResponseView.ErrorMessage);
             }
 
-            PerformanceLog.Log(
-                $"Default therapy plans created successfully for child ID: {childCreateDTO.Id}"
-            );
+            TherapyPlanBulkData data = new()
+            {
+                ChildId = childCreateDTO.Id,
+                AssignedById = childCreateDTO.UserId,
+                Levels = planResponseView.Data.Levels,
+            };
+
+            LearningRateService service = new();
+
+            ApiResult resultCreate = await service.CreateTherapyPlanBulk(data);
+
+            if (!resultCreate.Success)
+            {
+                return ApiResult.Fail(resultCreate.Message);
+            }
 
             return ApiResult.Ok();
         }
