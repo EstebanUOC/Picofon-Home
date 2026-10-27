@@ -19,6 +19,6 @@ namespace Picofon.Core.MapPath
 
         public static bool IsAIEnabled { get; set; }
 
-        public static char Vowel { get; set; }
+        public static char? Vowel { get; set; }
     }
 }

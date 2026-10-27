@@ -15,11 +15,7 @@ namespace Picofon.Activities.Basket
 
         public readonly int TaskIndex { get; init; }
 
-        public readonly int? MainAttributeWs { get; init; }
-
-        public readonly int? CorrectAttributeWs { get; init; }
-
-        public readonly int? SelectedAttributeWs { get; init; }
+        public readonly PresentedWordDTO[] PresentedWords { get; init; }
 
         public readonly int? SelectedButton { get; init; }
     }
@@ -65,9 +61,7 @@ namespace Picofon.Activities.Basket
                 StartedAt = _activityStartTime,
                 DurationSeconds = (float)activityDuration.TotalSeconds,
                 CompletedAt = now,
-                MainAttributeWs = taskInfo.MainAttributeWs,
-                CorrectAttributeWs = taskInfo.CorrectAttributeWs,
-                SelectedAttributeWs = taskInfo.SelectedAttributeWs,
+                PresentedWords = taskInfo.PresentedWords ?? Array.Empty<PresentedWordDTO>(),
                 SelectedButton = taskInfo.SelectedButton,
             };
         }
@@ -83,6 +77,10 @@ namespace Picofon.Activities.Basket
 
             TherapyPlanService therapyPlanService = new(0);
             SessionService sessionService = new();
+
+            PerformanceLog.Log("Lleguo aqui");
+
+            await sessionService.CreateTherapySession(_sessionInfo, _sessionResults);
 
             await therapyPlanService.ChangePlanStatus(
                 id: _sessionInfo.TherapyPlanId,

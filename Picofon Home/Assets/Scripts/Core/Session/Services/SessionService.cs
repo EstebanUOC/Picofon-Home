@@ -10,7 +10,7 @@ namespace Picofon.Core.Session.Services
 
     public class SessionService
     {
-        private readonly string url = ApiConfig.BaseUrl + "therapy-task-result/bulk";
+        private readonly string url = ApiConfig.BaseUrl + "therapy-task-result/bulk-v2";
 
         public async UniTask<ApiResult> CreateTherapySession(
             GeneralSessionDTO sessionInfo,
@@ -30,6 +30,10 @@ namespace Picofon.Core.Session.Services
 
             byte[] jsonRequest = JsonHelper.ToBytes(in sessionRequest);
 
+            PerformanceLog.Log(
+                $"Therapy session creation request \nURL: {url} \nRequest: {JsonHelper.ToJson(sessionRequest)}"
+            );
+
             try
             {
                 rawResponse = await HttpClientUnity.PostAsyncBytes(
@@ -39,8 +43,9 @@ namespace Picofon.Core.Session.Services
                     cancellationToken: token
                 );
             }
-            catch (System.Exception)
+            catch (System.Exception e)
             {
+                PerformanceLog.LogError($"Network request failed with error: {e.Message}");
                 return ApiResult.Fail("Network error occurred while creating therapy session.");
             }
 

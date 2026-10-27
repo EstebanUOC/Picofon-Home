@@ -84,11 +84,9 @@ namespace Picofon.Core.MapPath
         {
             LevelDataStore instance = LevelDataStore.Instance;
 
-            await instance.LoadPlans(childId);
-
             if (!instance.HasPlans() || !instance.HasActivePlans())
             {
-                PerformanceLog.Log("No active plans found for the child.");
+                await instance.LoadPlans(childId);
             }
 
             await LoadOralnitas(childId);

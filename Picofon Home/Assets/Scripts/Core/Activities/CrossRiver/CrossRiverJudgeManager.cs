@@ -388,8 +388,6 @@ namespace Picofon.Activities.CrossRiver
             bool isPositive = (floatIndex & 1) == 0;
             bool isCorrect = _currentActivity.Answer == isPositive;
 
-            WordInfo word = _currentActivity.Words[0];
-
             int variant = 0;
 
             if (!isCorrect)
@@ -401,11 +399,27 @@ namespace Picofon.Activities.CrossRiver
 
             AudioManager.Instance.PlayVoice(_feedbackClips[audioIndex]);
 
+            WordInfo[] judgeWords = _currentActivity.Words ?? Array.Empty<WordInfo>();
+
+            int judgeWordCount = Math.Min(judgeWords.Length, 2);
+
+            PresentedWordDTO[] presentedWords = new PresentedWordDTO[judgeWordCount];
+
+            for (int i = 0; i < judgeWordCount; i++)
+            {
+                presentedWords[i] = new PresentedWordDTO
+                {
+                    WordSegmentId = judgeWords[i].Id,
+                    WordRole = i == 0 ? WordRole.Main : WordRole.Comparison,
+                    DisplayOrder = i + 1,
+                };
+            }
+
             TaskInfo taskInfo = new()
             {
                 IsCorrect = isCorrect,
                 TaskIndex = _dataManager.GetCurrentIndex(),
-                MainAttributeWs = word?.Id,
+                PresentedWords = presentedWords,
                 SelectedButton = isPositive ? 1 : 0,
             };
 

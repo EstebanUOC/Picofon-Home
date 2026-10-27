@@ -978,7 +978,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 23bb15967977b1dbf8e0fdb78cedbca6
-    m_Address: "SP-dr\xE0cula"
+    m_Address: SP-dracula
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -1723,7 +1723,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3b53146e0dfd062d794d4a0e6eae2568
-    m_Address: "SP-drag\xF3n"
+    m_Address: SP-dragon
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -80,13 +80,14 @@ namespace Picofon.Core.MapPath.Services
             using JsonDocument doc = JsonDocument.Parse(rawResponse);
             JsonElement root = doc.RootElement;
 
-            PerformanceLog.Log($"Fetched therapy plans for child {childId}: {root}");
             ApiResponseView<T> responseView = new(root);
 
             if (!responseView.Success)
             {
                 return ApiResult<T>.Fail(responseView.ErrorMessage);
             }
+
+            PerformanceLog.Log($"Data: {root}");
 
             return ApiResult<T>.Ok(responseView.Data);
         }

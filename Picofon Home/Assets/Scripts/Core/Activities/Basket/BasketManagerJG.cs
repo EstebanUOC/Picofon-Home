@@ -112,9 +112,9 @@ namespace Picofon.Activities.Basket
 #if DEBUG
             if (@params.ChildId is null)
             {
-                skill = ActivitySkill.Initial;
+                skill = ActivitySkill.Final;
                 language = LanguageID.Catalan;
-                @params = new ActivityRequestParams { PlanId = 112, ChildId = "12345678Z" };
+                @params = new ActivityRequestParams { PlanId = 531, ChildId = "00000099F" };
 
                 GamePrefs.DebugMode = true;
 
@@ -281,6 +281,47 @@ namespace Picofon.Activities.Basket
             }
         }
 
+        private void HideUI()
+        {
+            Sequence
+                .Create()
+                .Group(
+                    Tween.UIAnchoredPositionX(
+                        target: _menuTransform,
+                        endValue: -200,
+                        duration: 0.5f,
+                        ease: Ease.OutCubic
+                    )
+                )
+                .Group(
+                    Tween.UIAnchoredPositionX(
+                        target: _counterTransform,
+                        endValue: 400,
+                        duration: 0.5f,
+                        ease: Ease.OutCubic
+                    )
+                );
+
+            if (_progressBarTransform.rotation.z == 0)
+            {
+                _ = Tween.UIAnchoredPositionY(
+                    target: _progressBarTransform,
+                    endValue: 700,
+                    duration: 0.5f,
+                    ease: Ease.OutCubic
+                );
+            }
+            else
+            {
+                _ = Tween.UIAnchoredPositionX(
+                    target: _progressBarTransform,
+                    endValue: -100,
+                    duration: 0.5f,
+                    ease: Ease.OutCubic
+                );
+            }
+        }
+
         private async UniTaskVoid AnimateUI()
         {
             await UniTask.WaitForSeconds(1f);
@@ -348,11 +389,27 @@ namespace Picofon.Activities.Basket
 
             AudioManager.Instance.PlayVoice(_audioClips[audioIndex]);
 
+            WordInfo[] judgeWords = _currentActivity.Words;
+
+            int judgeWordCount = Math.Min(judgeWords.Length, _texts.Length);
+
+            PresentedWordDTO[] presentedWords = new PresentedWordDTO[judgeWordCount];
+
+            for (int i = 0; i < judgeWordCount; i++)
+            {
+                presentedWords[i] = new PresentedWordDTO
+                {
+                    WordSegmentId = judgeWords[i].Id,
+                    WordRole = i == 0 ? WordRole.Main : WordRole.Comparison,
+                    DisplayOrder = i + 1,
+                };
+            }
+
             TaskInfo taskInfo = new()
             {
                 IsCorrect = isCorrect,
                 TaskIndex = _currentActivityIndex,
-                MainAttributeWs = _currentActivity.Words[0].Id,
+                PresentedWords = presentedWords,
                 SelectedButton = isPositive ? 1 : 0,
             };
 
@@ -389,6 +446,7 @@ namespace Picofon.Activities.Basket
             if (_currentActivityIndex >= _activities.Length)
             {
                 EndActivity().Forget();
+                HideUI();
                 return;
             }
 

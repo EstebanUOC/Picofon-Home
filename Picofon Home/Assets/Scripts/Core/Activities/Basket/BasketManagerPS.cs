@@ -264,6 +264,47 @@ namespace Picofon.Activities.Basket
             }
         }
 
+        private void HideUI()
+        {
+            Sequence
+                .Create()
+                .Group(
+                    Tween.UIAnchoredPositionX(
+                        target: _menuTransform,
+                        endValue: -200,
+                        duration: 0.5f,
+                        ease: Ease.OutCubic
+                    )
+                )
+                .Group(
+                    Tween.UIAnchoredPositionX(
+                        target: _counterTransform,
+                        endValue: 400,
+                        duration: 0.5f,
+                        ease: Ease.OutCubic
+                    )
+                );
+
+            if (_progressBarTransform.rotation.z == 0)
+            {
+                _ = Tween.UIAnchoredPositionY(
+                    target: _progressBarTransform,
+                    endValue: 700,
+                    duration: 0.5f,
+                    ease: Ease.OutCubic
+                );
+            }
+            else
+            {
+                _ = Tween.UIAnchoredPositionX(
+                    target: _progressBarTransform,
+                    endValue: -100,
+                    duration: 0.5f,
+                    ease: Ease.OutCubic
+                );
+            }
+        }
+
         private async UniTaskVoid AnimateUI()
         {
             await UniTask.WaitForSeconds(1f);
@@ -322,38 +363,38 @@ namespace Picofon.Activities.Basket
 
             AudioManager.Instance.PlayVoice(_audioClips[audioIndex]);
 
-            int correctWordId = 0;
+            WordInfoPS[] words = _currentActivity.Words;
+
             int correctIndex = 0;
 
-            if (isCorrect)
+            for (int i = 0; i < words.Length; i++)
             {
-                correctWordId = currentWord.Id;
-                correctIndex = hoopIndex;
-            }
-            else
-            {
-                int i = 0;
-
-                foreach (var word in _currentActivity.Words)
+                if (words[i].Answer)
                 {
-                    if (word.Answer)
-                    {
-                        correctWordId = word.Id;
-                        correctIndex = i;
-                        break;
-                    }
-
-                    i++;
+                    correctIndex = i;
+                    break;
                 }
+            }
+
+            PresentedWordDTO[] presentedWords = new PresentedWordDTO[words.Length];
+
+            // SELECT: el rol lo define `answer` y la selección lo que eligió el niño.
+            for (int i = 0; i < words.Length; i++)
+            {
+                presentedWords[i] = new PresentedWordDTO
+                {
+                    WordSegmentId = words[i].Id,
+                    WordRole = words[i].Answer ? WordRole.CorrectOption : WordRole.Distractor,
+                    DisplayOrder = i + 1,
+                    IsSelected = i == hoopIndex,
+                };
             }
 
             TaskInfo taskInfo = new()
             {
                 IsCorrect = isCorrect,
                 TaskIndex = _currentActivityIndex,
-                MainAttributeWs = correctWordId,
-                CorrectAttributeWs = correctWordId,
-                SelectedAttributeWs = currentWord.Id,
+                PresentedWords = presentedWords,
             };
 
             _sessionManager.RecordActivityResult(in taskInfo);
@@ -384,6 +425,9 @@ namespace Picofon.Activities.Basket
             if (_currentActivityIndex >= _activities.Length)
             {
                 EndActivity().Forget();
+
+                HideUI();
+
                 return;
             }
 

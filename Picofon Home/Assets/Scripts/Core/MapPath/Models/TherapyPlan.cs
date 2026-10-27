@@ -8,7 +8,7 @@ namespace Picofon.Core.MapPath.Models
 
         public int TherapyPlanId { get; init; }
 
-        public char Vowel { get; init; }
+        public char? Vowel { get; init; }
 
         public TherapyStatus Status { get; init; }
 

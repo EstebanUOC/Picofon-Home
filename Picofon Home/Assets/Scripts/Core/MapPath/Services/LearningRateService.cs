@@ -13,7 +13,7 @@ namespace Picofon.Core.MapPath.Services
 
         public string AssignedById { get; init; }
 
-        public char Vowel { get; init; }
+        public char? Vowel { get; init; }
 
         public JsonElement Levels { get; init; }
     }
