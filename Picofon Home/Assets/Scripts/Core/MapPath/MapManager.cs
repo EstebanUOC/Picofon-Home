@@ -11,6 +11,7 @@ namespace Picofon.Core.MapPath
     using Cysharp.Threading.Tasks;
     using PrimeTween;
     using UnityEngine;
+    using UnityEngine.SceneManagement;
 
     public enum ActivityType : byte
     {
@@ -37,6 +38,9 @@ namespace Picofon.Core.MapPath
         [SerializeField]
         private Counter _counter;
 
+        [SerializeField]
+        private ModalMap _modal;
+
         #endregion
 
         // Variables
@@ -57,12 +61,11 @@ namespace Picofon.Core.MapPath
             if (string.IsNullOrEmpty(childId))
             {
                 childId = "77345678B";
-                PerformanceLog.LogWarning("Using default parameters for testing in Editor");
-            }
-
-            if (string.IsNullOrEmpty(_conductedById))
-            {
                 _conductedById = "noXJSkWJnCW5iSEu32n5Kvofq5a2";
+
+                MapPathPayload.NextAction = NextAction.Reload;
+
+                PerformanceLog.LogWarning("Using default parameters for testing in Editor");
             }
 
 # endif
@@ -82,20 +85,78 @@ namespace Picofon.Core.MapPath
 
         private async UniTaskVoid LoadPlans(string childId)
         {
-            LevelDataStore instance = LevelDataStore.Instance;
-
-            if (!instance.HasPlans() || !instance.HasActivePlans())
+            switch (MapPathPayload.NextAction)
             {
-                await instance.LoadPlans(childId);
+                case NextAction.Load:
+                    await LoadOralnitas(childId);
+
+                    await UniTask.WaitForEndOfFrame(this);
+
+                    break;
+
+                case NextAction.Reload:
+                    await LevelDataStore.Instance.LoadPlans(childId);
+
+                    break;
+
+                case NextAction.CalculateLR:
+                    await CalculateLearningRate(childId);
+
+                    await LevelDataStore.Instance.LoadPlans(childId);
+
+                    break;
+
+                default:
+                    break;
             }
-
-            await LoadOralnitas(childId);
-
-            await UniTask.WaitForEndOfFrame(this);
 
             Sequence sequence = _transition.ZoomIn();
 
-            _itemManager.RenderLevels(store: instance, sequence: in sequence);
+            _itemManager.RenderLevels(store: LevelDataStore.Instance, sequence: in sequence);
+        }
+
+        private async UniTask CalculateLearningRate(string childId)
+        {
+            LearningRateService service = new(0);
+
+            int planId = LevelDataStore.Instance.GetLastPlan().TherapyPlanId;
+
+            ApiResult<LearningRateData> result = await service.GetLearningRate(
+                childId: childId,
+                therapyPlan: planId
+            );
+
+            if (!result.Success)
+            {
+                // TODO: Show modal with error message, and load the AuthScene after user clicks OK
+
+                await _modal.Show("No s'han pogut carregar els nivells següents.");
+
+                await LoadScene("AuthScene");
+
+                return;
+            }
+
+            TherapyPlanBulkData data = new()
+            {
+                ChildId = childId,
+                AssignedById = MapPathPayload.ConductedById,
+                Vowel = LevelDataStore.Instance.GetLastPlan().Vowel,
+                Levels = result.Data.Levels,
+            };
+
+            ApiResult resultCreate = await service.CreateTherapyPlanBulk(data);
+
+            if (!resultCreate.Success)
+            {
+                await _modal.Show("No s'han pogut carregar els nivells següents.");
+
+                await LoadScene("AuthScene");
+
+                return;
+            }
+
+            await _modal.Show("Niveles cargados correctamente, ¡a jugar!");
         }
 
         private void HandleLevelSelected(LevelConfig config, int index)
@@ -135,7 +196,7 @@ namespace Picofon.Core.MapPath
 
             string scene = $"{config.SceneName}_{suffix}";
 
-            UnityEngine.SceneManagement.SceneManager.LoadScene(scene);
+            SceneManager.LoadScene(scene);
         }
 
         private async UniTask LoadOralnitas(string childId)
@@ -151,6 +212,14 @@ namespace Picofon.Core.MapPath
             }
 
             _counter.SetScore(response.Data.CorrectAnswers);
+        }
+
+        private async UniTask LoadScene(string sceneName)
+        {
+            AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneName);
+            loadOperation.allowSceneActivation = false;
+
+            await UniTask.WaitUntil(() => loadOperation.progress >= 0.9f);
         }
     }
 }

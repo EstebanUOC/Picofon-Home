@@ -1,0 +1,24 @@
+vamos a trabajar sobre el archivo llamado especificamente @Picofon Home/Assets/Scripts/Core/Session/Models/TherapySession.cs, en la estructura llamada TherapySessionDTO, agregue un nuevo cambio y crees la estructura para el campo llamada PresentedWordDTO, en esta nueva estructura coloque la nueva disposicion que debe recibir el backend cambiando/elimimnando los anteriores campos llamados:
+public readonly int? MainAttributeWs { get; init; }
+
+        public readonly int? CorrectAttributeWs { get; init; }
+
+        public readonly int? SelectedAttributeWs { get; init; } 
+Entonces lo que quiero que hagas es que cambies en el codigo el uso de los mismos campos que ahora ya no existen, y que uses e inicializes los valores para los campos nuevos, te explico antes en los campos eliminados se usaban las ids, como veras en la estructura TaskInfo, que tambien debes cambiar, pero ahora cada palabra tendra un id que es el mismo concepto pero ahora todas las palabras deberan ir en el cuerpo de la peticion, y los demas te los explico aqui:
+word_segment_id: 
+Id de la palabra tal como llega en /questions
+word_role: 
+MAIN, COMPARISON, CORRECT_OPTION o DISTRACTOR
+display_order: 
+Posición en pantalla; no se repite dentro de la tarea
+is_selected: 
+Si el niño eligió esa palabra
+
+Y estas seran las reglas segun la mecanica:
+
+Skill / Task Type | Palabras a enviar | Selección
+ISI/ISM/ISF · JUDGE | 1 MAIN (words[0]) + 1 COMPARISON (words[1]) | Ninguna (la respuesta va en selected_button)
+ISI/ISM/ISF · SELECT | 1 CORRECT_OPTION (la que tiene answer: true) + DISTRACTOR (las demás) | Como máximo 1 is_selected
+ISI/ISM/ISF · RELATE | 1 MAIN (main_word) + 1 CORRECT_OPTION (correct_option) + DISTRACTOR (wrong_options) | Como máximo 1, nunca la MAIN
+SPS · JUDGE / RELATE | 1 MAIN (la única palabra) | Ninguna
+Antes de comenzar alguna duda?

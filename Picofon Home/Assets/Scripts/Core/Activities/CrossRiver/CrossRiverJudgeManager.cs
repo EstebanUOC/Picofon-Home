@@ -13,6 +13,7 @@ namespace Picofon.Activities.CrossRiver
 {
     using System;
     using Cysharp.Threading.Tasks;
+    using Picofon.Core.Auth;
     using PrimeTween;
     using UnityEngine;
     using UnityEngine.SceneManagement;
@@ -475,7 +476,7 @@ namespace Picofon.Activities.CrossRiver
 
             if (LevelPayload.IsFinalLevel)
             {
-                await CalculateLearningRate();
+                MapPathPayload.NextAction = NextAction.CalculateLR;
             }
             else
             {
@@ -496,49 +497,6 @@ namespace Picofon.Activities.CrossRiver
                 target: loadOperation,
                 onComplete: target => target.allowSceneActivation = true
             );
-        }
-
-        private async UniTask CalculateLearningRate()
-        {
-            if (!LevelPayload.IsAIEnabled)
-            {
-                await _modalGame.ShowFinal("Has completat tots els nivells, felicitats!");
-                await LoadScene("AuthScene");
-                return;
-            }
-
-            LearningRateService service = new(0);
-            string childId = LevelPayload.Params.ChildId;
-            int planId = LevelPayload.Params.PlanId;
-
-            ApiResult<LearningRateData> result = await service.GetLearningRate(childId, planId);
-
-            if (!result.Success)
-            {
-                await _modalGame.ShowFinal("No s'han pogut carregar els nivells següents.");
-                await LoadScene("AuthScene");
-                return;
-            }
-
-            TherapyPlanBulkData data = new()
-            {
-                ChildId = childId,
-                AssignedById = LevelPayload.Params.ConductedById,
-                Vowel = LevelPayload.Vowel,
-                Levels = result.Data.Levels,
-            };
-
-            ApiResult createResult = await service.CreateTherapyPlanBulk(data);
-
-            if (!createResult.Success)
-            {
-                await _modalGame.ShowFinal("No s'han pogut carregar els nivells següents.");
-                await LoadScene("AuthScene");
-                return;
-            }
-
-            await _modalGame.ShowFinal("Niveles cargados correctamente, ¡a jugar!");
-            await LoadScene("MapPathScene");
         }
 
         private Sprite LoadSprite(string path)

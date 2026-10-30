@@ -1,10 +1,7 @@
-using Picofon.Core.Auth;
 using Picofon.Core.Auth.Components;
 using Picofon.Core.Auth.DTOs;
 using Picofon.Core.Auth.Services;
 using Picofon.Core.MapPath;
-using Picofon.Core.MapPath.Models;
-using Picofon.Core.MapPath.Services;
 using Picofon.Core.Network;
 using Picofon.Utils;
 
@@ -405,6 +402,9 @@ namespace Picofon.Core.Auth.Panels
             if (instance.HasActivePlans())
             {
                 _uiManager.ContinueMapTransition(success: true);
+
+                MapPathPayload.NextAction = NextAction.Load;
+
                 return;
             }
 
@@ -432,79 +432,7 @@ namespace Picofon.Core.Auth.Panels
                 return;
             }
 
-            TherapyPlan lastPlan = instance.GetLastPlan();
-
-            if (lastPlan is null)
-            {
-                _uiManager.ContinueMapTransition(success: false);
-
-                await UniTask.WaitForSeconds(2.5f);
-
-                await _uiManager.ShowModal(
-                    new ModalData
-                    {
-                        Title = "Error",
-                        Message =
-                            "Could not found any valid therapy plan for the selected child. Please try again later or choose another child.",
-                        Panel = _panel,
-                    }
-                );
-
-                return;
-            }
-
-            LearningRateService service = new(0);
-
-            ApiResult<LearningRateData> result = await service.GetLearningRate(
-                childId,
-                lastPlan.TherapyPlanId
-            );
-
-            if (!result.Success)
-            {
-                _uiManager.ContinueMapTransition(success: false);
-
-                await _uiManager.ShowModal(
-                    new ModalData
-                    {
-                        Title = "Error",
-                        Message =
-                            "An error occurred while calculating the learning rate for the selected child. Please try again later or choose another child.",
-                        Panel = _panel,
-                    }
-                );
-
-                return;
-            }
-
-            TherapyPlanBulkData data = new()
-            {
-                ChildId = childId,
-                AssignedById = _userId,
-                Vowel = lastPlan.Vowel,
-                Levels = result.Data.Levels,
-            };
-
-            ApiResult resultCreate = await service.CreateTherapyPlanBulk(data);
-
-            if (!resultCreate.Success)
-            {
-                _uiManager.ContinueMapTransition(success: false);
-
-                await _uiManager.ShowModal(
-                    new ModalData
-                    {
-                        Title = "Error",
-                        Message =
-                            "An error occurred while creating the therapy plan for the selected child. Please try again later or choose another child.",
-                        Panel = _panel,
-                    }
-                );
-
-                return;
-            }
-
-            await instance.LoadPlans(childId);
+            MapPathPayload.NextAction = NextAction.CalculateLR;
 
             _uiManager.ContinueMapTransition(success: true);
         }

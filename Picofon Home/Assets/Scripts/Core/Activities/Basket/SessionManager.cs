@@ -78,10 +78,6 @@ namespace Picofon.Activities.Basket
             TherapyPlanService therapyPlanService = new(0);
             SessionService sessionService = new();
 
-            PerformanceLog.Log("Lleguo aqui");
-
-            await sessionService.CreateTherapySession(_sessionInfo, _sessionResults);
-
             await therapyPlanService.ChangePlanStatus(
                 id: _sessionInfo.TherapyPlanId,
                 status: TherapyStatus.Completed
