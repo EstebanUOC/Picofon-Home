@@ -8,6 +8,7 @@ using Picofon.Utils;
 
 namespace Picofon.Core.MapPath
 {
+    using System.Text.Json;
     using Cysharp.Threading.Tasks;
     using PrimeTween;
     using UnityEngine;
@@ -22,6 +23,8 @@ namespace Picofon.Core.MapPath
 
     public class MapManager : MonoBehaviour
     {
+        private const int SpsSkillId = 4;
+
         #region References
 
         [SerializeField]
@@ -128,12 +131,31 @@ namespace Picofon.Core.MapPath
 
             if (!result.Success)
             {
+                // 409 ACTIVE_LEVELS_REMAIN / HOME_DISCOVERY_IN_PROGRESS /
+                // POLICY_CURRICULUM_ALREADY_STARTED: el niño ya tiene niveles; LoadPlans
+                // recarga y se juega el ACTIVE pendiente.
+                if (result.Error is { MeansReloadPlans: true })
+                {
+                    PerformanceLog.LogWarning($"[Map] Recargando planes: {result.Error}");
+                    return;
+                }
+
                 // TODO: Show modal with error message, and load the AuthScene after user clicks OK
 
                 await _modal.Show("No s'han pogut carregar els nivells següents.");
 
                 await LoadScene("AuthScene");
 
+                return;
+            }
+
+            // levels = [] cuando la ruta de la Policy está completa: no hay nada que crear.
+            if (
+                result.Data.Levels.ValueKind == JsonValueKind.Array
+                && result.Data.Levels.GetArrayLength() == 0
+            )
+            {
+                PerformanceLog.Log("[Map] Ruta completada: no hay niveles nuevos.");
                 return;
             }
 
@@ -149,6 +171,21 @@ namespace Picofon.Core.MapPath
 
             if (!resultCreate.Success)
             {
+                if (resultCreate.Error is { MeansReloadPlans: true })
+                {
+                    PerformanceLog.LogWarning($"[Map] Recargando planes: {resultCreate.Error}");
+                    return;
+                }
+
+                if (resultCreate.Error is { StatusCode: 409 or 422 })
+                {
+                    // MIXED_POLICY_VERSIONS / POLICY_LANGUAGE_MISMATCH /
+                    // PINNED_POLICY_VERSION_MISMATCH / HOME_DISCOVERY_*: error de datos.
+                    // Ya está registrado; no se reintenta y se recargan los planes.
+                    await _modal.Show("No s'han pogut carregar els nivells següents.");
+                    return;
+                }
+
                 await _modal.Show("No s'han pogut carregar els nivells següents.");
 
                 await LoadScene("AuthScene");
@@ -164,6 +201,16 @@ namespace Picofon.Core.MapPath
             TherapyPlan plan = LevelDataStore.Instance.GetPlanByIndex(index);
 
             TherapyTemplate template = plan.TherapyTemplate;
+
+            if (plan.IsLudicScene || template == null)
+            {
+                // TODO(v3): abrir la escena lúdica (plan.LudicScene.Code) y cerrarla con
+                // PATCH /therapy/{id}/status/COMPLETED. Hoy la escena está desactivada en BD.
+                PerformanceLog.LogWarning(
+                    $"[Map] Plan {plan.TherapyPlanId} es {plan.PlanType} sin template; aún no se puede jugar."
+                );
+                return;
+            }
 
             LevelPayload.Params = new ActivityRequestParams
             {
@@ -195,6 +242,13 @@ namespace Picofon.Core.MapPath
             };
 
             string scene = $"{config.SceneName}_{suffix}";
+
+            // SPS (skill_id = 4) tiene escenas propias; Basket / CrossRiver solo
+            // conocen las skills silábicas 1-3.
+            if (template.SkillId == SpsSkillId)
+            {
+                scene = type == ActivityType.Relate ? "Segmentation_R" : "Segmentation";
+            }
 
             SceneManager.LoadScene(scene);
         }

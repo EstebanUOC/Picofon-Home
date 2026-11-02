@@ -90,3 +90,6 @@ ExportedObj/
 *.pidb.meta
 *.pdb.meta
 *.mdb.meta
+
+# Volcados de crash de Mono (Unity Editor)
+mono_crash.*.json

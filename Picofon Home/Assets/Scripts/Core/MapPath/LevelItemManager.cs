@@ -2,6 +2,7 @@ namespace Picofon.Core.MapPath
 {
     using System;
     using Cysharp.Threading.Tasks;
+    using Picofon.Core.MapPath.Models;
     using PrimeTween;
     using UnityEngine;
 
@@ -22,6 +23,9 @@ namespace Picofon.Core.MapPath
         public readonly LevelType Type { get; init; }
 
         public readonly LevelState State { get; init; }
+
+        // Nivel del screening inicial (HOME_DISCOVERY): se pinta distinto en el mapa
+        public readonly bool IsScreening { get; init; }
     }
 
     public sealed class LevelItemManager : MonoBehaviour
@@ -125,8 +129,13 @@ namespace Picofon.Core.MapPath
 
                 LevelConfig config = _configurations[i & 1];
 
-                ActivityType activityType = (ActivityType)
-                    store.GetPlanByIndex(i).TherapyTemplate.TaskTypeId;
+                TherapyPlan plan = store.GetPlanByIndex(i);
+
+                // Las escenas lúdicas (HOME_DISCOVERY v3) no tienen template.
+                TherapyTemplate template = plan.TherapyTemplate;
+
+                ActivityType activityType =
+                    template != null ? (ActivityType)template.TaskTypeId : ActivityType.Judge;
 
                 if (activityType != ActivityType.Judge)
                 {
@@ -151,6 +160,7 @@ namespace Picofon.Core.MapPath
                     Config = config,
                     Type = type,
                     State = state,
+                    IsScreening = plan.IsScreening,
                 };
 
                 button.Init(enabled: enabled, itemView: comp);

@@ -42,6 +42,12 @@ namespace Picofon.Core.Auth.Services
         public readonly UserModel User { get; init; }
     }
 
+    // POST /children: el backend genera el id universal (UUID) e ignora el enviado.
+    public sealed class CreatedChildData
+    {
+        public string Id { get; init; }
+    }
+
     public class UserService
     {
         private readonly string ChildrenURL = ApiConfig.BaseUrl + "children/";
@@ -407,21 +413,23 @@ namespace Picofon.Core.Auth.Services
             using JsonDocument doc = JsonDocument.Parse(rawResponse);
             JsonElement root = doc.RootElement;
 
-            ApiResponseView responseView = new(root);
+            ApiResponseView<CreatedChildData> responseView = new(root);
 
             if (!responseView.Success)
             {
                 return ApiResult.Fail(responseView.ErrorMessage);
             }
 
+            string childId = responseView.Data?.Id ?? childCreateDTO.Id;
+
             PerformanceLog.Log(
-                $"Child registered successfully: {childCreateDTO.FirstName} {childCreateDTO.LastName}, ID: {childCreateDTO.Id}"
+                $"Child registered successfully: {childCreateDTO.FirstName} {childCreateDTO.LastName}, ID: {childId}"
             );
 
             // After successfully registering the child, create default therapy plans for the child
 
             url =
-                $"{ApiConfig.BaseUrl}/segment-levels/generate-initial-level-params?child_id={childCreateDTO.Id}";
+                $"{ApiConfig.BaseUrl}/segment-levels/generate-initial-level-params?child_id={childId}";
 
             try
             {
@@ -431,10 +439,28 @@ namespace Picofon.Core.Auth.Services
                     cancellationToken: token
                 );
             }
+            catch (UnityWebRequestException e) when (e.ResponseCode >= 400)
+            {
+                // Errores de Policy: 404 / 409 con error_code (antes 400 genérico).
+                ApiError error = ApiError.From(e);
+
+                if (error.MeansReloadPlans)
+                {
+                    // POLICY_CURRICULUM_ALREADY_STARTED / HOME_DISCOVERY_IN_PROGRESS:
+                    // el niño ya tiene ruta; el mapa cargará sus planes.
+                    PerformanceLog.LogWarning($"generate-initial-level-params: {error}");
+                    return ApiResult.Ok();
+                }
+
+                PerformanceLog.LogError(
+                    $"Error generating initial level params for child {childId}: {error}, URL: {url}"
+                );
+                return ApiResult.Fail(error);
+            }
             catch (System.Exception e)
             {
                 PerformanceLog.LogError(
-                    $"Error generating initial level params for child {childCreateDTO.Id}: {e.Message}, URL: {url}"
+                    $"Error generating initial level params for child {childId}: {e.Message}, URL: {url}"
                 );
                 return ApiResult.Fail(
                     "Network error occurred while generating initial level parameters."
@@ -453,7 +479,7 @@ namespace Picofon.Core.Auth.Services
 
             TherapyPlanBulkData data = new()
             {
-                ChildId = childCreateDTO.Id,
+                ChildId = childId,
                 AssignedById = childCreateDTO.UserId,
                 Levels = planResponseView.Data.Levels,
             };
@@ -464,7 +490,16 @@ namespace Picofon.Core.Auth.Services
 
             if (!resultCreate.Success)
             {
-                return ApiResult.Fail(resultCreate.Message);
+                // HOME_DISCOVERY_ALREADY_STARTED: otro cliente ya inició la ruta.
+                if (resultCreate.Error is { MeansReloadPlans: true })
+                {
+                    return ApiResult.Ok();
+                }
+
+                // 409 de Policy pinning / 422 HOME_DISCOVERY_*: ya registrado, sin reintento.
+                return resultCreate.Error is { } error
+                    ? ApiResult.Fail(error)
+                    : ApiResult.Fail(resultCreate.Message);
             }
 
             return ApiResult.Ok();
