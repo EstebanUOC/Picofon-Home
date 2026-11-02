@@ -6,7 +6,9 @@ namespace Picofon.Activities.Segmentation
     using Picofon.Activities.Basket.DTOs.Responses;
     using Picofon.Activities.Feedback;
     using Picofon.Components;
+    using Picofon.Core.Auth;
     using Picofon.Core.MapPath;
+    using Picofon.Core.Session.Models;
     using Picofon.Core.Network;
     using Picofon.Utils;
     using PrimeTween;
@@ -81,6 +83,11 @@ namespace Picofon.Activities.Segmentation
 
         private DataManager _dataManager;
 
+        // Resultados (bulk-v2 + learning rate), igual que Basket / CrossRiver
+        private SessionManager _sessionManager;
+
+        private bool _taskCompleted;
+
         private SegmentationActivity _currentActivity;
 
         private int _syllablesNumber;
@@ -105,6 +112,13 @@ namespace Picofon.Activities.Segmentation
         public void Awake()
         {
             _dataManager = new DataManager();
+
+            _sessionManager = GetComponent<SessionManager>();
+
+            if (_sessionManager == null)
+            {
+                _sessionManager = gameObject.AddComponent<SessionManager>();
+            }
 
             _yesButton.OnClick += () => HandleAnswer(true);
             _noButton.OnClick += () => HandleAnswer(false);
@@ -133,6 +147,8 @@ namespace Picofon.Activities.Segmentation
             ActivitySkill skill = LevelPayload.Skill;
             LanguageID language = LevelPayload.Language;
             ActivityRequestParams @params = LevelPayload.Params;
+
+            _taskCompleted = LevelPayload.TaskCompleted;
 
 #if DEBUG
             if (@params.ChildId is null)
@@ -187,7 +203,24 @@ namespace Picofon.Activities.Segmentation
 
             await AudioManager.Instance.LoadAudios(audioPaths, labels);
 
-            _progressBar.Initialize(_dataManager.GetActivityCount(), false);
+            if (!_taskCompleted)
+            {
+                GeneralSessionDTO sessionInfo = new()
+                {
+                    TherapyPlanId = @params.PlanId,
+                    ChildId = @params.ChildId,
+                    Console = "MO",
+                    ConductedById = @params.ConductedById,
+                };
+
+                _sessionManager.InitializeSession(
+                    sessionInfo: sessionInfo,
+                    sessionResults: new TherapySessionDTO[_dataManager.GetActivityCount()],
+                    completed: _taskCompleted
+                );
+            }
+
+            _progressBar.Initialize(_dataManager.GetActivityCount(), _taskCompleted);
 
             _fade.StopAndZoom();
             AnimateUI().Forget();
@@ -203,6 +236,8 @@ namespace Picofon.Activities.Segmentation
             await AudioManager.Instance.WaitVoiceToEnd();
 
             _imageButton.Interactable = true;
+
+            _sessionManager.StartTime();
         }
 
         private void PositionUI()
@@ -492,6 +527,8 @@ namespace Picofon.Activities.Segmentation
 
             bool isCorrect = isYes == _expectedAnswer;
 
+            RecordAnswer(isCorrect, selectedButton: isYes ? 1 : 0);
+
             _progressBar.SetProgress(_dataManager.GetCurrentIndex() + 1, isCorrect);
 
             AudioClip feedbackClip = AudioManager.Instance.GetSegmentationClips(
@@ -520,6 +557,8 @@ namespace Picofon.Activities.Segmentation
             if (_dataManager.MoveNext())
             {
                 SetupRound();
+
+                _sessionManager.StartTime();
             }
             else
             {
@@ -527,10 +566,52 @@ namespace Picofon.Activities.Segmentation
 
                 HideUI();
 
-                _fade.Load();
-
-                LoadScene("MapPathScene").Forget();
+                EndActivity().Forget();
             }
+        }
+
+        private void RecordAnswer(bool isCorrect, int? selectedButton)
+        {
+            // SPS: una sola palabra objetivo (MAIN), ninguna seleccionada.
+            PresentedWordDTO[] presentedWords =
+            {
+                new PresentedWordDTO
+                {
+                    WordSegmentId = _currentActivity.Word.Id,
+                    WordRole = WordRole.Main,
+                    DisplayOrder = 1,
+                },
+            };
+
+            TaskInfo taskInfo = new()
+            {
+                IsCorrect = isCorrect,
+                TaskIndex = _dataManager.GetCurrentIndex(),
+                PresentedWords = presentedWords,
+                SelectedButton = selectedButton,
+            };
+
+            _sessionManager.RecordActivityResult(in taskInfo);
+        }
+
+        private async UniTaskVoid EndActivity()
+        {
+            _fade.Load();
+
+            LevelDataStore.Instance?.LevelCompleted();
+
+            await _sessionManager.EndSession();
+
+            if (LevelPayload.IsFinalLevel)
+            {
+                MapPathPayload.NextAction = NextAction.CalculateLR;
+            }
+            else
+            {
+                await UniTask.WaitForSeconds(1f);
+            }
+
+            await LoadScene("MapPathScene");
         }
 
         private void HandleMenuOptionSelected(GameMenuEvent menuEvent)
