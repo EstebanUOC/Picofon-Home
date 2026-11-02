@@ -8,6 +8,7 @@ using Picofon.Utils;
 
 namespace Picofon.Core.MapPath
 {
+    using System.Text.Json;
     using Cysharp.Threading.Tasks;
     using PrimeTween;
     using UnityEngine;
@@ -130,12 +131,31 @@ namespace Picofon.Core.MapPath
 
             if (!result.Success)
             {
+                // 409 ACTIVE_LEVELS_REMAIN / HOME_DISCOVERY_IN_PROGRESS /
+                // POLICY_CURRICULUM_ALREADY_STARTED: el niño ya tiene niveles; LoadPlans
+                // recarga y se juega el ACTIVE pendiente.
+                if (result.Error is { MeansReloadPlans: true })
+                {
+                    PerformanceLog.LogWarning($"[Map] Recargando planes: {result.Error}");
+                    return;
+                }
+
                 // TODO: Show modal with error message, and load the AuthScene after user clicks OK
 
                 await _modal.Show("No s'han pogut carregar els nivells següents.");
 
                 await LoadScene("AuthScene");
 
+                return;
+            }
+
+            // levels = [] cuando la ruta de la Policy está completa: no hay nada que crear.
+            if (
+                result.Data.Levels.ValueKind == JsonValueKind.Array
+                && result.Data.Levels.GetArrayLength() == 0
+            )
+            {
+                PerformanceLog.Log("[Map] Ruta completada: no hay niveles nuevos.");
                 return;
             }
 
@@ -151,6 +171,21 @@ namespace Picofon.Core.MapPath
 
             if (!resultCreate.Success)
             {
+                if (resultCreate.Error is { MeansReloadPlans: true })
+                {
+                    PerformanceLog.LogWarning($"[Map] Recargando planes: {resultCreate.Error}");
+                    return;
+                }
+
+                if (resultCreate.Error is { StatusCode: 409 or 422 })
+                {
+                    // MIXED_POLICY_VERSIONS / POLICY_LANGUAGE_MISMATCH /
+                    // PINNED_POLICY_VERSION_MISMATCH / HOME_DISCOVERY_*: error de datos.
+                    // Ya está registrado; no se reintenta y se recargan los planes.
+                    await _modal.Show("No s'han pogut carregar els nivells següents.");
+                    return;
+                }
+
                 await _modal.Show("No s'han pogut carregar els nivells següents.");
 
                 await LoadScene("AuthScene");

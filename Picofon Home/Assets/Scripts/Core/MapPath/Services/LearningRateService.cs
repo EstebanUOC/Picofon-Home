@@ -110,6 +110,13 @@ namespace Picofon.Core.MapPath.Services
                     cancellationToken: token
                 );
             }
+            catch (UnityWebRequestException e) when (e.ResponseCode >= 400)
+            {
+                // Errores de Policy / HOME_DISCOVERY: 404 / 409 con su error_code
+                ApiError error = ApiError.From(e);
+                PerformanceLog.LogWarning($"generate-next-level-params: {error}, URL: {url}");
+                return ApiResult<LearningRateData>.Fail(error);
+            }
             catch (System.Exception e)
             {
                 PerformanceLog.Log($"Error fetching learning rate: {e.Message}, URL: {url}");
@@ -150,6 +157,17 @@ namespace Picofon.Core.MapPath.Services
                     timeoutSeconds: 5,
                     cancellationToken: token
                 );
+            }
+            catch (UnityWebRequestException e) when (e.ResponseCode >= 400)
+            {
+                // 409 MIXED_POLICY_VERSIONS / POLICY_LANGUAGE_MISMATCH /
+                // PINNED_POLICY_VERSION_MISMATCH / HOME_DISCOVERY_ALREADY_STARTED,
+                // 422 HOME_DISCOVERY_*: se registra y no se reintenta.
+                ApiError error = ApiError.From(e);
+                PerformanceLog.LogError(
+                    $"therapy/bulk rechazado: {error}, URL: {url}, Payload: {JsonHelper.ToJson(payload)}"
+                );
+                return ApiResult.Fail(error);
             }
             catch (System.Exception e)
             {
