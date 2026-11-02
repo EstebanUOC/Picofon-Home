@@ -167,6 +167,16 @@ namespace Picofon.Core.MapPath
 
             TherapyTemplate template = plan.TherapyTemplate;
 
+            if (plan.IsLudicScene || template == null)
+            {
+                // TODO(v3): abrir la escena lúdica (plan.LudicScene.Code) y cerrarla con
+                // PATCH /therapy/{id}/status/COMPLETED. Hoy la escena está desactivada en BD.
+                PerformanceLog.LogWarning(
+                    $"[Map] Plan {plan.TherapyPlanId} es {plan.PlanType} sin template; aún no se puede jugar."
+                );
+                return;
+            }
+
             LevelPayload.Params = new ActivityRequestParams
             {
                 PlanId = plan.TherapyPlanId,

@@ -2,6 +2,7 @@ namespace Picofon.Core.MapPath
 {
     using System;
     using Cysharp.Threading.Tasks;
+    using Picofon.Core.MapPath.Models;
     using PrimeTween;
     using UnityEngine;
 
@@ -125,8 +126,11 @@ namespace Picofon.Core.MapPath
 
                 LevelConfig config = _configurations[i & 1];
 
-                ActivityType activityType = (ActivityType)
-                    store.GetPlanByIndex(i).TherapyTemplate.TaskTypeId;
+                // Las escenas lúdicas (HOME_DISCOVERY v3) no tienen template.
+                TherapyTemplate template = store.GetPlanByIndex(i).TherapyTemplate;
+
+                ActivityType activityType =
+                    template != null ? (ActivityType)template.TaskTypeId : ActivityType.Judge;
 
                 if (activityType != ActivityType.Judge)
                 {
