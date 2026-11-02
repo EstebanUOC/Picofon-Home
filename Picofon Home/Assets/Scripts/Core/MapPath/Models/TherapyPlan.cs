@@ -8,6 +8,13 @@ namespace Picofon.Core.MapPath.Models
         public const string LudicScene = "LUDIC_SCENE";
     }
 
+    public static class PlanModes
+    {
+        public const string HomeDiscovery = "HOME_DISCOVERY";
+        public const string Curriculum = "CURRICULUM";
+        public const string Manual = "MANUAL";
+    }
+
     public class LudicSceneInfo
     {
         public int Id { get; init; }
@@ -48,5 +55,10 @@ namespace Picofon.Core.MapPath.Models
         public LudicSceneInfo LudicScene { get; init; }
 
         public bool IsLudicScene => PlanType == PlanTypes.LudicScene;
+
+        // Screening inicial (HOME_DISCOVERY) frente a malla curricular
+        public bool IsScreening => PlanMode == PlanModes.HomeDiscovery;
+
+        public bool IsCurriculum => PlanMode == PlanModes.Curriculum;
     }
 }

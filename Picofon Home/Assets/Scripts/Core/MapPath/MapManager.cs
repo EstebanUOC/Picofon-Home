@@ -88,7 +88,9 @@ namespace Picofon.Core.MapPath
 
         private async UniTaskVoid LoadPlans(string childId)
         {
-            switch (MapPathPayload.NextAction)
+            NextAction action = MapPathPayload.NextAction;
+
+            switch (action)
             {
                 case NextAction.Load:
                     await LoadOralnitas(childId);
@@ -116,6 +118,44 @@ namespace Picofon.Core.MapPath
             Sequence sequence = _transition.ZoomIn();
 
             _itemManager.RenderLevels(store: LevelDataStore.Instance, sequence: in sequence);
+
+            await ShowRouteMessage(action);
+        }
+
+        // Avisa al niño y al adulto de que empieza el screening inicial o la malla.
+        private async UniTask ShowRouteMessage(NextAction action)
+        {
+            LevelDataStore store = LevelDataStore.Instance;
+
+            if (store == null || !store.HasActivePlans())
+                return;
+
+            int current = store.CurrentLevel;
+            TherapyPlan currentPlan = store.GetPlanByIndex(current);
+            TherapyPlan previousPlan = store.GetPlanByIndex(current - 1);
+
+            if (currentPlan == null)
+                return;
+
+            // Idioma de trabajo del niño (el de sus planes), no el de la interfaz.
+            LanguageID language = (LanguageID)currentPlan.LanguageId;
+
+            // Al entrar al mapa con el niño, mientras esté en el screening.
+            if (currentPlan.IsScreening && action == NextAction.Load)
+            {
+                await _modal.Show(MapRouteTexts.ScreeningStart(language));
+                return;
+            }
+
+            // Primer nivel de la malla justo después del screening.
+            if (
+                currentPlan.IsCurriculum
+                && previousPlan is { IsScreening: true }
+                && action != NextAction.Reload
+            )
+            {
+                await _modal.Show(MapRouteTexts.CurriculumStart(language));
+            }
         }
 
         private async UniTask CalculateLearningRate(string childId)

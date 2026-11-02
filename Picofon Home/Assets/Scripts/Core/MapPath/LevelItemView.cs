@@ -44,6 +44,9 @@ namespace Picofon.Core.MapPath
         private readonly Color32 _syllableColor = new(255, 255, 255, 255);
         private readonly Color32 _phonemeColor = new(206, 129, 225, 255);
 
+        // Dorado: niveles del screening inicial (HOME_DISCOVERY)
+        private readonly Color32 _screeningColor = new(255, 214, 92, 255);
+
         public void Init(in LevelData data)
         {
             _index = data.Id;
@@ -51,6 +54,12 @@ namespace Picofon.Core.MapPath
 
             SetState(data.State);
             SetBackgroundColor(data.Type);
+
+            if (data.IsScreening)
+            {
+                _shadow.color = _screeningColor;
+                _content.color = _screeningColor;
+            }
 
             _icon.sprite = data.Config.LevelIcon;
         }
