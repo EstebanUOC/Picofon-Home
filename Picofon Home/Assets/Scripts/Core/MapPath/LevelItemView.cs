@@ -44,8 +44,9 @@ namespace Picofon.Core.MapPath
         private readonly Color32 _syllableColor = new(255, 255, 255, 255);
         private readonly Color32 _phonemeColor = new(206, 129, 225, 255);
 
-        // Dorado: niveles del screening inicial (HOME_DISCOVERY)
-        private readonly Color32 _screeningColor = new(255, 214, 92, 255);
+        // Niveles del screening inicial (HOME_DISCOVERY). Image.color multiplica el sprite
+        // azul claro del nivel (Content/Shadow.png): este tinte amarillo se ve VERDE en el mapa.
+        private readonly Color32 _screeningGreenTint = new(255, 214, 92, 255);
 
         public void Init(in LevelData data)
         {
@@ -57,8 +58,8 @@ namespace Picofon.Core.MapPath
 
             if (data.IsScreening)
             {
-                _shadow.color = _screeningColor;
-                _content.color = _screeningColor;
+                _shadow.color = _screeningGreenTint;
+                _content.color = _screeningGreenTint;
             }
 
             _icon.sprite = data.Config.LevelIcon;
