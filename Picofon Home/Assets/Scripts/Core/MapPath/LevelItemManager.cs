@@ -26,6 +26,9 @@ namespace Picofon.Core.MapPath
 
         // Nivel del screening inicial (HOME_DISCOVERY): se pinta distinto en el mapa
         public readonly bool IsScreening { get; init; }
+
+        // Nivel SPS: icono propio (mano de segmentación)
+        public readonly bool IsSps { get; init; }
     }
 
     public sealed class LevelItemManager : MonoBehaviour
@@ -161,6 +164,7 @@ namespace Picofon.Core.MapPath
                     Type = type,
                     State = state,
                     IsScreening = plan.IsScreening,
+                    IsSps = template != null && template.IsSps,
                 };
 
                 button.Init(enabled: enabled, itemView: comp);
