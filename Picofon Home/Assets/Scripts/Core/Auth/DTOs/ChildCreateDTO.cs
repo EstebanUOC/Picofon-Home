@@ -4,8 +4,6 @@ namespace Picofon.Core.Auth.DTOs
 {
     public class CreateChildDTO
     {
-        public string Id { get; set; }
-
         public string FirstName { get; set; }
 
         public string LastName { get; set; }

@@ -1,4 +1,3 @@
-using Picofon.Core.Auth;
 using Picofon.Core.Auth.Components;
 using Picofon.Core.Auth.DTOs;
 using Picofon.Core.Auth.Services;
@@ -264,11 +263,6 @@ namespace Picofon.Core.Auth.Panels
                 _childData.CenterId = centerId;
             }
 
-            if (_countryDropdown.options[_countryDropdown.value].text == "España")
-            {
-                _personalContent.SetIsSpain(true);
-            }
-
             Tween.UISizeDelta(
                 _contentTransform,
                 endValue: _personalInfoGroup.sizeDelta,
@@ -303,7 +297,11 @@ namespace Picofon.Core.Auth.Panels
             if (IsUpdate)
             {
                 ChildService childService = new();
-                result = await childService.UpdateChild(_childData.Id, _childData, token);
+                result = await childService.UpdateChild(
+                    _authManager.CurrentChild.Id,
+                    _childData,
+                    token
+                );
             }
             else
             {

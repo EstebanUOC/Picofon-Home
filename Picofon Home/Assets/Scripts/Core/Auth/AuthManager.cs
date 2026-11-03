@@ -94,6 +94,10 @@ namespace Picofon.Core.Auth
 
         public void SetCurrentChild(ChildDataDTO child)
         {
+            PerformanceLog.Log(
+                $"Setting current child: {child.Id}, {child.FirstName} {child.LastName}"
+            );
+
             CurrentChild = new()
             {
                 Id = child.Id,
@@ -131,9 +135,40 @@ namespace Picofon.Core.Auth
 
                     UnityEngine.SceneManagement.SceneManager.LoadScene("MapPathScene");
 
+                    // Prueba().Forget();
+
                     break;
                 default:
                     break;
+            }
+        }
+
+        private async UniTaskVoid Prueba()
+        {
+            // Metodo usado para pruebas de desarrollo, se puede eliminar en el futuro
+
+            UserService userService = UserService;
+
+            // CreateChildDTO _childData = new()
+            // {
+            //     FirstName = "Test",
+            //     LastName = "Child",
+            //     BirthDate = "2023-03-30",
+            //     Disorder = "NONE",
+            //     CenterId = 2,
+            //     IsAiPersonalizationEnabled = true,
+            //     LanguagePreference = 1,
+            //     UserId = "noXJSkWJnCW5iSEu32n5Kvofq5a2",
+            //     Relationship = UserRole.Parent,
+            // };
+
+            ApiResult<ChildListItemDTO[]> result = await userService.GetUserChildren(
+                "noXJSkWJnCW5iSEu32n5Kvofq5a2"
+            );
+
+            foreach (ChildListItemDTO child in result.Data)
+            {
+                Debug.Log($"Child: {child.Id}, {child.FirstName} ");
             }
         }
 

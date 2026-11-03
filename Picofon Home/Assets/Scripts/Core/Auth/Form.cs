@@ -12,7 +12,6 @@ namespace Picofon.Core.Auth
 
     public enum ChildFields
     {
-        ID,
         FirstName,
         LastName,
         BirthDate,
@@ -61,7 +60,6 @@ namespace Picofon.Core.Auth
             {
                 UserId = ParentId,
                 Relationship = Relationship,
-                Id = _fields[ChildFields.ID].GetData(),
                 FirstName = _fields[ChildFields.FirstName].GetData(),
                 LastName = _fields[ChildFields.LastName].GetData(),
                 BirthDate = _fields[ChildFields.BirthDate].GetData(),

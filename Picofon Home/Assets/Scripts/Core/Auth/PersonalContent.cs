@@ -19,9 +19,6 @@ namespace Picofon.Core.Auth
         private UIManager _uiManager;
 
         [SerializeField]
-        private TMP_InputField _idInput;
-
-        [SerializeField]
         private TMP_InputField _nameInput;
 
         [SerializeField]
@@ -35,8 +32,6 @@ namespace Picofon.Core.Auth
 
         public event Action OnValidationSuccess;
 
-        private bool _isSpain;
-
         public void Start()
         {
             _submit.Interactable = false;
@@ -44,12 +39,10 @@ namespace Picofon.Core.Auth
 
             _ageInput.onValidateInput = ValidateDateChar;
 
-            _idInput.onSelect.AddListener(OnInputSelected);
             _nameInput.onSelect.AddListener(OnInputSelected);
             _lastNameInput.onSelect.AddListener(OnInputSelected);
             _ageInput.onSelect.AddListener(OnInputSelected);
 
-            _idInput.onEndEdit.AddListener(ValidateInputs);
             _nameInput.onEndEdit.AddListener(ValidateInputs);
             _lastNameInput.onEndEdit.AddListener(ValidateInputs);
             _ageInput.onEndEdit.AddListener(ValidateInputs);
@@ -59,7 +52,6 @@ namespace Picofon.Core.Auth
 
         public void SetUpdateData(ChildDataDTO data)
         {
-            _idInput.text = data.Id;
             _nameInput.text = data.FirstName;
             _lastNameInput.text = data.LastName;
             _ageInput.text = DateTime.Parse(data.BirthDate).ToString("dd/MM/yyyy");
@@ -69,22 +61,15 @@ namespace Picofon.Core.Auth
         {
             if (RegisterChild.IsUpdate)
             {
-                _idInput.interactable = false;
                 _submit.Interactable = true;
             }
         }
 
         public void OnDisable()
         {
-            _idInput.text = string.Empty;
             _nameInput.text = string.Empty;
             _lastNameInput.text = string.Empty;
             _ageInput.text = string.Empty;
-        }
-
-        public void SetIsSpain(bool isSpain)
-        {
-            _isSpain = isSpain;
         }
 
         public bool CanSubmit()
@@ -94,7 +79,6 @@ namespace Picofon.Core.Auth
 
         public void SetData(CreateChildDTO data)
         {
-            data.Id = _idInput.text;
             data.FirstName = _nameInput.text;
             data.LastName = _lastNameInput.text;
 
@@ -112,8 +96,7 @@ namespace Picofon.Core.Auth
         private void ValidateInputs(string _)
         {
             if (
-                _idInput.text.Length < 9
-                || _ageInput.text.Length < 10
+                _ageInput.text.Length < 10
                 || _nameInput.text.Length < 3
                 || _lastNameInput.text.Length < 3
             )
@@ -127,21 +110,6 @@ namespace Picofon.Core.Auth
 
         private void OnSubmit()
         {
-            if (!ValidateIdentification(_idInput.text))
-            {
-                _ = _uiManager.ShowModal(
-                    new ModalData
-                    {
-                        Title = "Error",
-                        Message =
-                            "La identificación ingresada no es válida. Por favor, verifica los datos e intenta nuevamente.",
-                        Panel = _panel,
-                    }
-                );
-
-                return;
-            }
-
             if (!ValidateDate(_ageInput.text))
             {
                 _ = _uiManager.ShowModal(
@@ -158,16 +126,6 @@ namespace Picofon.Core.Auth
             }
 
             OnValidationSuccess?.Invoke();
-        }
-
-        private bool ValidateIdentification(string id)
-        {
-            if (_isSpain)
-            {
-                return ValidateDNI(id) || ValidateNIE(id) || ValidatePassport(id);
-            }
-
-            return !string.IsNullOrEmpty(id) && id.Length >= 5 && id.Length <= 10;
         }
 
         private bool ValidateDate(string date)
@@ -216,54 +174,6 @@ namespace Picofon.Core.Auth
                 return '\0';
 
             return addedChar;
-        }
-
-        private bool ValidatePassport(string passport)
-        {
-            return !string.IsNullOrEmpty(passport) && passport.Length >= 9;
-        }
-
-        private bool ValidateDNI(string dni)
-        {
-            if (string.IsNullOrEmpty(dni) || dni.Length != 9)
-                return false;
-
-            string numbers = dni[..8];
-
-            if (!int.TryParse(numbers, out int _))
-            {
-                return false;
-            }
-
-            char letter = dni[8];
-
-            return char.IsLetter(letter);
-        }
-
-        private bool ValidateNIE(string nie)
-        {
-            if (string.IsNullOrEmpty(nie) || nie.Length != 9)
-                return false;
-
-            bool endsWithLetter = char.IsLetter(nie[^1]);
-
-            if (!endsWithLetter)
-            {
-                return false;
-            }
-
-            bool someChar = false;
-
-            for (int i = 1; i < nie.Length - 1; i++)
-            {
-                if (char.IsLetter(nie[i]))
-                {
-                    someChar = true;
-                    break;
-                }
-            }
-
-            return !someChar;
         }
     }
 }
