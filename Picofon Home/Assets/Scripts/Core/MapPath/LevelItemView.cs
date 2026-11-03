@@ -44,9 +44,28 @@ namespace Picofon.Core.MapPath
         private readonly Color32 _syllableColor = new(255, 255, 255, 255);
         private readonly Color32 _phonemeColor = new(206, 129, 225, 255);
 
-        // Niveles del screening inicial (HOME_DISCOVERY). Image.color multiplica el sprite
-        // azul claro del nivel (Content/Shadow.png): este tinte amarillo se ve VERDE en el mapa.
-        private readonly Color32 _screeningGreenTint = new(255, 214, 92, 255);
+        // Niveles del screening inicial (HOME_DISCOVERY): sprites dorados. Image.color
+        // multiplica el sprite azul, así que con un tinte no se puede conseguir dorado.
+        private const string ScreeningContentPath = "Images/MapPath/Level/ContentGold";
+        private const string ScreeningShadowPath = "Images/MapPath/Level/ShadowGold";
+
+        // Icono SPS: mano en "V" de la hoja de manos de segmentación
+        private const string SpsIconSheetPath = "Images/Segmentation/Hands";
+        private const string SpsIconName = "Hands3_2";
+
+        private static Sprite _screeningContent;
+        private static Sprite _screeningShadow;
+        private static Sprite _spsIcon;
+
+        // Sprites del prefab (malla), para restaurarlos al reutilizar el item
+        private Sprite _defaultContent;
+        private Sprite _defaultShadow;
+
+        public void Awake()
+        {
+            _defaultContent = _content.sprite;
+            _defaultShadow = _shadow.sprite;
+        }
 
         public void Init(in LevelData data)
         {
@@ -54,15 +73,55 @@ namespace Picofon.Core.MapPath
             _config = data.Config;
 
             SetState(data.State);
-            SetBackgroundColor(data.Type);
 
-            if (data.IsScreening)
+            if (data.IsScreening && LoadScreeningSprites())
             {
-                _shadow.color = _screeningGreenTint;
-                _content.color = _screeningGreenTint;
+                _content.sprite = _screeningContent;
+                _shadow.sprite = _screeningShadow;
+                _content.color = _syllableColor;
+                _shadow.color = _syllableColor;
+            }
+            else
+            {
+                _content.sprite = _defaultContent;
+                _shadow.sprite = _defaultShadow;
+                SetBackgroundColor(data.Type);
             }
 
-            _icon.sprite = data.Config.LevelIcon;
+            bool spsIcon = data.IsSps && LoadSpsIcon();
+
+            _icon.sprite = spsIcon ? _spsIcon : data.Config.LevelIcon;
+
+            // La mano es vertical (584x704): sin preserveAspect se deformaría
+            _icon.preserveAspect = spsIcon;
+        }
+
+        private static bool LoadScreeningSprites()
+        {
+            if (_screeningContent == null)
+                _screeningContent = Resources.Load<Sprite>(ScreeningContentPath);
+
+            if (_screeningShadow == null)
+                _screeningShadow = Resources.Load<Sprite>(ScreeningShadowPath);
+
+            return _screeningContent != null && _screeningShadow != null;
+        }
+
+        private static bool LoadSpsIcon()
+        {
+            if (_spsIcon != null)
+                return true;
+
+            foreach (Sprite sprite in Resources.LoadAll<Sprite>(SpsIconSheetPath))
+            {
+                if (sprite.name == SpsIconName)
+                {
+                    _spsIcon = sprite;
+                    break;
+                }
+            }
+
+            return _spsIcon != null;
         }
 
         private void SetState(LevelState value)

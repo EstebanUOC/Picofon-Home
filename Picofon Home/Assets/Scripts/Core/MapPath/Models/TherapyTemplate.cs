@@ -9,5 +9,10 @@ namespace Picofon.Core.MapPath.Models
         public bool IsActive { get; init; }
 
         public int TaskTypeId { get; init; }
+
+        // SPS (Segmentar y contar sílabas) tiene escenas e icono propios
+        public const int SpsSkillId = 4;
+
+        public bool IsSps => SkillId == SpsSkillId;
     }
 }

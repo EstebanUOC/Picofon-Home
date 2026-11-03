@@ -23,8 +23,6 @@ namespace Picofon.Core.MapPath
 
     public class MapManager : MonoBehaviour
     {
-        private const int SpsSkillId = 4;
-
         #region References
 
         [SerializeField]
@@ -245,7 +243,7 @@ namespace Picofon.Core.MapPath
 
             // SPS (skill_id = 4) tiene escenas propias; Basket / CrossRiver solo
             // conocen las skills silábicas 1-3.
-            if (template.SkillId == SpsSkillId)
+            if (template.IsSps)
             {
                 scene = type == ActivityType.Relate ? "Segmentation_R" : "Segmentation";
             }
