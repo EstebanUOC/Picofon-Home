@@ -176,12 +176,14 @@ namespace Picofon.Core.Auth
         {
             _initializeData = new InitializeData { Initialized = true };
 
+#if !UNITY_IOS
             GoogleSignIn.Configuration = new GoogleSignInConfiguration
             {
                 WebClientId = GoogleClientId,
                 RequestIdToken = true,
                 RequestEmail = true,
             };
+#endif
 
             string preferredLanguage = GamePrefs.PreferredLanguage;
 

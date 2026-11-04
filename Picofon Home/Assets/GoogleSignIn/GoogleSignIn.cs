@@ -87,7 +87,8 @@ namespace Google {
     public static GoogleSignIn DefaultInstance {
       get {
         if (theInstance == null) {
-#if UNITY_ANDROID || UNITY_IOS
+// Picofon: en iOS no se incluye el plugin nativo (v1 iOS sin login de Google).
+#if UNITY_ANDROID
           theInstance = new GoogleSignIn(new GoogleSignInImpl(Configuration));
 #else
           theInstance = new GoogleSignIn(null);
@@ -100,7 +101,7 @@ namespace Google {
       }
     }
 
-    internal GoogleSignIn(GoogleSignInImpl impl) {
+    internal GoogleSignIn(ISignInImpl impl) {
       this.impl = impl;
     }
 

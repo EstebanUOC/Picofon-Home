@@ -54,11 +54,17 @@ namespace Picofon.Core.Auth.Panels
                 _debugButton.gameObject.SetActive(false);
             }
 
+#if UNITY_IOS
+            // v1 de iOS: solo correo y contrasena (sin Google, evita exigir Sign in with Apple).
+            _loginButton.gameObject.SetActive(false);
+            return;
+#else
             if (Application.isEditor)
             {
                 _loginButton.Interactable = false;
                 return;
             }
+#endif
 
             _loginButton.OnClick += AuthenticateWithGoogle;
         }
