@@ -243,7 +243,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12670480929636352
-    m_Localized: "Nom/\xC0lies"
+    m_Localized: "Nom/\xC0lies <color=red>*</color> "
     m_Metadata:
       m_Items: []
   - m_Id: 12670604951011328
@@ -251,7 +251,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12670736790568960
-    m_Localized: Data de naixement
+    m_Localized: 'Data de naixement <color=red>*</color> '
     m_Metadata:
       m_Items: []
   - m_Id: 12673230258159616
@@ -403,6 +403,15 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 40207061835956224
     m_Localized: No hi ha plans actius
+    m_Metadata:
+      m_Items: []
+  - m_Id: 76472945530425344
+    m_Localized: <color=red>*</color> Camp obligatori.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 76489484463820800
+    m_Localized: "Si no vols introduir el nom exacte de la nena o nen, pots posar
+      un \xE0lies."
     m_Metadata:
       m_Items: []
   references:

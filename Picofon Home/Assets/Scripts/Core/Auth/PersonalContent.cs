@@ -12,6 +12,8 @@ namespace Picofon.Core.Auth
 
     public class PersonalContent : MonoBehaviour
     {
+        # region References
+
         [SerializeField]
         private RectTransform _panel;
 
@@ -30,12 +32,33 @@ namespace Picofon.Core.Auth
         [SerializeField]
         private CustomButton _submit;
 
+        [SerializeField]
+        private SimpleButton _advice;
+
+        [SerializeField]
+        private GameObject _advicePanel;
+
+        #endregion
+
         public event Action OnValidationSuccess;
 
         public void Start()
         {
             _submit.Interactable = false;
             _submit.OnClick += OnSubmit;
+
+            _advicePanel.SetActive(false);
+
+            _advice.OnClick += () =>
+            {
+                _advicePanel.transform.position = _advice.transform.position;
+
+                RectTransform panelRect = _advicePanel.GetComponent<RectTransform>();
+
+                panelRect.anchoredPosition += new Vector2(-24, 0);
+
+                _advicePanel.SetActive(!_advicePanel.activeSelf);
+            };
 
             _ageInput.onValidateInput = ValidateDateChar;
 
@@ -95,11 +118,7 @@ namespace Picofon.Core.Auth
 
         private void ValidateInputs(string _)
         {
-            if (
-                _ageInput.text.Length < 10
-                || _nameInput.text.Length < 3
-                || _lastNameInput.text.Length < 3
-            )
+            if (_ageInput.text.Length < 10 || _nameInput.text.Length < 3)
             {
                 _submit.Interactable = false;
                 return;

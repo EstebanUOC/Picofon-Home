@@ -242,7 +242,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12670480929636352
-    m_Localized: Nombre/Alias
+    m_Localized: 'Nombre/Alias <color=red>*</color> '
     m_Metadata:
       m_Items: []
   - m_Id: 12670604951011328
@@ -250,7 +250,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12670736790568960
-    m_Localized: Fecha de nacimiento
+    m_Localized: 'Fecha de nacimiento <color=red>*</color> '
     m_Metadata:
       m_Items: []
   - m_Id: 12673230258159616
@@ -403,6 +403,15 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 40207061835956224
     m_Localized: No hay planes activos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 76472945530425344
+    m_Localized: <color=red>*</color> Campo obligatorio.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 76489484463820800
+    m_Localized: "Si no quieres introducir el nombre exacto de la ni\xF1a o ni\xF1o,
+      puedes poner un sobrenombre."
     m_Metadata:
       m_Items: []
   references:

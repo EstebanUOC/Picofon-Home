@@ -383,6 +383,14 @@ MonoBehaviour:
     m_Key: NO_ACTIVE_PLANS_TITLE
     m_Metadata:
       m_Items: []
+  - m_Id: 76472945530425344
+    m_Key: REG-NOTICE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 76489484463820800
+    m_Key: REG-ADVICE
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
