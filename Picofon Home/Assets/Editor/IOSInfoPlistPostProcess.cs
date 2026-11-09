@@ -24,6 +24,14 @@ public static class IOSInfoPlistPostProcess
         var plist = new PlistDocument();
         plist.ReadFromFile(plistPath);
         plist.root.SetBoolean("ITSAppUsesNonExemptEncryption", false);
+
+        // Firebase Analytics desactivado en iOS (app infantil): sin eventos
+        // automáticos ni consentimientos de Google Analytics por defecto.
+        plist.root.SetBoolean("FIREBASE_ANALYTICS_COLLECTION_DEACTIVATED", true);
+        plist.root.SetBoolean("GOOGLE_ANALYTICS_DEFAULT_ALLOW_ANALYTICS_STORAGE", false);
+        plist.root.SetBoolean("GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_STORAGE", false);
+        plist.root.SetBoolean("GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_USER_DATA", false);
+        plist.root.SetBoolean("GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS", false);
         plist.WriteToFile(plistPath);
     }
 }
