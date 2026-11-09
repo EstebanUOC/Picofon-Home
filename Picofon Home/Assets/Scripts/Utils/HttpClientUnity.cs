@@ -90,6 +90,25 @@ namespace Picofon.Utils
             return request.downloadHandler.data;
         }
 
+        public static async UniTask<byte[]> DeleteAsyncBytes(
+            string url,
+            int timeoutSeconds = 10,
+            CancellationToken cancellationToken = default
+        )
+        {
+            using var request = new UnityWebRequest(url, "DELETE");
+            request.downloadHandler = new DownloadHandlerBuffer();
+
+            request.timeout = timeoutSeconds;
+
+            await request.SendWebRequest().WithCancellation(cancellationToken);
+
+            if (request.result != UnityWebRequest.Result.Success)
+                throw new Exception($"HTTP DELETE Error: {request.error} | URL: {url}");
+
+            return request.downloadHandler.data;
+        }
+
         public static async UniTask<byte[]> PatchAsyncBytes(
             string url,
             byte[] data,
