@@ -107,9 +107,20 @@ namespace Picofon.Core.Auth.Panels
 
         private RectTransform _panel;
 
+        // Eliminar cuenta (requisito App Store 5.1.1(v)). El botón se crea en
+        // tiempo de ejecución clonando el de logout, para no tocar la escena.
+        private const float DeleteConfirmWindowSeconds = 20f;
+
+        private SimpleButton _deleteAccountButton;
+        private TMP_Text _deleteAccountLabel;
+        private float _deleteArmedUntil = -1f;
+        private bool _deletingAccount;
+
         public void Start()
         {
             _logoutButton.OnClick += OnLogout;
+
+            CreateDeleteAccountButton();
 
             _selectCenterButton.OnClick += OnSelectCenter;
 
@@ -491,6 +502,148 @@ namespace Picofon.Core.Auth.Panels
         private void OnUpdateChild()
         {
             OnUpdateChildAsync().Forget();
+        }
+
+        private bool IsCatalan =>
+            !string.IsNullOrEmpty(GamePrefs.PreferredLanguage)
+            && GamePrefs.PreferredLanguage[0] == 'C';
+
+        private string DeleteText(string es, string ca) => IsCatalan ? ca : es;
+
+        private void CreateDeleteAccountButton()
+        {
+            GameObject buttonObject = Instantiate(
+                _logoutButton.gameObject,
+                _logoutButton.transform.parent
+            );
+            buttonObject.name = "DeleteAccount";
+            buttonObject.transform.SetSiblingIndex(_logoutButton.transform.GetSiblingIndex() + 1);
+
+            RectTransform source = (RectTransform)_logoutButton.transform;
+            RectTransform target = (RectTransform)buttonObject.transform;
+            target.anchoredPosition =
+                source.anchoredPosition + new Vector2(source.sizeDelta.x + 30f, 0f);
+
+            Transform icon = buttonObject.transform.Find("Icon");
+            if (icon != null)
+            {
+                icon.gameObject.SetActive(false);
+            }
+
+            _deleteAccountLabel = Instantiate(_centerLabel, buttonObject.transform);
+            _deleteAccountLabel.name = "Label";
+            RectTransform labelRect = _deleteAccountLabel.rectTransform;
+            labelRect.anchorMin = Vector2.zero;
+            labelRect.anchorMax = Vector2.one;
+            labelRect.pivot = new Vector2(0.5f, 0.5f);
+            labelRect.offsetMin = new Vector2(12f, 12f);
+            labelRect.offsetMax = new Vector2(-12f, -12f);
+            _deleteAccountLabel.alignment = TextAlignmentOptions.Center;
+            _deleteAccountLabel.enableWordWrapping = true;
+            _deleteAccountLabel.enableAutoSizing = true;
+            _deleteAccountLabel.fontSizeMin = 12f;
+            _deleteAccountLabel.fontSizeMax = 36f;
+            _deleteAccountLabel.raycastTarget = false;
+
+            _deleteAccountButton = buttonObject.GetComponent<SimpleButton>();
+            _deleteAccountButton.Interactable = true;
+            _deleteAccountButton.OnClick += OnDeleteAccount;
+
+            ResetDeleteAccountButton();
+        }
+
+        private void ResetDeleteAccountButton()
+        {
+            _deleteArmedUntil = -1f;
+            _deleteAccountLabel.text = DeleteText("Eliminar\ncuenta", "Eliminar\ncompte");
+        }
+
+        private void OnDeleteAccount()
+        {
+            OnDeleteAccountAsync().Forget();
+        }
+
+        private async UniTaskVoid OnDeleteAccountAsync()
+        {
+            if (_deletingAccount)
+            {
+                return;
+            }
+
+            // Primera pulsación: avisa y arma el botón. Segunda (dentro del plazo): borra.
+            if (Time.unscaledTime > _deleteArmedUntil)
+            {
+                _deleteArmedUntil = Time.unscaledTime + DeleteConfirmWindowSeconds;
+                _deleteAccountLabel.text = DeleteText("Confirmar", "Confirmar");
+
+                _ = _uiManager.ShowModal(
+                    new ModalData
+                    {
+                        Title = DeleteText("Eliminar cuenta", "Eliminar compte"),
+                        Message = DeleteText(
+                            "Se borrarán para siempre tu cuenta y los datos de los niños y niñas que solo están vinculados a ella (perfiles, niveles y resultados). Esta acción no se puede deshacer.\n\nSi estás seguro, cierra este aviso y pulsa «Confirmar».",
+                            "S'esborraran per sempre el teu compte i les dades dels infants que només hi estan vinculats (perfils, nivells i resultats). Aquesta acció no es pot desfer.\n\nSi n'estàs segur, tanca aquest avís i prem «Confirmar»."
+                        ),
+                        Panel = _panel,
+                    }
+                );
+
+                RevertDeleteButtonLater().Forget();
+                return;
+            }
+
+            _deletingAccount = true;
+            _deleteAccountButton.Interactable = false;
+            _logoutButton.Interactable = false;
+            _deleteAccountLabel.text = "...";
+
+            bool deleted = await _authManager.DeleteAccount();
+
+            _deletingAccount = false;
+            _deleteAccountButton.Interactable = true;
+            _logoutButton.Interactable = true;
+            ResetDeleteAccountButton();
+
+            if (deleted)
+            {
+                // AuthManager.DeleteAccount ya ha cerrado la sesión y mostrado el login.
+                _ = _uiManager.ShowModal(
+                    new ModalData
+                    {
+                        Title = DeleteText("Cuenta eliminada", "Compte eliminat"),
+                        Message = DeleteText(
+                            "Tu cuenta y sus datos se han eliminado.",
+                            "El teu compte i les seves dades s'han eliminat."
+                        ),
+                        Panel = _panel,
+                    }
+                );
+                return;
+            }
+
+            await _uiManager.ShowModal(
+                new ModalData
+                {
+                    Title = "Error",
+                    Message = DeleteText(
+                        "No se ha podido eliminar la cuenta. Comprueba la conexión, vuelve a iniciar sesión e inténtalo de nuevo.",
+                        "No s'ha pogut eliminar el compte. Comprova la connexió, torna a iniciar sessió i torna-ho a provar."
+                    ),
+                    Panel = _panel,
+                }
+            );
+        }
+
+        private async UniTaskVoid RevertDeleteButtonLater()
+        {
+            float armedUntil = _deleteArmedUntil;
+
+            await UniTask.WaitForSeconds(DeleteConfirmWindowSeconds, ignoreTimeScale: true);
+
+            if (!_deletingAccount && Mathf.Approximately(_deleteArmedUntil, armedUntil))
+            {
+                ResetDeleteAccountButton();
+            }
         }
 
         private void OnLogout()

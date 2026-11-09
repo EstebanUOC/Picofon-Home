@@ -79,6 +79,53 @@ namespace Picofon.Core.Auth
             _uiManager.ShowPanel(PanelEnum.Login);
         }
 
+        /// <summary>
+        /// "Eliminar cuenta": borra la cuenta en el backend (que también la borra
+        /// de Firebase Auth) y, si va bien, cierra la sesión local y vuelve al login.
+        /// Si la sesión del backend ha caducado y hay usuario de Firebase, la renueva
+        /// una vez y reintenta.
+        /// </summary>
+        public async UniTask<bool> DeleteAccount()
+        {
+            ApiResult result = await UserService.DeleteAccount();
+
+            if (
+                !result.Success
+                && result.Message == UserService.DeleteAccountUnauthorized
+                && FirebaseAuth.DefaultInstance.CurrentUser != null
+            )
+            {
+                try
+                {
+                    string firebaseIdToken = await FirebaseAuth
+                        .DefaultInstance.CurrentUser.TokenAsync(true)
+                        .AsUniTask();
+
+                    ApiResult<LoginData> login = await UserService.LoginWithFirebaseToken(
+                        firebaseIdToken
+                    );
+
+                    if (login.Success && !login.Data.IsNewUser)
+                    {
+                        result = await UserService.DeleteAccount();
+                    }
+                }
+                catch (System.Exception e)
+                {
+                    PerformanceLog.LogError($"Error refreshing session to delete account: {e.Message}");
+                }
+            }
+
+            if (!result.Success)
+            {
+                return false;
+            }
+
+            Logout();
+
+            return true;
+        }
+
         public void SetCurrentUser(UserModel user)
         {
             _initializeData.CurrentUser = new()

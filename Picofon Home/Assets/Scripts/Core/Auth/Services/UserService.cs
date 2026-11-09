@@ -171,6 +171,46 @@ namespace Picofon.Core.Auth.Services
             return ApiResult<RegisterResponse>.Ok(result.Data);
         }
 
+        public const string DeleteAccountUnauthorized = "DELETE_ACCOUNT_UNAUTHORIZED";
+
+        /// <summary>
+        /// Elimina la cuenta del usuario de la sesión actual (DELETE /auth/me).
+        /// Contrato: docs/auth/eliminar-cuenta.md del backend.
+        /// </summary>
+        public async UniTask<ApiResult> DeleteAccount(CancellationToken token = default)
+        {
+            string url = $"{ApiConfig.BaseUrl}auth/me";
+
+            try
+            {
+                await HttpClientUnity.DeleteAsyncBytes(
+                    url: url,
+                    timeoutSeconds: 20,
+                    cancellationToken: token
+                );
+            }
+            catch (UnityWebRequestException e)
+            {
+                PerformanceLog.LogError(
+                    $"Error deleting account: {e.ResponseCode} {e.Text}, URL: {url}"
+                );
+
+                if (e.ResponseCode == 401)
+                {
+                    return ApiResult.Fail(DeleteAccountUnauthorized);
+                }
+
+                return ApiResult.Fail("NET_ERR_DELETE_ACCOUNT");
+            }
+            catch (System.Exception e)
+            {
+                PerformanceLog.LogError($"Error deleting account: {e.Message}, URL: {url}");
+                return ApiResult.Fail("NET_ERR_DELETE_ACCOUNT");
+            }
+
+            return ApiResult.Ok();
+        }
+
         public async UniTask<ApiResult<LoginData>> LoginWithFirebaseToken(
             string firebaseToken,
             CancellationToken token = default
