@@ -1,5 +1,4 @@
 using System;
-using Picofon.Utils;
 using UnityEngine;
 
 namespace Picofon.Activities
@@ -9,7 +8,7 @@ namespace Picofon.Activities
         [SerializeField]
         private Camera _camera;
 
-        public event Action<Vector3> OnCloudTouched;
+        public event Action<Transform> OnCloudTouched;
 
         public void Update()
         {
@@ -22,13 +21,13 @@ namespace Picofon.Activities
 
             RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
 
-            if (hit.collider != null)
+            if (hit.collider == null)
             {
-                Transform cloudTransform = hit.collider.transform;
-                PerformanceLog.Log($"Position nube: {cloudTransform.position}");
-
-                OnCloudTouched.Invoke(cloudTransform.position);
+                return;
             }
+
+            Transform cloudTransform = hit.collider.transform;
+            OnCloudTouched.Invoke(cloudTransform);
         }
     }
 }
