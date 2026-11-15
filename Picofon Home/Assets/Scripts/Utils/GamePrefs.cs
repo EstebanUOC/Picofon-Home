@@ -91,7 +91,19 @@ namespace Picofon.Utils
 
         public static void ClearAll()
         {
+            // El idioma es una preferencia del dispositivo, no de la sesión: se
+            // conserva al cerrar sesión (si no, volvía al valor por defecto "CA"
+            // mientras la interfaz seguía en castellano).
+            bool hadLanguage = PlayerPrefs.HasKey(nameof(PreferredLanguage));
+            string language = PlayerPrefs.GetString(nameof(PreferredLanguage), string.Empty);
+
             PlayerPrefs.DeleteAll();
+
+            if (hadLanguage && !string.IsNullOrEmpty(language))
+            {
+                PlayerPrefs.SetString(nameof(PreferredLanguage), language);
+            }
+
             Save();
         }
 

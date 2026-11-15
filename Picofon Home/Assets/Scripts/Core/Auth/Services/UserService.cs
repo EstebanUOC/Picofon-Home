@@ -181,6 +181,8 @@ namespace Picofon.Core.Auth.Services
         {
             string url = $"{ApiConfig.BaseUrl}auth/me";
 
+            UnityEngine.Debug.Log($"[DeleteAccount] DELETE {url}");
+
             try
             {
                 await HttpClientUnity.DeleteAsyncBytes(
@@ -207,6 +209,8 @@ namespace Picofon.Core.Auth.Services
                 PerformanceLog.LogError($"Error deleting account: {e.Message}, URL: {url}");
                 return ApiResult.Fail("NET_ERR_DELETE_ACCOUNT");
             }
+
+            UnityEngine.Debug.Log("[DeleteAccount] DELETE /auth/me OK");
 
             return ApiResult.Ok();
         }

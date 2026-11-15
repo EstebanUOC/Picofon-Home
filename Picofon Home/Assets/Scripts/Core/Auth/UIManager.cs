@@ -139,6 +139,15 @@ namespace Picofon.Core.Auth
             await _modalPanel.Show(data);
         }
 
+        /// <summary>
+        /// Muestra el aviso y devuelve true si se pulsa su botón, false si se
+        /// cierra tocando fuera (o si ya había otro aviso abierto).
+        /// </summary>
+        public UniTask<bool> ShowModalWithResult(ModalData data)
+        {
+            return _modalPanel.Show(data);
+        }
+
         public void ShowModal(RectTransform panel, ModalEnum modal)
         {
             switch (modal)

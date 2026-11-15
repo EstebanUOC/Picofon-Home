@@ -89,6 +89,8 @@ namespace Picofon.Core.Auth
         {
             ApiResult result = await UserService.DeleteAccount();
 
+            Debug.Log($"[DeleteAccount] Primer intento: success={result.Success} message={result.Message}");
+
             if (
                 !result.Success
                 && result.Message == UserService.DeleteAccountUnauthorized
@@ -105,9 +107,12 @@ namespace Picofon.Core.Auth
                         firebaseIdToken
                     );
 
+                    Debug.Log($"[DeleteAccount] Sesión renovada: success={login.Success}");
+
                     if (login.Success && !login.Data.IsNewUser)
                     {
                         result = await UserService.DeleteAccount();
+                        Debug.Log($"[DeleteAccount] Reintento: success={result.Success} message={result.Message}");
                     }
                 }
                 catch (System.Exception e)

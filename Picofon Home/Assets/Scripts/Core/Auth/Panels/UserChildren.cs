@@ -109,11 +109,12 @@ namespace Picofon.Core.Auth.Panels
 
         // Eliminar cuenta (requisito App Store 5.1.1(v)). El botón se crea en
         // tiempo de ejecución clonando el de logout, para no tocar la escena.
-        private const float DeleteConfirmWindowSeconds = 20f;
+        // Confirmación: el botón del aviso ("Eliminar definitivamente") borra;
+        // tocar fuera del aviso cancela. Sin temporizadores.
+        private const string DeleteLog = "[DeleteAccount]";
 
         private SimpleButton _deleteAccountButton;
         private TMP_Text _deleteAccountLabel;
-        private float _deleteArmedUntil = -1f;
         private bool _deletingAccount;
 
         public void Start()
@@ -504,11 +505,7 @@ namespace Picofon.Core.Auth.Panels
             OnUpdateChildAsync().Forget();
         }
 
-        private bool IsCatalan =>
-            !string.IsNullOrEmpty(GamePrefs.PreferredLanguage)
-            && GamePrefs.PreferredLanguage[0] == 'C';
-
-        private string DeleteText(string es, string ca) => IsCatalan ? ca : es;
+        private string DeleteText(string es, string ca) => UiLanguage.Text(es, ca);
 
         private void CreateDeleteAccountButton()
         {
@@ -519,10 +516,19 @@ namespace Picofon.Core.Auth.Panels
             buttonObject.name = "DeleteAccount";
             buttonObject.transform.SetSiblingIndex(_logoutButton.transform.GetSiblingIndex() + 1);
 
+            // Esquina superior DERECHA, lejos del botón de logout (arriba a la
+            // izquierda), para que no se pulse uno por error en lugar del otro.
+            // Mismo tamaño que el de logout (150x150 unidades, > 44 pt).
             RectTransform source = (RectTransform)_logoutButton.transform;
             RectTransform target = (RectTransform)buttonObject.transform;
-            target.anchoredPosition =
-                source.anchoredPosition + new Vector2(source.sizeDelta.x + 30f, 0f);
+            target.anchorMin = new Vector2(1f, 1f);
+            target.anchorMax = new Vector2(1f, 1f);
+            target.pivot = new Vector2(1f, 1f);
+            target.sizeDelta = source.sizeDelta;
+            target.anchoredPosition = new Vector2(
+                -source.anchoredPosition.x,
+                source.anchoredPosition.y
+            );
 
             Transform icon = buttonObject.transform.Find("Icon");
             if (icon != null)
@@ -554,7 +560,6 @@ namespace Picofon.Core.Auth.Panels
 
         private void ResetDeleteAccountButton()
         {
-            _deleteArmedUntil = -1f;
             _deleteAccountLabel.text = DeleteText("Eliminar\ncuenta", "Eliminar\ncompte");
         }
 
@@ -567,42 +572,61 @@ namespace Picofon.Core.Auth.Panels
         {
             if (_deletingAccount)
             {
+                Debug.Log($"{DeleteLog} Ignorado: ya hay un borrado en curso");
                 return;
             }
 
-            // Primera pulsación: avisa y arma el botón. Segunda (dentro del plazo): borra.
-            if (Time.unscaledTime > _deleteArmedUntil)
+            Debug.Log($"{DeleteLog} Botón pulsado: mostrando confirmación");
+
+            bool confirmed = await _uiManager.ShowModalWithResult(
+                new ModalData
+                {
+                    Title = DeleteText("Eliminar cuenta", "Eliminar compte"),
+                    Message = DeleteText(
+                        "Se borrarán para siempre tu cuenta y los datos de los niños y niñas que solo están vinculados a ella (perfiles, niveles y resultados). Esta acción no se puede deshacer.\n\nPulsa «Eliminar definitivamente» para continuar, o toca fuera de este aviso para cancelar.",
+                        "S'esborraran per sempre el teu compte i les dades dels infants que només hi estan vinculats (perfils, nivells i resultats). Aquesta acció no es pot desfer.\n\nPrem «Eliminar definitivament» per continuar, o toca fora d'aquest avís per cancel·lar."
+                    ),
+                    ConfirmText = DeleteText("Eliminar definitivamente", "Eliminar definitivament"),
+                    Panel = _panel,
+                }
+            );
+
+            if (!confirmed)
             {
-                _deleteArmedUntil = Time.unscaledTime + DeleteConfirmWindowSeconds;
-                _deleteAccountLabel.text = DeleteText("Confirmar", "Confirmar");
-
-                _ = _uiManager.ShowModal(
-                    new ModalData
-                    {
-                        Title = DeleteText("Eliminar cuenta", "Eliminar compte"),
-                        Message = DeleteText(
-                            "Se borrarán para siempre tu cuenta y los datos de los niños y niñas que solo están vinculados a ella (perfiles, niveles y resultados). Esta acción no se puede deshacer.\n\nSi estás seguro, cierra este aviso y pulsa «Confirmar».",
-                            "S'esborraran per sempre el teu compte i les dades dels infants que només hi estan vinculats (perfils, nivells i resultats). Aquesta acció no es pot desfer.\n\nSi n'estàs segur, tanca aquest avís i prem «Confirmar»."
-                        ),
-                        Panel = _panel,
-                    }
-                );
-
-                RevertDeleteButtonLater().Forget();
+                Debug.Log($"{DeleteLog} Cancelado por el usuario");
                 return;
             }
+
+            Debug.Log($"{DeleteLog} Confirmado: llamando a DELETE /auth/me");
 
             _deletingAccount = true;
             _deleteAccountButton.Interactable = false;
             _logoutButton.Interactable = false;
             _deleteAccountLabel.text = "...";
 
-            bool deleted = await _authManager.DeleteAccount();
+            // Deja terminar la animación de cierre del aviso antes de la carga.
+            await UniTask.WaitForSeconds(0.4f, ignoreTimeScale: true);
+            _uiManager.ShowLoading(LoadingEnum.Normal);
 
-            _deletingAccount = false;
-            _deleteAccountButton.Interactable = true;
-            _logoutButton.Interactable = true;
-            ResetDeleteAccountButton();
+            bool deleted = false;
+            try
+            {
+                deleted = await _authManager.DeleteAccount();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"{DeleteLog} Excepción: {e}");
+            }
+            finally
+            {
+                _uiManager.HideLoading(LoadingEnum.Normal);
+                _deletingAccount = false;
+                _deleteAccountButton.Interactable = true;
+                _logoutButton.Interactable = true;
+                ResetDeleteAccountButton();
+            }
+
+            Debug.Log($"{DeleteLog} Resultado: {(deleted ? "cuenta eliminada" : "error")}");
 
             if (deleted)
             {
@@ -621,7 +645,7 @@ namespace Picofon.Core.Auth.Panels
                 return;
             }
 
-            await _uiManager.ShowModal(
+            _ = _uiManager.ShowModal(
                 new ModalData
                 {
                     Title = "Error",
@@ -632,18 +656,6 @@ namespace Picofon.Core.Auth.Panels
                     Panel = _panel,
                 }
             );
-        }
-
-        private async UniTaskVoid RevertDeleteButtonLater()
-        {
-            float armedUntil = _deleteArmedUntil;
-
-            await UniTask.WaitForSeconds(DeleteConfirmWindowSeconds, ignoreTimeScale: true);
-
-            if (!_deletingAccount && Mathf.Approximately(_deleteArmedUntil, armedUntil))
-            {
-                ResetDeleteAccountButton();
-            }
         }
 
         private void OnLogout()
