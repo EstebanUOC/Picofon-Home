@@ -16,6 +16,9 @@ namespace Picofon.Core.Auth.Components
         public string Title;
         public string Message;
 
+        // Texto opcional del botón del aviso (por defecto, el del prefab).
+        public string ConfirmText;
+
         public RectTransform Panel;
     }
 
@@ -290,6 +293,8 @@ namespace Picofon.Core.Auth.Components
 
             if (clicked == _background.gameObject)
             {
+                // Tocar fuera = cancelar: quien espera el resultado recibe false.
+                _taskCompletion?.TrySetResult(false);
                 HandleClose();
             }
         }

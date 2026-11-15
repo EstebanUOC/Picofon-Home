@@ -140,7 +140,7 @@ namespace Picofon.Core.MapPath
 
                 // TODO: Show modal with error message, and load the AuthScene after user clicks OK
 
-                await _modal.Show("No s'han pogut carregar els nivells següents.");
+                await _modal.Show(UiLanguage.Text("No se han podido cargar los siguientes niveles.", "No s'han pogut carregar els nivells següents."));
 
                 await LoadScene("AuthScene");
 
@@ -180,18 +180,18 @@ namespace Picofon.Core.MapPath
                     // MIXED_POLICY_VERSIONS / POLICY_LANGUAGE_MISMATCH /
                     // PINNED_POLICY_VERSION_MISMATCH / HOME_DISCOVERY_*: error de datos.
                     // Ya está registrado; no se reintenta y se recargan los planes.
-                    await _modal.Show("No s'han pogut carregar els nivells següents.");
+                    await _modal.Show(UiLanguage.Text("No se han podido cargar los siguientes niveles.", "No s'han pogut carregar els nivells següents."));
                     return;
                 }
 
-                await _modal.Show("No s'han pogut carregar els nivells següents.");
+                await _modal.Show(UiLanguage.Text("No se han podido cargar los siguientes niveles.", "No s'han pogut carregar els nivells següents."));
 
                 await LoadScene("AuthScene");
 
                 return;
             }
 
-            await _modal.Show("Niveles cargados correctamente, ¡a jugar!");
+            await _modal.Show(UiLanguage.Text("Niveles cargados correctamente, ¡a jugar!", "Nivells carregats correctament, a jugar!"));
         }
 
         private void HandleLevelSelected(LevelConfig config, int index)
