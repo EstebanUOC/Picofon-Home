@@ -61,7 +61,7 @@ namespace Picofon.Core.MapPath
 
             if (string.IsNullOrEmpty(childId))
             {
-                childId = "77345678B";
+                childId = "QA261020";
                 _conductedById = "noXJSkWJnCW5iSEu32n5Kvofq5a2";
 
                 MapPathPayload.NextAction = NextAction.Reload;
@@ -114,6 +114,8 @@ namespace Picofon.Core.MapPath
             Sequence sequence = _transition.ZoomIn();
 
             _itemManager.RenderLevels(store: LevelDataStore.Instance, sequence: in sequence);
+
+            _counter.Show().Forget();
         }
 
         private async UniTask CalculateLearningRate(string childId)
@@ -241,8 +243,6 @@ namespace Picofon.Core.MapPath
 
             string scene = $"{config.SceneName}_{suffix}";
 
-            // SPS (skill_id = 4) tiene escenas propias; Basket / CrossRiver solo
-            // conocen las skills silábicas 1-3.
             if (template.IsSps)
             {
                 scene = type == ActivityType.Relate ? "Segmentation_R" : "Segmentation";

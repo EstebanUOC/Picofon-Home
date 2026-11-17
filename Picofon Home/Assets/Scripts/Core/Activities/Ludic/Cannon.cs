@@ -1,6 +1,4 @@
 using System;
-using System.Reflection.PortableExecutable;
-using Picofon.Utils;
 using PrimeTween;
 using UnityEngine;
 
@@ -23,6 +21,9 @@ namespace Picofon.Activities
         [SerializeField]
         private GameObject _bullet;
 
+        [SerializeField]
+        private CloudManager _cloudManager;
+
         private Transform _cloud;
 
         private bool _canShoot = true;
@@ -40,14 +41,17 @@ namespace Picofon.Activities
             {
                 _bullet.SetActive(false);
 
-                Tween.ShakeScale(
-                    _cloud,
-                    strength: Vector3.one * 0.2f,
-                    duration: 0.5f,
-                    frequency: 10,
-                    enableFalloff: true,
-                    easeBetweenShakes: Ease.OutQuad
-                );
+                if (_cloudManager.CloudTouched(_cloud))
+                {
+                    Tween.ShakeScale(
+                        _cloud,
+                        strength: Vector3.one * 0.2f,
+                        duration: 0.5f,
+                        frequency: 10,
+                        enableFalloff: true,
+                        easeBetweenShakes: Ease.OutQuad
+                    );
+                }
             };
 
             _onBarrelRotationComplete = () =>
