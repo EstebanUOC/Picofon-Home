@@ -45,5 +45,36 @@ namespace Picofon.Core.MapPath
             _videoPlayer.gameObject.SetActive(true);
             _videoPlayer.Play();
         }
+
+        public void StopVideo()
+        {
+            _videoPlayer.Stop();
+
+            Tween
+                .Alpha(_fade, 0f, 0.5f)
+                .OnComplete(() =>
+                {
+                    _fade.gameObject.SetActive(false);
+                });
+
+            Tween
+                .Scale(_videoImage.transform, Vector3.one * 0.3f, 0.5f, ease: Ease.InBack)
+                .OnComplete(() =>
+                {
+                    _videoImage.gameObject.SetActive(false);
+                });
+
+            Tween
+                .Scale(_videoFrame.transform, Vector3.one * 0.3f, 0.5f, ease: Ease.InBack)
+                .OnComplete(() =>
+                {
+                    _videoFrame.gameObject.SetActive(false);
+                });
+        }
+
+        public bool IsVideoPlaying()
+        {
+            return _videoPlayer.isPlaying;
+        }
     }
 }

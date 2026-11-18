@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Picofon.Components;
 using Picofon.Core.MapPath;
 using Picofon.Utils;
@@ -50,7 +51,7 @@ namespace Picofon.Core
 
             _playButton.OnClick += () =>
             {
-                _videoManager.PlayVideo();
+                HandlePlayButtonClick().Forget();
             };
         }
 
@@ -58,6 +59,17 @@ namespace Picofon.Core
         {
             _isPanelActive = !_isPanelActive;
             _panel.SetActive(_isPanelActive);
+        }
+
+        private async UniTaskVoid HandlePlayButtonClick()
+        {
+            _videoManager.PlayVideo();
+
+            await UniTask.WaitForSeconds(0.5f);
+
+            await UniTask.WaitWhile(() => _videoManager.IsVideoPlaying());
+
+            _videoManager.StopVideo();
         }
     }
 }
