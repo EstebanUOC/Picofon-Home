@@ -11,9 +11,13 @@
   </androidPackages>
 
   <!-- iOS Cocoapod dependencies can be specified by each iosPod element. -->
+  <!-- Picofon: v1 de iOS sin login de Google. El plugin nativo v1.0.4 no es
+       compatible con GoogleSignIn 7+ y GoogleSignIn 5.x choca con
+       GTMSessionFetcher 3.x de Firebase 13.x, asi que no se pide el pod.
   <iosPods>
     <iosPod name="GoogleSignIn" version=">= 4.0.2" bitcodeEnabled="false"
         minTargetSdk="6.0">
     </iosPod>
   </iosPods>
+  -->
 </dependencies>

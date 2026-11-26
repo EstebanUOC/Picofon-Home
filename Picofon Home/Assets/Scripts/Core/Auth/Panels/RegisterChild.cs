@@ -312,7 +312,10 @@ namespace Picofon.Core.Auth.Panels
 
             if (result.Success)
             {
-                message = "Les dades del nen s'han enviat correctament.";
+                message = UiLanguage.Text(
+                    "Los datos del niño o niña se han guardado correctamente.",
+                    "Les dades de l'infant s'han desat correctament."
+                );
             }
             else
             {
@@ -321,7 +324,7 @@ namespace Picofon.Core.Auth.Panels
 
             ModalData modalData = new()
             {
-                Title = "Detalls del registre",
+                Title = UiLanguage.Text("Detalles del registro", "Detalls del registre"),
                 Message = message,
                 Panel = _panel,
             };

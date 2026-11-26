@@ -14,6 +14,8 @@
 //    limitations under the License.
 // </copyright>
 
+// Picofon: sin binding nativo en iOS (el plugin .mm esta excluido de iOS).
+#if !UNITY_IOS
 namespace Google.Impl {
   using System;
   using System.Collections.Generic;
@@ -185,3 +187,4 @@ namespace Google.Impl {
     }
   }
 }
+#endif
