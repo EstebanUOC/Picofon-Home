@@ -10,17 +10,12 @@ namespace Picofon.Core.MapPath
         [SerializeField]
         private TransitionData _transition;
 
-        [SerializeField]
-        private SimpleButton _exitButton;
-
         public void Start()
         {
             SceneOrientationHelper.LockToLandscape();
-
-            _exitButton.OnClick += HandleExitButtonClicked;
         }
 
-        private void HandleExitButtonClicked()
+        public void HandleExitButtonClicked()
         {
             _transition.LoadSourceScene();
         }

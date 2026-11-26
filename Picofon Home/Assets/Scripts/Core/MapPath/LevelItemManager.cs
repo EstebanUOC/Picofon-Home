@@ -24,11 +24,7 @@ namespace Picofon.Core.MapPath
 
         public readonly LevelState State { get; init; }
 
-        // Nivel del screening inicial (HOME_DISCOVERY): se pinta distinto en el mapa
         public readonly bool IsScreening { get; init; }
-
-        // Nivel SPS: icono propio (mano de segmentación)
-        public readonly bool IsSps { get; init; }
     }
 
     public sealed class LevelItemManager : MonoBehaviour
@@ -134,7 +130,6 @@ namespace Picofon.Core.MapPath
 
                 TherapyPlan plan = store.GetPlanByIndex(i);
 
-                // Las escenas lúdicas (HOME_DISCOVERY v3) no tienen template.
                 TherapyTemplate template = plan.TherapyTemplate;
 
                 ActivityType activityType =
@@ -143,6 +138,11 @@ namespace Picofon.Core.MapPath
                 if (activityType != ActivityType.Judge)
                 {
                     config = _configurations[0];
+                }
+
+                if (template.IsSps)
+                {
+                    config = _configurations[4];
                 }
 
                 LevelType type = (i & 1) == 0 ? LevelType.Syllable : LevelType.Phoneme;
@@ -164,7 +164,6 @@ namespace Picofon.Core.MapPath
                     Type = type,
                     State = state,
                     IsScreening = plan.IsScreening,
-                    IsSps = template != null && template.IsSps,
                 };
 
                 button.Init(enabled: enabled, itemView: comp);
