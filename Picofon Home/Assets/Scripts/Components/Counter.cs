@@ -1,16 +1,55 @@
+using Cysharp.Threading.Tasks;
+using PrimeTween;
+using TMPro;
+using UnityEngine;
+
 namespace Picofon.Components
 {
-    using TMPro;
-    using UnityEngine;
-
     public class Counter : MonoBehaviour
     {
         [SerializeField]
         private TMP_Text _counterText;
 
+        [SerializeField]
+        private bool _prueba = false;
+
         private int _score;
 
         private readonly char[] scoreChars = new char[3];
+
+        public void Start()
+        {
+            if (_prueba)
+            {
+                RectTransform rectTransform = transform as RectTransform;
+
+                Vector3 position = rectTransform.anchoredPosition;
+                position.x = 700;
+
+                rectTransform.anchoredPosition = position;
+            }
+        }
+
+        public async UniTaskVoid Show()
+        {
+            RectTransform rectTransform = transform as RectTransform;
+
+            _ = Tween.UIAnchoredPositionX(
+                rectTransform,
+                endValue: -50f,
+                duration: 0.5f,
+                ease: Ease.OutCubic
+            );
+
+            await UniTask.WaitForSeconds(3f);
+
+            _ = Tween.UIAnchoredPositionX(
+                rectTransform,
+                endValue: 700f,
+                duration: 0.5f,
+                ease: Ease.InCubic
+            );
+        }
 
         public void AddScore(bool correct)
         {

@@ -1,5 +1,3 @@
-using Picofon.Utils;
-using PrimeTween;
 using UnityEngine;
 
 namespace Picofon.Activities
@@ -7,25 +5,22 @@ namespace Picofon.Activities
     public class LudicController : MonoBehaviour
     {
         [SerializeField]
-        private Transform _barrel;
+        private CloudManager _cloudManager;
 
         [SerializeField]
-        private CloudManager _cloudManager;
+        private Cannon _cannon;
 
         public void Start()
         {
             _cloudManager.OnCloudTouched += CloudTouched;
         }
 
-        public void FixedUpdate() { }
-
-        public void CloudTouched(Vector3 position)
+        public void CloudTouched(Transform cloud)
         {
-            // Quaternion target = Quaternion.LookRotation(position - _barrel.position);
-            //
-            // Tween.LocalRotation(_barrel, target, 0.5f);
-
-            _barrel.up = position - _barrel.position;
+            if (_cannon.CanShoot())
+            {
+                _cannon.Shoot(cloud);
+            }
         }
     }
 }
