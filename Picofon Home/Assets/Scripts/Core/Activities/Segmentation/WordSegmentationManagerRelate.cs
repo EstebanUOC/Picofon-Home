@@ -18,6 +18,13 @@ namespace Picofon.Activities.Segmentation
 
     public class WordSegmentationManagerRelate : MonoBehaviour
     {
+        // Segundos de espera entre el audio de la imagen y la instrucción.
+        private const float InstructionDelaySeconds = 1.5f;
+
+        // Sube con cada respuesta: la instrucción pendiente no suena si el niño
+        // ya respondió durante la pausa.
+        private int _answerCount;
+
         # region References
 
         [SerializeField]
@@ -537,6 +544,8 @@ namespace Picofon.Activities.Segmentation
 
         private async UniTaskVoid PlayWordAudio()
         {
+            int answerCount = _answerCount;
+
             AudioManager.Instance.PlayUI(_currentWordClip);
 
             if (_isMinimized)
@@ -546,6 +555,15 @@ namespace Picofon.Activities.Segmentation
 
             await AudioManager.Instance.WaitUIToEnd();
 
+            // Pausa entre el audio de la imagen y la instrucción.
+            await UniTask.WaitForSeconds(InstructionDelaySeconds);
+
+            // Si el niño ya respondió (o cambió la ronda), no se reproduce.
+            if (answerCount != _answerCount)
+            {
+                return;
+            }
+
             AudioManager.Instance.PlayVoice(_instructionClip);
 
             _isMinimized = true;
@@ -553,6 +571,8 @@ namespace Picofon.Activities.Segmentation
 
         private void HandleAnswer(int fingersCount)
         {
+            _answerCount++;
+
             bool isCorrect = fingersCount == _syllablesNumber;
 
             // RELATE responde con el número de dedos: no hay botón sí/no.
