@@ -580,6 +580,11 @@ namespace Picofon.Activities.Segmentation
 
             await _feedbackController.ShowSegmentation(feedbackType);
 
+            // Al pulsar Continuar se corta el audio del feedback para que no se
+            // solape con la siguiente palabra.
+            AudioManager.Instance.StopVoice();
+            AudioManager.Instance.StopUI();
+
             if (_dataManager.MoveNext())
             {
                 SetupRound();
