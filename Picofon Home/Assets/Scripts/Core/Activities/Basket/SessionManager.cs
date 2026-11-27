@@ -75,14 +75,11 @@ namespace Picofon.Activities.Basket
             if (_taskCompleted)
                 return;
 
-            TherapyPlanService therapyPlanService = new(0);
             SessionService sessionService = new();
 
-            await therapyPlanService.ChangePlanStatus(
-                id: _sessionInfo.TherapyPlanId,
-                status: TherapyStatus.Completed
-            );
-
+            // bulk-v2 guarda los resultados y marca el nivel COMPLETED en la misma
+            // transacción. No se hace PATCH antes: el backend rechazaba los
+            // resultados de un nivel que ya no estaba ACTIVE (409).
             await sessionService.CreateTherapySession(_sessionInfo, _sessionResults);
 
             LearningRateService learningRateService = new(0);
